@@ -1,0 +1,7 @@
+#!/bin/csh
+# Jens Michael Carstensen, IMSOR 1991
+
+set file = /tmp/hat$$
+cat >$file
+merode $1 <$file | mdilate $1 | frdif $file
+rm $file

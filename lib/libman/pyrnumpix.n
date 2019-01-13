@@ -1,0 +1,30 @@
+.TH PYRNUMPIX 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+pyrnumpix \- calculate the number of pixels in a pyramid
+.SH SYNOPSIS
+.nf
+pyrnumpix(toplev,nr,nc)
+int toplev,nr,nc;
+.fi
+.SH DESCRIPTION 
+This routine returns the total number of pixels per pyramid for an image
+pyramid whose bottom level (level 0) has size
+.I nr
+by
+.IR nc ,
+and which has the specified top level.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_PYRTLZ - top level less than zero
+.br
+HE_PYRTL - top level is too large for supplied image size
+.SH AUTHOR
+The pyramid utilities are derived from code originally written by
+Raj Hingorani at SRI/David Sarnoff Research Institute.  The original
+Gaussian and Laplacian pyramid algorithms were designed by Peter Burt (also
+currently at SRI/DSRC).  See:  Computer Graphics and Image Processing,
+Volume 16, pp. 20-51, 1981, and IEEE Transactions on Communications,
+Volume COM-31, pp. 532-540, 1983.
+.sp
+modified for HIPS 2 - msl - 1/3/91

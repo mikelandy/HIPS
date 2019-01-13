@@ -1,0 +1,22 @@
+.TH HUPDOWN 1HIPS "May 24, 1989"
+.SH NAME
+Hupdown -- Reverse the signs of 8 random pixels in each successive 4X4 block
+of pixels.
+.SH SYNOPSIS
+.B hupdown
+[-u] [-s seed] < inseq > outseq
+.SH DESCRIPTION 
+.I Hupdown
+Reverses the signs of exactly 8 of the 16 pixels in each 4X4 block of
+.I inseq
+pixels, for which the upper left-hand pixel has row and column indexes both
+divisible by 4.  The eight pixels flipped in each such block are randomly
+chosen, independently from block to block.
+.I Seed
+seeds the pseudorandom number generator.
+.I -u
+displays a usage summary.
+.SH SEE\ ALSO
+rflipix(1HIPS), updown(1HIPS)
+.SH AUTHOR
+Charlie Chubb - 3/2/87

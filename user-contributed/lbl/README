@@ -1,0 +1,160 @@
+/***********************************************************************/
+/*  COPYRIGHT NOTICE         *******************************************/
+/***********************************************************************/
+
+This software is copyright (C) by the Lawrence Berkeley National Laboratory.
+Permission is granted to reproduce this software for non-commercial
+purposes provided that this notice is left intact.
+
+It is acknowledged that the U.S. Government has rights to this software
+under Contract DE-AC03-76SF00098 between the U.S.  Department of Energy
+and the University of California.
+
+This software is provided as a professional and academic contribution
+for joint exchange. Thus, it is experimental, and is provided ``as is'',
+with no warranties of any kind whatsoever, no support, no promise of
+updates, or printed documentation. By using this software, you
+acknowledge that the Lawrence Berkeley Laboratory and Regents of the
+University of California shall have no liability with respect to the
+infringement of other copyrights by any part of this software.
+
+For further information about this notice, contact William Johnston,
+Bld. 50B, Rm. 2239, Lawrence Berkeley National Laboratory, Berkeley, CA, 94720.
+(wejohnston@lbl.gov)
+
+For further information about this software, contact:
+	Jin Guojun
+	Bld. 50B, Rm. 2275
+	Lawrence Berkeley National Laboratory, Berkeley, CA, 94720.
+	g_jin@lbl.gov
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+These directories contain various programs developed at Lawrence Berkeley
+Laboratory for use with HIPS2.	This is a extracted version that must be
+used with CCS package </pub/ccs/ccs-x.y-tar.gz>.
+
+
+The following is the README from the HIPS-1 version of the directory, which
+briefly describes only a fraction of the programs available in this directory:
+
+Brian Tierney, LBL
+bltierney@lbl.gov
+
+-------------------------------OLD README-------------------------------------
+
+The contents of this directory come courtesy of the Lawrence Berkeley
+Laboratory.
+
+Description of some of the contents of this directory:
+
+  README:  this file
+
+  doc/dna_segmentation.me  : copy of a paper which describes the use of
+                     some of these programs
+
+subdirectories:
+
+lib/    : directory containing routines for allocating, reading, writing,
+          and freeing dynamically allocated 2D and 3D arrays. Used by
+          bclean.c, bthin.c, fill_holes.c, flip_quad.c, getobj.c, and hstat.c
+
+doc/    : the above-mentioned paper
+
+hips/	: standard HIPS filters, subroutines and man pages
+
+include/: include files required for these filters (these are not installed
+	but simply used in place)
+
+xhips2/	: the routine xhips2 which is a raw X11 viewer (an improvement on
+		drivers/xhips)
+
+xwindows/: several XView-based image analysis programs
+
+Some of the new HIPS filters:
+
+	addmask - combines a HIPS image with a binary mask to create a new
+		image.
+
+	applylut - apply a text gray-level look-up table to a byte or short 
+		formatted HIPS image.
+
+	autocollage - collages a sequence of hips images into a single 
+		frame with 50 pixels between each image.
+
+	autoextract - generate a csh script file to automatically extract
+		smaller images from a larger HIPS image.
+
+	bdwindow - window on pixels in depth
+
+	bin_mask - apply a bitmask to each pixel of an image
+
+	clip - limit the upper and lower grey values of an images to a
+		specified value
+
+	fill_holes - fill small holes in binary HIPS images.
+
+	flip_quad - flips the 4 quadrants of a HIPS image.
+
+	getobj - Selects objects out of an image, and sets the
+		rest of the image to a given background value. 
+
+	gray_wedge - generate a gray value ramp image
+
+	hfant - perform simple spatial transforms on a hips sequence of images
+
+	hfant_sh - perform simple spatial transforms on a hips sequence of
+		images
+
+	hstat - computes statistics on objects in a HIPS image defined 
+		by a binary mask.
+
+	make_mask - create an edge detector mask
+
+	maxseq - overlays two sequences.
+
+	printxyz - makes list of x,y,z locations of objects in a binary image
+		mask.
+
+	scale_gray - do window based mapping and quadratic scaling of the
+		pixel values of a sequence of images
+
+Similar to previous HIPS filters
+
+   bthin.c  : similar to thin, but uses a different algorithm, is MUCH
+              faster, and has some possibly annoying artifacts ( see the
+	      man page )
+
+New versions of previous HIPS filters
+
+   bclean2.c   : about 500 times faster than old version, but uses 3-4 times
+                more memory
+   checkers2 : generate a checker board pattern of gray values
+   disphist_short : display histogram files as a bar graph (smaller output
+		images)
+   ftocc : converts floating images to complex (i and r equal to float
+		image)
+   histoeq2.c  : now handles short and int images, plus fixes a bug in the
+                old version when using the -z option on a sequence
+   mls_short : suppress random noise in an image
+   suntohips2.c : now looks and sun raster colormap and converts colors
+                 to grayscale.
+
+getobj3d/	source code for getobj3d program
+	getobj3d - is a 3D version of getobj, 
+		which selects objects out of an image, and sets the
+		rest of the image to a given background value.
+
+mahe/		source code for mahe program
+	mahe - "clipped" adaptive histogram equalization
+
+scale_geom/	source code for scale_geom
+	scale_geom - filtered image scale and translate
+
+segal/		source code for segal 
+	segal - An X-windows based image/mask viewer, editor, and analyser.
+
+tiff/		source code for tifftoh and htotiff
+	htotiff - reads a HIPS file and convert it to TIFF format
+	tifftoh - convert a tiff image file to a hips image file
+

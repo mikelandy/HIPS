@@ -1,0 +1,77 @@
+.TH 3DROTATE90 1 "March 8, 1991" LBL-HIPS
+.\" @(#)3drotate90 1.01 2/1/91 JIN;
+.SH NAME
+3drotate90 \- rotate 3D HIPS or FITS image to left or top. Output is HIPS.
+.SH SYNOPSIS
+.B 3drotate90
+[-l -L] [-c#] [-t] [-r#] [-n#]
+.SH DESCRIPTION
+.B 3drotate90
+rotates a 3D image into another 3D image for displaying and looking
+at different surfaces of the image.
+.SH OPTIONS
+Note, we use the term `rotate' to designate a 3D rotation about either the X
+or Y axis, and the term `turn' to designate a rotation about the Z (`frame
+number') axis.
+.TP
+.I -l
+(look from left side) is used to slice vertically (creating a y-z surface,
+parallel to the Y axis).
+It first rotates to the left on a horizontal surface (rotating the image about
+the Y axis, so left surface becomes the front), and then turns left (rotates
+about the new Z axis).
+.TP
+.I -L
+similar to -l but only rotates about the Y axis (horizontally rotate to left).
+.TP
+.I -t
+(look from top, the default) specifies a horizontal slice (creating an x-z
+surface, parallel to the X axis).
+First rotate top to front and then turn to the right.
+This is the default action.
+.TP
+.I -c #
+starting column for the vertical slice (\c
+.IR -l ).
+.TP
+.I -r #
+starting row for the horizontal slice (\c
+.IR -t ).
+.TP
+.I -n #
+New image frames. If you have a 50x50x50 image and start at column 10 for a
+vertical slice, and specify
+.I -n
+20. Then you get a 50x50x20 output image which
+includes the old image from column 10 to 30.
+.SH NOTE
+After using
+.I 3drotate90
+twice in same direction, you will get the same result as using
+.I 3drotate90
+once in the other direction. So
+.I 3drotate90
+can only can allow you
+to see the front, left and top. For the other 3 directions, use
+.I 3drotate180
+to go to the back first, and then use
+.I 3drotate90
+to see the right (left to back) and
+bottom (top to back). Also, use of
+.I 3drotate90
+is slower then using
+.I 3drotate
+to rotate 90 degrees (the extra effort is involved with keeping the upper-left
+corner in the upper-left of the output image).
+.I -L
+helps to see from a different direction.
+.SHEXAMPLES
+.B 3drotate90
+-l check_3d | xhips
+.br
+this command rotate the left side of check_3d (a particular pattern) to the
+front, and the old Y axis now is horizontally toward left.
+.SH "SEE ALSO"
+3dslice(1), 3drotate(1), 3drotate180(1), 3dscale_geom(1), powertool(1)
+.SH AUTHOR
+Jin Guojun - 2/1/91

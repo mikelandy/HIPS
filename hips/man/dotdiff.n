@@ -1,0 +1,40 @@
+.TH DOTDIFF 1 "8/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+dotdiff \- halftones using an 8x8 dot diffusion matrix
+.SH SYNOPSIS
+.B dotdiff
+.SH DESCRIPTION 
+.I Dotdiff
+converts an 8-bit sequence to a bi-level sequence using an 8 x 8
+dot error diffusion matrix.  The input and output sequences are both
+byte-formatted, although only the values of
+.I hips_lchar
+and
+.I hips_hchar
+are used in the output image.  These may be specified, as usual, using the
+standard switches
+.I -UL
+and
+.I -UH
+and default to 0 and 255.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+dither(1), halftone(1)
+.SH AUTHOR
+Mike Landy - 7/13/89 (algorithm from Hong Min)
+.br
+Hips 2 - msl - 8/10/91

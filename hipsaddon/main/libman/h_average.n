@@ -1,0 +1,61 @@
+.TH H_AVERAGE 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_average - operator for sequence averaging
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_average(hdi,hdo)
+h_average_b(hdi,hdo)
+struct header   *hdi,*hdo;
+
+h_average_B(imagei,imageo,nr,nc,onr,onc,fr)
+byte    *imagei,*imageo;
+int     nr,nc,onr,onc;
+int     fr;
+.fi
+.SH DESCRIPTION
+.I h_average
+averages subimages of the input sequence
+(ROI, specified by
+.I hdi
+or
+.I imagei,
+a pointer to the first pixel of the subimage)
+pixel-to-pixel without normalisation,
+and stores the result in the output subimage (specified by
+.I hdo
+or
+.I imageo,
+a pointer to the first pixel of the subimage).
+.I h_average
+then calls
+.I h_average_b
+only if the image pixel format is byte.
+.I h_average_b
+then calls
+.I h_average_B
+which is the low-level routine and does not require image header.
+The subimage size is
+.I nr
+by
+.IR nc.
+The input and output images have
+.I onc
+pixels per line, and
+.I onr
+lines.
+.I fr
+is the number of images in the input sequence.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH SEE ALSO
+catframes(1), pstrobe(1), repframe(1), strobe(1), subseq(1)
+.SH AUTHOR
+Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

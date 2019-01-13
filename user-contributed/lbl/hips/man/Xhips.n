@@ -1,0 +1,61 @@
+.TH XHIPS n "August, 1989" "LBL" "HIPS"
+.SH NAME
+Xhips - display a HIPS image on an X11 display
+.SH SYNOPSIS
+.B Xhips
+.B \-d 
+display [< hips_file]
+.SH DESCRIPTION 
+.I Xhips
+reads a HIPS image from standard_in and displays it using an X11 server. 
+This display program is called getx11, which is part of the URT package.
+You must have this package to use Xhips. This
+program automatically deals with dithering gray level images
+for a monochrome displays. Images must be scaled to byte format.
+.SH "Mouse/key actions (normal mode)"
+.TP 20
+Mouse 1 (left):
+Increase zoom factor by 1, center on this pixel.
+.TP 20
+Mouse 2 (middle):
+Recenter on this pixel.
+.TP 20
+Mouse 3 (right):
+Decrease zoom factor by 1, center on this pixel.
+.TP 20
+Shift mouse 1:
+Show value at this pixel.  In B&W, just shows intensity.
+.TP 20
+Shift mouse 2:
+Toggle between zoomed and unzoomed.
+.TP 20
+q,Q,^C:
+Quit.
+.TP 20
+1,2,3,4,5,6,7,8,9:
+Set zoom factor.
+.TP 20
+Arrow keys:
+Move image (when zoomed).  Shifted moves faster.
+
+.SH OPTIONS
+.TP
+.B \-d
+gives the X11 server to contact (e.g. workstation:display_num.fb_num
+, unix:0.0 for a local display)
+
+.SH NOTES
+Xhips is a shell script and the underlying
+display tool (getX11) reads Utah, RLE files.
+The display would be faster if getx11 were taught to read HIPS images directly.
+
+.SH SEE ALSO
+getx11(1), htor(1), picinvert(1)
+
+.SH AUTHOR
+Spencer W. Thomas, University of Utah (X10 version)
+.PP
+Andrew F. Vesper, Digital Equipment Corp. (X11 modifications)
+.PP
+Martin R. Friedmann, University of Michigan (better X11, flipbook,
+magnification, info)

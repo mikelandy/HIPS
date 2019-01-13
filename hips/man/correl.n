@@ -1,0 +1,62 @@
+.TH CORREL 1 "8/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+correl \- cross-correlate two images
+.SH SYNOPSIS
+.B correl
+[-s rows [cols]] file < iseq > oseq
+.SH DESCRIPTION 
+.I Correl
+cross-correlates two images.  The
+.I -s
+switch specifies the size of the output images (the amount
+of offsets attempted).  The center of the output image corresponds to
+centering both input images.  Rightward and downward offsets in the output
+images correspond to sliding the file image rightward and downward.  If
+.I -s
+is not specified, the default size is the largest possible (the sum of the
+input sizes minus 1).  If
+.I -s
+is specified but
+.I cols
+is not, it defaults to the value of
+.IR rows .
+.PP
+If either sequence is shorter than the other, the last frame is repeated
+a sufficient number of times to match (and a warning message is printed).
+The header text is generally taken from the standard input header, although
+the treatment of history, sequence description and extended parameters depends
+on the standard switch settings (see below).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float,
+.SH "REGION-OF-INTEREST"
+The cross-correlation of the  regions-of-interest of the sequences
+becomes the entire output image, which has a cleared region-of-interest.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -NFH
+Do not preserve the input sequence histories of all input sequences.
+.TP 1.3i
+.I -NFD
+Do not preserve the input sequence descriptions of all input sequences.
+.TP 1.3i
+.I -FXP
+Merge the extended parameter lists from all input sequences.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+convolve(1), mask(1)
+.SH AUTHOR
+Michael Landy - 4/8/89
+.br
+Hips 2 - msl - 8/10/91

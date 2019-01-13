@@ -1,0 +1,100 @@
+.TH H_QUADSCALE 3 "1/19/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_quadscale \- quadratic scaling
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_quadscale(hdi,hdo,a,b,c)
+h_quadscale_b(hdi,hdo,a,b,c)
+h_quadscale_s(hdi,hdo,a,b,c)
+h_quadscale_i(hdi,hdo,a,b,c)
+h_quadscale_f(hdi,hdo,a,b,c)
+struct header *hdi,*hdo;
+float a,b,c;
+
+h_quadscale_B(imagei,imageo,nr,nc,nlpi,nlpo,a,b,c)
+byte *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+float a,b,c;
+
+h_quadscale_S(imagei,imageo,nr,nc,nlpi,nlpo,a,b,c)
+short *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+float a,b,c;
+
+h_quadscale_I(imagei,imageo,nr,nc,nlpi,nlpo,a,b,c)
+int *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+float a,b,c;
+
+h_quadscale_F(imagei,imageo,nr,nc,nlpi,nlpo,a,b,c)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+float a,b,c;
+.fi
+.SH DESCRIPTION 
+These routines quadratically scale an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_quadscale
+calls
+.IR h_quadscale_b ,
+.IR h_quadscale_s ,
+.I h_quadscale_i
+or
+.I h_quadscale_f
+depending upon whether the pixel format is byte, short, integer or float.
+.IR h_quadscale_B ,
+.IR h_quadscale_S ,
+.I h_quadscale_I
+and
+.I h_quadscale_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line, and is
+in floating point format.
+The routines compute opix = a*ipix*ipix + b*ipix + c.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float
+.SH "OUTPUT PIXEL FORMAT"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words,
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+Of course, this only makes sense for floating point input images.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_linscale(3)
+.SH AUTHOR
+Michael Landy (HIPS 2) - 6/19/91

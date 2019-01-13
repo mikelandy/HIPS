@@ -1,0 +1,133 @@
+.TH MAGICPRINT 1 "DECEMBER 5, 1991" LBL-HIPS
+.\" @(#)magicprint.1  1.10 90/12/1 JIN;
+.SH NAME
+magicprint \- display images as halftones with footnote on a Postscript device
+.SH SYNOPSIS
+.nf
+.ta 1i
+.B magicprint
+	[-h imageheight] [-w imagewidth] [-p [#]] [-c] [-d]
+	[-F font] [-S fontsize] [-t string] [-T] [-H] [-X[#]] [-s] [-P #]
+	[-v "string"] [-V ["string"]] [-b frame#] [-n frames] [-o #] [-g #]
+	[-f screenfrequency] [-l] [-m] [-r #]
+	[-a screenangle] [<] imagefile | lpr [-Pprinter]
+.fi
+.SH DESCRIPTION
+.I magicprint
+converts an image sequence to postscript commands for output as a halftone
+screen. The input image can be one of the following types:
+.br
+HIPS, FITS, GIF, ICC, JPEG, PICT, PNM, RLE, SUN-raster, and TIFF
+
+The
+.I -h
+and
+.I -w
+flags specify the output halftone dimensions in inches. They
+default to an aspect ratio equal to that of the images, and if none is
+specified, so that the maximum dimension is 6 inches.
+.br
+The screen can be either a circle screen (the default) or a line screen (-l).
+.br
+The screen frequency (in screen cells per inch) is set by -f; the screen angle
+in degrees is set by -a. The defaults are 60 cells per inch and 45 degrees.
+These defaults provide 25 gray levels. Gray levels are mapped linearly to
+percent of dots painted. Any filters can be used to modify the mapping prior
+to this. This filter works for byte and bit-packed (MSBFIRST) images.
+.SH "MORE OPTIONS"
+Capital letters are usually used for texts and lower case letters are used for
+the image.
+.TP
+.I -t "string"
+lets you add a footnote to your image.
+.TP
+.I -T
+will automatically place all items on the command line into the title string.
+.TP
+.I -V
+has both the
+.I -t
+and
+.I -T
+functions but prints the string vertically on the right side of the page.
+.TP
+.I -v
+same as
+.I -t
+but prints the string on the right side of an image vertically.
+.TP
+.I -H
+prints all header information below the image.
+.TP
+.I -X[#]
+same as the
+.I -H
+option and also draws a box frame. The default of the box width is the same as
+the image width. You can specify the box width by specifying
+a number touching the -X .
+.TP
+.I -d
+prints history and desciption below images.
+.TP
+.I -F FONT
+used to specify the font for note. (default = NewCenturySchlbk-Bold)
+.TP
+.I -S
+used for changing font size. (default 10)
+.TP
+.I -P title-position
+used to set the height where the string will be printed from the
+bottom of page.  The default place is 1/5 inch below the image.
+.TP
+.I -B
+will place the string at the bottom of the page instead of at the bottom
+of the image.
+.TP
+.I -c
+used to center the image on the page. The default action is to place the image
+at the top of the page.
+.TP
+.I -p [image_top_postion]
+change image top position. If no further # is specified, the
+.I -p
+option will set the image top position to 1.5 inch below the top of a page.
+.TP
+.I -s
+paper size (height, default = 11').
+.TP
+.I -g #
+add # of spaces between the box and the image (in printer pixels).
+.TP
+.I -b frame_number
+begin output at the given frame #.
+.TP
+.I -n frames
+The number of frames you want to print. If you specify more frames than are
+available in the input sequence,
+.I magicprint
+will print all frames until the final frame.
+The default is 1.
+.TP
+.I -m
+prints the image upside down.
+.TP
+.I -r angle
+rotates the image counterclockwise (use a negative number for clockwise
+rotation).
+.TP
+.I -o frame# offset
+First frame # offset. This option is used for some input images which
+have been preprocessed by some tools not starting at the first frame.
+This option is just for printing the footnote, and will not effect image
+printing.
+.SH MORE
+For versatec (VT) printers, it is better to use the
+.I -p
+option and test it before formal printing
+unless you are very sure VT works well; use
+.I -h
+10.2 or less since the VT printer usually has a narrow printing size.
+.SH "SEE ALSO"
+color_ps(1), powertool(1), prthlf(1), prtdth(1), printimage(n), verdth(1)
+.SH AUTHOR
+Jin Guojun - 12/10/90

@@ -1,0 +1,47 @@
+.\"%W%      %G%"
+.TH ELLIPSE 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+ellipse - ellipse line drawing image generator
+.SH SYNOPSIS
+.B ellipse 
+[-c cenr cenc] [-d rows cols] [-r radr radc]
+.SH DESCRIPTION 
+.I ellipse
+generates an ellipse line drawing image, where
+.sp 1
+.ll -0.5i
+.in +3 
+.I cenr,cenc
+.in +1.2i
+.sp -1
+are the vertical and horizontal positions of the ellipse center
+in the image and defaults to the middle of the image.
+.in -1.2i
+.I rows,cols
+.in +1.2i
+.sp -1
+are the numbers of rows and columns of the image generated
+and defaults to (128, 128).
+.in -1.2i
+.I radr,radc
+.in +1.2i
+.sp -1
+are the vertical and horizontal radiuses of the ellipse
+and defaults to the value as large as the ellipse thus
+drawn can be contained totally within the image.
+.in -1.2i
+.in -3
+.sp 1
+.ll +0.5i
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH EXAMPLE
+ellipse > ellipse_image
+.SH SEE ALSO
+calcpix(1), fgenframe(1), genframe(1), greylevel(1), mandelbrot(1), saw(1)
+.SH AUTHOR
+Jin Zhengping - 12/6/85 
+.br
+Jin Zhengping - 20/3/1986 2nd Ed.
+.br
+Rewritten by Jin Zhengping - 31 August 1991

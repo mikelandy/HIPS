@@ -1,0 +1,27 @@
+.TH DIVSEQ2 1BIPS "Sept 24, 1987"
+.SH NAME
+divseq2 - divide the input sequence by another sequence, pixel by pixel
+.SH SYNOPSIS
+.B divseq2
+<divisor seq> [\-z thresh] < iseq > oseq
+.SH DESCRIPTION 
+.I divseq2
+divides each frame in a sequence by the frame in the divisor sequence,
+pixel by pixel.  If the input sequence has more than one frame, then it
+must have the same number of frames as the input sequence.  Each
+frame of the input is then divided by the corresponding frame of the divisor
+sequence.
+The input sequence and the divisor sequence must be in float format.
+The output is of the same format as the input.
+.sp
+The option
+.I [\z thresh]
+specifies a threshold which is compared with the absolute value of the
+divisor pixels, and if
+a pixel is below the threshold it is considered to be equal to 0.0 (zero)
+and the resulting pixel is set equal to zero.  This threshold defaults to
+1.0 (one).
+.SH "SEE ALSO"
+addseq(1HIPS), diffseq(1HIPS), aveseq(1BIPS)
+.SH AUTHOR
+Charles Carman and Ann Adams

@@ -1,0 +1,55 @@
+.TH CATFRAMES 1 "7/6/91" "Version 2" "HIPS Manual"
+.SH NAME
+catframes \- concatenate several image sequences
+.SH SYNOPSIS
+.B catframes
+[-m] file1 file2 ...
+.SH DESCRIPTION 
+.I Catframes
+combines several sequences into one sequence, outputting all of the frames of
+the first input sequence, then those of the second, and so on.
+The input files must have the same number
+of image rows, image columns, color planes, depths,
+and if a pyramid format, then the same number of pyramid levels.
+If the
+.I -m
+switch is specified, then the output will be in mixed raster format and thus
+the input image sequences will all be left in their original formats.
+Otherwise, the sequences will all be converted to the most appropriate common
+pixel format in the usual fashion.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+All raster and pyramid formats (including mixed raster format with
+.IR -m )
+.SH "REGION-OF-INTEREST"
+The region-of-interest is that of the first input file specified.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-RC [R | I | B]"
+Real-to-complex conversion: Set real part, imaginary part or both.
+Default: R.
+.TP 1.3i
+.I -NFH
+Do not preserve the input sequence histories of all input sequences.
+.TP 1.3i
+.I -NFD
+Do not preserve the input sequence descriptions of all input sequences.
+.TP 1.3i
+.I -FXP
+Merge the extended parameter lists from all input sequences.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+intercolor(1), interdepth(1), subseq(1)
+.SH AUTHOR
+HIPS 2 - Michael Landy - 7/6/91
+.br
+PFMIXED - msl - 11/12/92
+.br
+add depths - msl - 3/4/94

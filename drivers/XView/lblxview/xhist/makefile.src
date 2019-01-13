@@ -1,0 +1,40 @@
+#
+# makefile for user-contributed/lbl/xview/xhist
+#
+
+PGMS = xhist.out
+
+CPPFLAGS2 = -I$(XVIEWHOME)/include 
+#CFLAGS += -Bstatic
+LDFLAGS2 = -L$(XVIEWHOME)/lib
+
+LINTFLAGS  = -h -target=$(MACHINE)
+
+OBJECTS = comp_hist.o label.o load_i.o xhist.o xhist_ui.o help.o
+
+.c.o:
+	$(COMPILEc) $< $(CPPFLAGS2)
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+xhist.out:	$(OBJECTS)
+	$(LINKc) $* $(OBJECTS) $(LIBRARIES) $(LDFLAGS2) $(LIBXVIEW)
+	mv $* $(DESTDIR)
+	@touch $@
+
+FRC:
+
+lint:
+	lint $(LINTFLAGS) $(SOURCESc)
+
+#%_ui.c + %_ui.h + %_stubs.c + %.info: %.G
+#	$(GUIDEHOME)/bin/gxv $*

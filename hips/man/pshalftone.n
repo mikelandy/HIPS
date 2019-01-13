@@ -1,0 +1,110 @@
+.TH PSHALFTONE 1 "8/2/91" "Version 2" "HIPS Manual"
+.SH NAME
+pshalftone \- display images as halftones on a PostScript device
+.SH SYNOPSIS
+.ta 1i
+.B pshalftone
+[-h imageheight] [-w imagewidth] [-l] [-F screenfrequency]
+.br
+	[-A screenangle] [-I] [-n] [-B] < imagefile | lpr -Ppostscript
+.SH DESCRIPTION 
+.I Pshalftone
+converts an image sequence to postscript commands for output of a halftone
+screen.
+The
+.I -h
+and
+.I -w
+flags specify the output halftone dimensions in inches.  They
+default to an aspect ratio equal to that of the images (assuming square
+pixels), and if neither is specified, so that the maximum dimension is
+5 inches.  The screen can either be a circle screen (the default) or a
+line screen (\c
+.IR -l ).
+The screen frequency (in screen cells per inch)
+is set by
+.IR -F ;
+the screen angle in degrees is set by
+.IR -A .
+The defaults are 60 cells per inch and 45 degrees. These defaults
+provide 25 gray levels.
+However, if neither
+.IR -l ,
+.I -A
+nor
+.I -F
+is specified, then the printer's default (or default set by
+previous PostScript code sent to the printer) is used.
+Grey levels are mapped linearly to
+percent of dots painted.  HIPS routines may be used to modify the
+mapping prior to this.  Each frame is centered on a separate output page.
+.PP
+For byte images, if the header includes a colormap for pseudocolor, it
+will be used.  The header colormap will be ignored, however, if
+.I -I
+is specified.
+.PP
+For byte images, if the value of
+.I numcolor
+is 3, the file will be treated as
+a true 24-bit color image and output as such.  Thus, you should only use
+.I pshalftone
+with such images if the output device can handle 24-bit color
+and in particular it must support the PostScript Level 2
+.I colorimage
+operator.  The images will be printed as 3 separate images, however, if
+.I -I
+is specified.  24-bit color is also the result if
+.I pshalftone
+is applied to images in PFRGB and PFRGBZ formats.
+.PP
+The
+.I -B
+flag uses binary encoding for the image.  This results in an output
+file which is one half the usual size.  However, most line printer
+spoolers do not handle 8-bit data correctly, which will break this option.
+Thus, use the
+.I -B
+flag only if your method of sending the resulting
+PostScript to your output device is 8-bit safe.  This option also results in
+PostScript Level 2 code, so you should be sure your output device can handle
+this.
+.PP
+The output of
+.I pshalftone
+is Encapsulated PostScript, and thus it may be included in other PostScript
+files and read by programs which can include EPS files.  The output does
+include the
+.I showpage
+command, which is legal in an EPS file, but may still confuse some programs
+which include this file in a larger PostScript document.  The
+.I -n
+switch eliminates the
+.I showpage
+commands from the output.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+most-significant-bit first packed, byte, RGB, RGBZ
+.SH "REGION-OF-INTEREST"
+Only the region of interest is converted to PostScript.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+verdth(1), prthlf(1), prtdth(1)
+.SH AUTHOR
+Michael Landy/Jeff Fookson - 1/4/87
+.br
+HIPS 2 - msl - 8/2/91
+.br
+Color capabilities - jf/msl - 11/2/92

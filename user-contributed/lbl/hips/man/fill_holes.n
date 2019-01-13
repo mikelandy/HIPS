@@ -1,0 +1,29 @@
+.TH FILL_HOLES 1 "1 May 1990" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+fill_holes \- fill small holes in binary HIPS images.
+.SH SYNOPSIS
+.B fill_holes
+[-s N][-e] < infile > outfile
+.SH DESCRIPTION
+.I fill_holes
+finds small holes between objects in binary images,
+and fill the holes with a pixel value of 255.
+.pp
+Input image must be a binary image (with values of 0 and 255 only)
+of type byte.
+.pp
+The main purpose of this program is to fix flaws in the bthin
+algorithm.  The bthin program uses a very simple method to
+thin binary objects to a single pixel line, and an artifact
+of this algorithm is that the thinned objects will often have
+holes in them.  This program will fill those holes.
+.SH OPTIONS
+ [-s N]   fill holes of size N ( default = 3).
+ [-e]     fill holes between ends of lines only.
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH "SEE ALSO"
+bclean(1), bthin(1)
+.SH BUGS
+Report to Brian Tierney.

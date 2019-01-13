@@ -1,0 +1,100 @@
+.TH H_LINSCALE 3 "1/19/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_linscale \- linear scaling
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_linscale(hdi,hdo,b,c)
+h_linscale_b(hdi,hdo,b,c)
+h_linscale_s(hdi,hdo,b,c)
+h_linscale_i(hdi,hdo,b,c)
+h_linscale_f(hdi,hdo,b,c)
+struct header *hdi,*hdo;
+float b,c;
+
+h_linscale_B(imagei,imageo,nr,nc,nlpi,nlpo,b,c)
+byte *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+float b,c;
+
+h_linscale_S(imagei,imageo,nr,nc,nlpi,nlpo,b,c)
+short *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+float b,c;
+
+h_linscale_I(imagei,imageo,nr,nc,nlpi,nlpo,b,c)
+int *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+float b,c;
+
+h_linscale_F(imagei,imageo,nr,nc,nlpi,nlpo,b,c)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+float b,c;
+.fi
+.SH DESCRIPTION 
+These routines linearly scale an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_linscale
+calls
+.IR h_linscale_b ,
+.IR h_linscale_s ,
+.I h_linscale_i
+or
+.I h_linscale_f
+depending upon whether the pixel format is byte, short, integer or float.
+.IR h_linscale_B ,
+.IR h_linscale_S ,
+.I h_linscale_I
+and
+.I h_linscale_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line, and is
+in floating point format.
+The routines compute opix = b*ipix + c.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float
+.SH "OUTPUT PIXEL FORMAT"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words,
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+Of course, this only makes sense for floating point input images.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_quadscale(3)
+.SH AUTHOR
+Michael Landy (HIPS 2) - 6/19/91

@@ -1,0 +1,39 @@
+.TH PERR 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+perr \- the HIPS error handler
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+perr(errorcode,errorprintargs)
+int argformat;
+various-types errorprintargs;
+.fi
+.SH DESCRIPTION 
+This routine is called throughout the HIPS system when an error condition is
+detected.  The routine formats a text error message.  Then, if the severity of
+the error is greater than or equal to
+.I hipserrprt
+or
+.IR hipserrlev ,
+then the routine prints the error message on stdout.  Finally, if the severity
+of the error is greater than or equal to
+.IR hipserrlev ,
+the routine causes the program to exit (with a return code equal to the error
+severity).  Otherwise,
+.I perr
+returns the value HIPS_ERROR, which is typically passed back by all of the
+HIPS subroutines to the original caller.  The first argument is an error code
+(prefixed by `HE_').  The list of available error codes is given in
+hipl_format.h, and the comment there indicates the arguments which are
+required to fill out the error string.  The error severities are to be found
+in the source file lib/sources/herrs.c.  Note that the user is expected to
+have set the string
+.I Progname
+to be the calling program name, as this string is prepended to all error
+messages.
+.in -1i
+.SH FILES
+/usr/local/lib/libhips.a
+.SH AUTHOR
+Michael Landy - 1/3/91

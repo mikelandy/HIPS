@@ -1,0 +1,55 @@
+#
+# Unix-style makefile for pub/libsrc
+#
+
+OBJECTS = hpub_perr.o hpub_rdhdr.o hpub_wrthdr.o hpub_xparam.o
+
+#
+# for systems which don't have or need ranlib (e.g. System V variants),
+# replace the next line as follows:
+#	RANLIB = echo
+#
+
+RANLIB = ranlib
+
+#
+# set the next directory to the be the place you want the library stored
+#
+
+LIBDIR = /usr/local/lib
+
+#
+# if you place the include file in a nonstandard place, specify it in the
+# following define, for example:
+#
+# CFLAGS = -I/usr/local/include/hips2
+#
+# otherwise, set:
+#
+# CFLAGS =
+
+CFLAGS =
+
+.c.o:
+	$(CC) $(CFLAGS) -c $*.c
+	@-ld -x -r $*.o
+	@mv a.out $*.o
+
+libhipspub.a:	$(OBJECTS)
+	@rm -f libhipspub.a
+	ar cr libhipspub.a `lorder *.o | tsort`;
+	mv libhipspub.a $(LIBDIR)/libhipspub.a
+	$(RANLIB) $(LIBDIR)/libhipspub.a
+	@touch libhipspub.a
+
+install:	libhipspub.a
+
+clean:
+	rm -f $(OBJECTS) libhipspub.a
+
+pristine:
+	rm -f $(OBJECTS) libhipspub.a $(LIBDIR)/libhipspub.a
+
+man:
+
+doc:

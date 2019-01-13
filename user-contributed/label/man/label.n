@@ -1,0 +1,280 @@
+.TH LABEL 1 "March 25, 1986"
+.SH NAME
+label - add text to hips image sequences
+.SH SYNOPSIS
+.B label
+[-T textfile | text-string] [-j{rcl}] [-o{udrl}] [-x n] [-y n] [-a d]
+.br
+.ti 1.5i
+[-v n] [-f n] [-b n] [-F fontname] < inseq > outseq
+.br
+.B label
+-g [-T textfile | text-string] [-j{rcl}] [-o{udrl}]
+.ti 1.5i
+[-v n] [-f n] [-b n] [-F fontname] > outseq
+.SH DESCRIPTION 
+.I Label
+allows the user to conveniently label hips image sequences with arbitrary text.
+First the text is used to create a text raster, a rectangular array
+of pixels, which is then rotated and, if needed, combined with
+the input image frames at specified coordinates.
+If the 
+.I -g
+switch is given the program
+produces a single HIPS frame containing only the
+text raster (in proper orientation.)
+Otherwise, the text is written in the fashion specified by the remaining
+options onto each of the frames comprising the input sequence 
+.IR inseq .
+(Note that the input sequence must be in byte format.)
+The remaining switch options, specifiable in any order, include:
+.TP 1.5i
+.BI \-j [lrc]
+For multiline text, this specifies how the lines are justified:
+.I l
+- all lines are justified at the left margin of the text block,
+.I r
+- lines are justified at the right, and
+.I c
+- each line is centered within the block.
+.TP
+.BI \-o [udrl]
+specifies the orientation of the text;
+.I u
+- upward (i.e. rotated by 90 degrees counterclockwise,)
+.I d
+- downward (i.e. 90 degrees clockwise,)
+.I r
+- normal text orientation ( left to right), and
+.I l
+- leftward (i.e. upside down and running right to left).
+.TP
+.BI \-x " coord"
+.TP
+.BI \-y " coord"
+gives the x and y  coordinates of the point of alignment relative
+to the input frame.
+This may be any integer (positive or negative,) or the literal
+.I M
+meaning the middle row or column, or
+.I E
+meaning just after the last row or column.
+.TP
+.BI \-a " digit"
+specifies which point in the text block is used as the point of
+alignment (with the image coordinates given by the -x and -y flags.)
+This may be a digit between 0 and 8, and
+follows a convention identical to that of Leroy's:
+.TS
+.if \n+(b.=1 .nr d. \n(.c-\n(c.-1
+.de 35
+.ps \n(.s
+.vs \n(.vu
+.in \n(.iu
+.if \n(.u .fi
+.if \n(.j .ad
+.if \n(.j=0 .na
+..
+.nf
+.nr #~ 0
+.if n .nr #~ 0.6n
+.ds #d .d
+.if \(ts\n(.z\(ts\(ts .ds #d nl
+.fc
+.nr 33 \n(.s
+.rm 80 81
+.nr 80 0
+.nr 38 \wIf \fBdigit\fP is:
+.if \n(80<\n(38 .nr 80 \n(38
+.nr 38 \w0
+.if \n(80<\n(38 .nr 80 \n(38
+.nr 38 \w1
+.if \n(80<\n(38 .nr 80 \n(38
+.nr 38 \w2
+.if \n(80<\n(38 .nr 80 \n(38
+.nr 38 \w3
+.if \n(80<\n(38 .nr 80 \n(38
+.nr 38 \w4
+.if \n(80<\n(38 .nr 80 \n(38
+.nr 38 \w5
+.if \n(80<\n(38 .nr 80 \n(38
+.nr 38 \w6
+.if \n(80<\n(38 .nr 80 \n(38
+.nr 38 \w7
+.if \n(80<\n(38 .nr 80 \n(38
+.nr 38 \w8
+.if \n(80<\n(38 .nr 80 \n(38
+.80
+.rm 80
+.nr 81 0
+.nr 38 \wthen the point is:
+.if \n(81<\n(38 .nr 81 \n(38
+.nr 38 \wlower-left corner
+.if \n(81<\n(38 .nr 81 \n(38
+.nr 38 \wleft mid-edge
+.if \n(81<\n(38 .nr 81 \n(38
+.nr 38 \wupper-left corner
+.if \n(81<\n(38 .nr 81 \n(38
+.nr 38 \wbottom mid-edge
+.if \n(81<\n(38 .nr 81 \n(38
+.nr 38 \wcenter
+.if \n(81<\n(38 .nr 81 \n(38
+.nr 38 \wtop mid-edge
+.if \n(81<\n(38 .nr 81 \n(38
+.nr 38 \wlower-right corner
+.if \n(81<\n(38 .nr 81 \n(38
+.nr 38 \wright mid-edge
+.if \n(81<\n(38 .nr 81 \n(38
+.nr 38 \wupper-right corner
+.if \n(81<\n(38 .nr 81 \n(38
+.81
+.rm 81
+.nr 38 1n
+.nr 79 0
+.nr 40 \n(79+(1*\n(38)
+.nr 80 +\n(40
+.nr 41 \n(80+(3*\n(38)
+.nr 81 +\n(41
+.nr TW \n(81
+.nr TW +1*\n(38
+.if t .if (\n(TW+\n(.o)>7.65i .tm Table at line 84 file Input is too wide - \n(TW units
+.ne 12v+0p
+.nr #I \n(.i
+.in +(\n(.lu-\n(TWu-\n(.iu)/2u
+.fc  
+.nr #T 0-1
+.nr #a 0-1
+.nr #a 0-1
+.eo
+.de T#
+.ds #d .d
+.if \(ts\n(.z\(ts\(ts .ds #d nl
+.mk ##
+.nr ## -1v
+.ls 1
+.if \n(#T>=0 .nr #a \n(#T
+.if \n(T. .vs \n(.vu-\n(.sp
+.if \n(T. \h'|0'\s\n(33\l'|\n(TWu\(ul'\s0
+.if \n(T. .vs
+.if \n(#a>=0 .sp -1
+.if \n(#a>=0 \h'|0'\s\n(33\h'-\n(#~u'\L'|\n(#au-1v'\s0\v'\n(\*(#du-\n(#au+1v'\h'|\n(TWu'
+.if \n(#a>=0 .sp -1
+.if \n(#a>=0 \h'|\n(TWu'\s\n(33\h'-\n(#~u'\L'|\n(#au-1v'\s0\v'\n(\*(#du-\n(#au+1v'
+.ls
+..
+.ec
+.nr 36 \n(.v
+.vs \n(.vu-\n(.sp
+\h'|0'\s\n(33\l'|\n(TWu\(ul'\s0
+.vs \n(36u
+.mk #a
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'If \fBdigit\fP is:\h'|\n(41u'then the point is:
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'\h'|\n(41u'
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'0\h'|\n(41u'lower-left corner
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'1\h'|\n(41u'left mid-edge
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'2\h'|\n(41u'upper-left corner
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'3\h'|\n(41u'bottom mid-edge
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'4\h'|\n(41u'center
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'5\h'|\n(41u'top mid-edge
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'6\h'|\n(41u'lower-right corner
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'7\h'|\n(41u'right mid-edge
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'8\h'|\n(41u'upper-right corner
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'\h'|\n(41u'
+.fc
+.nr T. 1
+.T# 1
+.in \n(#Iu
+.35
+.nr #a 0
+.TE
+.if \n-(b.=0 .nr c. \n(.c-\n(d.-16
+.TP
+.BI \-T " Textfile"
+allows label text to be taken from a file, rather than from
+.I text_string.
+This is especially useful when the text contains newline characters, or
+when
+.I text_string
+begins with a minus sign (making it confusable with other command line
+options).
+.TP
+.BI \-v " nnn"
+This specifies the vertical spacing in pixels between successive lines.
+.TP
+.BI \-f " nnn"
+.TP
+.BI \-b " nnn"
+These specify the foreground and background pixel values of the text block.
+When overlaying text onto a background image, a zero value of either
+foreground or background leaves the image as it was, allowing a matte.
+.TP
+.BI \-F " Fontname"
+specifies a font to use in generating characters. All standard Berkeley
+distribution fonts are usable with
+.I label.
+.I Fontname
+is the last component of the desired font file
+in the font directory /usr/lib/vfont.
+There are many fonts available, the full list may be gotten by listing
+the vfont directory (/usr/lib/vfont) R.n, B.n,
+I.n, S.n where n=6,7,8,9,10,11,12,14,16,18,10,22,24,28,36 are one
+variation of a standard ``Times Roman'' font. R is normal tpye face, I
+is italic, B is bold, and S is greek and mathematical symbols in 6, 7,
+8, .... is the point size.
+(The default font is times.6.r)
+.sp
+.PP
+Thus for example the command line:
+.sp
+.ti 1.5i
+label ``Label Text'' -jl -or -x M -y E -a 5 < inseq > outseq
+.sp
+will place the quoted literal directly underneath each frame of the
+input sequence
+.IR inseq ,
+centering it (under the image). These options are the current defaults.
+To make this text run upward and centered along the left edge of the image, use
+.sp
+.ti 1.5i
+label ``Label Text'' -jl -ou -x -1 -y M -a 3 < inseq > outseq
+.sp
+Space between option letters and their modifiers or arguments is optional
+and may be included or ommitted for readability.
+.SH AUTHOR
+Roman Yangarber - 3/25/86

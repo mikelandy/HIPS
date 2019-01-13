@@ -1,0 +1,52 @@
+.TH RFRAME 1BIPS "June 1, 1986"
+.SH NAME
+rframe - read a frame from the ITEC or the LEX-90 display. 
+.SH SYNOPSIS
+.B rframe
+[-p left_col [top_row]] [-s cols [rows]] [-rgbC] [abcd]  > imagefile
+
+.I Defaults:
+.nf
+left_col: 0, rop_row: 0, cols: 512, rows: 480
+color: r
+.fi
+.SH DESCRIPTION 
+.I Rframe
+reads an image from the ITEC or LEX-90 display and produces a HIPL format 
+image file.  A number of options are available to specify the location
+of the image to be read from the screen as well as its color content.
+The input device is determined by a variable in the environment with the
+name DSPDEV, and value either "itec" or "lex".
+
+The
+.I default
+option will cause a 512 x 480 black and white image to be
+read from the ITEC screen, or a 640 x 512 grey image from the LEX-90 screen.
+
+The
+.I spatial location 
+of the image to be read can be specified
+either by row and column or quadrant designations.
+The row and column designation requires specification
+of both the number of row and columns in the image,
+.I [-s cols [rows]]
+as well as
+.I [-p left_col [top_row]]
+which specifies the location of the top left corner of the image.
+Quadrants are specified with
+.I [abcd]
+which recursively specifies the quadrant location for the image.
+
+The
+.I [-rgbC]
+option specifies the 
+frame buffer color from which the image is read.
+The
+.I -C
+option reads a sequence of three images from the red, green,
+and blue frame buffers respectively into a single multiframe sequence.
+On the LEX-90 the color designation is ignored.
+.SH SEE\ ALSO
+wframe(1BIPS) 
+.SH AUTHOR
+Charles Carman - 3/14/86

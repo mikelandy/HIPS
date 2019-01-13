@@ -1,0 +1,130 @@
+.TH H_DIVSCALE 3 "6/29/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_divscale \- divide by a fixed scale factor
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_divscale(hdi,hdo,b)
+h_divscale_s(hdi,hdo,b)
+h_divscale_ib(hdi,hdo,b)
+h_divscale_i(hdi,hdo,b)
+h_divscale_if(hdi,hdo,b)
+h_divscale_f(hdi,hdo,b)
+h_divscale_c(hdi,hdo,b)
+h_divscale_dc(hdi,hdo,b)
+struct header *hdi,*hdo;
+Pixelval *b;
+
+h_divscale_S(imagei,imageo,nr,nc,nlpi,nlpo,b)
+short *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+short b;
+
+h_divscale_IB(imagei,imageo,nr,nc,nlpi,nlpo,b)
+int *imagei;
+byte *imageo;
+int nr,nc,nlpi,nlpo;
+int b;
+
+h_divscale_I(imagei,imageo,nr,nc,nlpi,nlpo,b)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+int b;
+
+h_divscale_IF(imagei,imageo,nr,nc,nlpi,nlpo,b)
+int *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+int b;
+
+h_divscale_F(imagei,imageo,nr,nc,nlpi,nlpo,b)
+h_divscale_C(imagei,imageo,nr,nc,nlpi,nlpo,b)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+float b;
+
+h_divscale_DC(imagei,imageo,nr,nc,nlpi,nlpo,b)
+double *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double b;
+.fi
+.SH DESCRIPTION 
+These routines divide every pixel in an input subimage (specified by
+.I hdi
+or
+.IR imagei )
+by a constant factor
+.IR b ,
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_divscale
+calls
+.IR h_divscale_s ,
+.IR h_divscale_ib ,
+.IR h_divscale_i ,
+.IR h_divscale_if ,
+.IR h_divscale_f ,
+.I h_divscale_c
+or
+.I h_divscale_dc
+depending upon whether the pixel format is short, integer (with byte output),
+integer (with integer output), integer (with float output),
+float, complex or double complex.
+.IR h_divscale_S ,
+.IR h_divscale_IB ,
+.IR h_divscale_I ,
+.IR h_divscale_IF ,
+.IR h_divscale_F ,
+.I h_divscale_C
+and
+.I h_divscale_DC
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+The routines compute opix = ipix/b.  For complex images the scale factor is
+floating point.  For double complex images the scale factor is double.
+For integer input images with byte output images the scale
+factor is an integer.
+For integer input images with float output images the scale
+factor is a float.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+short, integer, float, complex, double complex
+.SH "OUTPUT PIXEL FORMAT"
+same as input (except for integer input with byte or float output)
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words,
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+Of course, this doesn't make sense for integer input images with byte or
+float output.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_FMTSUBR2 - can't handle this pixel format combination
+.SH "SEE ALSO"
+h_linscale(3), h_quadscale(3)
+.SH AUTHOR
+Michael Landy (HIPS 2) - 6/29/91

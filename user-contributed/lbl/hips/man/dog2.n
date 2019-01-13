@@ -1,0 +1,62 @@
+.TH DOG2 Hips "November 25, 1990"
+.SH NAME
+dog2 - filter an image by applying difference of Gaussians mask
+.SH SYNOPSIS
+.B dog2
+[-A esigma [masksize [ratio ]]] [-p #] [-b #] [-n #]
+.br
+[-g #] [-i [-c]] [-w] [-m] [-n input] < input > output
+.SH DESCRIPTION
+.I Dog
+filters an image by applying a difference of Gaussians mask.
+The input is in byte or float format, and the output is in floating point.
+or in integer format.
+
+.SH OPTION
+.TP
+.B -A
+.I Esigma
+is the standard deviation of the "excitatory" Gaussian (default 1.0).
+
+.I Masksize
+is the size of the mask (an integer, defaults to 7).
+
+.I Ratio
+is the ratio between the standard deviations of the inhibitory and
+excitatory Gaussians and defaults to 1.6.
+.TP
+.I -p
+followed by a positive integer specifies the precision and
+defaults to 1.
+.TP
+.I -b
+begin process from #th frames.
+.TP
+.I -n
+the number of frames will be processed.
+.TP
+.I -i
+implies output in PFINT format.
+.TP
+.IR -c
+if -i is specified, causes checking of input to be in the
+range [-1024 to 1024].
+.TP
+.I -m
+outputs the Gaussian(s) only, without convolving.
+.TP
+.I -g
+output Gaussian(s) in # + size of filter, and also other 3 samples.
+Otherwise, output the Gaussian(s) in traditional method ( 2**n ).
+.TP
+.I -w
+output the pure image without header.
+.PP
+If input file is  not redirected, the program gives an impulse
+response in a 7 x 7 frame.
+.SH Examples:
+dog2 -A 1. 28 2. < bird > bird.dog
+.br
+dog2 -A .6 80 1.5 -n bird | scale_gray | histoeq | xhips
+.SH SEE\ ALSO
+3dog(1), mask(1), fmask(1), 3mask(1), f3dmaskm(1)

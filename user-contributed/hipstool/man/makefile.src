@@ -1,0 +1,16 @@
+#
+# makefile for user-contributed/hipstool/man
+#
+
+MANPAGES = hipstool.me
+
+install:
+
+clean:	clean-pgm
+
+man:
+	$(MEPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

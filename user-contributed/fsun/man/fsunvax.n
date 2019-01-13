@@ -1,0 +1,16 @@
+.TH FSUNVAX 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+fsunvax \- convert floating point images between Sun and Vax format
+.SH SYNOPSIS
+.B fsuntovax
+.br
+.B fvaxtosun
+.SH DESCRIPTION 
+These filters translate the binary floating point representation between Sun
+and Vax format.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float
+.SH "OUTPUT PIXEL FORMATS"
+float suitable for the other machine
+.SH AUTHOR
+Ramin Samadani

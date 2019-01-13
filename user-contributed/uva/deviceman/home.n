@@ -1,0 +1,14 @@
+.TH HOME 1BIPS "January 2, 1986"
+.SH NAME
+to undo a zoom on the ITEC boards or the LEX-90.
+.SH SYNOPSIS
+.B home 
+.SH DESCRIPTION
+.I Home
+undoes a zoom and, for the ITEC, puts the pan and scroll registers 
+at 0,0 which will cause the original, unzoomed display
+to be centered in the frame buffer.
+.SH SEE\ ALSO
+zoom(1BIPS)
+.SH AUTHOR
+Chuck Carman - 11/18/85

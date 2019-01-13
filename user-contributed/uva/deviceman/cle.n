@@ -1,0 +1,32 @@
+.TH CLE 1BIPS "April 9, 1986"
+.SH NAME
+cle \- to clear the ITEC or LEX-90 display screen
+.SH SYNOPSIS
+.B cle
+[\-csrgb] [abcd] [graylevel]
+.SH DESCRIPTION
+.PP
+.I cle 
+sets the currently displayed ITEC or LEX-90 frame buffers to a single value,
+erasing the previous contents of these frame buffers.  The device is
+determined by the contents of a variable in the environment, named DSPDEV.
+.sp
+.I Defaults:
+The cle command defaults to clearing the entire screen
+to 0 (black) gray level value without any options.
+.sp
+.I Options:
+A specific frame
+buffer (or set of frame buffers) can be chosen for initialization with the
+.I [\-csrgb]
+option [this parameter is ignored by the LEX-90].  A specific quadrant on
+the screen can be chosen for initialization with the
+.I [abcd]
+option.  The
+.I [graylevel]
+option allows the graylevel value of the initialization
+to be controlled.
+.SH "SEE ALSO"
+wframe(1BIPS)
+.SH AUTHOR
+Chuck Carman - 4/9/85

@@ -1,0 +1,17 @@
+#
+# makefile for user-contributed/cc/sources
+#
+
+PGMS = hips2imP.out slant.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

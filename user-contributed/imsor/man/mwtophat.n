@@ -1,0 +1,30 @@
+.TH MWTOPHAT 1hips "OCTOBER 28, 1991" 
+.SH NAME
+mwtophat, mbtophat - perform gray level morphological tophat
+operations
+.SH SYNOPSIS
+.B mwtophat
+[n] < iseq > oseq
+.br
+.B mbtophat
+[n] < iseq > oseq
+.SH DESCRIPTION 
+The gray level morphological operations are performed using a square
+3x3 structuring element. 
+.I mwtophat
+is the opened image subtracted from itself and thus enhances white tops 
+smaller than the chosen size 
+.I n
+.
+.I mbtophat
+enhances black tops by subtracting the image from the closed image.
+These operations works for both binary and gray level images.
+Input sequence must be in byte or float format.
+.SH SEE\ ALSO
+morpherode(1), morphdilate(1), merode(1), mgradient(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

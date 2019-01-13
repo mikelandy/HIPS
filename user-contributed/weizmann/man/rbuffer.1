@@ -1,0 +1,54 @@
+.TH RBUFFER 1HIPS "November 30, 1986"
+.SH NAME
+rbuffer - read a buffer from the IP-512
+
+.SH SYNOPSIS
+.B rbuffer
+[-r rows] [-c cols] [-y initialrow] [-x initialcol] [-d dev] [-b fbnum]
+[-h] [-t]>frame
+
+
+.SH DESCRIPTION
+.I Rbuffer
+reads buffer fbnum from the IP-512, starting at
+(\fIinitialrow\fR,\fIinitialcol\fR) with size \fIrows\fR * \fIcols\fR,
+and stores it in the standard output file.
+(\fIinitialrow\fR,\fIinitialcol\fR) specifies the position in the frame
+buffer where the read starts from. If the picture does not fit the
+buffer due to a non-zero origin, there will be wraparound.  Thus, if a
+picture happens to reside not in the upper left corner of the frame
+buffer, e.g. it is right shifted as a result of an ALU operation,
+setting (\fIinitialrow\fR,\fIinitialcol\fR) to the picture's origin
+will produce a file with no offset.  \fIh\fR and \fIt\fR are relevant
+only if \fIfbnum\fR is a 16-bits buffer.  If \fIt\fR is on, the output
+file will be made of 16-bits pixels.  If \fIt\fR is off, the low byte
+is read. If \fIt\fR is off and \fIh\fR is on, the high byte is read.
+\fIdevice\fR /dev/ipfb0a does not initiate the camera for continuous
+grabbing frames. That is why the frame buffer's contents are preserved.
+One can also use other devices, as long as their START_CAMERA bit is
+not on.  Thus, do not use /dev/ipfb0b, /dev/ipfb0d, /dev/ipfb1b,
+/dev/ipfb1d.
+
+.SH DEFAULTS
+.I Rows
+and
+.I cols
+default to IPFB_SIZEY (=512), IPFB_SIZEX (=512).
+.I Initialrow
+and
+.I initialcol
+default to 0.
+.I dev
+defaults to /dev/ipfb0a.
+.I fbnum
+defaults to MASTER_FB ( =0).
+.I h
+is reset; low byte chosen.
+.I t
+is reset; 8-bits pixels.
+
+.SH SEE\ ALSO
+rframe(1HIPS), wframe(1HIPS)
+
+.SH AUTHOR
+LEAH MORY -  30/11/86

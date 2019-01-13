@@ -1,0 +1,19 @@
+.TH MSNAP 1HIPS "Febuary 17, 1988"
+.SH NAME
+msnap - capture a frame of video input through the matrox vip-1024 
+frame grabber board(s).
+.SH SYNOPSIS
+.B msnap
+[-c]
+.SH DESCRIPTION 
+.I Msnap 
+captures a frame of video input through the matrox vip-1024 
+GREEN COLORPLANE BOARD.
+The 
+.I -c 
+option indicates that the video source is a color
+camera (i.e., all three colorplanes are used).
+.SH SEE\ ALSO
+rframe(1HIPS), wframe(1HIPS), mclear(1HIPS), and mlive(1HIPS)
+.SH AUTHOR
+Edmond Mesrobian - 2/17/88

@@ -1,0 +1,95 @@
+.TH COLLAGE 1 "7/20/91" "Version 2" "HIPS Manual"
+.SH NAME
+collage \- combine 2 or more sequences into a single collage sequence
+.SH SYNOPSIS
+.B collage
+[-s rows [cols]] [-f] [-e]
+.br
+.ta 1i 1.3i
+	file1 ir1 ic1
+.br
+	file2 ir2 ic2
+.br
+		.
+.br
+		.
+.br
+		.
+.br
+	filen irn icn > collage-file
+.SH DESCRIPTION 
+.I Collage
+combines two or more sequences of frames into a single 
+sequence.  Corresponding frames from each sequence are combined into a
+single frame.  The output frame is initially set to the background color, 
+which is specified with the standard switch 
+.I -UL
+and defaults to 0.  Then,
+.IR file1 's
+frame is placed with its upper-left corner at (ir1,ic1).  Then,
+.IR file2 's
+frame is placed with its upper-left corner at (ir2,ic2), possibly
+overlaying part of
+.IR file1 's
+frame.  This process continues until all n files'
+frames have been read, and then the frame is output.  The process repeats
+for each input frame.  The size of the output frame may be set with the
+.I -s
+switch (and
+.I cols
+defaults to
+.IR rows ).
+Otherwise it defaults to the minimum
+size needed to contain all of the input frames (except that the output
+frames upper-left corner is always at position (0,0)).  Input frames will be
+clipped at the edges of the output frame and need not fit entirely within
+the output frame.  The output sequence will have as many frames as the
+longest input sequence.  If any input sequence is shorter than the maximum,
+then either it will simply no longer take part (the default), or the last
+frame will be repeatedly used (a ``freeze-frame'', specified with the
+.I -f
+switch).  For bit-packed output frames, the initial column positions will be
+clipped to an even multiple of 8.  Only the regions-of-interest of the
+input files are collaged.  However, if
+.I -e
+is specified, the input regions
+of interest are reset to be the entire image, so that entire images are
+collaged.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+most-significant-bit first packed, least-significant-bit first packed,
+byte, short, integer, float, double, complex, double complex, integer pyramid,
+float pyramid
+.SH "REGION-OF-INTEREST"
+The output region-of-interest is cleared to be the entire image.
+Unless
+.I -e
+is specified, only regions-of-interest are copied into the collage.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -NFH
+Do not preserve the input sequence histories of all input sequences.
+.TP 1.3i
+.I -NFD
+Do not preserve the input sequence descriptions of all input sequences.
+.TP 1.3i
+.I -FXP
+Merge the extended parameter lists from all input sequences.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+joinframes(1)
+.SH AUTHOR
+Michael Landy - 11/14/86
+.br
+HIPS 2 - Michael Landy - 7/20/91

@@ -1,0 +1,34 @@
+This directory contains contributions from 
+
+The Institute of Mathematical Modelling (IMM, former IMSOR)    
+    The Technical University of Denmark, Building 321
+               DK-2800 Lyngby, Denmark
+
+The programs have been compiled and used under HP-UX (Hewlett Packard UNIX) 
+and they have to a large extent been ported to SunOS and AIX systems.
+
+The latest version of the IMM contribution, hipscontrib.tar.Z, can be 
+obtained through anonymous ftp from snake1.imsor.dth.dk (129.142.68.53) 
+in pub/unix/jmc.
+
+To get a list of the IMM HIPS programs in public domain just look at
+the hips_imm manual page.
+
+Maintenance of the IMM HIPS contribution:
+
+Jens Michael Carstensen, jmc@imsor.dth.dk
+Allan Aasbjerg Nielsen, aa@imsor.dth.dk
+
+Suggestions and bug reports are welcome!
+
+PS.
+In the ....imsor/man directory there is a
+shell script called mk_sysV.man. This shell script renames the extension
+of the man-files to be .1 instead of .n and at the same time the 
+header of the man-files is changed to include the word 1hips. This
+makes it easier to recognize the hips commands when you do a keyword
+search on the man-pages. The shell script takes two arguments
+<fromdir> and <todir> which - in principle - could be the same. <Fromdir>
+is the directory where the man-pages are stored now and <todir> is the
+new directory.
+

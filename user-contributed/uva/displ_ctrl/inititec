@@ -1,0 +1,13 @@
+if test $DSPDEV != ITEC
+then
+   echo "Display device is not the Itec.  Change it using: setenv DSPDEV ITEC"
+else
+  cle
+  cd /usr/spool/images/lut
+  wrlut < stdlut.hipl
+  grab; freeze
+  cle
+  cd ../demo
+  wframe -C < mikids
+fi
+

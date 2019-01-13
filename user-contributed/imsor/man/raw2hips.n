@@ -1,0 +1,28 @@
+.TH RAW2HIPS 1hips "JUNE 17, 1993" 
+.SH NAME
+raw2hips - converts a raw byte image to HIPS-format by guessing the
+number of rows and columns.
+.SH SYNOPSIS
+.B raw2hips
+[-c ncols] [-r nrows] [-v] iseq > oseq
+.SH DESCRIPTION 
+.I Raw2hips 
+converts a raw byte image to HIPS-format by guessing the 
+number of rows and columns. The guess is made by maximizing the vertical
+nearest neighbor correlation among the possible factorizations of
+the image size.
+Options:
+.I [-c ncols]
+fixes the number of columns to ncols.
+.I [-r nrows]
+fixes the number of rows to nrows.
+.I [-v]
+sets verbose mode.
+.SH SEE\ ALSO
+stripheader(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

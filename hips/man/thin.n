@@ -1,0 +1,79 @@
+.TH THIN 1 "8/4/91" "Version 2" "HIPS Manual"
+.SH NAME
+thin \- thin and categorize a white-on-black image
+.SH SYNOPSIS
+.B thin
+[-t] [-d] [-c] [-m] [-a] [-s] [-v]
+.SH DESCRIPTION 
+This program thins white-on-black images in two ways, and then categorizes
+the points in the image.  The algorithms are derived from those of
+Sakai, et al. (Computer Graphics and Image Processing, Vol. 1, 1972, pp.
+81-96).  The program
+operates in several passes, any combination of which can be chosen with
+switches:
+.sp
+.TP
+.I -t
+1) Thin the image by deleting points with 3 to 5
+8-neighbors and 2 transitions.  This pass is repeated
+until no further deletions occur unless the
+.I -s 
+(single-pass) switch is given.
+.TP
+.I -d
+2) Thin the image further, so that diagonal lines are
+at most 1 pixel wide, but 8 connectivity is
+preserved.  Delete pixels which have 2-6 8-neighbors
+and exactly one 8-connected gap in the ring its
+8-neighbors.
+.TP
+.I -c
+3) Categorize pixels as Endpoints (020), Multiple branch
+points, Isolated points (040), or Uninteresting
+points (010).  Multiple branch points are
+categorized as M's (0200) if 6 or more transitions
+are found, otherwise as MM (0100).
+.TP
+.I -m
+4) Multiple 8-neighbor MM point groups have an M point
+replace the MM closest to the center of the group.
+.sp
+.PP
+The
+.I -a
+switch implies all four passes. The
+.I -v
+switch (verbose) prints the
+number of deletions in pass 1, etc.  The
+.I -s
+switch keeps the first two passes
+from being repeated if changes were made.  If no switches are given, the
+default is
+.IR "-t -d" .
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+thicken(1), thresh(1), vectcode(1), vectgen(1)
+.SH AUTHOR
+Michael Landy - 10/22/82
+.br
+HIPS 2 - msl - 8/4/91

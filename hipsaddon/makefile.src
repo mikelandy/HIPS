@@ -1,0 +1,19 @@
+#
+# makefile for directory hipsaddon
+#
+
+# Subdirectories that get made
+# Note that xanim and datacube directories are made from DRIVERDIRS.
+
+DIRS = main
+
+# default action just makes src dirs
+
+all: install
+
+clean install pristine man doc: doit
+	@for d in $(DIRS) ; do \
+		( cd $$d ; echo make $@ on $(HERE)$$d ; make $(MFLAGS) $@ ) ; \
+	done
+
+doit:

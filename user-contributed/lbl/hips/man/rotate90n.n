@@ -1,0 +1,21 @@
+.TH ROTETA90N 1 "DECEMBER 5, 1991" LBL-HIPS
+.\" @(#)rotate90n.1  1.10 90/12/1 JIN;
+.SH NAME
+rotate90n \- rotate any type image 90 degree, and output a HIPS image
+.SH SYNOPSIS
+.nf
+.ta 1i
+.B rotate90n
+	[-r] [<] in_file > output
+.fi
+.SH DESCRIPTION
+.I rotate90n
+rotate an image 90 degree in CounterClockWise by default.  The -r rotates
+an image ClockWisely.  The input is in
+.br
+HIPS, FITS, GIF, ICC, JPEG, PICT, PNM, RLE, SUN-raster, and TIFF
+
+.SH "SEE ALSO"
+toany(1), color_ps(1), powertool(1)
+.SH AUTHOR
+Jin Guojun - 12/10/90

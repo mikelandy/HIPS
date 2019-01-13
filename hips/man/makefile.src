@@ -1,0 +1,55 @@
+#
+# makefile for hips/man
+#
+
+MANPAGES = \
+	abdou.n absdiffseq.n abspix.n addcmap.n adddesc.n addparam.n \
+	addseq.n affine.n ahc3.n ahc3_r.n andseq.n applycmap.n atop.n \
+	autodiff.n bandpass.n bandreject.n bclean.n binentropy.n \
+	binquad.n binquad_r.n bnoise.n bpack.n btc.n btcsmooth.n \
+	btorle.n calccomb.n calcpix.n calcwarp.n \
+	catframes.n checkers.n clearroi.n \
+	collage.n colorkey.n coltransf.n combine.n comicstrip.n \
+	conjpix.n convertxhd.n \
+	convolve.n correl.n cosum.n cutf.n cylindrate.n dct.n diffseq.n \
+	discedge.n discedge2.n disphist.n dispwbasis.n dither.n \
+	divseq.n dog.n dotdiff.n dpcm_r.n dpcm_t.n drift.n \
+	dump_plot3d.n enlarge.n exppix.n extract.n extractroi.n \
+	extremum.n fastcosum.n fcalccomb.n fcalcpix.n flipquad.n fourtr.n \
+	fourtr3d.n framevar.n gabor.n gcube.n genframe.n genheader.n \
+	getmax.n getmin.n \
+	gmag.n gnoise.n gpoly.n grabheader.n grating.n greybar.n \
+	gridwarp.n grot.n \
+	gshift.n gsync.n halftone.n hc_bin.n hc_bin_r.n highpass.n \
+	hipstosun.n hips2tohips1.n histo.n histoeq.n histostretch.n \
+	htob.n htobgr.n htobgrz.n htoc.n htod.n htodc.n htof.n htoi.n \
+	htolp.n htomp.n htorgb.n htorgbz.n htos.n htosb.n htoui.n \
+	htous.n htozbgr.n htozrgb.n imgtopyr.n intercolor.n interdepth.n \
+	interlace.n inv.dct.n inv.fourtr.n inv.fourtr3d.n \
+	inv.walshtr.n joinframes.n logimg.n lowpass.n luminance.n \
+	mask.n maskseq.n maxabsseq.n maxseq.n mean0.n median.n \
+	minabsseq.n minseq.n morphdilate.n morpherode.n mulseq.n neg.n \
+	noise.n nonisot.n oct.n oct_r.n orseq.n pad.n picinvert.n \
+	pictranspose.n pixentropy.n pixto3d.n plot3topix.n plot3tov.n \
+	powerpix.n prtdth.n prteps.n prthlf.n pshalftone.n pstrobe.n \
+	psubseq.n ptoa.n pyrdisplay.n pyrexpand.n pyrextract.n \
+	pyrmerge.n pyrreduce.n pyrtoimg.n reduce.n reflect.n repframe.n \
+	rle.n rle_r.n rletob.n rmparam.n rotate180.n rotate90.n scale.n \
+	scalemeansd.n seeheader.n \
+	seehist.n seeplot.n setroi.n shiftpix.n sirds.n slice.n stretch.n \
+	stretchpix.n stripheader.n strobe.n subsample.n subseq.n \
+	suntohips.n thicken.n thin.n \
+	thresh.n tmag.n transf.n trot.n tshift.n vectcode.n vectgen.n \
+	view.n vmag.n vrot.n vshift.n walshtr.n wgauss.n wrapimg.n \
+	xorseq.n zc.n zoneplate.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

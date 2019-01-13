@@ -1,0 +1,28 @@
+.TH APPLYLUT 1 "1 October 1990" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+applylut \- apply a text gray-level look-up table to a byte or short
+formatted HIPS image.
+.SH SYNOPSIS
+.B applylut
+lut_file < inseq > outseq
+.SH DESCRIPTION
+.I applylut
+reads a text file containing a new gray-level look-up table and
+applies this look-up table to a sequence of images. The format of
+the look-up table is all integers; the first number indicates the
+size of the look-up table (normally 256 for byte images and 65536
+for short images, however any size is possible), followed by a
+list of new values. The order in the file determines the value to
+be mapped from. For example, 0 will be mapped the the the 1st
+value in the file, 1 to the 2nd, 255 to the 256th, 60000 to
+the 60001th, etc.
+.sp
+If your look-up table contains less entries than the number of gray levels
+in your file, remaining gray-levels will be mapped to 0.
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH SEE ALSO
+hips_intro(1)
+.SH BUGS
+Report to Brian Tierney.

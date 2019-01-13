@@ -1,0 +1,49 @@
+#
+# makefile for user-contributed/lbl/hips/sources/rle/togif
+#
+
+
+PGMA = rletogif.out
+PGMS = to8.out
+
+OBJA = rletogif.o gifencod.o compgif.o
+
+default:	install
+install:	${OBJA} $(PGMA) # $(PGMS)
+
+RI = $(CCS_ROOT)/include
+RL = $(LDFLAGS) -lrle
+
+${OBJA}:
+	$(COMPILEc) -I$(RI) $*.c
+
+$(PGMA): ${OBJA}
+	$(LINKc) $* ${OBJA} $(RL)
+	strip $*
+	mv $*	$(DESTDIR)
+	cp togif	$(DESTDIR)
+	@touch $@
+
+$(PGMS):
+	$(LINKc) $* -I$(RI) $< $(RL) -lm
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+# Clean up installed binaries
+pristine:	pristine-pgm
+
+# Clean up binaries
+clean:	clean-pgm
+clean-all:	clean_all
+man:
+
+doc:
+
+mkdest:
+	@if [ ! -f togif ];	then	\
+		ln -s ../togif . ;	\
+	else	true;	fi
+
+# Dependencies
+$(OBJA): $(RI)/rle_config.h

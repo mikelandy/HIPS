@@ -1,0 +1,41 @@
+#
+# makefile for user-contributed/lbl/xview/hview
+#
+
+PGMS = hview.out
+
+CPPFLAGS2 = -I$(XVIEWHOME)/include 
+#CFLAGS += -Bstatic
+LDFLAGS2 = -L$(XVIEWHOME)/lib
+LIBRARIES2 = -lxcolor
+
+LINTFLAGS  = -h -target=$(MACHINE)
+
+OBJECTS = hview.o hview_ui.o procs.o 24to8.o
+
+.c.o:
+	$(COMPILEc) $< $(CPPFLAGS2)
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+hview.out:	$(OBJECTS)
+	$(LINKc) $* $(OBJECTS) $(LIBRARIES) $(LIBRARIES2) $(LDFLAGS2) $(LIBXVIEW)
+	mv $* $(DESTDIR)
+	@touch $@
+
+FRC:
+
+lint:
+	lint $(LINTFLAGS) $(SOURCESc)
+
+#%_ui.c + %_ui.h + %_stubs.c + %.info: %.G
+#	$(GUIDEHOME)/bin/gxv $*

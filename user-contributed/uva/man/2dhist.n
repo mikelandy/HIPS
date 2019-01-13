@@ -1,0 +1,32 @@
+.TH 2DHIST 1BIPS "Aug 3 1987"
+.SH NAME
+2dhist \- creates a 2d histogram from a pair of images
+.SH SYNOPSIS
+.B 2dhist
+[<x_image> <y_image>] [\-zh] [< iseq] > oseq
+.SH DESCRIPTION
+.PP
+.I 2dhist 
+creates a 256x256 image representing
+the two dimensional histogram of the image pair.
+Input images may be from a pipe or 2 specified files.
+Input images may be any size but must match. For
+example, input images may be in-register views of
+the same source, masked to a region of interest.  The input images must be 
+in byte format.
+Output image is in integer format, ready to be piped through
+.I scale
+as desired.
+.sp
+.I Defaults:
+By default, bin (0,0), which 
+represents paired zeros, usually from background regions, is set
+to zero so as not to tip the scaling.
+.sp
+.I Options:
+The [\-z] option activates bin (0,0) when zero suppression
+is not desired. The [\-h] option displays the command syntax.
+.SH "SEE ALSO"
+histi(1BIPS), histo(1BIPS), 3dhist(1BIPS)
+.SH AUTHOR
+Chuck Carman & Justin Pearlman

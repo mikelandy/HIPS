@@ -1,0 +1,89 @@
+.TH GRIDWARP 1 "6/3/93" "Version 2" "HIPS Manual"
+.SH NAME
+gridwarp \- warp an image using a control grid
+.SH SYNOPSIS
+.B gridwarp
+[-c controlfile] [-s nr [nc]] [-w] <iseq >oseq
+.SH DESCRIPTION 
+.I Gridwarp
+warps an input image spatially based on a grid of control points.
+The algorithm (based on the discussion in Castleman,
+.IR "Digital Image Processing" ,
+Prentice-Hall) is based on a pixel fill algorithm.  The control
+grid points are a rectangular grid in the output image, and the user
+specifies both this grid and the spatial locations of the points in the
+input image which map to these grid locations in the output image.  For
+each output image pixel, the program determines in which control grid
+rectangle the pixel lies.  Pixels lying outside any control grid rectangle
+utilize the mapping of the nearest control grid rectangle.  Then, it
+determines the corresponding input image pixel location by bilinearly
+interpolating between the four points corresponding to the four corners of
+the rectangle.  Finally, using the four nearest neighbors to that input
+pixel position, the output grey value is determined using bilinear
+interpolation.
+.PP
+The program assumes that pixels are points located on a rectangular grid.
+For a coordinate system it assumes that the first pixel in an image is
+located at position (0,0), and the last stored pixel in an image (or ROI) is
+located at position (1,1).
+.PP
+The control file (the default file name is `controlfile') is formatted as
+follows:
+.sp
+.ta .3i 1.5i
+.nf
+firstx firsty	the first control grid point location in the output image
+nx ny	the grid size
+dx dy	the distance between successive grid points
+xi1 yi1	the first input image control grid position
+       .
+       .
+       .
+xi(nx*ny) yi(nx*ny)	the last input image control grid position
+.fi
+.sp
+The control grid positions start with that corresponding to (firstx,firsty)
+and proceed in column-first order (i.e. the 2nd one corresponds to
+(firstx+dx,firsty).  The user may also specify the size of the output
+images.  If
+.I -s
+is not specified, the output image size is the same as the
+input image size.  If
+.I -s
+is specified but
+.I nc
+is not,
+.I nc
+defaults to be the same as
+.IR nr .
+.PP
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+By default the input image used is the region-of-interest of the input
+image.  The
+.I -w
+flag specifies that the entire input image should be used.
+The output image contains only the warped image or subimage, with ROI
+set to be the entire image.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+affine(1), calcwarp(1)
+.SH AUTHOR
+Michael Landy - 5/27/93

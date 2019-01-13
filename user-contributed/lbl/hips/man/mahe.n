@@ -1,0 +1,70 @@
+.TH MAHE 1 "8/30/91" LBL-HIPS
+.SH NAME
+mahe \- "clipped" adaptive histogram equalization
+.SH SYNOPSIS
+.B mahe 
+.BR
+[-r \fIrx ry\fR] [-c \fIf\fR]  [-W \fIWx Wy\fR]
+< \fIinfile\fR > \fIoutfile\fR
+.SH DESCRIPTION
+\fImahe\fR is an implementation of the Pizer Adaptive Histogram
+Equalization algorithm.  This algorithm is a form of adaptive contrast
+enhancement used for the display of images which have an intrinsic
+data range larger than the capabilities of a display device.
+\fImahe\fR also performs well as an edge enhancement technique.
+
+Clipping the histogram limits the effects of noise in the histogram
+equalization process.  The -c option specifies the amount of
+"clipping" to be done.
+
+Input images must be in HIPS format.
+
+.SH OPTIONS
+
+.LP
+Options may appear in any order.  -r and -W cannot be used together.
+
+.TP
+.BI \-r " rx ry"
+Positive integers which specify the number of regions in the x and y
+directions.  The default value is 4 for both x and y.
+.TP
+.BI \-W " wx wy"
+Positive integers which specify the size of the region.  This is the
+same thing as dividing the image dimension by the window dimension
+and using the result int \fB\-r\fR.
+.TP
+.BI \-c " f"
+Positive floating point number (>= 1.0) which is used to limit the
+number of pixels in any bucket of the histogram.  An average number of
+pixels for all grey levels is computed, and the user specified number
+is used to scale this average.  This scaled number becomes the maximum
+count in the histogram used to calculate the ahe mapping.  A good
+starting value is 5, and smaller numbers cause more limiting.
+.TP
+.BI \-h
+List options.
+
+.SH AUTHOR
+Original Program: John B. Zimmerman
+.br
+Modification: Phil Amburn
+.br
+Modification: Robert Cromartie
+.br
+Renamed by: John Gauch
+.br 
+Modification: Michael McGuffey
+.br
+UNC Department of Computer Science
+.br
+Modification: Max Rible
+.br
+Lawrence Berkeley Laboratory, Information and Computing Sciences
+.br
+Modification: David Robertson
+.br
+Lawrence Berkeley Laboratory, Information and Computing Sciences
+
+.SH BUGS
+Report to Cromartie.

@@ -1,0 +1,53 @@
+.TH HC_BIN_R 1 "7/23/91" "Version 2" "HIPS Manual"
+.SH NAME
+hc_bin_r \- decode an hc_bin-coded sequence into a byte formatted sequence
+.SH SYNOPSIS
+.B hc_bin_r
+[-d [delta [greylevel]]]  < input_tree >output_sequence
+.SH DESCRIPTION 
+.I Hc_bin_r
+converts a sequence coded using 
+.IR hc_bin (1)
+into a byte formatted sequence.
+The default is to simply reconstruct the image.  If
+.I -d
+is specified, then a
+a displayable picture is created of the decomposition into
+subblocks. The boundaries are painted in gray.  If
+.I delta
+is specified, then each lower level boundary is
+.I delta
+greylevels lower than the previous level's boundary.
+.I Delta
+defaults to zero.
+.I Greylevel
+specifies the grey level of level 0, which defaults to 168.
+.PP
+The input must be in the special PFBT format.  The coding uses the following
+bit mapping: {W,B,G} map to
+{10,11,0}. At the lowest level the pixels are coded in 1
+bit per pair.  The code is assumed to be left shifted and packed, with last
+word of each binary-tree padded with 0's to the right.  The number of bits
+read is given on ``stderr''.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+BT
+.SH "OUTPUT PIXEL FORMATS"
+byte
+.SH "REGION-OF-INTEREST"
+The region-of-interest is ignored and the entire image is decoded.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when reconstructing. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when reconstructing. Default: 255.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+hc_bin(1), ahc3(1), ahc3_r(1), binquad(1), binquad_r(1)
+.SH AUTHOR
+Mike Landy - 10/1/83
+.br
+Hips 2 - msl - 7/23/91

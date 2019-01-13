@@ -1,0 +1,51 @@
+.TH VFFTPASS 1 "March 15, 1992" LBL-HIPS
+.\" @(#)elastic filter for virtual-Fourier transform.1  1.10 91/5/15 JIN;
+.SH NAME
+vfftpass \- elastic-symmetric low and high pass filter for VFFT
+.SH SYNOPSIS
+.nf
+.ta 1.5i
+vfftpass	[-hi] [-base #] [-c] [-floor #] [-F #] [-G] [-L]
+	[min #] [-neg] [-r #] [-v] [<] VFFT [> | -o] filtered-VFFT
+.SH DESCRIPTION
+.SH OPTIONS
+.TP
+.I -base #
+base value in filter plane. [Default=0.0], max 2.0.
+.TP
+.I -c
+convex curve. Default is concave curve.
+.TP
+.I -hi
+highpass filter (also -neg). Default is lowpass filter.
+.TP
+.I -f #
+elastic scale factor. See curve, use -g option.
+.TP
+.I -F #
+number of Frames in sample. Default is 16.
+.TP
+.I -G
+only generate a plot data file for filter curves.
+.TP
+.I -L
+Linear filter.
+.TP
+.I -min #
+lower threshold value. The default is 0.01.
+.TP
+.I -neg
+negate filter. It generates 3 - 1D high pass filters, then conbines them to
+a 2D or 3D high-pass like filter. The
+.I -hi
+reverse entire low-pass filter to generate a high-pass filter.
+.TP
+.I -r #
+radius factor. default is 1 (100%). Range 0.1 - 1.0
+.TP
+.I -v
+verbose.
+.SH "SEE ALSO"
+vfft(1), vfftfilter(1), inv-vfft(1), dcvtob(1), tuner(1)
+.SH AUTHOR
+Jin Guojun - 5/15/91

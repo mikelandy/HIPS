@@ -1,0 +1,127 @@
+.TH H_SETIMAGE 3 "6/25/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_setimage \- subroutines to set all image pixels to a single value
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_setimage(hd,val)
+h_setimage_mp(hd,val)
+h_setimage_lp(hd,val)
+h_setimage_b(hd,val)
+h_setimage_sb(hd,val)
+h_setimage_s(hd,val)
+h_setimage_us(hd,val)
+h_setimage_i(hd,val)
+h_setimage_ui(hd,val)
+h_setimage_f(hd,val)
+h_setimage_d(hd,val)
+h_setimage_c(hd,val)
+h_setimage_dc(hd,val)
+struct header *hd;
+Pixelval *val;
+
+h_setimage_MP(image,nr,nc,nlp,val)
+h_setimage_LP(image,nr,nc,nlp,val)
+h_setimage_B(image,nr,nc,nlp,val)
+byte *image,val;
+int nr,nc,nlp;
+
+h_setimage_SB(image,nr,nc,nlp,val)
+sbyte *image,val;
+int nr,nc,nlp;
+
+h_setimage_S(image,nr,nc,nlp,val)
+short *image,val;
+int nr,nc,nlp;
+
+h_setimage_US(image,nr,nc,nlp,val)
+h_ushort *image,val;
+int nr,nc,nlp;
+
+h_setimage_I(image,nr,nc,nlp,val)
+int *image,val;
+int nr,nc,nlp;
+
+h_setimage_UI(image,nr,nc,nlp,val)
+h_uint *image,val;
+int nr,nc,nlp;
+
+h_setimage_F(image,nr,nc,nlp,val)
+float *image,val;
+int nr,nc,nlp;
+
+h_setimage_D(image,nr,nc,nlp,val)
+double *image,val;
+int nr,nc,nlp;
+
+h_setimage_C(image,nr,nc,nlp,val)
+float *image,*val;
+int nr,nc,nlp;
+
+h_setimage_DC(image,nr,nc,nlp,val)
+double *image,*val;
+int nr,nc,nlp;
+.fi
+.SH DESCRIPTION 
+These routines set all pixel values in an input subimage
+(specified by
+.I hd
+or
+.IR image )
+to the supplied constant value.
+.I h_setimage
+calls
+.IR h_setimage_mp ,
+.IR h_setimage_lp ,
+.IR h_setimage_b ,
+.IR h_setimage_sb ,
+.IR h_setimage_s ,
+.IR h_setimage_us ,
+.IR h_setimage_i ,
+.IR h_setimage_ui ,
+.IR h_setimage_f ,
+.IR h_setimage_d ,
+.I h_setimage_c
+or
+.I h_setimage_dc
+depending upon whether the pixel format is packed most-significant-bit first,
+packed least-significant-bit first, byte, signed byte, short, unsigned
+short, integer, unsigned integer, float, double, complex or double complex.
+.IR h_setimage_MP ,
+.IR h_setimage_LP ,
+.IR h_setimage_B ,
+.IR h_setimage_SB ,
+.IR h_setimage_S ,
+.IR h_setimage_US ,
+.IR h_setimage_I ,
+.IR h_setimage_UI ,
+.IR h_setimage_F ,
+.IR h_setimage_D ,
+.I h_setimage_C
+and
+.I h_setimage_DC
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The image has
+.I nlp
+pixels per line.  For packed formats, the supplied value is taken from
+val->v_byte, and this byte value replaced each byte of the subimage (hence, it
+may not make the image uniform unless the value is 0 or 255).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+MSBF, LSBF, byte, signed byte, short, unsigned short, integer, unsigned
+integer, float, double, complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.\" .SH "SEE ALSO"
+.SH AUTHOR
+Michael Landy - 6/23/91

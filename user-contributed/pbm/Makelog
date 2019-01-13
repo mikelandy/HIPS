@@ -1,0 +1,127 @@
+making all in ./pbm...
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I.. -c libpbm1.c
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I.. -c libpbm2.c
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I.. -c libpbm3.c
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I.. -c libpbm4.c
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I.. -c libpbm5.c
+rm libpbm.a
+ar cq libpbm.a libpbm1.o libpbm2.o libpbm3.o libpbm4.o libpbm5.o
+ranlib libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o atktopbm atktopbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o brushtopbm brushtopbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o cmuwmtopbm cmuwmtopbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o g3topbm g3topbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o icontopbm icontopbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o gemtopbm gemtopbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o macptopbm macptopbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o mgrtopbm mgrtopbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmlife pbmlife.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmmake pbmmake.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmmask pbmmask.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmreduce pbmreduce.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtext pbmtext.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmto10x pbmto10x.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtoascii pbmtoascii.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtoatk pbmtoatk.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtobbnbg pbmtobbnbg.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtocmuwm pbmtocmuwm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtoepson pbmtoepson.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtog3 pbmtog3.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtogem pbmtogem.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtogo pbmtogo.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtoicon pbmtoicon.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtolj pbmtolj.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtomacp pbmtomacp.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtomgr pbmtomgr.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtopi3 pbmtopi3.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtoplot pbmtoplot.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtoptx pbmtoptx.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtox10bm pbmtox10bm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtoxbm pbmtoxbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtoybm pbmtoybm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmtozinc pbmtozinc.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pbmupc pbmupc.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o pi3topbm pi3topbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o xbmtopbm xbmtopbm.c libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -DLIBTIFF -I..  -o ybmtopbm ybmtopbm.c libpbm.a
+making all in ./pgm...
+cc -O   -I/usr/include       -I.. -I../pbm -c libpgm1.c
+cc -O   -I/usr/include       -I.. -I../pbm -c libpgm2.c
+rm libpgm.a
+ar cq libpgm.a libpgm1.o libpgm2.o
+ranlib libpgm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o fitstopgm fitstopgm.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o fstopgm fstopgm.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o hipstopgm hipstopgm.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o lispmtopgm lispmtopgm.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmbentley pgmbentley.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmenhance pgmenhance.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmhist pgmhist.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmnorm pgmnorm.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmoil pgmoil.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmramp pgmramp.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmtofits pgmtofits.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmtofs pgmtofs.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmtolispm pgmtolispm.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmtopbm pgmtopbm.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o psidtopgm psidtopgm.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o rawtopgm rawtopgm.c libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmedge pgmedge.c -lm libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -I.. -I../pbm  -o pgmtexture pgmtexture.c -lm libpgm.a ../pbm/libpbm.a
+making all in ./ppm...
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm -c libppm1.c
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm -c libppm2.c
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm -c libppm3.c
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm -c libppm4.c
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm -c libppm5.c
+rm libppm.a
+ar cq libppm.a libppm1.o libppm2.o libppm3.o libppm4.o libppm5.o
+ranlib libppm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o giftoppm giftoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o gouldtoppm gouldtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ilbmtoppm ilbmtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o imgtoppm imgtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o mtvtoppm mtvtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o pcxtoppm pcxtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o pgmtoppm pgmtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o pi1toppm pi1toppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o picttoppm picttoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o pjtoppm pjtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmdither ppmdither.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmhist ppmhist.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmmake ppmmake.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmquant ppmquant.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmrelief ppmrelief.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtogif ppmtogif.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtoicr ppmtoicr.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtoilbm ppmtoilbm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtopcx ppmtopcx.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtopgm ppmtopgm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtopi1 ppmtopi1.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtopict ppmtopict.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtopj ppmtopj.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtopuzz ppmtopuzz.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtorgb3 ppmtorgb3.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtosixel ppmtosixel.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtotga ppmtotga.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtouil ppmtouil.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtoxpm ppmtoxpm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmtoyuv ppmtoyuv.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o qrttoppm qrttoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o rawtoppm rawtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o rgb3toppm rgb3toppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o spctoppm spctoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o sputoppm sputoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o tgatoppm tgatoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ximtoppm ximtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o xpmtoppm xpmtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o yuvtoppm yuvtoppm.c libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+cc -O   -I/usr/include       -DRGB_DB=\"/usr/lib/X11/rgb\" -I.. -I../pgm -I../pbm  -o ppmpat ppmpat.c -lm libppm.a ../pgm/libpgm.a ../pbm/libpbm.a
+making all in ./pnm...
+cc -O   -I/usr/include       -DLIBTIFF -I.. -I../ppm -I../pgm -I../pbm -I../libtiff -c libpnm1.c
+cc -O   -I/usr/include       -DLIBTIFF -I.. -I../ppm -I../pgm -I../pbm -I../libtiff -c libpnm2.c
+cc -O   -I/usr/include       -DLIBTIFF -I.. -I../ppm -I../pgm -I../pbm -I../libtiff -c libpnm3.c
+cc -O   -I/usr/include       -DLIBTIFF -I.. -I../ppm -I../pgm -I../pbm -I../libtiff -c libpnm4.c
+rm libpnm.a
+ar cq libpnm.a libpnm1.o libpnm2.o libpnm3.o libpnm4.o
+ranlib libpnm.a

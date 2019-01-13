@@ -1,0 +1,58 @@
+.TH H_SIGMASPAT 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_sigmaspat - image random noise estimator
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <math.h>
+#include <hipl_format.h>
+
+h_sigmaspat(hdi,sigma)
+h_sigmaspat_b(hdi,sigma)
+struct header   *hdi;
+float          *sigma;
+
+h_sigmaspat_B(imagei,nr,nc,ocols,sigma)
+byte    *imagei;
+int     nr,nc,ocols;
+float   *sigma;
+.fi
+.SH DESCRIPTION
+.I h_sigmaspat
+estimates the standard deviation of random noise of the input subimage
+(ROI, specified by
+.I hdi
+or
+.I imagei
+as a pointer to the first pixel of the subimage),
+and displays the estimate and stores it in
+.I sigma.
+.I h_sigmaspat
+then calls
+.I h_sigmaspat_b
+only if the image pixel format is byte.
+.I h_sigmaspat_b
+then calls
+.I h_sigmaspat_B
+which is the low-level routine and does not require image header.
+The subimage size is
+.I nr
+by
+.IR nc.
+The longer subimage dimension
+of the image must be larger than 15 to ensure a reliable
+estimation. The other shorter dimension must be greater than 1.
+.I ocols
+is the number of pixels in a line of the input image.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH SEE ALSO
+h_sigmatemp(1)
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

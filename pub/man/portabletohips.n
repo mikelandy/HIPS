@@ -1,0 +1,42 @@
+.TH PORTABLETOHIPS 1 "4/19/95" "Version 2" "HIPS Manual"
+.SH NAME
+portabletohips \- Convert from various portable formats to HIPS format
+.SH SYNOPSIS
+.B portabletohips
+[-f frames] < portablefile > hipsfile
+.SH DESCRIPTION 
+.I Portabletohips
+converts from a variety of Jef Poskanzer's portable formats
+to HIPS format.  This allows one to then use Poskanzer's routines to
+convert from a variety of other standard image formats to HIPS format.
+This program only accepts input files in the standard input.  Here are the
+conversions that it performs:
+.sp
+.nf
+.ta 1i 3i
+	Input format	Output pixel format
+.sp
+	PBM (raw or plain)	MSBF packed
+	PGM (raw or plain)	byte, short or integer
+	PPM (raw or plain)	RGB
+.fi
+.PP
+For plain PGM formats, the maximum value in the sequence determines the
+output pixel format (so that no clipping is ever required).  For raw PBM
+format, the code assumes that each row begins on a byte boundary (which is
+not stated explicitly in the PBM documentation but is true of the PBM
+library code). For all PPM formats, only maximum values no greater than 255
+are accepted.
+.PP
+Hipstoportable allows one to collapse a multiframe sequence into a single
+portable frame (with successive frames one above the next).  With the -f
+switch, the single portable frame is treated as if it needs to be
+`uncollapsed', resulting in a multiframe HIPS sequence.  Thus, the
+specified number of frames must be an even divisor of the number of rows in
+the portable input image.
+.SH "PORTABLE FORMATS HANDLED DIRECTLY"
+PBM (raw or plain), PGM (raw or plain), PPM (raw or plain)
+.SH "SEE ALSO"
+hipstoportable(1)
+.SH AUTHOR
+Michael Landy - 4/17/95

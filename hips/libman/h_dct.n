@@ -1,0 +1,114 @@
+.TH H_DCT 3 "3/10/93" "Version 2" "HIPS Manual"
+.SH NAME
+h_dct \- subroutines to compute a discrete cosine transform
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_dct(ihd,ohd)
+h_dct_f(ihd,ohd)
+h_dct_d(ihd,ohd)
+h_dctinv(ihd,ohd)
+h_dctinv_f(ihd,ohd)
+h_dctinv_d(ihd,ohd)
+struct header *ihd,*ohd;
+
+h_dct_F(imagei,imageo,nr,nc,nlpi,nlpo)
+h_dctinv_F(imagei,imageo,nr,nc,nlpi,nlpo)
+h_dct2d_f(imagei,imageo,logrows,logcols,nlpi,nlpo)
+h_dctinv2d_f(imagei,imageo,logrows,logcols,nlpi,nlpo)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo,logrows,logcols;
+
+h_dct_D(imagei,imageo,nr,nc,nlpi,nlpo)
+h_dctinv_D(imagei,imageo,nr,nc,nlpi,nlpo)
+h_dct2d_d(imagei,imageo,logrows,logcols,nlpi,nlpo)
+h_dctinv2d_d(imagei,imageo,logrows,logcols,nlpi,nlpo)
+double *imagei,*imageo;
+int nr,nc,nlpi,nlpo,logrows,logcols;
+
+h_dctfree()
+.fi
+.SH DESCRIPTION 
+These routines take a subimage of an input image (specified by
+.I hdi
+or
+.IR imagei ),
+compute a discrete cosine transform, and store the result in the output
+subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_dct
+calls
+.I h_dct_f
+or
+.I h_dct_d
+depending upon whether the pixel format is float or double.
+.I h_dct_F
+and
+.I h_dct_D
+are the low-level routines which don't require an image header.
+.IR h_dctinv ,
+.IR h_dctinv_f ,
+.IR h_dctinv_d ,
+.I h_dctinv_F
+and
+.I h_dctinv_D
+are the corresponding routines for the inverse transform.
+The subimage
+size is
+.I nr
+by
+.IR nc ,
+and both dimensions must be powers of 2.
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+The actual work is carried out by routines
+.IR h_dct2d_f ,
+.IR h_dct2d_d ,
+.I h_dctinv2d_f
+and
+.IR h_dctinv2d_d ,
+which are supplied with the log (to the base 2) of the number of rows and
+columns.  These routines allocate memory both for storing constants (2*(nr+nc)
+floats or doubles) and for performing the transform (indirectly using an FFT;
+8*nr*nc floats or doubles).  This allocated memory may be freed by calling
+.IR h_dctfree .
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float, double
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR ihd .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words,
+.I ihd
+may be the same as
+.I ohd
+and
+.I imagei
+may be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FFTI - strange index
+.br
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_POW2 - image dimensions not a power of 2
+.SH "SEE ALSO"
+h_fft2(3), h_flipquad(3), h_fourtr(3), h_fourtr3d(3), h_invfourtr(3),
+h_invfourtr3d(3)
+.SH AUTHOR
+Michael Landy - 3/11/92
+.br
+modified for HIPS2 - msl - 1/3/92
+.br
+upgraded to support ROI and header calls - msl - 3/9/93

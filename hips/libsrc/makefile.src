@@ -1,0 +1,53 @@
+#
+# makefile for directory hips/libsrc
+#
+
+OBJECTS = \
+	h_abdou.o h_abs.o h_absdiff.o h_add.o h_addcos.o h_addgabor.o \
+	h_affine.o h_and.o h_applylut.o h_avg.o h_bclean.o h_bnoise.o \
+	h_btorle.o h_checkers.o h_clearhisto.o h_colorkey.o h_combine.o \
+	h_conj.o \
+	h_convolve.o h_copy.o h_correl.o h_dct.o h_diff.o h_discedge.o \
+	h_discedge2.o h_disphist.o h_dither.o h_div.o h_divscale.o \
+	h_dotdiff.o h_enlarge.o h_entropy.o h_entropycnt.o h_exp.o \
+	h_extract.o h_extremum.o h_fastaddcos.o h_fft2.o h_filter.o \
+	h_flipquad.o h_fourtr.o h_fourtr3d.o h_gaussmask.o h_gnoise.o \
+	h_greybar.o h_gridwarp.o \
+	h_halftone.o h_hardthresh.o h_hconvolve.o h_histo.o \
+	h_histoeq.o h_ienlarge.o h_ienlarge3.o h_invert.o h_invfourtr.o \
+	h_invfourtr3d.o \
+	h_linscale.o h_log.o h_mask.o h_max.o h_maxabsp.o h_maxhisto.o \
+	h_maxp.o h_mean.o h_median.o h_minabsp.o h_minmax.o h_minp.o \
+	h_minroi.o h_morphdil.o h_morphero.o h_mul.o h_mulscale.o \
+	h_neg.o h_noise.o h_nonisot.o h_or.o h_pixmap.o h_power.o \
+	h_pyrdisp.o h_quadscale.o h_reduce.o h_reflect.o h_rletob.o h_rot180.o \
+	h_rot90.o h_sample.o \
+	h_scaleadd.o h_sepconv.o h_seqord.o h_setimage.o h_shift.o \
+	h_shuffleadd.o h_slice.o h_softthresh.o h_stats.o h_stretch.o \
+	h_stretchimg.o h_thicken.o h_thin.o h_translate.o h_transpose.o \
+	h_vconvolve.o h_walshtr.o h_wgauss.o h_wtsum3.o h_xor.o h_zc.o \
+	h_zoneplate.o
+
+.c.o:
+	$(COMPILEc) $*.c
+#	@-ld $(LDLIBFLAGS) $*.o
+#	@mv a.out $*.o
+
+libhipsh.a:	$(OBJECTS)
+	@rm -f libhipsh.a
+	ar cr libhipsh.a `$(LORDER) $(OBJECTS) | $(TSORT)`;
+	mv libhipsh.a $(LIBDIR)/$(HLIBNAME)
+	$(RANLIB) $(LIBDIR)/$(HLIBNAME)
+	@touch libhipsh.a
+
+install:	libhipsh.a
+
+clean:
+	rm -f $(OBJECTS) libhipsh.a
+
+pristine:
+	rm -f $(OBJECTS) libhipsh.a $(LIBDIR)/$(HLIBNAME)
+
+man:
+
+doc:

@@ -1,0 +1,24 @@
+.TH BIL 1 "1 october, 1993" "Version 2" "HIPS Manual"
+.SH NAME
+bil \- bandinterleaving by line
+.SH SYNOPSIS
+.B bil
+.SH DESCRIPTION
+.I bil
+performs a bandinterleaving by line of the input HIPS image sequence,
+or de-bandinterleaving by line.
+On return the header parameter 'bil' (byte) is either set to 1 or cleared.
+When making linear transformations of image sequences, e.g. principal components
+analysis, it is necessary to access pixels from all bands at the same time
+twice. First when computing relevant covariance matrices, second when 
+making the actual transformation. To achieve this in an efficient way, the 
+pixel values are bandinterleaved by line. This means rearranging the pixel 
+values, so that line 0 of band 0 is followed by line 0 of band 1, and so 
+forth.
+.SH SEE ALSO
+maf(1), roprc(1), lintrans(1)
+.SH AUTHOR
+.nf
+Rasmus Larsen 
+IMSOR, Technical University of Denmark
+e-mail: rl@imsor.dth.dk

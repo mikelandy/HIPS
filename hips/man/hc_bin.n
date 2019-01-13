@@ -1,0 +1,67 @@
+.TH HC_BIN 1 "7/23/91" "Version 2" "HIPS Manual"
+.SH NAME
+hc_bin \- binary-tree coding of binary images
+.SH SYNOPSIS
+.B hc_bin
+[-t height [width]] [-s] [-v] [-g > outseq] < inseq 
+.SH DESCRIPTION 
+.I Hc_bin
+gives statistics on compression of a binary sequence using
+coding in 2D into binary trees.
+.I Height
+and
+.I width
+determine the size of the area which is hc_bin-encoded as a
+tree in the forest.  Each must be a power of 2 and evenly divide the number
+of rows and columns in the input images, respectively.
+.PP
+.I -g
+indicates that actual code should be generated.
+.I -s
+reports statistics on each individual frame.
+.I -v
+specifies vertical dominance (i.e. a vertical cut is made prior to a
+horizontal cut in a square subimage; horizontal dominance is the default).
+.PP
+The input must be in byte-unpacked-format with 1 bit per pixel (in other
+words,
+.I hc_bin
+only codes nonzero vs zero pixels).  Block
+dimensions must be powers of 2.  The coding assumptions are 2 bits per black or
+white pixel, 1 bit per meta symbol. At the lowest the
+two pixels are coded as a ``nibble'' in 1 bit.  If an area is divided
+into two homogeneous areas, the second area is coded in 1 bit (0), since it
+must be of a color different from that of the first area.  If
+.I -g
+is specified the actual code is generated.  It is left shifted and packed, with
+last word of each binary-tree padded with 1's to the right.  Compression
+statistics are given on ``stderr''.  The program computes the number of input
+bits; it also counts the number of output symbols, and multiplies it by the
+number of bits for the output.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "OUTPUT PIXEL FORMATS"
+BT (with
+.IR -g )
+.SH "REGION-OF-INTEREST"
+The region-of-interest is ignored and the entire image is coded.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+hc_bin_r(1), ahc3(1), ahc3_r(1), binquad(1), binquad_r(1)
+.SH AUTHOR
+Yoav Cohen - 10/4/82
+.br
+HIPS 2 - msl - 7/23/91

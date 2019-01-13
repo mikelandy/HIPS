@@ -1,0 +1,36 @@
+.TH CUTF 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+cutf \- cut a PLOT3D frame
+.SH SYNOPSIS
+.B cutf
+[-p x0 [y0 [xn [yn]]]]
+.SH DESCRIPTION 
+.I cutf
+``cuts'' a sequence; all the entries are transformed
+and ``cut'' by cut_frame.
+The arguments 
+.IR x0 , 
+.IR y0 , 
+.IR xn ,
+and 
+.I yn
+specify the coordinates (lower-left and
+upper-right) of the window.
+.I X0
+defaults to 0,
+.I y0
+to
+.IR x0 ,
+.I xn
+to 512-\fIx0\fR, 
+.I yn
+to 512-\fIy0\fR.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.I -U
+Print usage message.
+.SH AUTHOR
+Yoav Cohen 17/11/82
+.br
+HIPS 2 - msl - 7/24/91

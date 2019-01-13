@@ -1,0 +1,44 @@
+.TH AVESEQ 1BIPS "June 1, 1987"
+.SH NAME
+aveseq - compute the average image of a sequence, pixel by pixel
+.sp
+stdseq - compute the standard deviation image of a sequence, pixel by pixel
+.sp
+varseq - compute the variance image of a sequence, pixel by pixel
+.SH SYNOPSIS
+.B aveseq
+< iseq > oseq
+.sp
+.B stdseq
+iseq.ave < iseq > oseq
+.sp
+.B varseq
+iseq.ave < iseq > oseq
+.SH DESCRIPTION 
+.I Aveseq
+adds each frame in a sequence to a stored frame,
+pixel by pixel. The output is this stored frame divided by the number
+of frames in the input sequence, the pixel by pixel average of the
+input seqence.  The input sequence may be
+either float, integer, short, or byte format.  The output is of the
+same format as the input
+.sp
+.I Stdseq
+computes the standard deviation of a sequence, pixel by pixel.  The
+input sequence must be either float or int.  The output sequence is the
+same format as the input. The file iseq.ave containes the results of
+.I aveseq
+which is used as input to compute the standard deviation.  It must be of the 
+same size and type as the input sequence.
+.sp
+.I Varseq
+computes the variance of a sequence, pixel by pixel.  The
+input sequence must be either float or int.  The output sequence is the
+same format as the input.  The iseq.ave file contains the results of
+.I aveseq
+which is used as input to compute the variance.  It must be of the 
+same size and type as the input sequence.
+.SH "SEE ALSO"
+addseq(1HIPS), diffseq(1HIPS), divseq(1BIPS)
+.SH AUTHOR
+Charles Carman

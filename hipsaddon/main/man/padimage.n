@@ -1,0 +1,39 @@
+.TH PADIMAGE 1 "31st August 1991" "Version 2" "HIPS Manual"
+.SH NAME
+padimage - image merger 
+.SH SYNOPSIS
+.B padimage
+[-s startrow startcol]] sequence-1 [<] sequence-2
+.SH DESCRIPTION
+.I padimage
+inserts each (foreground) image of the input sequence-1 into
+each (background) image of the input sequence-2.
+Parameters
+.I startrow
+and
+.I startcol
+specify the position on the background image
+for the top left corner of the foreground image.
+It can be negative and defaults to (0,0).
+Note that if the foreground image crosses the boundary of the background image,
+the part that lies outside the background image is clipped.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH EXAMPLE
+.in +3m
+padimage -s 30 30 input_seq1 < input_seq2 > output_seq
+.in -3m
+.sp
+.br
+will insert every image of input_seq1 into input_seq2 with its top left
+corner aligned with pixel (30,30) of every image of input_seq2.
+.SH SEE ALSO
+extract(1), pad(1)
+.SH AUTHOR
+Mowforth P.H. and Jin Z.P. 9/10/85 
+.br
+Rewritten by Jin Zhengping - 31 August 1991

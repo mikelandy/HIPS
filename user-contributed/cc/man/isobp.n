@@ -1,0 +1,21 @@
+.TH ISOBP 1HIPS "May 23, 1989"
+.SH NAME
+isobp -- multiply the Fourier transform of a sequence by the Fourier
+transform of an isotropic, bandpass filter.
+.SH SYNOPSIS
+.B isobp
+[-u] [-C center_freq] [-S standard_deviation] < inseq > outseq
+.SH DESCRIPTION 
+.I Isobp
+Multiplies inseq (which is presumed to be the Fourier transform of a sequence)
+by a (complex pixel format, but real-valued) Gaussian annulus with radius
+(i.e. center frequency)
+.I center_freq
+and thickness (i.e. bandwidth) governed by
+.I standard_deviation.
+.I -u
+displays a usage summary.
+.SH SEE\ ALSO
+idealbp(1HIPS), fourtr(1HIPS), inv.fourtr(1HIPS)
+.SH AUTHOR
+Charlie Chubb - 5/23/89 

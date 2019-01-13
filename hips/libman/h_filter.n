@@ -1,0 +1,151 @@
+.TH H_FILTER 3 "8/9/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_filter \- subroutines to apply standard linear filters to Fourier spectra and transforms
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_filter(hdi,hdo,filter)
+h_filter_f(hdi,hdo,filter)
+h_filter_d(hdi,hdo,filter)
+h_filter_c(hdi,hdo,filter)
+h_filter_dc(hdi,hdo,filter)
+struct header *hdi,*hdo;
+struct hips_filter *filter;
+
+h_filter_F(imagei,imageo,nr,nc,nlpi,nlpo,method,disttype,ftype,dmetric,lowcut,
+	loworder,highcut,highorder)
+h_filter_C(imagei,imageo,nr,nc,nlpi,nlpo,method,disttype,ftype,dmetric,lowcut,
+	loworder,highcut,highorder)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo,method,disttype,ftype,loworder,highorder;
+float dmetric,lowcut,highcut;
+
+h_filter_D(imagei,imageo,nr,nc,nlpi,nlpo,method,disttype,ftype,dmetric,lowcut,
+	loworder,highcut,highorder)
+h_filter_DC(imagei,imageo,nr,nc,nlpi,nlpo,method,disttype,ftype,dmetric,lowcut,
+	loworder,highcut,highorder)
+double *imagei,*imageo;
+int nr,nc,nlpi,nlpo,method,disttype,ftype,loworder,highorder;
+float dmetric,lowcut,highcut;
+.fi
+.SH DESCRIPTION 
+These routines scale an input subimage (specified by
+.I hdi
+or
+.IR imagei )
+by a given modulation transfer function or filter characteristic (specified by
+.I filter
+or the various filter parameters),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_filter
+calls
+.IR h_filter_f ,
+.IR h_filter_d ,
+.I h_filter_c
+or
+.I h_filter_dc
+depending upon whether the pixel format is float, double, complex or double
+complex.
+.IR h_filter_F ,
+.IR h_filter_D ,
+.I h_filter_C
+and
+.I h_filter_DC
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.PP
+These routines apply a parameterized filter to an image.  If the image is
+floating point or double, it is assumed to be a Fourier spectrum (with the
+origin in the center of the image).  Otherwise, it is assumed to be a Fourier
+transform (with the origin in the beginning of the image).  The filter is
+specified in a
+.I hips_filter
+structure (for the high-level routines), or the parameters are supplied (for
+the low-level routines).  Three filtering methods are available:
+FILTMETHOD_IDEAL (an ideal filter which is either 1 or 0 for each frequency
+component), FILTMETHOD_BUTTERWORTH (a Butterworth filter) or
+FILTMETHOD_EXPONENTIAL (an exponential filter).  All methods are characterized
+by cutoff frequencies (\c
+.I lowcut
+and
+.IR highcut ).
+The latter two methods are also characterized by the order of the filter (\c
+.I loworder
+and
+.IR highorder ).
+There are four types of filters (specified by
+.IR ftype ):
+FILTTYPE_LOWPASS (which passes frequencies below
+.IR lowcut ),
+FILTTYPE_HIGHPASS (which passes frequencies above
+.IR highcut ),
+FILTTYPE_BANDPASS (which is a product of two filters, a lowpass filter which
+passes frequencies below
+.I highcut
+and a highpass filter which passes frequencies above
+.IR lowcut ),
+and FILTTYPE_BANDREJ (which is the opposite of a bandpass filter, or uses one
+minus the product of the two filters used by FILTTYPE_BANDPASS).
+.PP
+Frequencies are specified as fractions of a maximum frequency according to a
+particular distance metric which is specified by
+.I disttype
+and
+.I dmetric .
+The row and column frequency are combined using a standard Minkowski metric to
+compute the overall frequency at a given image location, where
+.I dmetric
+is the Minkowski metric exponent.  For example, a value of 2 results in the
+usual Euclidean metric and yields an isotropic filter.
+The cutoff frequencies are expressed as a fraction of a
+frequency range.  The frequency range is controlled by the value of
+.IR disttype .
+If its value is FILTDIST_COL, then frequency ``1.0'' is controlled
+by half the number of columns, and the rows are treated with the same
+distance metric, so that nonsquare pictures may have a different range of
+frequencies in the rows and columns.  FILTDIST_ROW specifies frequency ``1.0''
+by the number of rows rather than columns.  FILTDIST_BOTH specifies both, so
+that the distance metric for nonsquare pictures is different for rows and
+columns, adjusted so that both (number of rows/2) and (number of columns/2)
+are treated as frequency 1.0.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float, double, complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_mul(3)
+.SH AUTHOR
+Yoav Cohen 5/21/82
+.br
+modified by Mike Landy 7/20/84
+.br
+HIPS-2 - msl - 8/9/91

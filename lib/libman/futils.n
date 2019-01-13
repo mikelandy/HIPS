@@ -1,0 +1,45 @@
+.TH FUTILS 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+futils \- HIPS stdio utility routines
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+FILE *hfopenr(name)
+FILE *ffopen(name,mode)
+FILE *ffreopen(name,mode,stream1)
+Filename name;
+char *mode;
+FILE *stream1;
+
+ffread(ptr,size,nelem,stream)
+ffwrite(ptr,size,nelem,stream)
+char *ptr;
+int size,nelem;
+FILE *stream;
+.fi
+.SH DESCRIPTION 
+.I hfopenr
+opens the named file for reading (in the manner of
+.IR fopen ).
+However, if the supplied filename is the string ``<stdin>'', then the standard
+input is returned instead.  Finally, once the standard input has been
+returned once, any subsequent call with the string ``<stdin>'' results in an
+error.
+The other routines are equivalent to the stdio routines
+.IR fopen ,
+.IR ffreopen ,
+.I fread
+and
+.I fwrite
+except that they call the HIPS error handler
+.I perr
+if there are any problems.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_OPEN - can't open file
+.br
+HE_REQ - less items read/written than requested
+.br
+HE_STDIN - can't open the standard input twice

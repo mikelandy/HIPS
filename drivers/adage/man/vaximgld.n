@@ -1,0 +1,40 @@
+.TH VAXIMGLD 1HIPS "January 2, 1984"
+.SH NAME
+vaximgld - Program to download an image sequence into Adage memory
+.SH SYNOPSIS
+.B vaximgld
+[-b] [-c[val]] [-B] [-C] [-R] [-l[0123]] startframe movie_file 
+.SH DESCRIPTION 
+.I Vaximgld
+downloads all images from the specified file to the frame
+buffer, packing the images into the frame buffer as closely as possible.  
+If requested to do so, it also loads a blank frame
+and a cuespot frame, both equal in size to the other images downloaded,
+immediately following them.
+The switch options may be specified in any order, and include:
+.TP 1.5i
+.B \-u
+Describe the usage of vaximgld.
+.TP
+.B \-b
+Add a blank frame at the end.
+.TP
+.BI \-c[val]
+Add a cue spot (with the given lut value) after the blank frame.
+.TP
+.B \-B
+Act as if the movie is binary for frame placement.
+.TP
+.B \-C
+Avoid crossing 1024 column boundaries.
+.TP
+.B \-R
+Avoid crossing 1024 row boundaries.
+.B \-l[0123]
+uses lores mode, and optionally specifies the byte number
+(which defaults to zero)
+.SH SEE\ ALSO
+movie(1HIPS), wframe(1HIPS)
+.SH AUTHOR
+Mike Landy - 1/20/87, 12/23/87
+Penny Hall - 3/31/87

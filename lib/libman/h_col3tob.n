@@ -1,0 +1,46 @@
+.TH H_COL3TOB 3 "5/21/93" "Version 2" "HIPS Manual"
+.SH NAME
+h_col3tob \- conversions from 3-color to byte pixel format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_col3tob(hdi,hdo,fr)
+h_rgbtob_1(hdi,hdo,fr)
+h_rgbztob_1(hdi,hdo,fr)
+h_zrgbtob_1(hdi,hdo,fr)
+h_bgrtob_1(hdi,hdo,fr)
+h_bgrztob_1(hdi,hdo,fr)
+h_zbgrtob_1(hdi,hdo,fr)
+struct header *hdi,*hdo;
+int fr;
+.fi
+.SH DESCRIPTION 
+These routines convert from the 3-color formats
+(RGB, RGBZ, ZRGB, BGR, BGRZ and ZBGR) to byte format.  The
+entire image pointed to by
+.I hdi
+is converted to byte format and stored in the image pointed to by
+.I hdo
+(any region-of-interest information is ignored).  The routine
+.I h_col3tob
+checks the pixel format of the input image and calls the appropriate
+individual routines
+according to whether it is RGB, RGBZ, ZRGB, BGR, BGRZ or ZBGR.
+The output image is in a single color format, and the routines must extract
+one of the three color values from the input image.  The supplied value of
+.I fr
+specifies the color to be used.  If
+.I fr
+is a multiple of 3, then the red plane is used.  If it is 1 more than a
+multiple of 3, then the green plane is used.  Otherwise, the blue plane is
+used.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_col1tocol3(3), h_col3tocol3(3), h_col3toi(3), h_rgb(3), h_toc(3), h_tod(3),
+h_todc(3), h_tof(3), h_toi(3), etc.
+.SH AUTHOR
+Michael Landy - 5/20/93

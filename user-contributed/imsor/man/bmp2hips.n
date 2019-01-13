@@ -1,0 +1,20 @@
+.TH BMP2HIPS 1hips "MAY 17, 1993" 
+.SH NAME
+bmp2hips - converts from Windows bmp-format to HIPS.
+.SH SYNOPSIS
+.B bmp2hips
+[-v] < iseq > oseq
+.SH DESCRIPTION 
+.I Bmp2hips 
+converts from Windows bmp-format to HIPS.
+Options
+.I [-v]
+sets verbose mode.
+.SH SEE\ ALSO
+hips2bmp(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

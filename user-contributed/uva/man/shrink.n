@@ -1,0 +1,21 @@
+.TH SHRINK 1BIPS "Oct 20, 1987"
+.SH NAME
+shrink - to shrink a frame by a factor of 2 in each dimension
+.SH SYNOPSIS
+.B shrink
+[\-tz] < iseq > oseq
+.SH DESCRIPTION 
+.I shrink
+reduces the size of the images in the input sequence by setting the pixels
+in the output sequence equal to the median of the 2 x 2 neighborhood in the
+input sequence.
+The default reduction is a factor of 2.
+The input sequence must be byte-formated.
+.sp
+.I Options:
+The [\-t] option should be used if the input sequence containes text.
+The [\-z] option should be used if the input is a mask file (roi file).
+.SH SEE\ ALSO
+reduce(1HIPS), enlarge(1HIPS), roishrink(1BIPS), hist_shrink(1BIPS)
+.SH AUTHOR
+Charles Carman

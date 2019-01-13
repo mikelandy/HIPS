@@ -1,0 +1,37 @@
+
+There are two ways to install the software in this directory.  The easiest is
+as part of a standard HIPS installation, in which case the software is
+installed automatically (via the usual makefile.src files, when the installer
+types config configfile; make).  However, if you have acquired these routines
+separately from the rest of HIPS, the procedure is as follows:
+
+(1)  Log in as root, if necessary for what follows.
+
+(2)  In directory include, copy hipspub.h to your standard include directory:
+
+	cp hipspub.h /usr/include
+
+(3)  In directory libsrc, configure the file makefile.unix as necessary,
+ensure that the intended destination directory (LIBDIR) exists (that is, make
+it if necessary), then type:
+
+	make -f makefile.unix install
+
+(4)  In directory libman, print the manual page and copy it to a relevant
+manual page directory where it will be found by the man command, for example:
+
+	ptroff -man hipspub.n
+	cp hipspub.n /usr/man/manl/hipspub.l
+
+(5)  In directory man, print the manual pages and copy them to a relevant
+manual page directory where it will be found by the man command, for example:
+
+	ptroff -man *.n
+	cp hipstoportable.n /usr/man/manl/hipstoportable.l
+	cp portabletohips.n /usr/man/manl/portabletohips.l
+
+(6)  In directory sources, configure the file makefile.unix as necessary,
+ensure that the intended destination directory (DESTDIR) exists (that is, make
+it if necessary), then type:
+
+	make -f makefile.unix install

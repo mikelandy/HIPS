@@ -1,0 +1,14 @@
+if [ X"$1" = X"-h" -o X"$1" = X"-help" ];	then	# X for haking -
+	echo	"`basename $0` [image.any] > image.gif"
+	echo	non-true color image must NOT use stdin
+	exit	1
+fi
+[ `uname` = SunOS ] && PATH=/usr/local/urt/sun4/bin:$PATH
+TO_8="| to8"
+#[ $# -gt 0 ] && {
+#	headers $1 | egrep "(24|32)-bit" > /dev/null || TO_8= ;	}
+#eval torle $1 $TO_8 | rletogif -m
+# spread to 32 and converge to 8; makes simple but slow
+# due to rletogif requires 256-color colormap
+torle $1 | applymap | to8 | rletogif -m
+

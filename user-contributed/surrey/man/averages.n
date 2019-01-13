@@ -1,0 +1,17 @@
+.TH AVERAGES 1 "December 7, 1987"
+.SH NAME
+averages - take the average of batches of frames
+.SH SYNOPSIS
+.B averages
+[batch-length]
+.SH DESCRIPTION 
+.I Averages
+computes the pixel by pixel average of subsequences of input frames.  The
+default is to produce one frame which is the average of the entire input
+sequence.  If
+.I batch-length
+is specified, then each successive set of
+.I batch-length
+frames is averaged and results in one frame of output.
+.I Averages
+handles byte-formatted sequences.

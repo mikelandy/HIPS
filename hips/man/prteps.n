@@ -1,0 +1,60 @@
+.TH PRTEPS 1 "8/2/91" "Version 2" "HIPS Manual"
+.SH NAME
+prteps \- print halftones on an Epson printer
+.SH SYNOPSIS
+.ta .5i
+.B prteps
+[-d] [-l label] [-lf label [startframe]] [-f labelfile]
+.br
+		[-ff labelfile [startframe]] [-e factor]
+.SH DESCRIPTION 
+This program reads a sequence of byte-formatted frames, and
+outputs them on an Epson printer (e.g. the LQ800).
+It uses Epson graphics mode.  It
+operates in two modes.  The default mode outputs a dot for all nonzero
+pixels.  The dither mode (\fI-d\fP) dithers the image.
+The probability of a dot
+being printed is proportional to the blackness of a pixel (i.e. is 
+1 - (pixel/255)).  The
+.I -l
+switches allows for a single line label
+to be placed below each frame of the sequence. The 
+.I -f
+switch allows for several lines of text from a file to be printed below
+the frame. The 
+.I -lf
+and
+.I -ff
+switches act like
+.I -l
+and
+.IR -f ,
+respectively,
+and add a line giving the frame number.  An optional starting frame
+number may be specified which defaults to 0.  The
+.I -e
+switch enlarges the image by pixel replication.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+The entire image is halftoned.  The region of interest is ignored.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+halftone(1), prtdth(1), verdth(1)
+.SH AUTHOR
+Michael Landy - 6/28/88
+.br
+HIPS 2 - msl - 8/3/91

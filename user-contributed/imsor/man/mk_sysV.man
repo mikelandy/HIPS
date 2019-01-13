@@ -1,0 +1,30 @@
+#!/bin/csh
+#
+# Usage:
+#               mk_sysV.man <fromdir> <todir>
+#
+# where <fromdir>       is a directory where all man files have been 
+#                       temporary installed
+#       <todir>         is the final destination (e.g. /usr/local/man )
+#
+#       The command does two things:
+#       1) File names must end with a number (1) in UNIX V
+#       2) The headline is changed to include the text "1hips" which is very
+#          usefull together with 'man -k'
+#
+if ( ! -e $argv[2] ) then
+        mkdir $argv[2]
+endif
+if ( ! -e $argv[2]/man1 ) then
+        mkdir $argv[2]/man1
+endif
+#
+#
+foreach i ( $argv[1]/*.n )
+        set j = $i:t
+        awk '/\.TH/{printf("%s %s %s ",$1,$2,"1hips");                  \
+                for (i=4; i<=NF; i++) printf("%s ", $i); print ""}      \
+             \!/\.TH/{ print $0}'                                       \
+                                                $i > $argv[2]/man1/$j:r.1
+end
+#

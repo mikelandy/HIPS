@@ -1,0 +1,56 @@
+.\"%W%      %G%"
+.TH H_ELLIPSE 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_ellipse - ellipse line drawing image generator
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+#include <math.h>
+
+h_ellipse(hd,cenr,cenc,radr,radc)
+h_ellipse_b(hd,cenr,cenc,radr,radc)
+struct header   *hd;
+int             cenr,cenc;
+double          radr,radc;
+
+h_ellipse_B(image,nr,nc,cenr,cenc,radr,radc)
+byte    *image;
+int     nr,nc;
+int     cenr,cenc;
+double  radr,radc;
+.fi
+.SH DESCRIPTION 
+.I h_ellipse
+generates an ellipse line drawing image (specified by
+.I hd
+or
+.IR image).
+.I h_asl
+then calls
+.I h_asl_b
+only if the pixel format is byte.
+.I h_asl_b
+then calls
+.I h_asl_B
+which is the low-level routine and does not require image header.
+The output image has
+.I nc
+pixels per line, and
+.I nr
+lines.
+.I cenr,cenc
+are the vertical and horizontal positions of the ellipse center
+in the image.
+.I radr,radc
+are the vertical and horizontal radiuses of the ellipse.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH SEE ALSO
+calcpix(1), fgenframe(1), genframe(1), greylevel(1), mandelbrot(1), saw(1)
+.SH AUTHOR
+Jin Zhengping - 12/6/85 
+.br
+Jin Zhengping - 20/3/1986 2nd Ed.
+.br
+Rewritten by Jin Zhengping - 31 August 1991

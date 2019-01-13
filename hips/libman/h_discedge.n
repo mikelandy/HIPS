@@ -1,0 +1,92 @@
+.TH H_DISCEDGE 3 "8/8/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_discedge \- a discrete domain regional edge detector
+.SH SYNOPSIS
+.nf
+.ta 2i
+#include <hipl_format.h>
+
+h_discedge(hdi,hdo,size,varcrit)
+h_discedge_b(hdi,hdo,size,varcrit)
+h_discedge_B(imagei,imageo,nr,nc,nlpi,nlpo,size,varcrit)
+
+struct header *hdi,*hdo;
+byte *imagei;
+int *imageo;
+int nr,nc,nlpi,nlpo,size;
+float varcrit
+.fi
+.SH DESCRIPTION 
+These routines apply a variant on Shaw's edge fitting algorithm
+to an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_discedge
+calls
+.I h_discedge_b
+as long as the input pixel format is byte.
+.I h_discedge_B
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+byte (with integer output)
+.I Size
+is the length of a side of the nonoverlapping domains in which
+the algorithm operates, and
+.I varcrit
+is the threshold on the variance
+in the normalized region (normalized by mean only) below which no
+edge is sought in that region.
+.PP
+This program is an implementation of the discrete domain regional operator
+described by G. B. Shaw (Computer Graphics and Image Processing, Volume 9,
+1979, pp. 135-149.
+The algorithm outlined therein is sketchy and contains errors, which
+hopefully are corrected here.  Also, the article does not clarify what to do
+with edges which appear to travel along a border of the region (the algorithm
+purports to be symmetric with respect to horizontal and vertical edges, but
+isn't really).  In this implementation, the first pixels on the light
+side of a light/dark edge are marked, and when the light/dark boundary
+travels along the boundary of the region, only the `middlemost' pixel is
+marked, since otherwise horizontal edges will all include little `tails' at
+an edge of each region.  Lastly, note that any excess after multiples of
+size in rows and columns is not edge detected.  The output image is integer
+(not byte), and gives the score for the edge to each edgel in a given region.
+The computations are done with integer arithmetic with all pixels scaled by
+size*size in order that the normalization by the mean can be exact.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "OUTPUT PIXEL FORMAT"
+integer
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+The dimensions should be an even multiple of
+.IR size .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place since the output image is in a
+different format from the input image.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.\" .SH "SEE ALSO"
+.SH AUTHOR
+Mike Landy 6/1/82
+.br
+HIPS 2 - msl - 8/8/91

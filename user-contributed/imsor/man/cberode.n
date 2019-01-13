@@ -1,0 +1,49 @@
+.TH CBERODE 1hips "February 1993"
+.SH NAME
+cberode - coefficient erosion on binary images.
+.SH SYNOPSIS
+.B cberode
+[-c coeff] [-t times] [-m masksize] < iseq > oseq
+.br
+.B cberode
+[-flip coeff1 coeff2] [-t times] [-m masksize] < iseq > oseq]
+.SH DESCRIPTION
+.I cberode 
+performs a binary erosion on a sequence of binary images. The erosion
+is performed 
+.I -t
+times using the specified structure-element. The structure-element is
+a 3x3 mask by default, but can be altered by using the 
+.I -m
+switch. Note that a coefficient can be specified using the
+.I -c
+switch. A white centerpixel is only allowed to change to black if
+more than 
+.I -c 
+pixels around it (in the structure-element) are black. Classical erosion
+is a special case of this type of erosion with the coefficient equal
+to zero.
+In order to make the eroded element more smooth it is often preferable
+to switch between coefficients. This facility is provided through the
+.I -flip
+switch. The two coefficients are specified here, and the cberode program
+alternates between these two.   
+If f.ex. a circle is eroded with a coefficient equal to zero a diamond
+is obtained. If the coefficient is changed to one a square is obtained.
+Thus, by flipping between coefficients one and zero we obtain an octagonal
+shape which is much closer to a circle.
+
+.SH EXAMPLES
+
+cberode -c 0 -t 15 < iseq > oseq
+.br
+cberode -flip 0 1 -t 15 < iseq > oseq
+
+.SH SEE\ ALSO
+cbdilate, grow, isolate, cobjets, hole_fill
+
+.SH REFERENCES
+John C. Russ, The Image Processing Handbook, CRC Press, 1992.
+
+.SH AUTHOR
+Written by Michael Grunkin, IMSOR, DTH - 15.2.93

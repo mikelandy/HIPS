@@ -1,0 +1,105 @@
+.TH MATLABHIPS 1 "10/20/92" "Version 2" "HIPS Manual"
+.SH NAME
+matlabhips \- HIPS interface to MATLAB
+.SH SYNOPSIS
+outmatrix = \fBreadhips\fR('hipsfilename')
+.br
+\fBwritehips\fR('hipsfilename',matrix)
+.br
+\fBwritehipsb\fR('hipsfilename',matrix)
+.br
+\fBdispm\fR(matrix)
+.br
+outmatrix = \fBhips2\fR('hips command',inmatrix,inflag,outflag)
+.br
+outmatrix = \fBiphips\fR('hips command')
+.br
+outmatrix = \fBiphips\fR('hips command',inmatrix)
+.br
+outmatrix = \fBiphips\fR('hips command',inmatrix,outflag)
+.SH DESCRIPTION 
+These routines are external interface commands which allow interaction between
+the matrix manipulation package MATLAB and HIPS.  The programs have been
+tested with MATLAB version 4.0 and, far more recently, with version 7.5.
+They include programs to import images into
+MATLAB, export matrices from MATLAB in HIPS format, display matrices as an
+image and pipe matrices through single HIPS commands.
+.I Readhips
+will read the first frame of a HIPS sequence into a MATLAB matrix.  MATLAB
+stores all matrices in double or double complex format, and therefore
+.I readhips
+will convert the input image to either of those types if necessary.
+.I Writehips
+will write a matrix as a one-frame HIPS file in either double or double
+complex format (depending on the matrix type).
+.I Writehipsb
+will write the matrix as a one-frame byte-formatted HIPS file.  Matrix
+elements are rounded, and no range checking is performed.
+.I Dispm
+is a macro file which scales a matrix linearly to range from 0 to 255, and
+pipes the resulting matrix to HIPS program
+.I mhips
+for display.
+.I Hips2
+may be used to pipe a MATLAB matrix through any HIPS filter and store
+the resulting image as a MATLAB matrix.  The image supplied to the HIPS filter
+will be either double or double complex depending on the type of the supplied
+input matrix.  The resulting output matrix will either be double or double
+complex depending on the output type from the HIPS filter.  If the HIPS filter
+requires no input image, then supply a dummy input matrix `[]' and set
+.I inflag
+to 0; otherwise set
+.I inflag
+to 1.  If the HIPS command produces no output image then set
+.I outflag
+to 0.  Here are some examples:
+.sp
+.ce 3
+b = hips2('rotate90',a,1,1);
+.sp
+hips2('framevar',a,1,0);
+.sp
+b = hips2('genframe -s 10 -g 5',[],0,1);
+.sp
+The macro
+.I iphips
+is a shorthand for the program
+.I hips2
+which allows the user to specify one argument (for a command which generates
+an image with no input), two arguments (for a standard filter with input and
+output) or three arguments (for a filter which takes an input and may or may
+not produce an output image).  Note that with
+.I iphips
+and
+.I hips2
+the user can specify the input image to the command in the command line in the
+usual fashion, thus applying a hips command to a stored hips file, importing
+the result as a matrix into MATLAB.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+double, double complex
+.SH "OUTPUT PIXEL FORMATS"
+double, double complex
+.SH "REGION-OF-INTEREST"
+The entire matrix/image is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I "-RC [R | I | B]"
+Real-to-complex conversion: Set real part, imaginary part or both.
+Default: R.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH AUTHOR
+Ramin Samadani
+.br
+HIPS 2 - msl - 10/20/92

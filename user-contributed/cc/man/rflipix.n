@@ -1,0 +1,49 @@
+.TH RFLIPIX 1HIPS "May 24, 1989"
+.SH NAME
+Rflipix -- Modulate the flicker frequency of binary noise as a function of
+an input sequence.
+.SH SYNOPSIS
+.B rflipix
+[-u] [-s seed] [-F] < inseq > outseq
+.SH DESCRIPTION 
+.I Rflipix
+first
+generates a (floating point) frame of independent binary noise (values
+1. and -1.).
+If (and only if) the
+.I -F
+option is elected, 
+.I rflipix
+makes this
+internally generated noise frame the first frame of
+.I outseq,
+in which
+case the number of frames of
+.I outseq
+is one more than the number of frames
+of
+.I inseq.
+.I Rflipix
+then proceeds to read in the frames of
+.I inseq.
+.I Inseq
+must be floating point format, and its pixel values should
+be probabilities (i.e., between 0. and 1.).
+For each frame of
+.I inseq,
+each pixel in the noiseframe is reversed in sign from its value in the
+previous output frame with probability given by the corresponding pixel of
+.I inseq.
+Note: if the
+.I -F
+option is not elected, then
+the first frame of inseq has no effect on the properties of
+.I outseq.
+.I Seed
+seeds the pseudorandom number generator.
+.I -u
+displays a usage summary.
+.SH SEE ALSO
+updown(1HIPS), hupdown(1HIPS)
+.SH AUTHOR
+Charlie Chubb - 3/2/87

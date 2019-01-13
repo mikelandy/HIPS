@@ -1,0 +1,68 @@
+.TH INTERLACE 1 "8/12/91" "Version 2" "HIPS Manual"
+.SH NAME
+interlace \- interlace the frames of several files
+.SH SYNOPSIS
+.B interlace
+[-s scriptfile] file1 [file2 ... ] > newfile
+.SH DESCRIPTION 
+.I Interlace
+combines several sequences into one by interlacing the frames of
+each.  By default, the program outputs one frame from each input file, 
+rotating among the input files (0 to n-1, 0 to n-1, ....) until all input files
+are exhausted.  Alternatively, the user may specify a scriptfile (using the
+.I -s
+option).  This allows an arbitrary combination of arbitrarily chosen
+frames from each of the input files.  The format of the scriptfile is:
+.nf
+.ta 1i 2.5i
+
+	n (= number-of-output-frames)
+	file-number(0)	frame-number-from-file(0)
+	file-number(1)	frame-number-from-file(1)
+	file-number(2)	frame-number-from-file(2)
+		.
+		.
+		.
+	file-number(n-1)	frame-number-from-file(n-1)
+
+.fi
+Note that all input frames must have the same 
+number of rows and columns, depths, colors, and if a pyramid
+format, then they must have the same number of pyramid levels.
+A `frame' consists of all color planes and depths for a single frame.
+Also, if any input sequence has a 3-color format (RGB, RGBZ, ZRGB, BGR, BGRZ
+or ZBGR), then all the input sequences must be in some 3-color format.
+In the script file, both the file number and the frame number are numbered
+starting with zero in the usual C numbering standard.
+The region of interest is taken from
+.IR file1 .
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, double, complex, double complex, integer pyramid,
+float pyramid, RGB, RGBZ, ZRGB, BGR, BGRZ, ZBGR
+.SH "REGION-OF-INTEREST"
+The region-of-interest is that of the first input file specified.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -NFH
+Do not preserve the input sequence histories of all input sequences.
+.TP 1.3i
+.I -NFD
+Do not preserve the input sequence descriptions of all input sequences.
+.TP 1.3i
+.I -FXP
+Merge the extended parameter lists from all input sequences.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+catframes(1), intercolor(1), interdepth(1), subseq(1)
+.SH AUTHOR
+Michael Landy - 3/14/86
+.br
+HIPS 2 - Michael Landy - 8/12/91

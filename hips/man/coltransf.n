@@ -1,0 +1,58 @@
+.TH COLTRANSF 1 "8/26/91" "Version 2" "HIPS Manual"
+.SH NAME
+coltransf \- apply an affine color transformation
+.SH SYNOPSIS
+.B coltransf
+[-f mappingfile]
+.SH DESCRIPTION 
+.I Coltransf
+applies an affine transformation to a color space.  The
+mapping file (the name defaults to `color.map') takes the following form:
+.sp
+.nf
+.in 1i
+.ta .7i 1.4i 2.1i 2.8i
+cin cout
+.sp
+A(1,1)	A(1,2)	...	A(1,cin)	shift(1)
+A(2,1)	A(2,2)	...	A(2,cin)	shift(2)
+\ \ .	\ \ .	...	\ \ .	\ \ .
+\ \ .	\ \ .	...	\ \ .	\ \ .
+\ \ .	\ \ .	...	\ \ .	\ \ .
+A(cout,1)	A(cout,2)	...	A(cout,cin)	shift(cout)
+.in -1i
+.sp
+.fi
+Thus,
+.I A
+is a matrix of a linear transformation from an input color space
+with
+.I cin
+colors, and an output color space with
+.I cout
+colors.  The shift
+values are then added (allowing for a shift of origin).
+All values are floating point.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+addcmap(1), applycmap(1), luminance(1)
+.SH AUTHOR
+Mike Landy - 8/26/91

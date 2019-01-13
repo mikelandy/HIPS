@@ -1,0 +1,44 @@
+.TH H_EXTRACT 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_extract \- subroutines to extract a subimage
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_extract(hdi,hdo,frow,fcol,nrows,ncols)
+
+struct header *hdi,*hdo;
+int frow,fcol,nrows,ncols;
+.fi
+.SH DESCRIPTION 
+This routine extracts a subimage of an input image (specified by
+.IR hdi )
+and stores the result in the output image (specified by
+.IR hdo ).
+The subimage size is
+.I nrows
+by
+.IR ncols ,
+and starts with the pixel specified by
+.I frow
+and
+.IR fcol .
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+all raster formats (\c
+.I h_copy
+is used).
+.SH "REGION-OF-INTEREST"
+Any region-of-interest is ignored.
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.IR hdo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_copy(3)
+.SH AUTHOR
+Michael Landy - 1/16/91

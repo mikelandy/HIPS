@@ -1,0 +1,15 @@
+.TH TAPER 1 "1 october, 1991" "Version 2" "HIPS Manual"
+.SH NAME
+taper \- perform tapering to be used prior to Fourier transformation
+.SH SYNOPSIS
+.B taper
+.SH DESCRIPTION
+.I taper
+performs tapering. The input image must be in float format. The outermost
+eighth of the image top/bottom/right/left is multiplied with a cosine, so
+that it fades to zero at the image borders.
+.SH AUTHOR
+.nf
+Rasmus Larsen 
+IMSOR, Technical University of Denmark
+e-mail: rl@imsor.dth.dk

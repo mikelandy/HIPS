@@ -1,0 +1,19 @@
+#
+# makefile for drivers/SunView/sunv/sources
+#
+
+OTHERLIBS = -lm -lsuntool -lsunwindow -lpixrect
+
+PGMS = sunv.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

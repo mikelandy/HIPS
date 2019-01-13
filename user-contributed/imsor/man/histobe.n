@@ -1,0 +1,108 @@
+.TH HISTOBE 1 "7 January 1993" "Version 2" "HIPS Manual"
+.SH NAME
+histobe \- histogram match to beta distribution
+.SH SYNOPSIS
+.B histobe
+.RB [ \-z ]
+.RB [ \-a 
+.IR alpha ]
+.RB [ \-b
+.IR beta ]
+.RB [ \-g
+.IR numgrey ]
+.RB [ \-I ]
+.br
+.RB 	[ \-e
+.RI [ nr 
+.IR nc \ [ sr
+.IR sc ]]
+|
+.BI \-M \ mask_file
+.RI [ mask_value ]]
+.SH DESCRIPTION 
+.I histobe
+matches the histograms of a HIPS byte sequence of frames to
+that of a Beta distribution.
+The Beta distribution is very versatile and a good approximation to many
+distributions defined on a closed interval.
+The parameters
+.I alpha
+and
+.I beta
+(both >0.0 and <20.0, default to 4.0) are given by options
+.B \-a
+and
+.BR \-b .
+.IR alpha > beta
+gives a distribution skewed towards higher values,
+.IR alpha < beta
+gives a distribution skewed towards lower values.
+.IR alpha = beta
+gives a distribution symmetric around the mean;
+.IR alpha = beta = 1
+gives histogram equalization;
+.IR alpha = beta = 4
+gives a good approximation to a Gaussian.
+.IR alpha = beta = 2
+gives a good trade-off between the preservation of detail in the tails offered
+by a Gaussian stretch and the powerful visual impression of the histogram
+equalization.
+The parameter
+.I numgrey
+the number of output grey levels (<=256, defaults to 256) is given by option
+.BR \-g .
+.SH OPTIONS
+.TP
+.B \-z
+zero valued pixels are not included in the stretches and the remaining pixels
+are stretched from 1 to
+.I numgrey\-1.
+.TP
+.BI \-a \ alpha
+in the Beta distribution (defaults to 4.0).
+.TP
+.BI \-b \ beta
+in the Beta distribution (defaults to 4.0).
+.TP
+.BI \-g \ numgrey
+is the number of grey levels (defaults to 256).
+.TP
+.B \-I
+stretch intensity rather than individual frames (3-frame sequence only).
+.TP
+.B \-e \fR[\fInr nc \fR[\fIsr sc\fR]]
+extract rectangular area for histogram match only;
+.IR nr , \ nc , \ sr
+and
+.I sc
+are number of rows and columns, and starting row and column respectively
+(default is a centered rectangle half the size of the original image).
+.TP
+.B \-M \fR[\fImask_file \fR[\fImask_value\fR]]
+histogram match is performed only where
+.I mask_file
+(a byte HIPS image) has the value
+.I mask_value
+(defaults to 0).
+.SH EXAMPLE
+When stretching an intensity-hue-saturation (IHS)
+image one often wants to stretch
+I to something that looks like a Gaussian distribution,
+H to a flat distribution (equalization)
+and S to a distribution that grows linearly from 0.
+This can be achieved in the following fashion:
+.IP
+histobe \-a 4 \-b 4 < I > Is
+.IP
+histobe \-a 1 \-b 1 < H > Hs
+.IP
+histobe \-a 2 \-b 1 < S > Ss
+.SH SEE\ ALSO
+histo(1), disphist(1), entropy(1), framevar(1), histoeq(1), fhist(1)
+.SH BUGS
+Presently options -M or -e do not work with -I.
+.SH AUTHOR
+.nf
+Allan Aasbjerg Nielsen
+IMSOR, Technical University of Denmark
+e-mail: aa@imsor.dth.dk

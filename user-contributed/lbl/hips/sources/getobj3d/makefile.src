@@ -1,0 +1,26 @@
+#
+# makefile for user-contributed/lbl/hips/sources/getobj3d
+#
+
+PGMS = getobj3d.out
+
+OBJECTS = connect.o fill3d.o getobj3d.o
+EXTRA_LIBS = -llbl
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+getobj3d.out:	$(OBJECTS)
+	$(LINKc) getobj3d $(OBJECTS) $(LIBRARIES) $(EXTRA_LIBS)
+	mv getobj3d $(DESTDIR)
+	@touch $@
+
+FRC:

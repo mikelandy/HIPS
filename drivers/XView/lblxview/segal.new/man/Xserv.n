@@ -1,0 +1,81 @@
+.TH XSERV n "1992" "Scry Version 1.3" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+Xserv - X window-based remote procedure call server
+.SH SYNOPSIS
+.B Xserv
+.B \-p prog_num
+.B \-c map_num
+.SH DESCRIPTION 
+.PP
+Serves incoming remote procedure calls (RPCs) to display images
+in a X window that are sent from the Scry client.
+This graphics window is created separately from
+the text window in which the server is invoked.  The image data can be
+written to a disk file for later use by the \f3Xanima\f1 movie preview program
+if the client chose that option (see \f3scry_libclient\f1).
+.PP
+After \f3Xserv\f1 is invoked, two windows will appear on the screen,
+one a control panel, and the other the window in which images will
+appear.  Pushing the "quit" button causes the windows to be destroyed
+and \f3Xserv\f1 to exit.  Entering a number in the "gamma" field will adjust
+the gamma value of the next image received.
+The default gamma value is 1, and the legal range is from 0.1 to 4.
+The default gamma value can be changed by resetting \f3S_DEF_GAMMA_VALUE\f1
+in \f2scry/include/scry_limits.h\f1 before making Scry.
+.PP
+\f3Xserv\f1 should run on the local workstation which will display
+the image.  It can run on a different client, but
+that would defeat the whole purpose of \f3Xserv\f1, since in that
+case the \f3XPutImage\f1 call will ship the whole uncompressed
+image over the network.
+.PP
+The RPC server calls \f3graphics_dispatch\f1
+(located in \f2Xserv\f1.c)
+based on information in the header of the incoming RPC call.  Cases in
+\f3graphics_dispatch\f1
+correspond to supported client procedures.  Routines starting with xdr_
+decode incoming network information into the server format.
+The type of compression is set by the client, and communicated to the server
+as part of an RPC.
+.PP
+See \f3Xanima(n)\f1 for information on using color with an 8-bit
+workstation, what window manager to use, and defaults.
+.SH OPTIONS
+.TP
+.B \-p 
+set the program number to be used.  The use of different program numbers
+allows several servers to be active on a particular workstation simultaneously.
+Each corresponding client must be invoked with the identical program
+number (see \f3scry_libclient\f1(n)).
+.TP
+.B \-c
+sets the maximum number of colors that can be allocated by \f3Xserv\f1.
+.SH DEFAULTS
+The defaults to the command line arguments are as follows:
+.br
+1) The program number is 
+.B 4000\.
+.br
+2) The maximum number of colors allocated is 221.
+.br
+.br
+.SH FILES
+.TP
+The Scry X server is located in \f2scry/Xserv\f1
+.TP
+.I Makefile
+makes the executable of the server
+.TP
+.I xvwin.h
+header file for X and XView dependent variables
+.TP
+.I Xserv.c
+RPC server
+.TP
+.I xvdisplay.c
+sets up image information and displays the images in the
+X window as they come in
+.SH SEE ALSO
+\f3scry_client(n), scry_libclient(n), Xanima(n)\f1
+.SH AUTHORS
+David Robertson, Teck-Joo Chua, Max Rible, and Antony Courtney

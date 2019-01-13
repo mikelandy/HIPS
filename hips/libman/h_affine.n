@@ -1,0 +1,87 @@
+.TH H_AFFINE 3 "6/29/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_affine \- Warp an image using an affine transformation
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_affine(hdi,hdo,A,B,C,a,b,c)
+h_affine_b(hdi,hdo,A,B,C,a,b,c)
+struct header *hdi,*hdo;
+float A,B,C,a,b,c;
+
+h_affine_B(imagei,imageo,nr,nc,nlpi,nor,noc,nlpo,A,B,C,a,b,c)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nor,noc,nlpo;
+float A,B,C,a,b,c;
+.fi
+.SH DESCRIPTION 
+These routines apply an affine warp to an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_affine
+calls
+.IR h_affine_b
+as long as the pixel format is byte.
+.IR h_affine_B
+is the low-level routine which doesn't require an image header.  The input
+subimage size is
+.I nr
+by
+.IR nc ,
+and the input image has
+.I nlpi
+pixels per line.  The output subimage size is
+.I nor
+by
+.IR noc ,
+and the output image has
+.I nlpo
+pixels per line.
+.I H_affine
+warps an image using an affine transformation.
+For each output pixel, the corresponding input coordinates are computed
+according to the formulae:
+.sp
+.ce 2
+input-x = A*x + B*y + C
+input-y = a*x + b*y + c
+.sp
+where (x,y) is the output pixel position in a coordinate system where the
+lower-left corner of the subimage is (0,0), and the upper-right corner is
+(1,1).  If the computed input position is outside of the input subimage,
+then the output pixel is set to the background value (\c
+.IR hips_lchar ).
+Otherwise, the value is bilinearly interpolated between the surrounding
+four pixels in the input.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi ,
+and is stretched to fit in the output region-of-interest.
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_enlarge(3), h_ienlarge(3), h_ienlarge3(3), h_reduce(3), h_stretch(3)
+.SH AUTHOR
+Mike Landy - 8/7/88
+.br
+HIPS 2 - msl - 6/29/91

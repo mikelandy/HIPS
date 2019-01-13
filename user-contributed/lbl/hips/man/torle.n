@@ -1,0 +1,81 @@
+.TH "TOANY" 1 "JANUARY 20, 1992" LBL
+.\" @(#).1 Complex Conversion tools 1.10 91/10/1 JIN;
+.SH NAME
+toany - convert the following type images to a given type image
+
+	HIPS, FITS, GIF, ICC, RLE, PICT, PNM, SUN-RASTER, TIFF, and JPEG
+.SH SYNOPSIS
+.nf
+	color_ps [-k] [-p [#]] [-s #] [-w #] image.any > image.color-ps
+	headers	files...
+	tohips [] image.any > image.hips
+	torle [-d] [-k] [-l] [-r] image.any > image.rle
+	torast [-k] [-l] [-r] [-a] [-d] [-8 [#]] [-u] image.any > image.ras
+	toicc [-k] [-l] [-r] [-f #] [-g #] [-w] image.any > image.icc
+	totiff [-k] [-revs] [-compress_options] image.any > image.tif
+	tovida [-k] image.any > image.vida
+	toraw_sep [-k] [-l] [-r] [-f #] [-g #] [-w] image.any > image.raw_sep
+	to3dplot [-k] [-r] [-s #] [-t title] image.any > image.3dplot
+	tojpeg	(see man cjpeg)
+	to_stream [-color] [-n #] [-jpeg [-Q #]] [-p] image.any > image.stream
+	see man to_stream for details.
+.fi
+.SH DESCRIPTION
+.I headers
+displays all header information.
+
+.I to????
+convert different image to a certain image.
+
+.I color_ps
+generates color postscript file.
+
+.SH OPTIONS
+.TP
+.I -a
+add alpha channel
+.TP
+.I -d
+dither to 8-bit color image
+.TP
+.I -8 [#]
+quantize to 8-bit image with # colors (default = 256, minimum > 128).
+.TP
+.I -k
+keep working, and ignore input errors.
+.TP
+.I -l
+rotete 90 degree to left.
+.TP
+.I -r
+rotate 90 degree to right.
+.TP
+.I -p [#]
+image top position on a printing paper.
+The default image top position is 9.6 inch from the top of a paper.
+.TP
+.I -s #
+re-scale factor. # > 1 is enlarge; 0 < # < 1 is reduce.
+.I -t title
+specify the image title
+.TP
+.I -u
+uncompress mode for torast. The default is RLE compression.
+.TP
+.I -w
+output raw image data Without header.
+The `toicc -w' command outputs a image with 3 separate planes.
+.TP
+.I -w #
+printing page width. The default is 8 inch.
+.TP
+.I toraw_sep
+The `toraw_sep' command outputs raw data of a image with 3 separate planes.
+.TP
+.I -others
+type program name for special information.
+
+.SH "SEE ALSO"
+ccs(1), cjpeg(1), elastic(1), magicprint(1), mainpeak(1), powertool(1), rotate90n(1), tuner(1)
+.SH AUTHOR
+Jin Guojun - OCTOBER 1, 1991

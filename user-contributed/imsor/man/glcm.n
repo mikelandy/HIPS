@@ -1,0 +1,25 @@
+.TH GLCM 1hips "NOVEMBER 9, 1992" 
+.SH NAME
+glcm - compute gray level cooccurrence matrix (GLCM) and GLCM features
+.SH SYNOPSIS
+.B glcm
+[-r rowdisp] [-c coldisp] < iseq > oseq
+.SH DESCRIPTION 
+.I Glcm 
+computes the gray level cooccurrence matrix (GLCM) and GLCM features
+of a byte sequence. The features, output in a single line, are
+energy, entropy, maximum probability, correlation, diagonal moment, kappa,
+difference energy, difference entropy, inertia, inverse difference moment,
+sum energy, sum entropy, sum variance, cluster shade, and cluster prominence.
+The GLCM is output as an integer frame.
+Options 
+.I [-r rowdisp]
+and 
+.I [-c coldisp]
+sets the row and column displacement (default (0,1)).
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

@@ -1,0 +1,20 @@
+#
+# makefile for hipsaddon/main/libman
+#
+
+MANPAGES = \
+	h_asl.n h_average.n h_cshift.n h_csinegen.n h_ellipse.n h_extend.n \
+	h_framing.n h_grey2disp.n h_meanfilt.n h_mls.n h_nns.n \
+	h_project.n h_rank.n h_rotate.n h_rsinegen.n h_sasmooth.n h_sigmaspat.n \
+	h_sigmatemp.n h_snn.n h_translatei.n h_unoise.n
+
+install:	libman-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristinelibman-pgm

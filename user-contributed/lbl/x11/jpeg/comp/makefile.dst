@@ -1,0 +1,33 @@
+#
+# makefile.src for jpeg/jpeg-v6/comp
+#
+
+LOCAL_INC = -I../libsrc -I../../libsrc -I$(CCS_ROOT)/include
+LOCALCFLAGS = $(LOCAL_INC) $(JPEG_FLAGS)
+LIBS = $(LDFLAGS) -ljpeg -lscs6 -lccs -lrle -ltiff $(LIBRARIES)	\
+	-lpixrect -lpanel # for xwd
+# $(OTHERLIBS)
+OBJS = cjpeg.o djpeg.o rdjpgcom.o wrjpgcom.o jpegtran.o
+ANSI_OBJ = $(OBJS)
+
+PRGMS = cjpeg.out djpeg.out rdjpgcom.out wrjpgcom.out jpegtran.out
+
+default: install
+install: $(PRGMS)
+
+# This rule causes ansi2knr to be invoked.  If you use this makefile,
+# make sure PROTO is not defined by jconfig.h.
+
+.c.o:
+	$(COMPILEc) $(LOCALCFLAGS) $*.c
+
+$(PRGMS):	$(OBJS)
+	$(LINKc) $* $*.o $(LIBS)
+	mv $* $(DESTDIR)
+	@touch $@
+	@rm -f tmpansi.c
+
+clean:
+	rm -f *.o*
+clean-all:	clean_all
+

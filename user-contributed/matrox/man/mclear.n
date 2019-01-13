@@ -1,0 +1,19 @@
+.TH MCLEAR 1HIPS "November 15, 1987"
+.SH NAME
+mclear - clear the Matrox VIP-1024 frame memory and reset registers
+.SH SYNOPSIS
+.B mclear
+[-cColorPlane]
+.SH DESCRIPTION 
+.I Mclear
+clears the Matrox VIP-1024 frame memory and reset registers.
+The 
+.I -cColorPlane 
+option is used to specify the color plane which should be cleared.
+Possible values for <ColorPlane> are r, R, g, G, b, and B.
+The default colorplane is ALLPLANES (i.e., all three
+color planes all cleared).
+.SH SEE\ ALSO
+rframe(1HIPS), wframe(1HIPS)
+.SH AUTHOR
+Edmond Mesrobian - 11/15/87

@@ -1,0 +1,39 @@
+.TH SIGMASPAT 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+sigmaspat - image random noise estimator
+.SH SYNOPSIS
+.B sigmaspat
+[-p]
+.SH DESCRIPTION
+.I sigmaspat
+estimates the standard deviation of random noise of each
+image of the input sequence base on each individual images.
+The estimates are displayed.
+The longer ROI dimension
+of the image must be larger than 15 to ensure a reliable
+estimation. The shorter ROI dimension must be greater than 1.
+.I -p
+is for the pipeline application.
+If set, the input sequence is copied into the output sequence
+and the estimates are put in the extended parameter section of the header as well.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH EXAMPLE
+.in +3m
+sigmaspat -p < input_seq > output_seq
+.in -3m
+.sp
+.br
+will estimate the standard deviation of noise of every image of input_seq
+and put the estimates in the header of output_seq,
+input_seq copied into output_seq.
+.SH SEE ALSO
+sigmatemp(1)
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

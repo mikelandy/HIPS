@@ -1,0 +1,302 @@
+.TH CONVERSION 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+conversion \- routines to find and do the most suitable pixel format conversion
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+#include <stdio.h>
+
+find_closest(hd,typeslist)
+ffind_closest(hd,typeslist,fname)
+pfind_closest(pfmt,typeslist,fname)
+in_typeslist (type,typeslist)
+find_method(typein,typeout)
+ffind_method(typein,typeout,fname)
+set_conversion(hd,hdp,typeslist)
+fset_conversion(hd,hdp,typeslist,fname)
+pset_conversion(hd,hdp,ptype,fname)
+hconvert(hd,hdp,method,fr)
+fhconvert(hd,hdp,method,fr,fname)
+hconvertback(hd,hdp,method,fr)
+setupconvback(hd,hdo,hdcb)
+read_imagec(hd,hdp,method,fr)
+fread_imagec(fp,hd,hdp,method,fr,fname)
+write_imagec(hd,hdp,method,flag,fr)
+fwrite_imagec(fp,hd,hdp,method,flag,fr,fname)
+
+struct header *hd,*hdp,*hdo,*hdcb;
+int *typeslist,pfmt,type,typein,typeout,method,fr;
+h_boolean flag;
+Filename fname;
+FILE *fp;
+.fi
+.SH DESCRIPTION 
+This collection of routines is used to give HIPS its `object-oriented'
+character, wherein HIPS routines automatically convert input images into an
+appropriate pixel format prior to processing them.  The typical use is to call
+.I set_conversion
+to choose a conversion method, and then call
+.I read_imagec
+to read each frame and perform any necessary pixel format conversion.  It may
+be of interest for a HIPS routine to perform the conversion, but then to
+convert back to the original format after processing is completed, if the user
+has so requested, by using
+.I write_imagec
+to write the output images.
+.PP
+.IR find_closest ,
+.IR ffind_closest ,
+and
+.I pfind_closest
+are used to choose the pixel format to which the input images will be
+converted.  Each of these routines is given the type of the input image
+(either via the image header, or directly, in the case of 
+.IR pfind_closest )
+and a list of the pixel formats
+which the subsequent processing routines can handle directly.  If the input
+format is among these, it is returned.  If not, a pixel format is chosen from
+among those in the types list, with priority given to the simplest conversions
+and to the least loss of information.  For example, it is preferable to
+convert unsigned bytes to shorts, then to integers, then to floats, but
+conversion to signed bytes or bit-packed formats is only carried out as a last
+resort.  Each routine returns the pixel format chosen as closest.
+.I find_closest
+is used for images read from the standard input.  Note that all types
+lists must have the pseudo-type `LASTTYPE' as the last entry.
+.PP
+.I in_typeslist
+returns TRUE if the given type is in the types list.
+.PP
+.I find_method
+and
+.I ffind_method
+return the `method identifier' for converting from one pixel format to another
+(\c
+.I find_method
+is used for images read from the standard input).  Possibilities include
+METH_IDENT if the two types are identical and no conversion is necessary,
+METH_BYTE for converting directly from any input pixel format to bytes
+(likewise for METH_INT, METH_FLOAT, etc.), or -METH_BYTE for converting from
+the input pixel format to integer, and then from integer to byte.  There are
+conversion programs for every raster pixel format to and from integer so that
+all conversions may be accomplished indirectly via integer format.
+.PP
+.IR set_conversion ,
+.I fset_conversion
+and
+.I pset_conversion
+are the routines generally used to set up for format conversion.
+.I set_conversion
+and
+.I fset_conversion
+are given a list of types, and determine the closest type using
+.IR ffind_closest ,
+whereas
+.I pset_conversion
+is provided with the desired final pixel format.
+Next, these routines call ffind_method to find the method for conversion.
+The input header (hd) is copied to the process header (hdp).  If the method is
+not METH_IDENT, then an image is allocated for the process header.
+.I set_conversion
+is used for images read from the standard input.  As far as memory management
+is concerned, the process header (hdp) is given the rights to all
+deallocatable memory in the header (history, description, parameters and
+image).  If the method is not METH_IDENT, then the input header retains the
+right to deallocate the input image memory.  Also, if the method is not
+METH_IDENT these routines call
+.IR perr (3)
+to generate a warning about the conversion, but do not return HIPS_ERROR to
+the user (who can tell that this happened by testing the value of the
+returned method).
+.PP
+.IR hconvert ,
+.I fhconvert
+and
+.I hconvertback
+are to perform the pixel conversion.
+.I hconvert
+and
+.I fhconvert
+convert from the input image format to the desired image format.
+.I hconvert
+is used for images read from the standard input.
+.I hconvertback
+is used to convert back to the original input format after processing is done.
+Note that this routine converts the image in
+.I hdp
+and stores the result in the image in
+.IR hd .
+If a routine changes the image header in any meaningful way (e.g., changes
+image size), then
+.I setupconvback
+is used to setup and allocate a header which has all the properties of the
+output header, but has the pixel format of the input header (see
+.IR enlarge (1)
+for an example).  The header
+.I hdcb
+also takes
+.I num_frames
+and
+.I numcolor
+from the input header in case these were changed because of a conversion
+between 1-color and 3-color formats (see more discussion of this point
+below).
+.PP
+.I read_imagec
+and
+.I fread_imagec
+are used to read input images and perform any necessary format conversion using
+.IR fhconvert .
+.I read_imagec
+is used for images read from the standard input.  If the method is METH_IDENT,
+these routines read into the image buffer pointed to by 
+.IR hdp .
+Thus, if the user needs to read two successive images, it is possible to
+make a second copy of
+.IR hdp ,
+and read to it as well, as in:
+.sp
+.nf
+.in +1i
+method = set_conversion(&hd,&hdp1,types);
+dup_headern(&hdp1,&hdp2);
+alloc_image(&hdp2);
+read_imagec(&hd,&hdp1,method,0);
+read_imagec(&hd,&hdp2,method,1);
+.in -1i
+.fi
+.sp
+.I write_imagec
+and
+.I fwrite_imagec
+are used to write output images, first converting back to the input pixel
+format if flag is TRUE.
+.I write_imagec
+is used for images written to the standard output.
+.PP
+These routines can convert between all raster formats where pixels are a
+single number (e.g. byte, float, int, complex and other such formats).  They
+can also convert between different 3-color formats (RGB, RGBZ, ZRGB, BGR, BGRZ
+and ZBGR).  Finally, they can convert between 3-color formats and single
+number formats (e.g. RGB to byte, int to BGR, etc.).  These latter conversions
+involve some complications that are important for the user to understand and
+we now outline these points.
+.PP
+For conversions from a single number format (e.g. byte) to a 3-color format
+(e.g. RGB), there is a change in the number of frames.  For example, the input
+byte image sequence may have 2 color frames (i.e.
+.I num_frame
+is 6 and
+.I numcolor
+is 3), but when converted to RGB format the sequence now has
+.I num_frame
+equal to 2 and
+.I numcolor
+equal to 1.  The conversion programs will change 
+.I num_frame
+and
+.I numcolor
+in the process header (\c
+.IR hdp )
+appropriately.  BUT IT IS IMPORTANT THAT THE USER OF THESE CONVERSION ROUTINES
+GET THE VALUES OF
+.I num_frame
+AND
+.I numcolor
+FROM
+.I hdp
+AFTER CALLING THE CONVERSION ROUTINES, AND USE THESE VALUES SUBSEQUENTLY.
+When
+.I read_imagec
+is called in this case, it will read three input byte images and construct one
+RGB image before returning control to the caller.  The routines
+.IR hconvert ,
+.I fhconvert
+and
+.I hconvertback
+are supplied the current frame number, and this must be the frame number in
+the terms of the input image sequence (so that it knows that it is dealing
+with the red, green, or blue color plane).  All of these routines assume that
+a single number pixel format sequence (e.g. a byte sequence) with
+.I numcolor
+equal to 3 is in the order red plane, green plane, and finally blue plane.
+Finally, if the routine
+.I pset_conversion
+determines that a conversion of this sort is required, it will check if the
+input image sequence has
+.I numcolor
+equal to three, and outputs an error message if this is not the case.  Thus,
+all of the routines attempt to convert to single color formats if possible,
+and only convert to 3-color formats if those are the only formats allowed by
+the user (in the supplied value of
+.IR typeslist ).
+.PP
+For conversions from a 3-color format (e.g. RGB) to a single number format
+(e.g. byte), there is also a change in the number of frames.  For example,
+the input RGB image sequence may have 2 frames (i.e.
+.I num_frame
+is 2 and
+.I numcolor
+is 1), but when converted to byte format the sequence now has
+.I num_frame
+equal to 6 and
+.I numcolor
+equal to 3.  The conversion programs will change 
+.I num_frame
+and
+.I numcolor
+in the process header (\c
+.IR hdp )
+appropriately.  BUT IT IS IMPORTANT THAT THE USER OF THESE CONVERSION ROUTINES
+GET THE VALUES OF
+.I num_frame
+AND
+.I numcolor
+FROM
+.I hdp
+AFTER CALLING THE CONVERSION ROUTINES, AND USE THESE VALUES SUBSEQUENTLY.
+When
+.I read_imagec
+is called in this case, it will read the input RGB image every third call,
+and construct one
+byte image before returning control to the caller.  The routines
+.IR hconvert ,
+.I fhconvert
+and
+.I hconvertback
+are supplied the current frame number, and this must be the frame number in
+the terms of the process image sequence (so that it knows to extract
+the red, green, or blue color plane).  All of these routines assume that
+a single number pixel format sequence (e.g. a byte sequence) with
+.I numcolor
+equal to 3 is in the order red plane, green plane, and finally blue plane.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_COL1 - input 3-color image has numcolor>1
+.br
+HE_COL3 - can't convert 1-color image with numcolor!=3 to 3-color
+.br
+HE_CONV - warning: converting from x to y
+.br
+HE_CONVI - warning: converting from x to y via integer
+.br
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_FMTSUBRFILE - can't handle this pixel format
+.br
+HE_METH - unknown method
+.br
+HE_READFRFILE - error reading image
+.br
+HE_ROI8C - clearing bad region-of-interest for packed image
+.br
+HE_WRITEFRFILE - error writing image
+.SH "SEE ALSO"
+write_headeru2(3)
+.SH AUTHOR
+Michael Landy - 1/5/91
+.br
+added rgb/rgbz/zrgb/bgr/bgrz/zbgr conversions - msl - 5/20/93

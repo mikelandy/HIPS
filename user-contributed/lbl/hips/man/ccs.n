@@ -1,0 +1,307 @@
+.TH "Complex Conversion Library" 1 "FEBERUARY 1, 1992" LBL-HIPS
+.\" @(#).1 Commom-Complex Conversion Library 1.10 91/10/1 JIN;
+.SH NAME
+libccs.a and libscs#.a \- conversion libarary for following type of images:
+.br
+ HIPS, FITS, GIF, ICC, RLE, PICT, PNM, JPEG, SUN-RASTER, AND TIFF
+
+.SH SYNOPSIS
+	cc -o $(DESTDIR)/filter $(OBJS) -lscs# -lccs $(OTHER_LIBS)
+
+.SH DESCRIPTION
+.nf
+The -lscs# is a library initial routine.
+The -lscs1 only reads HIPS and FITS images.
+The -lscs2 can read one more type image RLE.
+The -lscs3 reads all of the supporing type images, except PICT & JPEG.
+The -lscs4 reads all of them except JPEG.
+The -lscs5 reads all.
+The -lscs6 reads all and writes some of the supporing types.
+The -lscs[1-4] only output HIPS and RLE images. For other output formats,
+	see "man toany".
+
+U_IMAGE	*img;	/* union image structure defined in "imagedef.h" */
+
+\fBformat_init(img, Init_TYPE, Middle_TYPE, Output_TYPE, char* name, char* version);
+
+int	(*img->std_swif)(FI_LOAD_FILE, img, char* name, bool multi_frames / OsameI);
+
+int	(*img->std_swif)(FI_RLOAD_BUF, img, char* buf, bool multi_frames / OsameI);
+
+int	(*img->std_swif)(FI_ACCESS_ABS_FRAME, img, char* buf, int nth_frame);\fP
+
+	All 3 above return loading data size if successful, or EOF on failure.
+The FI_LOAD_FILE will check the buffer size (img->src). If it is not correct.
+std_swif will free the old one and allocate a new one.  For FI_RLOAD_BUF and
+FI_ACCESS_ABS_FRAME, the buf argumant must be allocated and passed to std_swif.
+The \fBmulti_frame\fP flag (for RLE) tells loading routine not to rewind or
+advance this file for any purpose since the rest frames will be loaded in order.
+\fBOther multi-frame images,\fP the control variable `img->load_all' controls
+loading process to load next N (= img->load_all) frames. N=0 & N=1 are same.
+The \fBOsameI\fP flag tells loading routine not to change the image format,
+such as 8-bit color to 24-bit, or 24-bit color to 8-bit transform.
+The char* \fIname\fP is the name of caller or any information that you want to
+pass to the function for tracing errors.
+
+\fBbool	(*img->std_swif)(FI_SAVE_FILE, img, char* buffer/bool map,
+			int #th_frame/LKT* lkt);	/* for HIPS | RLE */
+
+bool	(*img->std_swif)(FI_SAVE_FILE, img, char* buffer/bool map,
+			int alpha / reverse);	/* for Sun_Raster | TiFF */
+If NULL buffer or no map, save img.src. Otherwise, save buffer or img.dest\fP
+For saving multiple frame image, the control variable `\fIimg->save_all\fP'
+functions as same as the `\fIimg->load_all\fP' in saving control.
+When output Sun-Raster file, alpha flag generates alpha channel.
+Outputting TiFF image, reverse flag will swap RGB to BGR or another way around.
+
+\fBbool	(*img->std_swif)(FI_DESC_ETA, img, char* info, CER* cer);
+
+bool	(*img->std_swif)(FI_INIT_NAME, img, char* name, 0);\fP
+initial header with name string.
+above \fIbool functions return 0 on successful, or -1 on failure.\fP
+
+.B xel**	(*img->std_swif)(FI_PNM_MAXVAL, img, &max_value);
+it returns PNM data buffer pointer and the max_value.
+
+
+\fBbool	(*img->header_handle)(HEADER_READ, img, 0, bool multi_frame, bool OsameI);
+
+bool	(*img->header_handle)(HEADER_FREAD, img, FILE* fp, bool multi_frame, bool OsameI);
+
+
+For writing HIPS or FITS.
+bool (*img->header_handle)(HEADER_WRITE, img, int ac, char* av, bool update_header);
+
+bool	(*img->header_handle)(HEADER_FWRITE, img, int ac, char* av, FILE* fp);\fP
+The update_header is always true.
+
+
+\fBbool	(*img->header_handle)(ADD_DESC, img, char* info);
+
+bool	(*img->header_handle)(HEADER_TRANSF, img, 0);\fP
+make output same as input.
+
+\fBbool	(*img->header_handle)(HEADER_FROM, img, struct header*);
+bool	(*img->header_handle)(HEADER_TO, img, bool initial_header);\fP
+these header routines return 0 on successful, or EOF (-1) on failure.
+If struct header pointer is NULL in HEADER_FROM call, then internal header
+will be returned.
+
+.I Other functions:
+
+.B isColorImage(int CFM_format)
+this function returns color channels if CFM_format is a color format.
+Otherwise, it returns 0. For exampke:
+	color_channels = isColorImage(img->in_color);
+
+\fBTo_8(U_IMAGE *img, cmap_t* rg_cmap[], bool quant, int n_colors)\fP
+dither or quantize ( if quant != 0) a true color image to a pseudo color image.
+
+\fBras8_to_rle(byte *obp, byte *ibp, int width, U_IMAGE *img, cmap_t* cmap[3], int o_chans)
+
+any_color_to_rle(byte *obp, byte *ibp, U_IMAGE *img, int in_chans, bool revs)
+
+cell_to_line_color(byte *obp, byte *ibp, int width, int in_chans, byte* cmap[])
+
+line_to_cell_color(char *obp, *rle, int width, int height)
+
+ilc_transfer(char *op, char *ip, int width, int in_chans, bool revs, int o_chans)\fP
+
+These are color to different color image converters.
+Also, the color to gray-scale converters are available in colortog.c.
+
+\fBrotate90(VType *ibuf, VType *obuf, int newr, int newc, int pix_size, int rflag)\fP
+rotate an image count-clockwise 90 degrees (or clockwise 90 if rflag != 0)
+The 32-bit color image (CFM_ALPHA) can be directly rotated by set pix_size = 4.
+For other color images, please look at the torast.c, torle.c, and toicc.c.
+
+.SH FILE FORMAT
+.nf
+\fBinput type		output format (depends on img->mid_type)\fP
+
+HIPS			Standard 256 gray scale format (SGF)
+			Standard 8-bit Color Format + color map (SCF)
+			Interleave Cell (ILC)
+			Separated Plane (SEPLANE)
+
+FITS			SGF (img->mid_type == HIPS || !img->color_dpy)
+			SCF (img->mid_type == RLE)
+
+RLE			SCF
+			InterLeaf in Line [scan line] format (ILL)
+			SGF (!img->color_dpy, the followings are the same)
+
+GIF			SCF (OsameI flag set)
+			ILL (other color format)
+			SGF
+
+SUN-RASTER		SCF (8-bit color input & OsameI flag is set)
+			ILL (other colors)
+			SGF
+
+TIFF			SCF (1 channel input)
+			ILL (other input types, img->mid_type==RLE),
+			ILC (img->mid_type == OTHER)
+			SGF
+
+PNM			SCF (if able to convert to 8-bit color),
+			ILL (always),
+			ILC (in saved data buffer, see color_ps.c)
+			SGF
+
+ICC			ILL	(img->mid_type == RLE || == COLOR_PS)
+			SEPLANE	(img->color_dpy, otherwise)
+			SGF	(img->color_form == CFM_SGF)
+
+PICT			SGF
+			SEPLANE
+			ILL	(default)
+
+JPEG			ILL	(default)
+			SGF	(! img->color_dpy)
+
+
+.TP
+.B header strcture
+
+typedef	struct	{
+	char	*name,		/* file or image name	*/
+		*history, *desc;/* descriptions	*/
+	long	colormap;	/* color map for X	*/
+	void	*dpy, *gc, *igc;
+	long	frame, win, icon;
+	void	*event;		/* from colormap to here, all for X	*/
+	int	x0, y0,		/* image origin	*/
+		width, height,	/* image size	*/
+		icon_width, icon_height,	/* icon size	*/
+		font_w, font_h, ascent;	/* fonts information	*/
+	VType	*image, *icon_image;	/* X images	*/
+	int	curve, linearlow, linearup, bgrd, fgrd,	/* elastic curve */
+		scale, tmp_offset,	/* used for anything */
+		mark_x, mark_y,		/* marks position in X window	*/
+		resize_w, resize_h,	/* reduced window size	*/
+		sub_img_x, sub_img_y,	/* sub-image origin	*/
+		sub_img_w, sub_img_h,	/* sub-image size	*/
+		mag_fact, mag_mode,	/* display magnified image */
+		mag_x, mag_y, mag_w, mag_h,/* subimage currently being viewed */
+		save_mag_x, save_mag_y, save_mag_w, save_mag_h,
+		save_mag_fact,	/* save_* for fast switch magnified images	*/
+		dpy_depth,	/* visual (monitor) type	*/
+		frames, fn,	/* Z-size and Z-pointer	*/
+		channels, dpy_channels,	/* original and current channels	*/
+		*hist, *histp;	/* histogram buffer & pointer */
+	VType	*src, *dest, *cnvt, *img_buf, *lkt;	/* buffers	*/
+	bool	sub_img, sub_img_enh,	/* sub window and enhanced */
+		active,		/* active window	*/
+		rw_cmap,	/* writable colormap	*/
+		color_dpy,	/* False if black/white */
+		dither_img,	/* no true color monitor	*/
+		update,		/* image has been modified	*/
+		logscale, setscale,	/* use unique / own maxcnt */
+		load_all, save_all;	/* if not true, do 1 frame at a time */
+	Mregister	mmm, *marray;	/* min, max info	*/
+		/* standard interfaces	*/
+	StdInterface	*errors, *header_handle, *std_swif;
+	TableInterface	(*table_if)(), **table, tables;
+	VType	**superimpose,	/* superimposes draws & texts	*/
+		*parts;		/* scroll bars and others	*/
+	short	draws, texts,	/* number of draws & texts in si stacks */
+		stack_num;	/* parts in part stack	*/
+	int	in_type, mid_type, o_type,	/* image types	*/
+		in_color, color_form,		/* color formats	*/
+		in_form, o_form,		/* image formats	*/
+		pxl_in, pxl_out;		/* pixel sizes	*/
+	FILE	*IN_FP, *OUT_FP;	/* file pointers	*/
+	void	(*map_scanline)(), (*MAG_scanline)();
+	bool	binary_img, mono_img,	/* same info as color_form	*/
+		mono_color, sep_colors,
+		update_header;	/* if true, allow to update header again */
+	int	entries,	/* color entries are allocated	*/
+		ncmap, cmaplen;	/* colormap channels and size	*/
+	cmap_t	**cmap;		/* color maps	*/
+#if defined EXTENDED_U_IMAGE | defined X_WINDOW_DEP
+	int	lvls, lvls_squared,
+		visual_class;
+	VType	*dpy_visual;
+#endif
+	} U_IMAGE;	/* standard Union Image structure for filters */
+
+
+.SH EXAMPLES
+.nf
+/*	To_Others . C
+%
+%	Copyright (c)	1991,	Jin Guojun
+*/
+#include "header.def"
+#include "imagedef.h"
+
+U_IMAGE	uimg;
+char	usage[]=
+"to_others [-hips] [-rast] [-rle] [-color] in.any > out.other\\n";
+
+main(argc, argv)
+int	argc;
+char*	argv[];
+{
+char	info[128];
+int	i, mid_type, out_header=True, o_type=HIPS;
+
+/*	initial input any type, and output OTHER type	*/
+
+for (i=1; i < argc; i++)
+	if (*argv[i] == '-')	{
+		if (strcmp(argv[i], "-rle") == 0)
+			o_type = RLE;
+		else	if (strcmp(argv[i], "-rast") == 0)
+			o_type = RAS;
+		else	if (strcmp(argv[i], "-color") == 0)
+			uimg.color_dpy++;
+	}
+	else	if ((in_fp=fopen(argv[i], "rb") == NULL)
+		syserr("open input %s", argv[i]);
+
+uimg.color_dpy = -1;  /* for color transfer. 0 for generating gray scale
+	image.  1 for generating color image    */
+	/* use RLE format for other conversions */
+mid_type = o_type==HIPS ? HIPS : RLE;
+format_init(&uimg, IMAGE_INIT_TYPE, mid_type, o_type, *argv, "S20-1");
+
+io_test(fileno(in_fp), usage_n_options(usage, i, argv[i]));
+
+if (in_header)
+	if ((*uimg.header_handle)(HEADER_READ, &uimg, 0, 0, True) < 0)
+		syserr("Unknown image type");
+uimg.pxl_out = uimg.pxl_in;	/* output size = input size, for HIPS */
+
+	/* example to add description */
+sprintf(info, "%s: e%d*%d_%d_%d", i_name, enlg_row, enlg_cln, bgn_row,bgn_cln);
+
+(*uimg.header_handle)(ADD_DESC, &uimg, info);
+
+uimg.update_header = (*uimg.header_handle)(HEADER_TO, &uimg, 0);
+/* don't update again while HEADER_WRITE */
+
+if (uimg.o_type == HIPS)	/* HIPS is a single header type image */
+    if (out_header)
+	(*uimg.header_handle)(HEADER_WRITE, &uimg, argc, argv, True);
+    else
+	(*uimg.header_handle)(HEADER_FWRITE, &uimg, argc, argv, stderr);
+
+for (f=0; f<uimg.frames; f++)
+	(*uimg.std_swif)(FI_LOAD_FILE, &uimg, 0, 0),
+	(*uimg.std_swif)(FI_SAVE_FILE, &uimg, 0, 0);
+exit(0);
+}
+.fi
+
+.TP
+.I Input Buffer
+You don't need to care about allocating input memory for input at all.
+Even though you allocate wrong memory size for input, the system will correct
+it with no problem.
+
+.SH "SEE ALSO"
+toany(1), elastic(1), mean_scale(1), powertool(1), tuner(1)
+.SH AUTHOR
+Jin, Guojun - OCTOBER 1, 1991

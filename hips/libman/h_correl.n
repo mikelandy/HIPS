@@ -1,0 +1,75 @@
+.TH H_CORREL 3 "8/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_correl \- subroutines to cross-correlate two images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_correl(hdi1,hdi2,hdo,dr0,dc0)
+h_correl_f(hdi1,hdi2,hdo,dr0,dc0)
+struct header *hdi1,*hdi2,*hdo;
+int dr0,dc0;
+
+h_correl_F(imagei1,imagei2,imageo,nr1,nc1,nr2,nc2,nro,nco,nlpi1,nlpi2,nlpo,dr0,dc0)
+float *imagei1,*imagei2,*imageo;
+int nr1,nc1,nr2,nc2,nro,nco,nlpi1,nlpi2,nlpo,dr0,dc0;
+.fi
+.SH DESCRIPTION 
+These routines cross-correlate two input subimages (specified by
+.I hdi1
+and
+.IR hdi2 ,
+or by
+.I imagei1
+and
+.IR imagei2 ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_correl
+calls
+.I h_correl_f
+as long as the pixel format is float.
+.I h_correl_F
+is the low-level routine which doesn't require an image header.  The input
+subimage sizes are
+.I nr1
+by
+.I nc1
+and
+.I nr2
+by
+.IR nc2 ,
+and the output subimage size is
+.I nro
+by
+.IR nco .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+Increasing pixel positions in the output correspond to increasing shifts of
+the second image over the first.  The user supplies the initial shift used
+to produce the first output pixel.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from all three image headers.
+.SH "IN-PLACE PROCESSING"
+The input images may be the same (autocorrelation), but the output image must
+be a separate image entirely.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_convolve(3), h_mask(3)
+.SH AUTHOR
+Michael Landy - 4/8/89
+.br
+Hips 2 - msl - 8/10/91

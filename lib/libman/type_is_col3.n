@@ -1,0 +1,30 @@
+.TH TYPE_IS_COL3 3 "5/25/93" "Version 2" "HIPS Manual"
+.SH NAME
+type_is_col3 \- check for 3-color format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+#include <stdio.h>
+
+h_boolean type_is_col3(hd)
+h_boolean ptype_is_col3(pfmt)
+
+struct header *hd;
+int pfmt;
+.fi
+.SH DESCRIPTION 
+.PP
+The routines
+.I type_is_col3
+and
+.I ptype_is_col3
+indicate whether the supplied header or pixel format is one of the packed
+3-color formats (RGB, RGBZ, ZRGB, BGR, BGRZ or ZBGR).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+None
+.SH "SEE ALSO"
+conversion(3)
+.SH AUTHOR
+Michael Landy - 5/20/93

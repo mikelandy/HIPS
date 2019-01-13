@@ -1,0 +1,63 @@
+.TH READ_HEADER 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+read_header \- read an image header
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+read_header(hd)
+fread_header(fp,hd,fname)
+FILE *fp;
+struct header *hd;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+.I read_header
+and
+.I fread_header
+read HIPS image headers.
+.I read_header
+is used for reading from the standard input.  These routines call
+.I fread_oldhdr
+if the input is not in the new (HIPS-2) image format.  For new format headers,
+all header variables are set appropriately including the region-of-interest,
+number of pixels, size of pixels in bytes, and size of image in bytes.  The
+header is given deallocation rights for the sequence history, description,
+parameters, and binary parameter arrays.  For image pyramids, parameter
+.I toplev
+is consulted in order to set the number of pixels and image size correctly.
+The global variable
+.I hips_oldhdr
+is set to TRUE if an old-style header was read (for later use by
+.IR read_histo (3)).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_ALLOCSUBR - can't allocate memory
+.br
+HE_HDRREAD - error reading header
+.br
+HE_HDRBREAD - error reading binary information following header
+.br
+HE_HDRPREAD - error reading parameter information following header
+.br
+HE_HDRPTYPES - unknown parameter type
+.br
+HE_HDRXOV - binary parameter overflow (pointers screwed up)
+.br
+HE_MISSPAR - missing parameter (toplev not found for image pyramid)
+.br
+HE_ROI8F - illegal region-of-interest for bit-packed image (not a multiple of 8)
+.br
+HE_XINC - header binary parameter inconsistency (pointers screwed up)
+.SH "SEE ALSO"
+fread_oldhdr(3)
+.SH AUTHOR
+Michael Landy - 2/1/82
+.br
+modified to use read/write 4/26/82
+.br
+modified for HIPS2 1/3/91

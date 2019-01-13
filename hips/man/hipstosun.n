@@ -1,0 +1,50 @@
+.TH HIPSTOSUN 1 "February 11, 1993"
+.SH NAME
+hipstosun - Convert HIPS images to Sun raster format
+.SH SYNOPSIS
+.ta 1i
+.B hipstosun
+[-e]
+.SH DESCRIPTION 
+.I Hipstosun
+converts a HIPS image to Sun raster format.  Only a single frame
+sequence is permitted, either in MSBF single-bit-per-pixel format, byte,
+RGB, RGBZ, BGR or ZBGR format.
+If parameter
+.I cmap
+is set, it is stored in the output
+lookup table, otherwise the raster format image is created without a color
+lookup table.
+MSBF images are output as 1-bit
+deep.  Byte images are output as 8-bits deep.  RGB images are output as
+24 bits deep in RGB raster format, and RGBZ images are output as 32 bits
+deep in RGB raster format.  BGR images are output as 24-bit deep images in
+standard format, and ZBGR images are output as 32-bit deep images in standard
+format.  The
+.I -e
+flag encodes the image using RLE encoding (run-length encoding, an image
+compression scheme).   For RLE encoding, only BGR and ZBGR color images are
+supported.  Binary images without colormaps are inverted so that 1
+displays as white.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH AUTHOR
+Mike Landy - 6/12/87
+.br
+HIPS 2 - 1/8/91
+.br
+removed pixrect dependencies, added RGB/RGBZ - msl - 2/10/93
+.br
+BGR/ZBGR/etc. - msl - 5/24/93

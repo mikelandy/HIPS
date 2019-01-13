@@ -1,0 +1,137 @@
+# /bin/csh
+#This is a script file designed to generate a man page which contains the names
+#and synopses of a list of man pages.  The script features the option of adding 
+#a preamble and postamble to the man page.  The nroff file generated for the
+#resulting man page uses the -man macro package.
+#
+#To use this script, edit the following variables:
+#
+#outfile:  Man page output file name
+#prefile:  Preamble text file (NOTE:  This file and the postamble file MUST 
+#			       use the -man macro package, and this file must
+#			       begin with .TH)
+#postfile:  Postamble text file
+#DIRS: Directory or directories where man page files are found
+#
+#Then type the name of this file ("gen.man.page")
+#
+#After copying the preamble file to the eventual output file,  this script 
+#file will search the directory or directories for all man files
+#designated by ".n, .l, or .0-9" suffixes.  It then writes the name of all
+#man files found to a temporary file ("temp2.intro") and writes an
+#alphabetically sorted version of the list to a second temporary file
+#("temp3.intro").  This file then uses an awk script to put the list of man
+#page files into a variable ("fnames") which is used as a final list for
+#taking man pages and writing their names and synopses to the last temporary
+#("temp.intro").  This file is then cleaned of excess spaces and appended to
+#the final output file.  Finally, the postamble file is appended.
+#NOTE:  If SYSOPSIS or DESCRIPTION are misspelled in any of the man pages found
+# then this script will fail.  To circumvent this more sed commands must be
+# added, as shown by the example in the man page reading section.
+#
+#Assign variables
+#
+set echo
+set verify
+set sdir=$cwd/
+set prefile=summary.intro
+set postfile=post.intro
+set outfile=hips2_intro.n
+set temp=temp.intro
+set temp2=temp2.intro
+set temp3=temp3.intro
+#
+# Prepare files
+#
+rm $sdir$outfile
+rm $sdir$temp
+rm $sdir$temp2
+rm $sdir$temp3
+cat /dev/null > $sdir$temp
+cat /dev/null > $sdir$temp2
+#
+# Add preamble file
+#
+cat $sdir/$prefile > $sdir$outfile
+#
+echo 'This is a synopsis of all HIPS modules written at' >> $sdir$temp
+echo 'Lawrence Berkeley Laboratory.' >> $sdir$temp
+#
+# Place man file names in first file listing
+#
+# list of directories containing man pages
+#
+set DIRS = (/home/itg1/src/HIPS2/sun4/man)
+#
+foreach dir ($DIRS)
+   pushd $dir
+   set names = (*.n \
+		*.l \
+		*.[0-9])
+   foreach man_file ($names)
+         echo $man_file >> $sdir$temp2
+      end
+   popd
+end
+#
+# Sort man page listing
+#
+sort -f -o $sdir$temp3 $sdir$temp2
+#
+# Put file listing into file listing variable
+#
+set fnames = `awk '{print $1}' $sdir$temp3`
+#
+# Pull name and synopses from file and append to temp file
+#
+foreach dir ($DIRS)
+   pushd $dir
+   foreach man_file ($names)
+   # get everything from NAME to SYNOPSIS
+   #   then delete NAME and SYNOPSIS
+	sed -n -e '/SH NAME/,/SH DESCRIPTION/p' $man_file | \
+#
+# if description is misspelled, add alternative lines in case of error
+# for example:
+#  sed -n -e '/SH NAME/,/SH "DESCRIPTION"/p' $man_file | \
+#  sed -n -e '/SH NAME/,/SH DESCRIPTIO/p' $man_file | \
+#
+	sed 's/.SH NAME//' | \
+	sed 's/.SH SYNOPSIS//' >> $sdir/$temp
+#
+# if synopsis is misspelled, add alternative lines in case of error
+# for example:
+#  sed  's/.SH "SYNOPSIS"//' | \
+#  sed  's/.SH SYNOPSES//' | \
+#
+   end
+   popd
+end
+#
+# Finish off file
+#
+echo '.nf' >> $sdir$outfile
+echo '.na' >> $sdir$outfile
+#
+# Remove spaces
+#
+sed '/^$/d' $sdir$temp >> $sdir$outfile
+#
+# Add postamble file
+#
+foreach var ($postfile)
+   echo '.fi' >> $sdir$outfile
+   echo '.ad b' >> $sdir$outfile
+   cat $sdir/$postfile >> $sdir$outfile
+end
+#
+# Finish man page
+#
+echo '.SH "SEE ALSO"' >> $sdir$outfile
+echo 'All of these programs have their own man page.' >> $sdir$outfile
+#
+# Remove temporary files
+#
+rm $sdir$temp
+rm $sdir$temp2
+rm $sdir$temp3

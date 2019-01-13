@@ -1,0 +1,38 @@
+.TH DUP_HEADER 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+dup_header \- copy an image header
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+dup_header(hd1,hd2)
+dup_headern(hd1,hd2)
+struct header *hd1,*hd2;
+.fi
+.SH DESCRIPTION 
+.I dup_header
+and
+.I dup_headern
+are used to copy an image header (from
+.I hd1
+to
+.IR hd2 ).
+With
+.IR dup_header ,
+.I hd2
+gets all deallocation rights (to the orig_name, seq_name, orig_date,
+image, sequence description, history, and
+parameters).  With
+.IR dup_headern ,
+.I hd1
+retains the rights to the image, and
+.I hd2
+is given a null image pointer (presumably to be allocated later).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+None
+.SH "SEE ALSO"
+halloc(3), hcalloc(3), memalloc(3)
+.SH AUTHOR
+Michael Landy - 1/4/91

@@ -1,0 +1,30 @@
+.TH H_CLEARHISTO 3 "6/30/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_clearhisto \- subroutines to clear an image histogram
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_clearhisto(histogram)
+struct hips_histo *histogram;
+
+h_Clearhisto(nbins,histo)
+int nbins,*histo;
+.fi
+.SH DESCRIPTION 
+These routines clear an image histogram to zeroes, and should be called before
+the
+.I h_histo
+routines.
+.I h_clearhisto
+calls
+.I h_Clearhisto
+with the appropriate arguments.
+.I h_Clearhisto
+is the low-level routine which doesn't require the histogram structure.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH "SEE ALSO"
+h_histo(3)
+.SH AUTHOR
+Michael Landy - 6/30/91

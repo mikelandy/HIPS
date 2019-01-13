@@ -1,0 +1,136 @@
+/*	Copyright (c) 1989 Michael Landy
+
+Disclaimer:  No guarantees of performance accompany this software,
+nor is any responsibility assumed on the part of the authors.  All the
+software has been tested extensively and every effort has been made to
+insure its reliability.   */
+
+/* this is the 4board version, for systems with 4 DR256 memories */
+
+/*
+ * wframe.c - write a frame on the Adage
+ *
+ * Usage:	wframe [initialrow [initialcolumn]] [-v] [-n] < frame
+ *
+ * Defaults:	centered in the first 512x512
+ *
+ * Load:	cc -o wframe wframe.c -lhips
+ *
+ * Michael Landy - 6/22/85
+ *
+ * (initialrow, initialcolumn) specifies the screen position for 
+ * frame coordinate (0,0).  Effective off-screen coordinates are lost,
+ * so there is no wraparound.  Note that for bit-packed images, the image
+ * will be extended with 0's to an integral multiple of 32 columns.  The -v
+ * switch uses 30Hz video.  The -n switch leaves the lookup tables alone.
+ */
+
+#include <hipl_format.h>
+#include <stdio.h>
+#include <sys/ikio.h>
+#include <graphics/ik_const.h>
+
+int videosw=0;
+int nlutsw=0;
+
+main(argc,argv)
+
+int argc;
+char **argv;
+
+{
+	extern int Ikonas;
+	int i,j,r,c,cb,ocb,ir,irr,ic;
+	char *fr,*ofr,*pfr,*pofr;
+	struct header hd;
+
+	Progname = strsave(*argv);
+	read_header(&hd);
+	r = hd.orows;
+	cb = c = hd.ocols;
+	if (hd.pixel_format == PFLSBF)
+		cb = (c+7)/8;
+	if ((fr = (char *) calloc(r*cb,sizeof(char))) == 0)
+		perr(HE_MSG,"can't allocate core");
+	ir=(512-r)/2; ic=(512-c)/2;
+	if (strcmp(argv[argc-1],"-v")==0) {
+		videosw++;
+		argc--;
+	}
+	if (strcmp(argv[argc-1],"-n")==0) {
+		nlutsw++;
+		argc--;
+	}
+	if (strcmp(argv[argc-1],"-v")==0) {
+		videosw++;
+		argc--;
+	}
+	if(argv[argc-1][0]=='-')argc--;
+	if(argc>1) ir=atoi(argv[1]);
+	if(argc>2) ic=atoi(argv[2]);
+	if (hd.pixel_format != PFBYTE && hd.pixel_format != PFLSBF)
+		perr(HE_MSG,"frame must be in byte format");
+	if (fread(fr,r*cb*sizeof(char),1,stdin) != 1)
+		perr(HE_MSG,"error during read");
+
+	Ik_open();
+	Ik_init(videosw ? IK_30INT_HIRES : IK_60NON_HIRES);
+	if (hd.pixel_format == PFLSBF) {
+		if (nlutsw == 0)
+			Ik_cload_map(1,0);
+
+		Ik_set_mode(SET_32_BIT_MODE);
+		if (cb & 03) {
+			ocb = (cb + 4) & ~03;
+			if ((ofr = (char *) calloc(r*ocb,sizeof(char))) == 0)
+				perr(HE_MSG,"can't allocate output frame core");
+			pofr = ofr; pfr = fr;
+			for (i=0;i<r;i++) {
+				for (j=0;j<ocb;j++) {
+					if (j < cb)
+						*pofr++ = *pfr++;
+					else
+						*pofr++ = 0;
+				}
+			}
+		}
+		else {
+			ofr = fr;
+			ocb = cb;
+		}
+		ic &= ~037;
+		Ik_windowdma(ic,ocb,IK_WDHXY_ADDR);
+		i = HI_WORDXYH(02,0,(ic>>5),ir);
+		j = LO_WORDXYH(02,0,(ic>>5),ir);
+		Ik_dmawr8(IK_WD_ADDR,i,j,ofr,r*ocb);
+	}
+	else {
+		if (nlutsw == 0)
+			Ik_cload_map(0,0);
+
+		Ik_set_mode(SET_8_BIT_MODE);
+		if (c & 01) {
+			ocb = c + 1;
+			if ((ofr = (char *) calloc(r*ocb,sizeof(char))) == 0)
+				perr(HE_MSG,"can't allocate output frame core");
+			pofr = ofr; pfr = fr;
+			for (i=0;i<r;i++) {
+				for (j=0;j<ocb;j++) {
+					if (j < c)
+						*pofr++ = *pfr++;
+					else
+						*pofr++ = 0;
+				}
+			}
+		}
+		else {
+			ofr = fr;
+			ocb = c;
+		}
+		Ik_windowdma(ic,ocb,IK_HXY_ADDR);
+		Ik_dmawr8(IK_HXY_ADDR,ic,ir,ofr,r*ocb);
+	}
+
+	Ik_close();
+	return(0);
+}

@@ -1,0 +1,54 @@
+.TH COMICSTRIP 1 "8/16/91" "Version 2" "HIPS Manual"
+.SH NAME
+comicstrip \- display batches of frames in a single matrix of pictures
+.SH SYNOPSIS
+.B comicstrip
+[-s mr [mc]] [-m margin] [-e] <iseq >oseq
+.SH DESCRIPTION 
+.I Comicstrip
+takes batches of successive frames in an image sequence and
+displays them in a matrix of rows and columns in a single image.  By
+default, the program calculates the squarest matrix it can to fit the
+entire sequence (with more columns than rows, if necessary).  If only
+.I mr
+is specified, this is the number of rows of images, and the number of
+columns is set sufficiently large to contain the entire sequence.  If
+.I mc
+is specified, then each output frame contains the frames from a batch of
+.I mr*mc
+input frames (although the final output frame may only be partially
+filled.  For bit-packed output frames, the column width will be rounded up
+to an even multiple of 8.  A border is interpolated between each row and
+column.  The border size may be specified by
+.IR -m ,
+and defaults to no border
+at all.  The borders are filled with the background value which is set by
+.I -UL
+which defaults, as usual, to zero).  By
+default, the program only displays the region of interest.  If
+.I -e
+is specified, the region-of-interest
+is cleared and entire images are displayed.  The output
+region of interest is cleared to be the entire image.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+most-significant-bit first packed, least-significant-bit first packed,
+byte, short, integer, float, double
+.SH "REGION-OF-INTEREST"
+The output region-of-interest is cleared to be the entire image.
+Unless
+.I -e
+is specified, only regions-of-interest are copied into the joined frame.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+catframes(1), collage(1), joinframes(1), subseq(1)
+.SH AUTHOR
+Michael Landy - 8/16/85

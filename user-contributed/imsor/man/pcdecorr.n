@@ -1,0 +1,39 @@
+.TH PCDECORR 1 "10 December 1992" "Version 2" "HIPS Manual"
+.SH NAME
+pcdecorr \- RGB to principal components, stretch PCs, PCs to RGB
+.SH SYNOPSIS
+.B pcdecorr
+.RB [ \-s
+.I s1 s2
+.IR s3 ]
+.RB [ \-c ]
+.SH DESCRIPTION 
+.I pcdecorr
+transforms from RGB to principal components (PCs),
+stretches the PCs linearly and transforms back from PCs to RGB.
+This gives a colour decorrelation that enhances the colour information
+available in RGB images with even strongly correlated components.
+.sp 0.5
+The amount of stretching of the three PCs is controlled by three scaling
+factors.
+.I s1
+gives scaling of PC1 (defaults to 1.0),
+.I s2
+gives scaling of PC2 (defaults to 0.5) and
+.I s3
+gives scaling of PC3 (defaults to 0.2).
+.B \-c
+sets
+.I numcolor=3
+in output sequence.
+.SH SEE\ ALSO
+decorr(1), ihsdecorr(1), rgb2ihs(1), ihs2rgb(1)
+.SH EXTERNAL ROUTINES
+To be installed successfully
+.I pcdecorr
+requires access to EISPACK routines.
+.SH AUTHOR
+.nf
+Allan Aasbjerg Nielsen
+IMSOR, Technical University of Denmark
+e-mail: aa@imsor.dth.dk

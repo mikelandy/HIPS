@@ -1,0 +1,117 @@
+
+This directory contains a tool for performing image analysis, called HIPSTool.
+This program was developed at Lawrence Berkeley Laboratory at the University
+of California, and they retain the copyright on this software.  More copyright
+information is contained in the documentation (hipstool.me) and in the source
+code for the main program (hipstool.c).
+
+This program was originally developed for use on Sun computers using the
+SunView windowing package, and running under SUNOS 4.0 or later.  Michael
+Landy of SharpImage Software converted the software so that it would compile
+and run under earlier versions of SUNOS (we run 3.4).  Several differences
+discovered during this process are noted below.
+
+****IMPORTANT NOTE****
+This program uses both the HIPS library, and the HIPS extended header package
+(XHEADER).  It can not be compiled without the library routines from both
+packages.
+**********************
+
+Current development of HIPSTool will be under X-windows, which will allow this
+same package to be run on a far wider range of UNIX machines.  The X-windows
+version should become available in a few months (e.g., by winter, 1990).
+
+The operation of HIPSTool is described (mostly) in the documentation, which
+is file hipstool.me (to print it out, type something like:
+		`psroff -me hipstool.me'
+
+In this directory, there are two versions of hipstool, the original SunView
+version supplied by the Lawrence Berkeley Laboratory which compiles and runs
+under SUNOS 4.0 (in subdirectory `sunos4.0'), and the version hacked by
+Michael Landy to run under earlier versions of the Sun operating system (in
+subdirectory `sunos3.4').  I have successfully run the 4.0 version on a Sun
+386i running SUNOS 4.0.  I have successfully run the 3.4 version on a Sun
+3/60C running SUNOS 3.4.  However, the 3.4 version crashes on my Sun 3/160
+(upgraded from a 2/160) running SUNOS 3.4.  The 3/160 crash is a segmentation
+fault from within the SunView routines dealing with the cgtwo frame buffer
+before the program has done anything useful (the window appears for a brief
+moment, then the program crashes).  The 3/60C which ran the program
+successfully has a cgfour frame buffer.  So, this may be the crucial
+difference.  If you use this program on a pre-4.0 system, please let me know
+what happens.
+
+The SUNOS 3.4 version required several changes to be made in the code:
+
+	1.  The code calls a routine called `strdup' which was added in 4.0.
+	The HIPS library already had an equivalent routine (called strsave),
+	and so I modified their macros.h to use strsave instead of strdup.
+
+	2.  The 3.4 C compiler does not handle `enum' correctly at all (for
+	example, you can't use an enum element to reference an array, which is
+	used extensively in the code.  So, I changed all enum-erations in the
+	code to separate #define's for each item, and I changed all
+	type-castings from `enum xxx' to `int'.
+
+	3.  The 3.4 C compiler had occasional problems with code of the form
+	`if (a == b)' where `a' was a pointer to a function, and `b' was the
+	name of a function.  So, I added a flag to the structure `primit_info'
+	called `listflag' which is used instead of testing the function
+	pointers.
+
+	4.  The `mmap' function is very different in 4.0 compared to 3.4, so
+	the 3.4 version turns off the flag called `USE_MMAP'.
+
+	5.  The SunView function event_action is called event_id under 3.4,
+	so the include file was changed to reflect this.
+
+Good luck with this tool.  It looks quite useful, and I expect that the
+X-windows version will be a major improvement, so stay tuned.
+
+Michael Landy
+SharpImage Software
+P.O. Box 373, Prince Street Station
+New York, NY   10012-0007
+(212) 998-7857
+landy@nyu.nyu.edu
+
+__________________________________________________________________________
+
+The following is the README file supplied by the original author of hipstool:
+
+HIPStool README				07 Jul 89	Max Rible
+
+HIPStool was created on a Sun 4/280 with 96 megabytes of main memory
+and 2 gigabytes of disk, running SunOS Release 4.0_REVB_BETA and
+SunView Release 4.0.  Naturally, this could introduce problems if
+you're trying to get it to work anywhere else in the known universe.
+
+-- 
+One problem is that Sun OS 4.0 understands a function called strdup,
+but other computers don't seem to, including many other Suns.  The
+manual entry says:
+
+     char *strdup(s1)
+     char *s1;
+
+     strdup() returns a pointer to a new string which is a dupli-
+     cate  of the string pointed to by s1.  The space for the new
+     string is obtained using malloc(3).  If the new string  can-
+     not be created, a NULL pointer is returned.
+
+HIPStool makes extensive use of this function, but it always calls it
+through the macro Strdup.  If you substitute an equivalent function
+for strdup in macros.h, you shouldn't have any problems.  (If
+necessary, you'll have to write the function yourself and add its
+extern declaration to externs.h.)
+--
+Apparently, a function event_action() under SunView 4.0 was called
+event_id() under previous revisions.  If you encounter a problem with
+event_action()'s undefinedness, add the line #define event_action(x)
+event_id(x) near the beginning of macros.h.
+--
+My profuse thanks to Bill Johnston, Brian Tierney, and Mike Landy for
+helpful bug reports.
+
+--
+Note that this program requires the xheader package as well as the standard
+HIPS package.

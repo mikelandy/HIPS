@@ -1,0 +1,47 @@
+.TH H_HISTOEQ 3 "8/7/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_histoeq \- subroutines to compute a mapping for histogram equalization
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_histoeq(histogram,count,map)
+h_histoeq_b(histogram,count,map)
+struct hips_histo *histogram;
+int count;
+byte *map;
+
+h_histoeq_B(nbins,histo,count,map)
+byte *map;
+int nbins,*histo,count;
+.fi
+.SH DESCRIPTION 
+These routines calculate a pixel mapping from a histogram which when applied
+to an image with that histogram (using
+.IR h_pixmap (3))
+results in a histogram equalization.  The user supplies a histogram and the
+count of the number of pixels contributing to that histogram (as returned by
+.IR h_histo (3)),
+and a byte array into which the pixel map is placed.
+.I H_histoeq
+calls
+.IR h_histoeq_b
+as long as the pixel format is byte.
+.I h_histoeq_B
+is the low-level routine which doesn't require a histogram structure.
+Note that this routine only works for histograms of byte images with 256 bins
+(from 0 to 255).  Also note that the histogram array passed to
+.I h_histoeq_B
+is the same as that in the histogram structure.  In particular, histo[1] is
+the bin corresponding to a pixel value of zero, because histo[0] is the
+underflow bin.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_histo(3), h_pixmap(3)
+.SH AUTHOR
+Michael Landy; Lin, Shou-Tsung  - 12/4/85
+.br
+HIPS 2 - msl - 8/6/91

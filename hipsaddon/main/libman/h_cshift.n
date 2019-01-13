@@ -1,0 +1,117 @@
+.TH H_CSHIFT 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_cshift - image wrapping
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+h_cshift(hdi,hdo,srow,scol)
+h_cshift_b(hdi,hdo,srow,scol)
+h_cshift_s(hdi,hdo,srow,scol)
+h_cshift_i(hdi,hdo,srow,scol)
+h_cshift_f(hdi,hdo,srow,scol)
+h_cshift_d(hdi,hdo,srow,scol)
+h_cshift_c(hdi,hdo,srow,scol)
+h_cshift_dc(hdi,hdo,srow,scol)
+struct header   *hdi,*hdo;
+int             srow,scol;
+
+h_cshift_B(imagei,imageo,orows,ocols,srow,scol)
+byte    *imagei,*imageo;
+int     row,col,srow,scol ;
+
+h_cshift_S(imagei,imageo,orows,ocols,srow,scol)
+short   *imagei,*imageo;
+int     row,col,srow,scol ;
+
+h_cshift_I(imagei,imageo,orows,ocols,srow,scol)
+int     *imagei,*imageo;
+int     row,col,srow,scol ;
+
+h_cshift_F(imagei,imageo,orows,ocols,srow,scol)
+float   *imagei,*imageo;
+int     row,col,srow,scol ;
+
+h_cshift_D(imagei,imageo,orows,ocols,srow,scol)
+double  *imagei,*imageo;
+int     row,col,srow,scol ;
+
+h_cshift_C(imagei,imageo,orows,ocols,srow,scol)
+float   *imagei,*imageo;
+int     row,col,srow,scol ;
+
+h_cshift_DC(imagei,imageo,orows,ocols,srow,scol)
+double  *imagei,*imageo;
+int     row,col,srow,scol ;
+.fi
+.SH DESCRIPTION 
+.I h_cshift
+shifts circularly the input image (specified by
+.I hdi
+or
+.I imagei)
+and stores the result in the output image (specified by
+.I hdo
+or
+.I imageo).
+.I h_cshift
+then calls
+.I h_cshift_b
+for byte pixel format image,
+.I h_cshift_s
+for short integer pixel format image,
+.I h_cshift_i
+for integer pixel format image,
+.I h_cshift_f
+for int pixel format image,
+.I h_cshift_d
+for floating point pixel format image,
+.I h_cshift_c
+for complex pixel format image,
+or
+.I h_cshift_dc
+for double complex pixel format image.
+.I h_cshift_b,
+.I h_cshift_s,
+.I h_cshift_i,
+.I h_cshift_f,
+.I h_cshift_d,
+.I h_cshift_c
+or
+.I h_cshift_dc,
+then respectively calls
+.I h_cshift_B,
+.I h_cshift_S,
+.I h_cshift_I,
+.I h_cshift_F,
+.I h_cshift_D,
+.I h_cshift_C
+or
+.I h_cshift_DC
+which are the low-level routines and do not require image headers.
+The input and output images have
+.I ocols
+pixels per line, and
+.I orows
+lines.
+.I srow
+.I (scol)
+are the starting row (column) that will be shifted to
+the 0th row (column), and defaults to orows/2 (ocols/2)
+where orows  (ocols) is the number of orows (columns) of
+the image.
+.sp
+It can be used in processings involving FFT.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, int, float, double, complex, and double complex formats.
+.SH "OUTPUT PIXEL FORMATS"
+byte, short, int, float, double, complex, and double complex formats.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH SEE ALSO
+h_extend(1), h_extract(1), h_fourtr(1)
+.SH AUTHOR
+Jin Zhengping - 25 July 1988 
+.br
+Rewritten by Jin Zhengping - 31 August 1991

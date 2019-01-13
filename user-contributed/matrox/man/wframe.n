@@ -1,0 +1,26 @@
+.TH WFRAME 1HIPS "August 13, 1988"
+.SH NAME
+wframe - write a frame on the Matrox VIP-1024
+.SH SYNOPSIS
+.B wframe
+[initialrow [initialcolumn]]  [-cColorPlane]  < frame(s)
+.SH DESCRIPTION 
+.I Wframe
+writes a frame(s) on the Matrox VIP-1024.
+Coordinate
+.I ( initialrow , initialcolumn )
+specifies the screen position for 
+frame coordinate (0,0).  Effective off-screen coordinates are lost,
+so there is no wraparound.
+The default is to center the image on the screen.
+The 
+.I -cColorPlane 
+option is used to specify the color plane to which the frame should
+be dumped. Possible values for <ColorPlane> are r, R, g, G, b, and B.
+The default colorplane is ALLPLANES (i.e., frame is dumped to all three
+color planes). If the image contains more than one frame it is assumed to
+be a 24 bit color image with 1 frame for each colorplane.
+.SH SEE\ ALSO
+rframe(1HIPS), mclear(1HIPS)
+.SH AUTHOR
+Edmond Mesrobian - 8/13/88

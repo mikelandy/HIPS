@@ -1,0 +1,17 @@
+#
+# makefile for user-contributed/uva/man
+#
+
+MANPAGES = 2dhist.n 3dhist.n avefilt.n aveseq.n divseq2.n lutexpmake.n \
+		lutmake.n lutmap.n map.n pixshift.n shrink.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

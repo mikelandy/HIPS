@@ -1,0 +1,75 @@
+.TH H_FFT2 3 "7/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_fft2 \- low-level subroutines to compute a Fourier transform
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_fft_ri_c(rvec,ivec,loglen)
+h_fft2d_ri_c(rvec,ivec,loglen)
+h_fft2dgen_ri_c(rvec,ivec,logrows,logcols)
+h_fftn_ri_c(rvec,ivec,loglen,nskip)
+float *rvec,*ivec;
+int loglen,logrows,logcols,nskip;
+
+h_fft_ri_dc(rvec,ivec,loglen)
+h_fft2d_ri_dc(rvec,ivec,loglen,nlp)
+h_fft2dgen_ri_dc(rvec,ivec,logrows,logcols,nlp)
+h_fftn_ri_dc(rvec,ivec,loglen,nskip)
+double *rvec,*ivec;
+int loglen,logrows,logcols,nskip;
+.fi
+.SH DESCRIPTION 
+These routines compute Fourier transforms where the real and imaginary parts
+of the arrays are supplied separately.  (See
+.IR h_fourtr (3)
+for the standard routines which are supplied with complex format arrays.)
+The algorithm is
+adapted from that provided by Gonzalez & Wintz (page 87).
+.I h_fft_c
+and
+.I h_fft_dc
+perform a 1-dimensional fft.
+.I h_fft2d_c
+and
+.I h_fft2d_dc
+perform a 2-dimensional fft on a square array, where
+.I loglen
+is the log (to the base 2) of the length of a side of the array.
+.I h_fft2dgen_c
+and
+.I h_fft2dgen_dc
+perform a 2-dimensional fft on nonsquare arrays, but are otherwise analogous to
+.I h_fft2d_c
+and
+.IR h_fft2d_dc .
+.I h_fftn_c
+and
+.I h_fftn_dc
+are the lowest level routines which actually do the work.  These routines
+perform a 1-dimensional fft on a complex vector. Again,
+.I loglen
+is the log (to the base 2) of the number of elements in the vector.  The
+elements of the vector are not necessarily stored consecutively, but rather
+each element is
+.I nskip
+values after the previous.  This allows the routine to perform an fft on rows
+or columns of a 2-dimensional array.
+.PP
+All of these routines omit the final division by the number of entries in the
+array.  This can be performed afterward using
+.IR h_divscale (3).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+complex, double complex
+.SH "IN-PLACE PROCESSING"
+The image is always processed in place.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FFTI - strange index
+.SH AUTHOR
+Michael Landy - 3/11/82
+.br
+modified for HIPS 2 - msl - 1/3/91

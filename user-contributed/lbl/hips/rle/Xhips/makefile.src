@@ -1,0 +1,35 @@
+#
+# makefile for user-contributed/lbl/hips/sources/rle
+#
+
+# Xhips made obsolete by 'getx' ??
+PGMS = htorle.out Xhips.out
+#PGMS = htorle.out
+
+LIBRLE= -lrle
+
+.c.o:
+	$(COMPILEc) $< -I$(CCS_ROOT)/include
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+htorle.out:	htorle.o
+	$(LINKc) htorle htorle.o $(LIBRARIES) $(LIBRLE)
+	mv htorle $(DESTDIR)
+	@touch $@
+
+Xhips.out:
+	cp Xhips $(DESTDIR)
+	chmod +x $(DESTDIR)/Xhips
+	@touch $@
+
+FRC:

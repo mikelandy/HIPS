@@ -1,0 +1,46 @@
+.TH deriche 1hips "Marts 18, 1991" 
+.SH NAME
+deriche - a recursive implementation of the Canny-filter (without thresholding)
+.SH SYNOPSIS
+.B deriche
+[alpha [omega]] < inseq > outseq
+.SH DESCRIPTION 
+.I Deriche
+is a recursive implementation of the Canny-filter. Canny approximated his
+filter by the derivative of a Gaussian  - which is a suboptimal solution. 
+Deriche showed in his paper that Canny's criteria could be 
+satisfied by a recursive  filter implementation. 
+A side effect of using a recursive filter is that the computer time 
+is independent of the 'kernel size'. 
+
+The input sequence must be in float format, and the output is in complex format.
+The strength of an edge is found in the magnitude while the direction of the 
+gradient is found in the phase. (Use 
+.B ctof
+to convert from complex to either magnitude or phase.)
+
+Alpha controls the (effective) size of the filter. Default is 10.
+
+Omega controls the slope of the filter at the origin. Default is alpha/1000.
+
+In order to reduce the usual effects from filtering outside a non-zero boundary
+the pixels at the boundary are (or rather appear to be) repeated infinitely. 
+
+.SH REFERENCES
+"A Computational Approach to Edge Detection",
+John Canny,
+IEEE Trans. on Patt.Anal.&Machine Intell.,
+Vol PAMI 8. NO. 6. NOV. 86
+
+"Using Canny's criteria to derive a recursively
+implem. optimal edge detector.",
+Rachid Deriche,
+Int.J.of comp.vision 167-187 1987.
+
+.SH SEE\ ALSO
+dthresh(1hips) if available, canny(1hips) if available
+.SH AUTHOR
+Arni G. Sigurdsson, IMSOR, Technical University of Denmark
+
+18/3-91: Modified by Carsten Kruse Olsson, IMSOR, 
+e-mail: cko@vip.imsor.dth.dk

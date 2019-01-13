@@ -1,0 +1,101 @@
+.TH SAMPLES n "1992" "Scry Version 1.3" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+samples \- input various format images to Scry
+.SH SYNOPSIS
+\f2for the Sun\f1:
+.sp
+.B hipsclient < imagefile > Animafile
+.sp
+.B rleclient < imagefile > Animafile
+.sp
+.B sunclient < imagefile > Animafile
+.sp
+\f2for the Cray or Sun\f1:
+.sp
+.B imageclient < sunset.image > Animafile
+.sp
+.BI \-i " input file"
+.BI \-o " Anima file"
+.BI \-w " workstation"
+.BI \-p " RPC program number"
+.BI \-r " record"
+.BI \-c " compression"
+.BI \-v 
+.BI \-s " corner_x corner_y"
+.BI \-h
+.SH DESCRIPTION
+\f3hipsclient\f1 can be used to compress, transmit, record and/or
+save to a file a HIPS image or sequence of HIPS images.
+.sp
+\f3rleclient\f1 can be used to compress, transmit, record and/or
+save to a file an RLE image.
+.sp
+\f3sunclient\f1 can be used to compress, transmit, record and/or
+save to a file a Sun rasterfile.
+.sp
+\f3imageclient\f1 can be used to compress, transmit, record and/or
+save to a file the sample file contained in the \f2imageclient\f1
+directory.
+.SH OPTIONS
+.LP
+Options may appear in any order.  Later options override previous
+ones.
+.TP
+.B \-i inputfile
+Input file name.  The file can also be gotten by redirection
+from stdin (see above).
+.TP
+.B \-o filename
+If no connection was set up with the \f3\-w\f1 option, save the image
+on the client.  If it was, save the image on the server.  Redirection
+to stdout can also save the image on the client (see above), but
+will have no effect if a connection was set up.
+.TP
+.BI \-w " hostname"
+Use 
+.I hostname
+to indicate the server that will display the image.
+If this argument is omitted, no connection to a server will be established,
+and the image(s) will be saved as an Anima file.
+.TP
+.BI \-p " prognum"
+Contact the host at the specified program number.  This is unnecessary
+with hosts with one display screen (like a PC), but is required for
+those that can specify the program number (like Suns).
+.TP
+.BI \-c " compression"
+Select compression as Lempel-Ziv compression, CCC
+compression and run-length encoding, or color quantization (if
+the image is more than 8 bits per pixel); you
+may also select none.  Choices:
+.sp
+(1) "c" : CCC and run-length encoding,
+.sp
+(2) "q" : quantization to 8 bits,
+.sp
+(3) "cl" : CCC, run-length encoding, and Lempel-Ziv,
+.sp
+(4) "ql" : quantization to 8 bits and Lempel-Ziv,
+.sp
+(5) or "n" : no compression (default).
+.TP
+.B \-r option
+Record the image(s) on videotape or videodisk.  \f3option\f1
+can be either the desired frame number to seek to, or -1 to
+enable automatic seeking to the first available frame.
+.TP
+.B \-s corner_x corner_y
+This argument only has an effect if the server display resolution
+is smaller than that of the image.  It sets the upper left corner
+of the portion of the image that will be displayed on the server.
+.TP
+.B \-v
+Flips the image around an x axis in its center.
+.TP
+.B \-h
+Get help on all these options
+.SH AUTHOR
+David Robertson
+.SH "SEE ALSO"
+.B scry_libclient(n), Xserv(n), pcserv(n), svserv(n),
+.B scry_client(n)

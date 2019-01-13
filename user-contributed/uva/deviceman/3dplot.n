@@ -1,0 +1,15 @@
+.TH 3DPLOT 1BIPS "July 29, 1987"
+.SH NAME
+3dplot \- displays PLOT3D format files on the ITEC or LEX-90
+.SH SYNOPSIS
+.B 3dplot
+\< iseq
+.SH DESCRIPTION
+.PP
+.I 3dplot 
+displays the contents of a PLOT3D format file on the ITEC or LEX-90.
+The device is specified by the environment variable DSPDEV.
+.SH "SEE ALSO"
+pixto3d(1BIPS), plot3tov(1BIPS), plot3topix(1BIPS)
+.SH AUTHOR
+Chuck Carman

@@ -1,0 +1,111 @@
+.TH ELASTIC 1 "JANUARY 15, 1991" LBL-HIPS
+.\" @(#)elastic_scale.1  1.10 91/1/3 JIN;
+.SH NAME
+elastic \- high performance image enhancement tool
+.SH SYNOPSIS
+.nf
+.ta 1i
+elastic [-v#] [-b] [-n] [-r] [<] inputfilename [> [-o] filename]
+	[-f#] [-g[#]] [-B -F] [-a[#]] [-e [-z]] [-l] [-t]
+	[-I] [-R[X, Y] #] [-S] [-M] [-T]
+.SH DESCRIPTION
+.I elastic
+is a histogram streching based image enhancement tool using elastic algorithm.
+The ELASTIC function basically performs 3 different intensity corrections:
+.br
+(1) recoverable scaling (saturated elastic-tuning, by default)
+.br
+(2) S correction (-f # = -425 to +275, -325 to 0 is unsaturated elastic-tuning)
+.br
+(3) C correction (supersaturated non-saturated elastic-tuning)
+.br
+Also
+.I elastic
+can perform region difference interpolation and high frequencies emphasis.
+.br
+The input can be one type of HIPS, FITS, GIF, ICC, RLE, PNM, SUN-Raster,
+and TIFF images, and the output is a HIPS image.
+.SH OPTIONS
+.TP
+.I -a[#]
+adjust float input automatically. The following # yields output range factor.
+The default is 196.
+.TP
+-b
+use elastic-tuning to emphasize background. The default is to emphasize
+the foreground.
+.TP
+.I -f #
+scale factor, real number in percentage. The default is 0%.
+(often used range is from -575 to +750.)
+(The entire range can be from -10550 to +12500.)
+.TP
+.I -g[#]
+the base value (threhsold) at bottom, no output value will be less than it. If
+.I -g
+specified but no further value given, the default base = 10.
+.TP
+.I -l
+linear scaling. Usually work with RDI (region difference interpolation).
+.TP
+.I -n
+negative elastic operation.
+.TP
+.I -r
+relaxed elasticity operation, for Fast Version only (see version by using -M).
+.I -t[#]
+clip top # (default=1) value to 91%(default) or given value # (in -v).
+.TP
+.I -v #
+set maximum value for output.
+.TP
+.I -B
+force byte formated output. The default is to output images same as input.
+.TP
+.I -F
+force floating point format output.
+.TP
+.I -E
+modify Edges on right and bottom when interpolating.
+.TP
+.I -I
+Interpolation in main peak area for BYTE formated output, [2 x 2] regions.
+.TP
+.I -R
+interpolation Regions for both X and Y. For BYTE format images only.
+.TP
+.I -RX #
+X interpolation regions.
+.I -RY #
+Y interpolation regions.
+.TP
+.I -S
+treat all slices as a single 3D image.
+.TP
+.I -M
+Display messages.
+.TP
+.I -T
+generate Table for plot
+.TP
+.I -o
+this option is used for machines such as the PC which require binary output
+file modes to be set on open. No space allowed between the switch and the
+filename.
+.TP
+.I -e
+emphasize the high frequencies.
+.TP
+.I -z
+option counts zero valued pixels in high frequency emphasis (\c
+.IR -e ).
+.SH NOTE
+Input can be any format, and floating point input can only result in either
+byte or floating point output.
+.SH EXAMPLE
+.B elastic
+-f 250 -b -R 8 bird.h | xhips
+.SH "SEE ALSO"
+meanpeak(1), mean_scale(1)
+.SH AUTHOR
+Jin Guojun - 1/3/90

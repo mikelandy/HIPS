@@ -1,0 +1,25 @@
+.TH HSIZEPIX 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+hsizepix \- compute the size of image pixels
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+hsize_t hsizepix(pfmt)
+hsize_t hbitsperpixel(pfmt)
+int pfmt;
+.fi
+.SH DESCRIPTION 
+.I hsizepix
+returns the number of bytes required to store a single pixel of the given
+pixel format (or zero, if it is not a pixel-based or pyramid format).
+.PP
+.I hbitsperpixel
+returns the number of bits required to store a single pixel of the given
+pixel format (or zero, if it is not a pixel-based or pyramid format).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+None
+.SH AUTHOR
+Michael Landy - 1/3/91

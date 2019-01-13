@@ -1,0 +1,31 @@
+.TH TRANS_FRAME 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+trans_frame \- transform a plot3d by the associate shift and rotation
+.SH SYNOPSIS
+.nf
+trans_frame(buf,nbuf,shift_v,rot_m,flags)
+char *buf;
+double shift_v[3],rot_m[3][3];
+int *flags;
+.fi
+.SH DESCRIPTION 
+.I trans_frame
+transforms a frame according to the values
+of the shift vector and the rotation matrix supplied.
+The values of
+.IR flags ,
+.IR shift_v ,
+and
+.IR rot_m
+are updated to reflect that this has occurred.
+It is assumed that
+.I flags
+reflects the true state of affairs on entry.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_CODE - unknown plot3d code
+.SH AUTHOR
+Yoav Cohen  11/3/82
+.br
+modified for HIPS 2 - msl - 1/3/91

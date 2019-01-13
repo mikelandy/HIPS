@@ -1,0 +1,48 @@
+.TH PTOA 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+ptoa \- convert images from pixel-format to ASCII
+.SH SYNOPSIS
+.B ptoa
+.SH DESCRIPTION 
+.I Ptoa
+converts from all raster pixel formats to Ascii, allowing one, for example, to 
+apply
+.I stripheader
+and then examine images or apply UNIX statistical programs.  For complex and
+double complex images, the number of columns in the output header is doubled
+since there is no indication in the output image that it was originally
+complex. The same goes for the region-of-interest first column and number of
+columns.  For 3-color images (formats RGB, RGBZ, ZRGB, BGR, BGRZ, ZBGR), the
+program outputs each pixel as a series of three numbers (in the order red,
+green, blue), and modifies the number of columns and region-of-interest
+accordingly.  The program
+.I atop
+performs the converse of this operation appropriately.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, double, complex, double complex, integer pyramid,
+float pyramid, RGB, RGBZ, ZRGB, BGR, BGRZ, ZBGR, mixed raster format using
+the above constituent formats
+.SH "REGION-OF-INTEREST"
+The entire image is converted.  The region-of-interest information is
+preserved in the output image header.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 1.
+This is not the usual default, but makes for a more readable output.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+atop(1)
+.SH AUTHOR
+Yoav Cohen - 6/26/83
+.br
+Mike Landy - 10/9/83
+.br
+HIPS 2 - msl - 1/8/91
+.br
+RGB/RGBZ/etc. - msl - 5/24/93

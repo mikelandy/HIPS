@@ -1,0 +1,17 @@
+This directory has a previewer for HIPS images for Suns running Xwindows.
+It is a hacked version of one of the unsupported demos that came with X to
+do the displaying.  It operates similarly to the `sunv' viewer
+with the following exceptions:
+
+1. You can't replicate image pixels to make the window bigger.  It shouldn't
+   be hard to add this, but this feature is rarely used (?).
+
+2. When you iconify this `tool', the image is still displayed inside the
+   icon (neat!)  (That was from the original demo).
+
+This program has only been tested on Suns, but given the portability push
+for X, it should run without much modification on any X platform.
+
+Good luck with it
+
+Pat Flynn

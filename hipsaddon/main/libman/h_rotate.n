@@ -1,0 +1,68 @@
+.TH H_ROTATE HIPS "31st August 1991" "Version 2" "HIPS Manual"
+.SH NAME
+h_rotate - image 2D geometric transformer
+.SH SYNOPSIS
+.nf
+#include <math.h>
+#include <hipl_format.h>
+
+h_rotate(hdi,hdo,angle)
+h_rotate_b(hdi,hdo,angle)
+struct header   *hdi,*hdo;
+double          angle;
+
+h_rotate_B(imagei,imageo,nri,nci,nro,nco,angle)
+byte    *imagei,*imageo;
+int     nri,nci,nro,nco;
+double  angle;
+.fi
+.SH DESCRIPTION 
+.I h_rotate
+rotates the input image (specified by
+.I hdi
+or
+.I imagei)
+by an angle
+which is specified by
+.I angle,
+in degree.
+A positive angle corresponds to an anticlockwise rotation.
+.I h_rotate
+stores the result in the output image (specified by
+.I hdo
+or
+.I imageo).
+.I h_rotate
+then calls
+.I h_rotate_b
+only if the input image pixel format is byte.
+.I h_rotate_b
+then calls
+.I h_rotate_B
+which is the low-level routine and does not require image header.
+The input image has
+.I nci
+pixels per line, and
+.I nri
+lines.
+The output image has
+.I nco
+pixels per line, and
+.I nro
+lines.
+
+Note: any part of the rotated image that lie outside the output
+image will be clipped.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH SEE ALSO
+h_enlarge(1), pictranspose(1), h_project(1), h_reflect(1),
+h_rotate90(1), h_rotate180(1), h_translatei(1)
+.SH AUTHOR
+Jin Zhengping - 13 March 1989
+.br
+Rewritten by Jin Zhengping - 31 August 1991

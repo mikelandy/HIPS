@@ -1,0 +1,60 @@
+.TH PYRREFLECT 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+pyrreflect \- pyramid edge reflection routines
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+hor_reflectf(f,border,rtype)
+ver_reflectf(f,border,rtype)
+reflectf(f,border,rtype)
+hor_reflecti(i,border,rtype)
+ver_reflecti(i,border,rtype)
+reflecti(i,border,rtype)
+FIMAGE f;
+IIMAGE i;
+int border,rtype;
+.fi
+.SH DESCRIPTION 
+These routines perform the reflection of a pyramid image around its borders
+required by the reduce and expand routines because the convolution filter
+reaches beyond the image.  All routines are supplied with an image and the
+amount of image border.
+.I hor_reflectf
+and
+.I hor_reflecti
+reflect only horizontally.
+.I ver_reflectf
+and
+.I ver_reflecti
+reflect only vertically.
+.I reflectf
+and
+.I reflecti
+reflect both horizontally and vertically.  There are seven
+ways of filling these areas, specified by the reflection type argument:
+.nf
+.sp
+.ta 1i 2i 4i
+	1	Even reflection:		c b | a b c d e | d c
+	2	Wrap around (left=right):	c d | (a+e)/2 b c d (a+e)/2 | b
+	3	Copy edge values:		a a | a b c d e | e e
+	4	Odd reflection:			(2*a-c) (2*a-b) | a b c etc.
+	5	Zero out border:		0 0 | a b c d e | 0 0
+	6	Wrap around:			d e | a b c d e | a b
+	7	Even reflection with repeat:	b a | a b c d e | e d
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_REFL - unknown reflection type
+.SH "SEE ALSO"
+pyrredexp(3)
+.SH AUTHOR
+The pyramid utilities are derived from code originally written by
+Raj Hingorani at SRI/David Sarnoff Research Institute.  The original
+Gaussian and Laplacian pyramid algorithms were designed by Peter Burt (also
+currently at SRI/DSRC).  See:  Computer Graphics and Image Processing,
+Volume 16, pp. 20-51, 1981, and IEEE Transactions on Communications,
+Volume COM-31, pp. 532-540, 1983.
+.sp
+modified for HIPS 2 - msl - 1/3/91

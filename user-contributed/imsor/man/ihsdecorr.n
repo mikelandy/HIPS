@@ -1,0 +1,66 @@
+.TH IHSDECORR 1 "10 December 1992" "Version 2" "HIPS Manual"
+.SH NAME
+ihsdecorr \- RGB to IHS, stretch S, IHS to RGB
+.SH SYNOPSIS
+.B ihsdecorr
+.RB [ \-i
+.RI [ Iamp \ [ Ioff ]]]
+.RB [ \-S 
+.RI [ Samp \ [ Soff ]]]
+.RB [ \-s
+.RI [ Samp \ [ Soff ]]]
+.RB [ \-I
+.IR file ]
+.RB [ \-c ]
+.SH DESCRIPTION 
+.I ihsdecorr
+transforms from RGB to IHS, replaces I if wanted,
+stretches I and/or S linearly if wanted, transforms from IHS to RGB.
+This gives a colour decorrelation that enhances the colour information
+available in RGB images with even strongly correlated components.
+.sp 0.5
+Default is
+.B \-s
+with
+.I Samp=2.0
+and
+.IR Soff=0.0 .
+.SH OPTIONS
+.TP
+.BR \-i \ [ \fIIamp\fR \ [ \fIIoff\fR ]]
+stretch intensity with
+.I Iamp
+(defaults to 2.0) and
+.I Ioff
+(defaults to 0.0)
+.TP
+.BR \-S \ [ \fISamp\fR \ [ \fISoff\fR ]]
+intensity dependent saturation stretch wanted,
+stretch saturation with
+.I Samp
+(defaults to 2.5) and
+.I Soff
+(defaults to 0.0)
+.TP
+.BR \-s \ [ \fISamp\fR \ [ \fISoff\fR ]]
+stretch saturation with
+.I Samp
+(defaults to 2.0) and
+.I Soff
+(defaults to 0.0);
+this is the default action
+.TP
+.BI \-I \ file
+replace intensity with HIPS image
+.I file
+(one frame, same size and format)
+.TP
+.B \-c
+numcolor=3 in outseq
+.SH SEE\ ALSO
+decorr(1), rgb2ihs(1), ihs2rgb(1)
+.SH AUTHOR
+.nf
+Allan Aasbjerg Nielsen
+IMSOR, Technical University of Denmark
+e-mail: aa@imsor.dth.dk

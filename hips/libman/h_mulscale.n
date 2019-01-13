@@ -1,0 +1,106 @@
+.TH H_MULSCALE 3 "7/7/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_mulscale \- multiply by a fixed scale factor
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_mulscale(hdi,hdo,b)
+h_mulscale_b(hdi,hdo,b)
+h_mulscale_s(hdi,hdo,b)
+h_mulscale_i(hdi,hdo,b)
+h_mulscale_f(hdi,hdo,b)
+h_mulscale_d(hdi,hdo,b)
+struct header *hdi,*hdo;
+Pixelval *b;
+
+h_mulscale_B(imagei,imageo,nr,nc,nlpi,nlpo,b)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+byte b;
+
+h_mulscale_S(imagei,imageo,nr,nc,nlpi,nlpo,b)
+short *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+short b;
+
+h_mulscale_I(imagei,imageo,nr,nc,nlpi,nlpo,b)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+int b;
+
+h_mulscale_F(imagei,imageo,nr,nc,nlpi,nlpo,b)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+float b;
+
+h_mulscale_D(imagei,imageo,nr,nc,nlpi,nlpo,b)
+double *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double b;
+.fi
+.SH DESCRIPTION 
+These routines multiply every pixel in an input subimage (specified by
+.I hdi
+or
+.IR imagei )
+by a constant factor
+.IR b ,
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_mulscale
+calls
+.IR h_mulscale_b ,
+.IR h_mulscale_s ,
+.IR h_mulscale_i ,
+.I h_mulscale_f
+or
+.I h_mulscale_d
+depending upon whether the pixel format is byte, short,
+integer, float or complex.
+.IR h_mulscale_B ,
+.IR h_mulscale_S ,
+.IR h_mulscale_I ,
+.I h_mulscale_F
+and
+.I h_mulscale_D
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+The routines compute opix = ipix*b.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, double
+.SH "OUTPUT PIXEL FORMAT"
+same as input
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words,
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_divscale(3), h_linscale(3), h_quadscale(3)
+.SH AUTHOR
+Michael Landy (HIPS 2) - 7/7/91

@@ -1,0 +1,24 @@
+.TH HISTOEQ2 1 "August 20, 1990" LBL-HIPS
+.SH NAME
+histoeq2 \- histogram equalization (handles short images)
+.SH SYNOPSIS
+.B histoeq2
+[-z] [-v]
+.SH DESCRIPTION 
+.I Histoeq2
+performs histogram equalization on byte-formatted images.  It performs a
+variant of the Peleg algorithm, shuffling around pixels in order to best
+approximate a ramp cumulative distribution of pixel values.
+This program with accept byte, short, and int image. However, with
+short and int images, the histogram is scaled to 1500 buckets, and the
+histogram equalization produces only 1500 different gray values.
+.SH OPTIONS
+ -z  zero valued pixels will be ignored in the calculation.
+ -v  verbose mode, useful on short and int images to monitor the
+     status of the program
+.SH AUTHOR
+Michael Landy; Lin, Shou-Tsung  - 12/4/85
+.br
+Modified to handle short and int images; Brian Tierney, LBL 8/90
+.SH SEE ALSO
+histo(1), disphist(1), entropy(1), framevar(1)

@@ -1,0 +1,22 @@
+#
+# makefile for directory user-contributed
+#
+
+# Subdirectories that get made
+
+DIRS = $(CONTRIBDIRS)
+
+# default action just makes src dirs
+
+all: install
+
+clean install pristine man doc: doit
+	@-if test 'x$(DIRS)' != x ; then eval \
+		'for d in $(DIRS) ; do \
+		( cd $$d ; echo make $@ on $(HERE)$$d ; make $(MFLAGS) $@ ) ; \
+		done' ; \
+	else \
+		true ; \
+	fi
+
+doit:

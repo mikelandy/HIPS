@@ -1,0 +1,54 @@
+.TH XHIST 1 "26 JUNE 1991" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+.B xhist
+- display the histogram of an image
+.SH SYNOPSIS
+.B xhist
+[ [<] infile ]
+.SH DESCRIPTION
+Type of image file may be byte, short, int, or float.
+All red numbers are pixel values.  All blue numbers
+are the counts of pixel values.  Each vertical line refers to a
+pixel value (or a range of pixel values) and its
+counts.  The red vertical line is used to check a
+certain pixel value.  Orange vertical lines represent
+the margins of the range of interesting pixel values.
+Green horizontal lines represent the margins of the
+range of interesting counts.  "Eval" control button
+can be selected to display the region within vertical
+(and horizontal) margins.
+.SH CONTROL BUTTONS
+ Check pixel value : check the pixel value specified by
+                       "pixel value : ___" field
+ <--  :  move red vertical bar left by 1 unit
+ -->  :  move red vertical bar right by 1 unit
+ Select |  :  select vertical margin (orange vertical line)
+               for next region
+ Eval :  Evaluate a region within vertical (and horizontal)
+          margins
+ Restore :  restore histogram to that of the entire image 
+ Set count margin : set the count margin specified by
+                     "count margin : ___" field
+
+ Load :  load image file
+ QUIT :  quit xhist
+ Help :  show help manual
+.SH MOUSE EVENTS on the graph
+ LEFT BUTTON :
+   or
+ DRAG        : move red vertical bar to check pixel value
+                and its counts
+
+ MIDDLE BUTTON : select vertical margin (orange vertical
+                 line) for next region
+
+ RIGHT BUTTON : select horizontal margin (green
+                  horizontal line) for next region
+.SH AUTHOR
+ Brian Tierney, LBL        email: bltierney@lbl.gov
+ Felix Huang, LBL          email: fhuang@lbl.gov
+.SH BUGS
+If the xhist window lacks something, please press "Eval"
+button.  That seems a bug of X window system.  Please 
+report any other bugs to Brian Tierney or Felix Huang.

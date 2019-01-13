@@ -1,0 +1,23 @@
+.TH WFRAME 1HIPS  "February 8, 1989"
+.SH NAME
+wframe - write a frame on the IRIS 4D
+.SH SYNOPSIS
+.B  wframe 
+[windowsizx windowsizy [initialrow initialcolumn]]
+.SH DESCRIPTION
+.I Wframe 
+writes a single frame on the IRIS 4D.
+.IB  ( windowsizx,\ windowsizy ) 
+specifies the size of the window to
+place the image in. The default window size is the size of
+the image.  Coordinate\   
+.IB ( initialrow,\ initialcolumn )
+specifies the position within the window for frame
+coordinate (0,0).  Effective off-window coordinates are
+lost, so there is no wraparound.  If only window size is
+specified, the default is to center the image within the
+window.
+.SH SEE\ ALSO
+rframe(1HIPS), movie(1HIPS), bmovie(1HIPS)
+.SH AUTHOR
+Aries Arditi - 2/8/89

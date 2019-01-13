@@ -1,0 +1,40 @@
+.TH PYREXTRACT 1 "7/19/91" "Version 2" "HIPS Manual"
+.SH NAME
+pyrextract \- extract a subset of pyramid levels
+.SH SYNOPSIS
+.B pyrextract
+[-l botlev [toplev]] < ipyrseq > oseq
+.SH DESCRIPTION 
+.I Pyrextract
+extracts a subset of the levels of an image pyramid.  The levels
+from
+.I botlev
+to
+.I toplev
+are extracted, where
+.I toplev
+defaults to the value of
+.IR botlev ,
+and
+.I botlev
+defaults to zero.  If only a single level is extracted, the
+output will be in integer or floating point format, otherwise it will have
+the same pyramid format as the input.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+integer pyramid, float pyramid
+.SH "OUTPUT PIXEL FORMATS"
+integer or integer pyramid (for integer pyramids), float or float pyramid
+(for float pyramids)
+.SH "REGION-OF-INTEREST"
+The region-of-interest is left unchanged.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+imgtopyr(1), pyrdisplay(1), pyrexpand(1), pyrmerge(1),
+pyrreduce(1), pyrtoimg(1),
+.SH AUTHOR
+Mike Landy - 3/5/89
+.br
+Hips 2 - msl - 7/19/91

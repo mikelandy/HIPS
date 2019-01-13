@@ -1,0 +1,38 @@
+.TH HISTINFO 1hips "OCTOBER 9, 1991" 
+.SH NAME
+histinfo - print histogram information of byte sequence
+.SH SYNOPSIS
+.B histinfo
+[-a] [-c] [-g] [-p] [-t] [-z] < iseq > oseq
+.SH DESCRIPTION 
+.I Histinfo
+prints histogram information of byte sequences
+Options:
+.TP
+\-\fBa\fP
+print cumulative histogram in percent
+.TP
+\-\fBc\fP
+collapse, compute histogram information for all images in the sequence
+as one image
+.TP
+\-\fBg\fP
+non-verbose mode. Print one line with mean, variance, cv, skewness,
+kurtosis, median, entropy and energy 
+.TP
+\-\fBp\fP
+print histogram in percent
+.TP
+\-\fBt\fP
+print histogram in number of pixels
+.TP
+\-\fBz\fP
+ignore zero pixels
+.SH SEE\ ALSO
+framevar(1), getmean(1), getmin(1), getmax(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

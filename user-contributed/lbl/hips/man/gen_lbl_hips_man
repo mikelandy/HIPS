@@ -1,0 +1,39 @@
+# /bin/csh
+# script to generate man page summarizing LBL HIPS programs
+# Brian Tierney, LBL
+#
+set echo
+set verify
+set sdir=$cwd/
+# set output file name here
+set outfile=hips_lbl.n
+#
+rm  $outfile
+cat /dev/null > $sdir/$outfile
+echo '.TH HIPS_LBL 1 "DEC. 18, 1990" "LBL-HIPS"' >> $sdir/$outfile
+echo '.SH LBL HIPS'  >> $sdir/$outfile
+echo 'This is a synopsis of all HIPS modules written at' >> $sdir/$outfile
+echo 'Lawrence Berkeley Laboratory.' >> $sdir/$outfile
+#
+# list of directories containing man pages
+
+set DIRS = (/home/itg1/src/HIPS2/local/hips/man \
+		/home/itg1/src/HIPS2/local/x11/man \
+		/home/itg1/src/HIPS2/local/xview/man )
+
+foreach dir ($DIRS)
+   pushd $dir
+   set names = (*.n)
+   foreach man_file ($names)
+# get everything from NAME to SYNOPSIS
+#   then delete NAME and SYNOPSIS
+        sed -n -e '/SH NAME/,/SH SYNOPSIS/p' $man_file | \
+	sed 's/.SH NAME//' |  \
+	sed 's/.SH SYNOPSIS//' >> $sdir/$outfile
+   end
+   popd
+end
+echo '.SH LBL MAINTENCE ' >> $sdir/$outfile
+echo 'Brian Tierney, LBL        email: bltierney@lbl.gov ' >> $sdir/$outfile
+echo '.SH "SEE ALSO"' >> $sdir/$outfile
+echo 'All of these programs have their own man page.' >> $sdir/$outfile

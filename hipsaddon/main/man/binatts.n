@@ -1,0 +1,130 @@
+.\"%W%      %G%"
+.TH BINATTS 1 "December 1984"
+.UC 4
+.sp
+.SH NAME
+binatts - compute a series of shape descriptors from a boolean image.
+.SH SYNOPSIS
+binatts [-d] [-v] [-f
+.ul
+filename
+] picturefilename
+.SH DESCRIPTION
+.I Binatts
+extracts the values of a set of shape measurements from a boolean image
+expressed in hips format. The boolean image may contain multiple shapes
+(often simply the silhouettes of objects derived using
+.usl
+thresh
+). For best results the boolean image must be as 'clean' as possible.
+A degree of cleaning is performed within binatts, this in effect fills
+in any holes present in the shape, and removes salt and 
+pepper noise in the background.
+.sp
+To date a set of 38 measurements (often called features or attributes)
+have been implemented, many however are simply different expressions
+of the same basic measurement.
+All of the measurements are designed to be orientation independent
+although this obviously depends on the accuracy of digitisation.
+Some of these attributes are also magnification independent.
+A full list of attributes is provided at the end of this section.
+.sp
+The flags are:
+.\" .sp
+.\" -a attribute-name,attribute-name,...........
+.\" .sp
+.\" .ti 4
+.\" This lists which attributes are to be extracted. An alternative means of 
+.\" specifying attributes is to use an attribute-specification file.
+.\" For historical reasons the
+.\" format of this file is the same as that used in the ACLS (Analogue Concept
+.\" Learning System) package.
+.\" This is specified using
+.sp
+-f attribute-specification-file-name
+.sp
+.ti 4
+This lists which attributes are to be extracted using an
+attribute-specification file.
+For historical reasons the format of this file is the same as that used in
+the ACLS (Analogue Concept Learning System) package.
+If -f is not specified, then a default attribute specification file
+will be input (``atts.35'') which causes 35 attributes (excluding the shape
+x and y centroid coordinates and principal axis orientation) to be extracted.
+.sp
+-v
+.br
+Normally the value each computed attribute will be output on a new line
+together with the attributes name, -v causes only the attribute values
+to be output and no new lines, ie generates an attribute vector.
+.sp
+-d
+.sp
+This is useful in checking the attribute computations, it causes intermediate
+stages in these attribute computations to be displayed on the monitor.
+.sp
+The attributes names recognised by binatts are abbreviations of
+a fuller description of the attributes.
+.sp
+.nf
+xce		x centroid coordinate of the shape.
+yce		y centroid coordinate of the shape.
+pra		principal axis orientation
+rar		raw area of the shape.
+map		maximum length of perimeter (ie 4 connected perimeter).
+mip		minimum	length of perimeter (ie 8 connected perimeter)
+dfp		maximum - minimum perimeters
+avp		average of maximum and minimum perimeters
+mar		maximum radius (ie radius of circle centred at centroid which
+		just encloses all of the shape.
+mir		minimum radius (ie radius of circle centred at centroid which just 
+		fits inside the shape.
+dfr		maximum - minimum radius
+avr		average of maximum and minimum radius
+rra		ratio of maximum and minimum radius
+mal		maximum length (where length is a 'caliper' type measurement)
+maw		width of object (ie length in a direction perpendicular to
+		the maximum length)
+pal		length along the principle axis
+paw		length perpendicular to the principle axis.
+shw		shrink width (ie half the number of shrink steps needed
+		for the shape to disappear, - shrinks alternate between
+		4 and 8 connected).
+avd		average distance to perimeter, average distance of any pixel
+		in the shape to the perimeter of the shape.
+pro		proround, (average perimeter ** 2) * pi /area, a measure of
+		compactness of the shape.
+cir		circularity, (average radius ** 2) *pi /area, a measure of
+		the circularity of the shape?
+dci		same as above but using average distance to perimeter instead
+		of average radius.
+mla		maximum length aspect ration (maximum length/length 
+		in perpendicular direction)
+paa		principle axis aspect ratio (length along principle axis/length 
+		perpendicular to the principle axis).
+elo		elongatedness
+mlr		maximum length rectangularity.
+		ie: area/(maximum length * perpendicular length)
+par		principle axis rectangularity.
+		ie: area/(pr.axis length * pr.axis width)
+mav		variance along major axis (2nd order moment)
+miv		variance along minor axis
+sMv		scaled variance along major axis (ie magnification independent)
+smv		scaled variance along minor axis ( ditto)
+rag		radius of gyration.
+srg		scaled radius of gyration.
+mas		skewness along major axis (3rd order moment)
+mis		skewness along minor axis
+mak		kurtosis along major axis (4th order moment)
+mik		kurtosis along minor axis
+hol		area of hollows.
+		ie: (area of b.poly - area of shape)/(area of b.poly)
+		where b.poly is a close fitting bounding polygon. 
+.fi
+.SH AUTHOR
+.sp
+Barry Shepherd, December 1984.
+.SH BUGS
+The picture cleaning algorithm can be improved and needs removing
+to a separate utility (eg piclean).
+

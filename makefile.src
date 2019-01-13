@@ -1,0 +1,32 @@
+#
+# Top level makefile for HIPS
+#
+
+# Subdirectories that get made
+
+#DIRS = sys lib hips hipsaddon colorhips drivers doc user-contributed pub
+DIRS = sys lib hips hipsaddon colorhips drivers doc user-contributed pub
+TAPEDIRS = sys lib hips hipsaddon sunanim drivers doc \
+	Configure Copyright Makefile README_CHANGES README_FIRST \
+	README_INSTALL config.sun4.template makefile.hdr makefile.src \
+	makefile.tlr README_ardent gallery user-contributed pub
+
+# default action just makes src dirs
+
+all: install
+
+clean install pristine man doc: doit
+	@for d in $(DIRS) ; do \
+		( cd $$d ; echo make $@ on $(HERE)$$d ; make $(MFLAGS) $@ ) ; \
+	done
+
+tape: doit
+	tar cvfb /dev/rst8 120 $(TAPEDIRS)
+
+exatape: doit
+	tar cvf /dev/rst9 $(TAPEDIRS)
+
+halftape: doit
+	tar cv $(TAPEDIRS)
+
+doit:

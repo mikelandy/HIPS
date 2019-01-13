@@ -1,0 +1,93 @@
+.TH DATACUBE 1 "August 1987"
+.SH NAME
+datacube - programs for manipulating a Datacube MaxVideo
+.SH SYNOPSIS
+For MaxWare Version 2.1:
+.sp
+.B max_rframe
+[rows [cols [initialrow [initialcol]]]]
+.br
+.B max_wframe
+[initialrow [initialcolumn]]
+.br
+.B max_clear
+.br
+.B max_grab
+filename
+.br
+.B menu_demo
+.br
+.B grab
+.sp
+For MaxWare Version 3.0:
+.sp
+.B max_Rroi
+[rows [cols [initialrow [initialcol]]]]
+.br
+.B max_Wroi
+[initialrow [initialcolumn]]
+.br
+.B rsAquire
+.br
+.B rsclear
+.br
+.B rsDemo
+.br
+.B rsGrab
+.br
+.B rsGrab512
+.SH DESCRIPTION 
+.I Max_rframe
+reads a frame from the Datacube Framestore fs0 starting at
+(initialrow,initialcol) with size rows x cols.
+There is no wraparound so large sizes will be truncated.
+The defaults are a 512 x 512 image at position (0,0).
+.sp
+.I Max_wframe
+writes a frame onto the Datacube Framestore fs0 at screen
+position (initialrow,initialcol) for frame coordinate (0,0).
+There is no wraparound so off-screen coordinates are lost.
+The default is to center the image.
+.sp
+.I Max_clear
+clears the Datacube Framestore.
+.sp
+.I Max_grab
+grabs a frame onto the Datacube Framestore fs0.
+.sp
+.I Menu_demo
+uses the Digimax and Framestore
+main application module using the fsMenu and dgMenu.c functions.
+.sp
+.I Grab
+is a SunView window tool for the Datacube system, allowing the user to grab
+an image using fs0,
+write to a file, and write to the framestore.  No HIPS header is created for
+the stored files.  The file size standard is 512 x 512.
+.sp
+.I Max_Rroi
+reads a frame from the Datacube Roistore LS starting at
+(initialrow,initialcol) with size rows x cols.  The default is a 512 x 512
+frame at position (0,0).
+.sp
+.I Max_Wroi
+writes a frame onto the Datacube Roistore LS at screen
+position (initialrow,initialcol) for frame coordinate (0,0).
+The default is a centered image.
+.sp
+.I RsAquire
+acquires an active 512 x 512 frame in LS of Roistore (display
+active frame LS -> P7 -> DG).
+.sp
+.I Rsclear
+clears the roistore with a set value.
+.sp
+.I RsDemo
+demonstrates the functions of the ROI and DIGI board.
+.sp
+.I RsGrab
+grabs a full image into ROISTORE LS from the DIGIMAX.
+.sp
+.I RsGrab512
+grabs a 512 x 512 frame in LS of roistore from digimax (display frame on
+digimax LS -> P7 -> DG).

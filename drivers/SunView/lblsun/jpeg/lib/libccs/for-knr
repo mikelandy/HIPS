@@ -1,0 +1,8 @@
+#ANSI_PATH = $(TOPDIR)/ACS/setup
+ANSI_PATH = $(CCS_ROOT)/lib/libccs
+ANSI2KNR = $(DESTDIR)/ansi2knr
+$(ANSI2KNR):
+	(cd $(ANSI_PATH); $(LINKc) $(ANSI2KNR) ansi2knr.c)
+$(ANSI_OBJ):	$(ANSI2KNR)
+	@$(ANSI2KNR) $< tmpansi.c
+	$(COMPILEc) tmpansi.c $(LOCALCFLAGS) -o $*.o -DBSD4

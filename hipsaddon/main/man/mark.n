@@ -1,0 +1,30 @@
+.TH MARK 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+mark - image marker
+.SH SYNOPSIS
+.B mark
+[-l line] [-v] 
+.SH DESCRIPTION
+.I mark
+draws a straight horizontal broken line on each image of the input sequence.
+Parameter
+.I line
+specifies the position where 
+the line is to be drawn, and
+defaults to the middle of the image.
+.I -v
+allows for a vertical line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH EXAMPLE
+.in +3m
+mark < input_seq > output_seq
+.in -3m
+.SH "AUTHOR"
+Peter Mowforth and Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

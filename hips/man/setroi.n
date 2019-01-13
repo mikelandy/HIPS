@@ -1,0 +1,31 @@
+.TH SETROI 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+setroi \- set the region-of-interest
+.SH SYNOPSIS
+.B setroi
+-s frow fcol nrow ncol < frame > roiframe
+.br
+.B setroi
+-l frow fcol lrow lcol < frame > roiframe
+.SH DESCRIPTION 
+.I Setroi
+sets the region-of-interest specified in the image header so that processing
+by subsequent HIPS programs will be restricted to a sub-rectangle of the
+image.
+In the first form (\c
+.IR -s ),
+the user specifies the first row and column and the
+number of rows and columns in the region-of-interest.  In the second form (\c
+.IR -l ),
+the user specifies the last row and column in place of the size of the 
+region-of-interest.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+All formats.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+clearroi(1), extractroi(1)
+.SH AUTHOR
+Michael Landy - 1/8/91

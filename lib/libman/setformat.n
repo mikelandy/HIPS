@@ -1,0 +1,41 @@
+.TH SETFORMAT 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+setformat \- set image pixel format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+setformat(hd,pfmt)
+setpyrformat(hd,pfmt,toplev)
+struct header *hd;
+int pfmt,toplev;
+.fi
+.SH DESCRIPTION 
+These routines are used to set the pixel format of an image.  Use
+.I setformat
+for all formats except image pyramids, and use
+.I setpyrformat
+for integer and floating point pyramids (supplying the top pyramid level).
+In addition to setting the image pixel format, they also set the size of
+individual pixels and the size of the image.  If the format is being set to a
+bit-packed format and the region-of-interest left hand edge does not lie on a
+byte boundary (isn't a multiple of eight), then a warning is issued and the
+region-of-interest is reset to be the entire image.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_PYRTLZ - top pyramid level is less than zero
+.br
+HE_PYRTL - top pyramid level is too big
+.br
+HE_ROI8C - clearing incorrect bit-packed region-of-interest
+.br
+HE_SETFP - can't use setformat for pyramid formats
+.br
+HE_SETPF - can't use setpyrformat for nonpyramid formats
+.SH "SEE ALSO"
+setroi(3), setsize(3)
+.SH AUTHOR
+Michael Landy - 1/3/91

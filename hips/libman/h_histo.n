@@ -1,0 +1,162 @@
+.TH H_HISTO 3 "6/19/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_histo \- subroutines to compute the histogram of an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_histo(hd,histogram,nzflag,count)
+h_histo_b(hd,histogram,nzflag,count)
+h_histo_sb(hd,histogram,nzflag,count)
+h_histo_s(hd,histogram,nzflag,count)
+h_histo_us(hd,histogram,nzflag,count)
+h_histo_i(hd,histogram,nzflag,count)
+h_histo_ui(hd,histogram,nzflag,count)
+h_histo_f(hd,histogram,nzflag,count)
+h_histo_d(hd,histogram,nzflag,count)
+h_histo_c(hd,histogram,nzflag,count)
+h_histo_dc(hd,histogram,nzflag,count)
+struct header *hd;
+struct hips_histo *histogram;
+h_boolean nzflag;
+int *count;
+
+h_histo_B(image,nr,nc,nlp,nbins,histo,min,width,nzflag,count)
+byte *image,min,width;
+int nr,nc,nlp,nbins,*histo;
+h_boolean nzflag;
+int *count;
+
+h_histo_SB(image,nr,nc,nlp,nbins,histo,min,width,nzflag,count)
+sbyte *image,min,width;
+int nr,nc,nlp,nbins,*histo;
+h_boolean nzflag;
+int *count;
+
+h_histo_S(image,nr,nc,nlp,nbins,histo,min,width,nzflag,count)
+short *image,min,width;
+int nr,nc,nlp,nbins,*histo;
+h_boolean nzflag;
+int *count;
+
+h_histo_US(image,nr,nc,nlp,nbins,histo,min,width,nzflag,count)
+h_ushort *image,min,width;
+int nr,nc,nlp,nbins,*histo;
+h_boolean nzflag;
+int *count;
+
+h_histo_I(image,nr,nc,nlp,nbins,histo,min,width,nzflag,count)
+int *image,min,width;
+int nr,nc,nlp,nbins,*histo;
+h_boolean nzflag;
+int *count;
+
+h_histo_UI(image,nr,nc,nlp,nbins,histo,min,width,nzflag,count)
+h_uint *image,min,width;
+int nr,nc,nlp,nbins,*histo;
+h_boolean nzflag;
+int *count;
+
+h_histo_F(image,nr,nc,nlp,nbins,histo,min,width,nzflag,count)
+float *image,min,width;
+int nr,nc,nlp,nbins,*histo;
+h_boolean nzflag;
+int *count;
+
+h_histo_D(image,nr,nc,nlp,nbins,histo,min,width,nzflag,count)
+double *image,min,width;
+int nr,nc,nlp,nbins,*histo;
+h_boolean nzflag;
+int *count;
+
+h_histo_C(image,nr,nc,nlp,nbins,histo,min,width,nzflag,count)
+float *image,min,width;
+int nr,nc,nlp,nbins,*histo;
+h_boolean nzflag;
+int *count;
+
+h_histo_DC(image,nr,nc,nlp,nbins,histo,min,width,nzflag,count)
+double *image,min,width;
+int nr,nc,nlp,nbins,*histo;
+h_boolean nzflag;
+int *count;
+.fi
+.SH DESCRIPTION 
+These routines compute the histogram of pixel values across an input
+subimage (specified by
+.I hd
+or
+.IR image ).
+The result is stored in 
+.I histogram
+(for the generic routines), or in
+.I histo
+(for the low-level routines).
+.I h_histo
+calls
+.IR h_histo_b ,
+.IR h_histo_sb ,
+.IR h_histo_s ,
+.IR h_histo_us ,
+.IR h_histo_i ,
+.IR h_histo_ui ,
+.IR h_histo_f
+.IR h_histo_d
+.IR h_histo_c
+or
+.IR h_histo_f
+depending upon whether the pixel format is byte, signed byte, short, unsigned
+short, integer, unsigned integer, float, double, complex or double complex.
+.IR h_histo_B ,
+.IR h_histo_SB ,
+.IR h_histo_S ,
+.IR h_histo_US ,
+.IR h_histo_I ,
+.IR h_histo_UI ,
+.IR h_histo_F ,
+.IR h_histo_D ,
+.I h_histo_C
+and
+.I h_histo_DC
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The image has
+.I nlp
+pixels per line.  The histogram structure (or supplied arguments) specify the
+number of bins, the left edge of the lowest bin and the bin width.  Each bin
+counts pixels with values greater than or equal to the left edge of the bin,
+and less than the right edge of the bin.  The histogram array has nbins+2
+slots.  The first slot is used for underflows (pixels with values less than
+the left edge of the lowest bin), and the last slot is used for overflows
+(pixels with values greater than or equal to the right edge of the highest
+bin).  If the switch
+.I nzflag
+is TRUE, then pixels with values which are exactly zero are not included in
+the histogram.  The returned value
+.I count
+gives a count of the number of pixels which contributed to the histogram.
+For complex and double complex formats, the routines
+calculate histograms of the complex magnitudes of image pixels.
+Note that the histogram is not cleared before the image pixels are counted.
+This allows the user to call these routines more than once in order to compute
+a histogram over multiple images.  Use the routine
+.I h_clearhisto (3)
+to clear the histogram before calling these routines.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, signed byte, short, unsigned short, integer, unsigned integer, float,
+double, complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_max(3), h_minmax(3)
+.SH AUTHOR
+Michael Landy - 6/17/91

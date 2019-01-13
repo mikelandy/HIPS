@@ -1,0 +1,42 @@
+.TH WRITE_HISTO 3 "6/30/91" "Version 2" "HIPS Manual"
+.SH NAME
+write_histo \- write an image histogram
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+write_histo(histo,fr)
+fwrite_histo(fp,histo,fr,fname)
+histo_to_hdr(hd,histo);
+
+FILE *fp;
+struct hips_histo *histo;
+struct header *hd;
+int fr;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+.I write_histo
+and
+.I fwrite_histo
+write a single histogram from the histogram pointed to by the supplied
+histogram structure.
+.I write_histo
+is used for writing to the standard output.  The frame number and file name
+are supplied for more informative error messages.
+.PP
+.I histo_to_hdr
+is used to copy the histogram parameters
+``numbin'', ``imagepixfmt'', ``binleft'' and ``binwidth''
+from the histogram structure to the header parameters section.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_WRITEFRFILE - error during write
+.SH AUTHOR
+Michael Landy - 6/30/91

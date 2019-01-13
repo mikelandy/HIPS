@@ -1,0 +1,75 @@
+.TH MPMATCH 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+mpmatch - stereogramme matcher
+.SH SYNOPSIS
+.B mpmatch
+[-l] [-n its] [-t threshold] [-v]
+.SH DESCRIPTION
+.I  mpmatch
+performs pointwise stereo matching on a binary image sequence.
+The algorithm used is that of Marr and Poggio - as described 
+in "Computer Vision", pp. 89-93, by D. Ballard and C. Brown, published by
+Prentice-Hall, 1982. It has  been modified to inhibit
+all competing matches along both lines of sight, as opposed
+to just those along the lines of sight in neighbouring 
+disparity planes.
+
+The two frames of the input image sequence represent the left
+then right stereo images respectively.
+A disparity image is produced for each iteration of the algorithm.
+They are grey-level coded with darker pixels
+representing small disparities and lighter pixels representing
+larger disparities. Black pixels indicate that there are still
+competing matches at these points, or that there are no matches
+for these points.
+Here,
+.sp 1
+.ll -0.5i
+.in +3 
+.I -l
+.in +1.0i
+.sp -1
+an option which specifies the excitatory neighbourhood size. With
+.I -l
+, a 9 pixel area is used while without
+.I -l
+, an area of only 5 pixels is used.
+.in -1.0i
+.I its
+.in +1.0i
+.sp -1
+an option to specify the number of iterations of the matching
+process. This defaults to 6 iterations.
+.in -1.0i
+.I threshold
+.in +1.0i
+.sp -1
+an option to specify the thresholding level for the excitation and
+inhibition sum. This defaults to a threshold of 1.
+.in -1.0i
+.I -v
+.in +1.0i
+.sp -1
+an option which allows for printing progress messages on the user's
+terminal.
+.in -1.0i
+.ll +0.5i
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH EXAMPLE
+.in +3m
+mpmatch < input_stereogram > output_disparity
+.in -3m
+.sp
+.br
+will place in output_disparity the estimated disparities of input_stereogram. 
+.SH SEE ALSO
+grey2disp(1)
+.SH AUTHOR
+Linda Gillespie - 23 Sept 1987
+.br
+Rewritten by Jin Zhengping - 31 August 1991

@@ -1,0 +1,104 @@
+.TH INIT_HEADER 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+init_header \- routines to initialize a HIPS image header
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+init_hdr_alloc(hd,onm,snm,nfr,odt,rw,cl,pfmt,nc,desc)
+init_hdr_alloc_d(hd,onm,onmd,snm,snmd,nfr,odt,odtd,rw,cl,pfmt,nc,desc,descd)
+init_header(hd,onm,snm,nfr,odt,rw,cl,pfmt,nc,desc)
+init_header_d(hd,onm,onmd,snm,snmd,nfr,odt,odtd,rw,cl,pfmt,nc,desc,descd)
+struct header *hd;
+char *onm,*snm,*odt,*desc;
+int nfr,rw,cl,pfmt,nc;
+h_boolean onmd,snmd,odtd,descd;
+.fi
+.SH DESCRIPTION 
+These routines initialize a HIPS image header.  The arguments are:
+.TP
+.I hd
+The address of the HIPS header.
+.TP
+.I onm
+Documentation.  The original sequence name.
+.TP
+.I snm
+Documentation.  The sequence name.
+.TP
+.I nfr
+The number of frames.
+.TP
+.I odt
+Documentation.  The original date.
+.TP
+.I rw
+The number of rows.
+.TP
+.I cl
+The number of columns.
+.TP
+.I pfmt
+The pixel format.
+.TP
+.I nc
+The number of color planes.
+.TP
+.I desc
+Documentation.  The sequence description.
+.PP
+The arguments
+.IR onm ,
+.I snm
+and
+.I odt
+should only contain a single line of text (no <newline>'s).
+.I desc
+may be arbitrary in length and format.
+.I init_header
+simply initializes the header, leaving a null image pointer.
+.I init_hdr_alloc
+also allocates the image if possible.
+.I init_header_d
+and
+.I init_hdr_alloc_d
+are similar except that they allow the user to specify which strings may be
+freed when this header is no longer needed (deallocation rights).
+All routines set the region-of-interest to be the entire image and clear the
+sequence history.  The first two routines make copies of the supplied strings
+(\c
+.i onm ,
+.i snm ,
+.i odt
+and
+.i desc )
+and give the header deallocation rights to the new strings.
+The second two routines are supplied with pointers to these four strings and
+Boolean variables (\c
+.i onmd ,
+.i snmd ,
+.i odtd 
+and
+.i descd )
+which, if TRUE, indicate that the user of the header has the right to
+deallocate the storage for the corresponding strings.  In all cases the header
+is given a null sequence history and no rights to deallocate the sequence
+history, but is given rights to deallocate parameter structures.  Finally, if
+the pixel format is integer or float pyramid, these routines can not set the
+header variable for image size appropriately since they are not supplied with
+the pyramid variable
+.IR toplev .
+The user should set follow up with a call to
+.IR setpyrformat (3).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_BADFMT - unknown argument format code
+.SH "SEE ALSO"
+alloc_image(3)
+.SH AUTHOR
+Michael Landy - 2/1/82
+.br
+HIPS 2 version - 1/3/91

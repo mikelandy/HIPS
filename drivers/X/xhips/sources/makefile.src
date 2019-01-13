@@ -1,0 +1,25 @@
+#
+# makefile for drivers/X/xhips/sources
+#
+
+OTHERLIB3 = -lX11
+
+PGMS = xhips.out xhipsc.out mhips.out
+
+.c.out:
+	$(LINKc) $* $< -I$(XINCLUDE) -L$(XLIB) $(OTHERLIB3) $(LIBRARIES)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

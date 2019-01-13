@@ -1,0 +1,20 @@
+.TH STRIPHEADER 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+stripheader \- strip an image sequence of its header
+.SH SYNOPSIS
+.B stripheader
+.SH DESCRIPTION 
+.I Stripheader
+strips the header from an image sequence, leaving only the image itself.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+All formats.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+adddesc(1), genheader(1), grabheader(1), seeheader(1)
+.SH AUTHOR
+Michael Landy - 4/19/82
+.br
+HIPS 2 - msl - 1/8/91

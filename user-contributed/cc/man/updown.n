@@ -1,0 +1,19 @@
+.TH UPDOWN 1HIPS "May 24, 1989"
+.SH NAME
+Updown -- Randomly reverse the signs of pixels in a floating point sequence.
+.SH SYNOPSIS
+.B updown
+[-u] [-s seed] < inseq > outseq
+.SH DESCRIPTION 
+.I Updown
+Reverses the sign of each pixel in
+.I inseq
+independently with probability .5.
+.I Seed
+seeds the pseudorandom number generator.
+.I -u
+displays a usage summary.
+.SH SEE\ ALSO
+rflipix(1HIPS), hupdown(1HIPS)
+.SH AUTHOR
+Charlie Chubb - 3/2/87

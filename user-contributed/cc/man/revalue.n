@@ -1,0 +1,40 @@
+.TH REVALUE 1HIPS "March 2, 1987"
+.SH NAME
+Revalue -- Changes all occurrences of specified values in a sequence to other
+values
+.SH SYNOPSIS
+.B revalue
+[-u] ctrlfile < inseq > outseq
+.SH DESCRIPTION 
+.I Inseq
+can be float, int or byte formatted.
+.I Ctrlfile
+is formatted as follows:
+.sp
+		i_1 o_1
+.br
+		i_2 o_2
+.br
+		   .
+.br
+		   .
+.br
+		   .
+.br
+		i_n o_n
+.sp
+For j = 1,2,...,n, 
+.I revalue
+replaces every occurrence of the value i_j in
+.I inseq
+by the value o_j in
+.I outseq.
+.I -u
+option displays a usage summary.
+.SH SEE ALSO
+ptoa (1HIPS),
+atob (1HIPS),
+atof (1HIPS),
+atoc (1HIPS),
+.SH AUTHOR
+Charlie Chubb - 3/2/87

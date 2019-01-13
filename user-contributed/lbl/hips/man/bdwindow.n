@@ -1,0 +1,140 @@
+.TH BDWINDOW 1 "23 January 1988" LBL-HIPS
+.SH NAME
+bdwindow \- window on pixels in depth
+.SH SYNOPSIS
+.B bdwindow 
+.BR
+[-H] [-s \fIshift\fR] [-A \fIAND_mask\fR] [-O \fIOR_mask\fR] [-X \fIXOR_mask\fR] [-w \fIpixel_size\fR]
+.br
+.ta 1i
+	< \fIinfile\fR > \fIoutfile\fR
+.br
+	[-i \fIinfile\fR] [-o \fIoutfile\fR]
+.SH DESCRIPTION
+\fIbdwindow\fR windows in bit depth on individual pixels.  It
+operates on 32-bit integers.
+There are two ``modes'' of operation in \fIbdwindow\fR: one treats the
+file as ``integers in, integers out,'' while the other one works in
+terms of ``integers in, rgb out.''  The basic four operations are bit
+shift, bitwise and, bitwise or, and bitwise xor.  For shifting, a
+positive number indicates a left shift and a negative one a right
+shift; the other three options take masks in decimal and hexadecimal arguments
+alike.
+
+The ``integers in, integers out'' mode is quite simple: it reads in a
+longword, performs operations in the order shift, and, or, xor, and
+writes the longword out again.  If the \fB\-w\fR option is invoked,
+the program will only write out the lower 1, 2, or 3 bytes of the resulting
+word.
+
+The ``integers in, rgb out'' mode is a bit different.  An integer is
+read in and then triplicated.  Each of these three integers can then
+have the standard operations performed on it, after which its lowest 8
+bits placed into another integer for output.  In this output word
+In the output word red starts at 0, green
+at 8, and blue at 16. This ``rgb'' out mode is a side effect of
+specifying the r, g or b subargument to s, a, o, or x. To
+get rgb output with no bit operations, give an s subargument of zero.
+For example, to load 8 bit pixels (stored in ints) into an rgb
+output format:
+.br
+bdwindow -sr 0 -sg 0 -sb0 <int_8bit_in > rgb_3x8bit_out
+.br
+.sp
+Examples:
+.br
+Shift the high 8 bits of 12 bit pixels to the low 8 bits:
+.br
+bdwindow -H -i smd.gel.hips -o smd.gel.hips.8 -s -4
+.sp
+Bdwindow operating on
+a file of 16-bit pixels (in 32 bit words)
+could place the
+upper eight bits in blue, the middle eight in green, and the lower eight in
+red by selecting "-sb 8 -sg 4".
+So,
+.br
+0000000000000000\ i16\ i15\ i14\ i13\ i12\ i11\ i10\ i9\ i8\ i7\ i6\ i5\ i4\ i3\ i2\ i1
+.br
+would internally go to:
+.br
+0000000000000000\ r16\ r15\ r14\ r13\ r12\ r11\ r10\ r9\ r8\ r7\ r6\ r5\ r4\ r3\ r2\ r1
+.br
+0000000000000000\ g16\ g15\ g14\ g13\ g12\ g11\ g10\ g9\ g8\ g7\ g6\ g5\ g4\ g3\ g2\ g1
+.br
+0000000000000000\ b16\ b15\ b14\ b13\ b12\ b11\ b10\ b9\ b8\ b7\ b6\ b5\ b4\ b3\ b2\ b1
+.br
+These internal R, G, and B words would be shifted, the result
+masked to 8 bits, and placed in the output word.
+.br
+-sb -8 gives:
+.br
+000000000000000000000000\ b16\ b15\ b14\ b13\ b12\ b11\ b10\ b9
+.br
+-sg -4 gives:
+.br
+00000000000000000000\ g16\ g15\ g14\ g13\ g12\ g11\ g10\ g9\ g8\ g7\ g6\ g5
+.br
+and the result is:
+.br
+0000000000000000|b16\ b15\ b14\ b13\ b12\ b11\ b10\ b9|\ g12\ g11\ g10\ g9\ g8\ g7\ g6\ g5|\ r8\ r7\ r6\ r5\ r4\ r3\ r2\ r1
+.sp
+To swap the bytes of 16 bit pixels in 32 bit words and write 16 bit words:
+.br
+bdwindow -sr -8 -sg 0 -Ab 0 -w 2 -i in > out
+.sp
+To display 8 or 12 bit pixels (monochrome) shift and replicate the original
+pixel, then output an rgb triple byte in an int (4 byte word):
+.br
+top 4 in green top 4, bottom 8 in red.
+.br
+bdwindow -i wahe.12in12out -sg -4 -Ag 0xF0 -Ab 0 -o tightgenes
+.sp
+Top eight in green, blue; bottom eight in red.
+.br
+bdwindow -i wahe.12in12out -sg -4 -sb -4 -o tightgenes
+.sp
+Ordinary grayscale image, top 8 (of 12) in all.
+.br
+bdwindow -i wahe.12in12out -sr -4 -sb -4 -sg -4 -o tightgenes
+ 
+.SH OPTIONS
+
+.LP
+Options may appear in any order.  Later options override previous
+ones.
+
+.TP
+.BI \-H
+The input file is an integer HIPS file. The output HIPS file is byte,
+short or int, depending on whether ``w'' is 1, 2, 3 or 4.
+.TP
+.BI \-s " shift"
+Logical left shift.  A negative quantity yields a right shift.
+.TP
+.BI \-A " andmask"
+Mask with which to AND the quantity in an input int.
+.TP
+.BI \-O " ormask"
+Like AND, but bitwise OR.
+.TP
+.BI \-X " xormask"
+Bitwise XOR.
+.TP
+.BI \-i " input"
+Read from file \fIinput\fR instead of stdin.
+.TP
+.BI \-o " output"
+Write to file \fIoutput\fR instead of stdout.
+.TP
+.BI \-w " bytesize"
+.br
+Write out a file in something besides ints.  Specify number of bytes
+or bits; -w 1 yields a file of chars, -w 2 a file of short ints,
+-w 3 a file of 24-bit quantities, and -w 4 long ints (the default).
+The only acceptable values for number of bits are 8, 16, 24, and 32.
+
+.SH AUTHOR
+Original Program: Max Rible
+.br
+Lawrence Berkeley Laboratory, Information and Computing Sciences

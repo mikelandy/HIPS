@@ -1,0 +1,145 @@
+Makefile:222: warning: overriding commands for target `.c.o'
+Makefile:108: warning: ignoring old commands for target `.c.o'
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_aux.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_close.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_codec.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_color.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1   tif_compress.c
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_dir.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_dirinfo.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_dirread.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_dirwrite.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_dumpmode.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_error.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_extension.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_fax3.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include  -DHUSESTDARG   -o mkg3states -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1   mkg3states.c
+./mkg3states > g3states.h
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_fax3sm.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_flush.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_getimage.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_jbig.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_jpeg.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_jpeg_12.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_luv.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_lzma.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_lzw.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_next.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_ojpeg.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_open.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_packbits.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_pixarlog.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_predict.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_print.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_read.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_strip.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_swab.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_thunder.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_tile.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_unix.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_version.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_warning.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+gcc -DULORIG -DMSBFVERSION -O -g -mmacosx-version-min=10.6 -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch x86_64 -DHIPS_IMAGE -I/Users/msl/HIPS/include   -DHUSESTDARG  -c tif_webp.c -O -I. -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1  
+ar cr libtiff.a `lorder tif_aux.o tif_close.o tif_codec.o tif_color.o tif_compress.o tif_dir.o tif_dirinfo.o tif_dirread.o tif_dirwrite.o tif_dumpmode.o tif_error.o tif_extension.o tif_fax3.o tif_fax3sm.o tif_flush.o tif_getimage.o tif_jbig.o tif_jpeg.o tif_jpeg_12.o tif_luv.o tif_lzma.o tif_lzw.o tif_next.o tif_ojpeg.o tif_open.o tif_packbits.o tif_pixarlog.o tif_predict.o tif_print.o tif_read.o tif_strip.o tif_swab.o tif_thunder.o tif_tile.o tif_unix.o tif_version.o tif_warning.o tif_webp.o  | tsort`;
+tsort: cycle in data
+tsort: tif_unix.o
+tsort: tif_open.o
+tsort: tif_close.o
+tsort: tif_flush.o
+tsort: tif_dir.o
+tsort: tif_dirread.o
+tsort: tif_warning.o
+tsort: cycle in data
+tsort: tif_open.o
+tsort: tif_close.o
+tsort: tif_flush.o
+tsort: tif_dir.o
+tsort: tif_error.o
+tsort: tif_unix.o
+tsort: cycle in data
+tsort: tif_aux.o
+tsort: tif_dir.o
+tsort: tif_dirread.o
+tsort: tif_tile.o
+tsort: cycle in data
+tsort: tif_aux.o
+tsort: tif_dir.o
+tsort: tif_dirread.o
+tsort: tif_strip.o
+tsort: cycle in data
+tsort: tif_open.o
+tsort: tif_close.o
+tsort: tif_flush.o
+tsort: tif_dir.o
+tsort: tif_compress.o
+tsort: tif_codec.o
+tsort: tif_lzw.o
+tsort: tif_predict.o
+tsort: tif_read.o
+tsort: cycle in data
+tsort: tif_dirinfo.o
+tsort: tif_aux.o
+tsort: tif_dir.o
+tsort: tif_compress.o
+tsort: tif_codec.o
+tsort: tif_lzw.o
+tsort: tif_predict.o
+tsort: cycle in data
+tsort: tif_dir.o
+tsort: tif_compress.o
+tsort: tif_codec.o
+tsort: tif_pixarlog.o
+tsort: cycle in data
+tsort: tif_close.o
+tsort: tif_flush.o
+tsort: tif_open.o
+tsort: cycle in data
+tsort: tif_compress.o
+tsort: tif_codec.o
+tsort: tif_lzw.o
+tsort: cycle in data
+tsort: tif_dir.o
+tsort: tif_compress.o
+tsort: tif_codec.o
+tsort: tif_luv.o
+tsort: cycle in data
+tsort: tif_dirinfo.o
+tsort: tif_aux.o
+tsort: tif_dir.o
+tsort: tif_compress.o
+tsort: tif_codec.o
+tsort: tif_fax3.o
+tsort: cycle in data
+tsort: tif_dirinfo.o
+tsort: tif_aux.o
+tsort: tif_dir.o
+tsort: tif_dirread.o
+tsort: cycle in data
+tsort: tif_aux.o
+tsort: tif_dir.o
+tsort: tif_dirinfo.o
+tsort: cycle in data
+tsort: tif_aux.o
+tsort: tif_dir.o
+tsort: cycle in data
+tsort: tif_codec.o
+tsort: tif_compress.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: libtiff.a(tif_webp.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: libtiff.a(tif_ojpeg.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: libtiff.a(tif_lzma.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: libtiff.a(tif_jpeg_12.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: libtiff.a(tif_jpeg.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: libtiff.a(tif_jbig.o) has no symbols
+mv libtiff.a /Users/msl/HIPS/lib
+ranlib /Users/msl/HIPS/lib/libtiff.a
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /Users/msl/HIPS/lib/libtiff.a(tif_webp.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /Users/msl/HIPS/lib/libtiff.a(tif_ojpeg.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /Users/msl/HIPS/lib/libtiff.a(tif_lzma.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /Users/msl/HIPS/lib/libtiff.a(tif_jpeg_12.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /Users/msl/HIPS/lib/libtiff.a(tif_jpeg.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /Users/msl/HIPS/lib/libtiff.a(tif_jbig.o) has no symbols
+for i in tiff.h tiffio.h tiffconf.h tiffvers.h; do \
+	    h=`basename $i`; \
+	    cmp -s $i /Users/msl/HIPS/include/$h || \
+	        install -c -m 444 $i /Users/msl/HIPS/include/$h; \
+	done

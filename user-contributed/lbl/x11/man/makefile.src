@@ -1,0 +1,17 @@
+#
+# makefile for user-contributed/lbl/x11/man
+#
+
+MANPAGES = ftuner.n getx.n tuner.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

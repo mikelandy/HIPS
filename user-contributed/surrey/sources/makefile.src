@@ -1,0 +1,18 @@
+#
+# makefile for user-contributed/cc/sources
+#
+
+PGMS = averages.out disp_line.out dual_thresh.out histo_line.out \
+		meanie.out pick_line.out polyfit_line.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

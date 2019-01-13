@@ -1,0 +1,106 @@
+.TH H_ABSDIFF 3 "7/3/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_absdiff \- compute the absolute value of the difference of two images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_absdiff(hdi1,hdi2,hdo)
+h_absdiff_b(hdi1,hdi2,hdo)
+h_absdiff_s(hdi1,hdi2,hdo)
+h_absdiff_i(hdi1,hdi2,hdo)
+h_absdiff_f(hdi1,hdi2,hdo)
+h_absdiff_d(hdi1,hdi2,hdo)
+struct header *hdi1,*hdi2,*hdo;
+
+h_absdiff_B(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+byte *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_absdiff_S(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+short *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_absdiff_I(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+int *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_absdiff_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_absdiff_D(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+double *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines compute the absolute value of the difference of two
+input subimages (specified by
+.I hdi1
+and
+.IR hdi2 ,
+or by
+.I imagei1
+and
+.IR imagei2 ),
+and store the result (|image1-image2|)
+in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_absdiff
+calls
+.IR h_absdiff_b ,
+.IR h_absdiff_s ,
+.IR h_absdiff_i ,
+.I h_absdiff_f
+or
+.I h_absdiff_d
+depending upon whether the pixel format is
+byte, short, integer, float or double.
+.IR h_diff_B ,
+.IR h_diff_S ,
+.IR h_diff_I ,
+.I h_diff_F
+and
+.I h_diff_D
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, double
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_add(3), h_diff(3)
+.SH AUTHOR
+Michael Landy - 7/3/91

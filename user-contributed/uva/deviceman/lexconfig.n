@@ -1,0 +1,12 @@
+.TH LEXCONFIG l
+.SH NAME
+lexconfig \- configure the lexidata memory
+.SH SYNOPSIS
+.B lexconfig
+[<configuration number>]
+.SH DESCRIPTION
+.PP
+.I lexconfig
+is a command that sets up the Lexidata memory boards according to 
+configurations listed in the Lexidata 90 Reference Manual (page 48).
+The configuration number defaults to configuration 9.

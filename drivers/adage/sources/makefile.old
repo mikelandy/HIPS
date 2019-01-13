@@ -1,0 +1,40 @@
+DESTDIR=/usr/hips
+CFLAGS=	-O
+LIB= -lhips
+ILIB= -lIkonas
+OBJS=   bmovie.o movie.o portmovie.o rframe.o wframe.o bpsmovie.o vaximgld.o
+
+4board:	4files ${OBJS} bps_viewport
+
+1board:	1files ${OBJS} bps_viewport
+
+4files:
+	cp rframe.4board rframe.c
+	cp wframe.4board wframe.c
+	cp bpsmovie.4board bpsmovie.c
+	cp portmovie.4board portmovie.c
+	cp bps_viewport.4board bps_viewport.c
+
+1files:
+	cp rframe.1board rframe.c
+	cp wframe.1board wframe.c
+	cp bpsmovie.1board bpsmovie.c
+	cp portmovie.1board portmovie.c
+	cp bps_viewport.1board bps_viewport.c
+
+.c.o:
+	${CC} ${CFLAGS} -o $* $*.c ${LIB} ${ILIB}
+	install -s $* ${DESTDIR}
+
+bps_viewport:
+	/usr/local/adage/bpscc -O -c bps_viewport.c
+	/usr/local/adage/bpscc -o bps_viewport bps_viewport.o -lsubs
+	mv bps_viewport ${DESTDIR}
+
+vaximgld.o:
+	cc -O -o vaximgld vaximgld.c loadimg.c loadimgl.c -lhips -lIkonas
+	rm vaximgld.o
+	install -s vaximgld ${DESTDIR}
+
+clean:
+	rm -f ${OBJS}

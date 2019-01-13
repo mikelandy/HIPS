@@ -1,0 +1,77 @@
+.TH HEADFIELD 1 "Februaray 18 1993" "Version 2" "HIPS Manual" 
+.SH NAME
+headfield \- return value of header-field.
+.SH SYNOPSIS
+.B headfield 
+.RB [ \-or 
+.RB | \-oc 
+.RB | \-r 
+.RB | \-c 
+.RB | \-f 
+.RB | \-p 
+.RB | \-on 
+.RB | \-od 
+.RB | \-sn 
+.RB | \-sd 
+.RB | \-sh 
+.RB | \-e
+.I flag
+.RB | \-? 
+]  
+.br
+.RI < \ file  
+.RI > \ value 
+.br
+.SH DESCRIPTION
+.I headfield 
+returns the value of a header-field. Input is a header or a complete image.
+The header-field is chosen by the following switches:
+.SH OPTIONS
+.TP
+.B \-on 
+originator of sequence.
+.TP
+.B \-od 
+originate sequence date.
+.TP
+.B \-sn 
+sequence name.
+.TP
+.B \-or
+number of rows.
+.TP
+.B \-oc 
+number of coloumns 
+.TP
+.B \-r 
+number of rows in region of interest.
+.TP
+.B \-c 
+number of coloumns in region of interest.
+.TP
+.B \-f 
+number of frames.
+.TP
+.B \-p 
+pixel-format code.
+.TP
+.B \-sd 
+sequence description.
+.TP
+.B \-sh 
+sequence history 
+.TP
+.BI \-e \ flag 
+value of extended parameter
+.I flag
+which must be a single value of byte-format (value=0 if parameter not
+present in header).
+.TP
+.B \-?
+options 
+
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk 

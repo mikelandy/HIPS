@@ -1,0 +1,76 @@
+.fz \s +4
+.Ls	2
+.TH HEXDUMP 1 "October 10, 1990"
+
+.SH NAME
+.I hexdump
+- dump file in hex mode
+
+.SH SYNOPSIS
+.br
+.B hexdump
+[-d[x]] [ < ]
+.I file_name
+[[ > ] [ | ] output ]]
+.br
+.B hexdump
+[-b[x]] [ < ]
+.I file
+
+.SH DESCRIPTION
+.br
+.I hexdump
+is a debugging tool for program or image development. It display a file
+in Hex and ascii format with address location.
+.I Hexdump
+can start and relocate file display position. Look at following example.
+
+.SH EXAMPLE:
+.nf
+sparc: hexdump par
+70 61 72 0A 0A 31 0A 0A - 35 0A 35 0A 38 0A 30 0A   par..1..5.5.8.0.  00000
+30 0A 20 0A 0A 2E 0A 62 - 69 72 64 0A 65 31 2A 31   0. ....bird.e1*1  00010
+5F 30 5F 30 0A 31 0A 0A - 31 30 0A 31 30 0A 38 0A   _0_0.1..10.10.8.  00020
+30 0A 30 0A 0A 0A 2E 0A - 55 48 4A 4C 3E 50 46 4E   0.0.....UHJL>PFN  00030
+4D 43 5A 49 4E 4F 38 44 - 4E 41 48 4C 48 3E 46 42   MCZINO8DNAHLH>FB  00040
+4D 40 45 4D 3A 41 4A 43 - 49 38 40 46 41 50 3C 50   M@EM:AJCI8@FAP<P  00050
+44 4B 40 4C 38 42 42 40 - 43 43 4E 47 4E 45 2F 3C   DK@L8BB@CCNGNE/<  00060
+3D 3F 4B 43 4C 47 43 40 - 48 39 41 44 3C 49 4E 44   =?KCLGC@H9AD<IND  00070
+43 46 40 3E 4B 50 3E 3D - 52 40 50 51 39 42 45 49   CF@>KP>=R@PQ9BEI  00080
+3F 4B 51 42 40 52 35 3F - 52 4A 40 3A   ?KQB@R5?RJ@:  00000090
+Total 8 lines<140 bytes> displayed
+
+sparc: hexdump -dx 28 par
+4E 4D 43 5A 49 4E 4F 38 - 44 4E 41 48 4C 48 3E 46   NMCZINO8DNAHLH>F  00000
+42 4D 40 45 4D 3A 41 4A - 43 49 38 40 46 41 50 3C   BM@EM:AJCI8@FAP<  00010
+50 44 4B 40 4C 38 42 42 - 40 43 43 4E 47 4E 45 2F   PDK@L8BB@CCNGNE/  00020
+3C 3D 3F 4B 43 4C 47 43 - 40 48 39 41 44 3C 49 4E   <=?KCLGC@H9AD<IN  00030
+44 43 46 40 3E 4B 50 3E - 3D 52 40 50 51 39 42 45   DCF@>KP>=R@PQ9BE  00040
+49 3F 4B 51 42 40 52 35 - 3F 52 4A 40 3A   I?KQB@R5?RJ@:  00000050
+Total 6 lines<109 bytes> displayed
+
+sparc: hexdump -bx 28 par
+4E 4D 43 5A 49 4E 4F 38 - 44 4E 41 48 4C 48 3E 46   NMCZINO8DNAHLH>F  00028
+42 4D 40 45 4D 3A 41 4A - 43 49 38 40 46 41 50 3C   BM@EM:AJCI8@FAP<  00038
+50 44 4B 40 4C 38 42 42 - 40 43 43 4E 47 4E 45 2F   PDK@L8BB@CCNGNE/  00048
+3C 3D 3F 4B 43 4C 47 43 - 40 48 39 41 44 3C 49 4E   <=?KCLGC@H9AD<IN  00058
+44 43 46 40 3E 4B 50 3E - 3D 52 40 50 51 39 42 45   DCF@>KP>=R@PQ9BE  00068
+49 3F 4B 51 42 40 52 35 - 3F 52 4A 40 3A   I?KQB@R5?RJ@:  00000078
+Total 6 lines<109 bytes> displayed
+
+.fi
+.I -d
+displament relocates the starting position.
+.I -b
+option starting from given position -- begining_position.
+.I \ x
+which tells the input number is in Hex number.
+.br
+Here :	hexdump -bx 28 == hexdump -b 40
+
+.SH SEE ALSO:
+
+	append(n), powertool(n)
+
+.SH AUTHOR
+Jin Guojun - 10/10/90

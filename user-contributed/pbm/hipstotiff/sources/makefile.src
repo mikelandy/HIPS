@@ -1,0 +1,23 @@
+#
+# makefile for user-contributed/pbm/hipstotiff/sources
+#
+
+PGMS = hipstotiff.out
+
+TIFFINC =	-I../tifflib
+TIFFLIB =	-ltiff
+
+CPPFLAGS = -I$(INCLUDE_DIR) $(TIFFINC)
+OTHERLIBS = $(TIFFLIB) -lm -lz
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

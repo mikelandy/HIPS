@@ -1,0 +1,32 @@
+.TH H_ENTROPY 3 "7/5/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_entropy \- subroutines to compute the entropy of an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+double h_entropy(table,count,pairflag)
+int *table,count;
+h_boolean pairflag;
+.fi
+.SH DESCRIPTION 
+This routine computes the entropy from a table of pixel value counts (or if
+.I pairflag
+is TRUE, pixel value pair counts).  If
+.I pairflag
+is TRUE,
+.I table
+should have length 256*256, and otherwise it should have length 256.
+.I Count
+is the total number of counts in
+.IR table .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+None
+.SH "SEE ALSO"
+h_entropycnt(3), h_stats(3)
+.SH AUTHOR
+Yoav Cohen - 9/20/82
+.br
+HIPS 2 - Michael Landy - 7/5/91

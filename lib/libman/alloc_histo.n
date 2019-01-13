@@ -1,0 +1,62 @@
+.TH ALLOC_HISTO 3 "6/19/91" "Version 2" "HIPS Manual"
+.SH NAME
+alloc_histo \- image histogram allocation routine
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+alloc_histo(histo,min,max,nbins,format)
+alloc_histobins(histo)
+struct hips_histo *histo;
+Pixelval *min,*max;
+int nbins,format;
+.fi
+.SH DESCRIPTION 
+.I alloc_histo
+is used to allocate a histogram, leaving the pointer to the allocated
+storage in a histogram structure.  If the histogram already has an allocated
+header and deallocation rights, and if the new histogram has a different size,
+then the old histogram storage is freed.  Note that the first time a histogram
+structure is used, it must have been initialized to indicate that it does not
+have any allocated storage (\c
+.I histo.histodealloc
+must be set to FALSE).  This is true for
+.I alloc_histobins
+as well.
+Then, new storage is allocated if
+necessary and the histogram's slots for number of bins, size,
+deallocation rights and
+pixel format are set appropriately.  Note that the allocated storage has
+nbins+2 slots.  The first slot is used for underflows and the last slot for
+overflows (for counting pixels whose values are less than the left edge of the
+first bin, or greater than or equal to the right edge of the right bin).
+Finally, the histogram minimum bin (the
+left edge of the first bin) and bin width are computed based on the supplied
+minimum and maximum.  The minimum bin is set to the supplied minimum.  The bin
+width is set to the range (max-min) divided by the number of bins.  However,
+for integer-like pixel formats (byte, signed byte, short, unsigned short, 
+integer or unsigned integer), 1 is added to the range (so that the maximum
+value falls in the last bin rather than in the overflow bin), the bin width is
+truncated to be an integer, and
+the bin width is not allowed to be less than 1.  For floating point types
+(float, double, complex, double complex), the range max-min is used, so that a
+pixel with pixel value exactly equal to max will fall in the overflow bin.  If
+this is undesirable then increase the value of max (slightly).
+.PP
+.I alloc_histobins
+allocates the histogram storage like
+.IR alloc_histo ,
+but does not set the pixel format, minimum bin, and bin width, and gets the
+number of bins from the histogram structure.  Again, remember to initialize
+.I histo.histodealloc
+before allocating the histogram structure the first time as described above.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+halloc(3), hcalloc(3), memalloc(3)
+.SH AUTHOR
+Michael Landy - 6/17/91

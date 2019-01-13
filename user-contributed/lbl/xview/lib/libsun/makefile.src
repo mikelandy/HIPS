@@ -1,0 +1,40 @@
+#
+# makefile for user-contributed/lbl/sun/lib
+#
+
+OBJECTS = rast_mem.o rast_dump.o
+ANSI_OBJ = rast_mem.o rast_dump.o
+
+LOCALINC = -I$(CCS_ROOT)/include
+LIBNAME = libpixrect.a
+LOCALCFLAGS = -DHIPS_IMAGE -DCOMMON_TOOL -DEXTENDED_U_IMAGE $(LOCALINC)
+
+default:	#$(OBJECTS) $(LIBNAME)
+	@if test ! -f /usr/lib/libpixrect.a; then	make $(LIBNAME); fi
+install:	default
+
+ANSI2KNR = cp	# make non-ANSI anyway
+include ansi-knr
+
+
+.c.o:
+	$(COMPILEc) $*.c $(LOCALCFLAGS)
+	@-ld -s -r $*.o;	mv a.out $*.o
+
+$(LIBNAME):	$(OBJECTS)
+	@rm -f $(LIBNAME) tmpansi.c
+	ar cr $(LIBNAME) `$(LORDER) $(OBJECTS) | $(TSORT)`;
+	mv $(LIBNAME) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIBNAME)
+	@touch $(LIBNAME)
+
+clean:
+	rm -f $(OBJECTS) $(LIBNAME) $(ANSI2KNR)
+clean-all:	clean_all
+
+pristine:
+	rm -f $(OBJECTS) $(LIBNAME) $(LIBDIR)/$(LIBNAME)
+
+man:
+
+doc:

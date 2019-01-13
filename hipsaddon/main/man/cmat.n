@@ -1,0 +1,44 @@
+.\"%W%      %G%"
+.TH CMAT 1 "March 13, 1986"
+.SH NAME
+cmat - display a confusion matrix using data output from VACLS
+.SH SYNOPSIS
+.B "cmat [-e] [-n] [-r] [-s] attributefile < datafile"
+.SH DESCRIPTION 
+.I cmat
+accepts test data output from VACLS and displays in the form
+of a confusion matrix. 
+.I Attributefile
+is the VACLS problem-definition file.
+.I Datafile
+contains N lines of the form
+.I true-class  computed-class 
+where
+.I true-class
+is the real class of a test example 
+and 
+.I computed-class
+is the class that the VACLS classifier decided best fitted this example.
+In the confusion matrix each class values specified in the problem
+definition file is represented by a row and a column, and so each
+matrix entry indicates the number of test examples of the class
+(row) 
+which are classified as the class (column).
+.SH FLAGS
+.in 5
+.sp
+.I -e
+output only statistics about the number of errors (wrong classifications)
+.sp
+.I -n
+include a column in the confusion matrix to indicate null classifications
+.sp
+.I -r
+omit confusion matrix and output only the number of
+correct and incorrect classifications for each class (and a grand-total)
+.sp
+.I -s
+do not print rows or columns in the matrix which contain no incorrect
+classifications
+.SH AUTHOR
+Barry Shepherd - 13/3/86

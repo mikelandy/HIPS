@@ -1,0 +1,59 @@
+.TH BINQUAD_R 1 "7/23/91" "Version 2" "HIPS Manual"
+.SH NAME
+binquad_r \- decode an binquad-coded sequence into a byte formatted sequence
+.SH SYNOPSIS
+.B binquad
+[-d [delta [greylevel]]]  < input_tree >output_sequence
+.SH DESCRIPTION 
+.I Binquad_r
+converts a sequence coded using 
+.IR binquad (1)
+into a byte formatted sequence.
+The default is to simply reconstruct the image.  If
+.I -d
+is specified, than a displayable picture is created which represents the
+decomposition into subblocks. The boundaries are painted in gray.  If 
+.I delta
+is specified, then each lower level boundary
+is
+.I delta
+greylevels lower than the previous level's boundary.  
+.I Delta
+defaults to zero.  
+.I Greylevel
+specifies the grey level of level 0, which defaults to 168.
+.PP
+The input must be in PFBQ format.
+The coding uses the following bit mapping: {W,B,S,D} map to {10,11,00,01}.
+At the lowest level the 2 pixels are coded in 1 bit, or the 4 pixels (in a
+spatial cut) are coded in 3 or 4 bits.
+When a subdivision is possible in only one direction,
+less bits are used (see 
+.IR binquad (1)).
+The code is assumed to be left shifted and packed, with the last word of each
+binquad-tree padded with 0's to the right.
+The number of bits read is given on ``stderr''.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+BQ
+.SH "OUTPUT PIXEL FORMATS"
+byte
+.SH "REGION-OF-INTEREST"
+The region-of-interest is ignored and the entire image is decoded.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when reconstructing. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when reconstructing. Default: 255.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+ahc3(1), ahc3_r(1), binquad(1), hc_bin(1), hc_bin_r(1)
+.SH AUTHOR
+Yoav Cohen - 4/25/83
+.br
+modified by Mike Landy - 6/20/83
+.br
+Hips 2 - msl - 7/22/91

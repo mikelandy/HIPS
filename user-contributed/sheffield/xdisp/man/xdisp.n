@@ -1,0 +1,61 @@
+.\" Copyright (c) 1993 University of Sheffield.
+.\"
+.TH xdisp 1 "7 December 1993"
+.SH NAME
+xdisp \- X windows HIPS image display tool.
+.SH VERSION
+Version 1.
+.SH SYNOPSIS
+.B xdisp
+[
+.B \-size 
+.I rows columns 
+.B \-colors 
+.I number-of-colors
+] [
+.B \-e
+] [
+.I filename
+]
+.SH DESCRIPTION
+.B xdisp
+is a tool for displaying HIPS images under the OPENLOOK X Windows
+environment. The input file 
+is assumed to be in HIPS format. Images which are not in this format can
+easily be converted by adding a HIPS header \- see the 
+.I genheader
+HIPS man page. HIPS regions-of-interest are ignored.
+.B xdisp 
+is a true Unix filter, and so can appear as the last item in a HIPS
+filter chain. 
+.LP
+There is a separate document 
+.I Image Processing With Xdisp
+included in the release, which describes the features of the program.
+.LP
+The program also accepts all standard HIPS options. See the HIPS documentation for details.
+.SH PIXEL FORMATS HANDLED DIRECTLY
+Any format which can be converted to FLOAT by HIPS.
+.SH REGION-OF-INTEREST
+The region of ineterest is ignored.
+.SH CHANGES
+Version 1 is a completely new release.
+.SH BUGS
+.LP
+The size of image which can be displayed is limited by the amount of memory
+and swap space on the machine.
+.LP
+Colormap flashing is almost bound to occur when large numbers of colors 
+are used on 8-bit frame buffer systems. It is recommended that the default
+colors option is used in this case. Satisfactory effects with any number
+of colors up to the maximum are produced on
+systems with a frame buffer which supports multiple hardware colormaps (eg
+24-bit frame buffers).
+.LP
+True 24-bit color is not supported in this release.
+.SH SEE ALSO
+HIPS man pages and documentation.
+.LP 
+.I Image Processing With Xdisp
+.SH AUTHOR
+Ian Staniforth, School of Mathematics, Sheffield University, England

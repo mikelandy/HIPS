@@ -1,0 +1,20 @@
+
+This directory contains programs donated by Guna Seetharaman, The Center for
+Advanced Computer Studies, University of Southwestern Louisiana
+(CSNet: guna@usl.usl.edu).
+
+hips2imP.c:
+	
+	This program converts a HIPS image to ImPress format for printing on
+various Imagen laser printers.  To compile:
+
+		cc -o hips2imP hips2imP.c -lhips
+
+slant.c
+
+	This program performs the forward and inverse slant transforms.  The
+resulting image is after both the forward and inverse transforms have been
+applied, but you can easily extract the code for the separate transforms if
+you need to work with the transformed image.  To compile:
+
+		cc -o slant slant.c -lhips -lm

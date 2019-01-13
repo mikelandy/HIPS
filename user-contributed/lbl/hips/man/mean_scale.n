@@ -1,0 +1,137 @@
+.TH MEAN_SCALE 1 "MARCH 15, 1992" LBL-HIPS
+.\" @(#)mean_scale.1  1.10 91/1/11 JIN;
+.SH NAME
+mean_scale \- scale an image to have a given mean or other feature
+.SH SYNOPSIS
+.ta 1i
+mean_scale [-a] [-A x y [w [h]] [-B-b[#]] [-c] [-C "sp ss"] [-e[#]] [-E #]
+.br
+	[-f #] [-G] [-l #] [-m #] [-n # [#s] [-s #] [-S[#]] [-T] [-t[#]] 
+.br
+	[-w[#]] [-W #] [-z] [-M] [<] infilename [> -o filename]
+.SH DESCRIPTION
+.B mean_scale
+corrects shift gray value across frames in a 3D image according to a mean
+value. The mean value can be average bright (default), or mean gray value
+in given area (-A), or the weight mean of the main object brightness (-B),
+or make all background to the same level (-b), or pick the 4 corners mean value
+as the adjusting base (-C).
+.SH OPTIONS
+.TP
+.I -A x y [width [height]]
+using average gray value in a given Area (center at x..y with window size w * h
+[default is 16x16]) as mean-scale reference.
+.TP
+.I -B[#]
+mean_scale to weight balanced brightness. The default is average mean.
+.TP
+.I -b[#]
+make all backgrounds have same value. If a value is supplied,
+then make the backgrounds have that value.
+.I-B
+option, and the result is not satisfied, use `tuner' to find average value
+of valley across frames, and use this average value as the main-threshold
+value.
+.TP
+.I -C "start_position square_size"
+choose corners as background.
+.TP
+.I -c
+mean_scale to ceiling. The default is mean_scale to floor.
+This option will be used with the
+.br
+.I -B\ -C
+and
+.I -b
+options.
+.TP
+.I -e[#]
+enhanced mode. # is enhance factor for trying on the worst case.
+No necessary to use it at regular time.
+.TP
+.I -E #
+End frames are handled specially. if # < 0, special on first # frames (0..#);
+If # > 0, special on last # frames (n-#..n)
+.TP
+.I -F #
+overflow value handle Factor. Default=1. If F=1.5, then when
+overflow happened, that pixel value = max / F. It is used for
+avoiding to brightness in a certain case.
+.TP
+.I -f[#]
+foreground threshold. A value won't be changed if the value is
+lower then this threshold.
+.TP
+.I -h[#]
+height percentage from the top of a hill. It'd better work with
+.I -S
+option. It is defaulted to 50%.
+.TP
+.I -G
+generate a file which name is input file name plusing all options and suffix
+\".rpt\", and send all information to this file.
+.TP
+.I -l # -m #
+low and main thresholds \- default l=10, main threshold `-m' depends on the
+mean_scale scheme. If use default m with
+.TP
+.I -n # [#s]
+number of frames being processed [start from frame #].
+.TP
+.I -s #
+set sample width. Default=4.
+.br
+Range 3-7 for byte, 4-9 for short and 5-15 for long. The larger the width,
+the less peaks.
+.TP
+.I -S[#]
+smoothing search. This is a time consuming method for precise image processing.
+The following
+number is smoothness. Larger numbers indicate more smoothness. The
+range is 1 to 15 (default=2).
+.TP
+.I -T
+Test single frame (a 2D image).
+.TP
+.I -t[#]
+threshold. Default = 32. A value won't be changed if the value is lower then
+this threshold.
+.TP
+.I -V #
+valley position. The first valley in main chart is used if -v without -V.
+.TP
+.I -v[#]
+dig valley with width #. It will help to separate the foreground and background.
+The default valley width is 12.
+.TP
+.I -W #
+minimum peak foot width. The default = 2.5 * Sample_width.
+.TP
+.I -w[#]
+pseudo-weight percentage from a peak top. This is used with the
+.I -S
+option.  Actually, it's height percentage from hilltop.
+.TP
+.I -z
+count zeros in each frame.
+.TP
+.I -M
+print important status messages.
+.TP
+.I -o
+this option is used machines such as the PC which require binary output file
+modes to be specified on open.
+No space is allowed between the switch and the filename.
+.TP
+.I -a
+adjust float input automatically.
+.SH NOTE
+The input can be one of the following type images:
+.br
+	HIPS, FITS, GIF, ICC, RLE, PNM, SUN-Raster, and TIFF
+.br
+The output is a HIPS image.
+.SH "SEE ALSO"
+elastic(1), mainpeak(1), tuner(1)
+.SH AUTHOR
+Jin Guojun - 1/11/91

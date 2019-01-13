@@ -1,0 +1,60 @@
+.TH H_ENTROPYCNT 3 "7/5/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_entropycnt \- subroutines to count pixel values for an entropy computation
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_entropycnt(hd,table,pairflag)
+h_entropycnt_b(hd,table,pairflag)
+struct header *hd;
+int *table;
+h_boolean pairflag;
+
+h_entropycnt_B(image,nr,nc,nlp,table,pairflag)
+byte *image;
+int nr,nc,nlp,*table;
+h_boolean pairflag;
+.fi
+.SH DESCRIPTION 
+These routines count the pixel values across an input subimage
+(specified by
+.I hd
+or
+.IR image )
+prior to a computation of pixel entropy.
+The result is stored in 
+.IR table .
+.I h_entropycnt
+calls
+.IR h_entropycnt_b ,
+as long as the pixel format is byte.
+.I h_entropycnt_B
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The image has
+.I nlp
+pixels per line.  If
+.I pairflag
+is set, pairs of pixel values (horizontal neighbors) are counted, and if the
+number of columns is odd, the last pixel in each column is ignored.  Otherwise, 
+isolated pixel values are counted.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_entropy(3), h_stats(3)
+.SH AUTHOR
+Yoav Cohen - 9/20/82
+.br
+HIPS 2 - Michael Landy - 7/5/91

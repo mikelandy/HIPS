@@ -1,0 +1,102 @@
+
+This code is still in development and may have bugs!!!
+Sorry, but not much documentation yet either (see man page). 
+
+Chances are that this code will require modifications to be useful
+for your specific needs. There are several '#defines' which are needed
+depending on the amount of memory and the size of the data sets you
+are using. Also you will almost certainly want to change the output format
+to fit the needs of your rendering software.  Hopefully the code is
+clear enough that the  changes necessary will be obvious.
+
+If you have questions contact: bltierney@lbl.gov
+
+
+---------------------------------
+Input data uses the HIPS image format. The input routines in 'file_io.c'
+could easily be changed to use your format, or a HIPS header could
+be faked by doing the following:
+
+original name       # character string, may be blank
+sequence name       # character string, may be blank
+20    # frames
+date                # character string, may be blank, any format
+20    #rows
+20    #cols
+8     #bits per pixel
+0     # bit packing on/off
+0     # 0 =byte data, 1 = short, 2 = int, 3 = float
+sequence history     # character string, may be blank
+comment              # character string, may be blank
+.                    # period to indicate end of header
+
+-----------------------------------------
+sample header: 128x128x197 byte data
+
+mri data
+
+197
+
+128
+128
+8
+0
+0
+
+.
+
+
+HIPS is available from: Mike Landy,
+			SharpImage Software
+		        P.O. Box 373, Prince Street Station,
+			New York, NY  10012-0007
+			landy@nyu.edu
+
+==============================================================
+
+output file format:
+Because for large data files, all of the polygons may not
+fit in memory.  Therefore polygon output is written in "chunks"
+All values are in binary format
+
+header (4 integers):
+    more flag  : 0 = this is the last chunk, 1 = more chunks to follow
+    number of vertices
+    number of edges
+    normal flag  : vertex normals are included (for gouraud shading)
+
+vertex list (floats)
+    x,y,z
+    x,y,z
+    x,y,z
+    x,y,z
+    x,y,z
+    .
+    .
+    .
+
+normal list (floats), only if normal flag = 1
+    nx,ny,nz
+    nx,ny,nz
+    nx,ny,nz
+    nx,ny,nz
+    .
+    .
+    .
+
+edge list (int)
+The edge list values are indices into the vertex list, telling which
+vertices make up the corners of the triangles.
+All polygons are triangles, so every 3 values in the edge list
+describes one triangle.
+
+If number of edges = 0, then every 3 vertices in the edge list
+is a triangle.
+
+
+=======================================================
+to view the results of isobuild (using isoview):
+    isoview render_host
+    triserv -t 0   or  ptserv 
+
+

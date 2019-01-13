@@ -1,0 +1,64 @@
+.TH MANDELBROT 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+mandelbrot - mandelbrot sub-set generator 
+.SH SYNOPSIS
+.B mandelbrot
+[-a lb rb] [-b ub bb] [-d rows cols] [-e eps] [-n ite]
+.SH DESCRIPTION 
+.I mandelbrot
+generates a subset of a mandelbrot set.
+.ll -0.5i
+.sp 1
+.in +3m
+.I lb,rb
+.in +1.0i
+.sp -1
+specify the horizontal boundaries of the subset.
+.I lb
+defaults to -0.750 and 
+.I rb
+-0.746.
+.in -1.0i
+.I ub,bb
+.in +1.0i
+.sp -1
+specify the vertical boundaries of the subset.
+.I ub
+defaults to 0.0986 and 
+.I bb
+0.1014.
+.in -1.0i
+.I rows,cols
+.in +1.0i
+.sp -1
+specify the size of the output image.
+.I rows
+defaults to 256 and
+.I cols
+341.
+.in -1.0i
+.I eps
+.in +1.0i
+.sp -1
+specifies the tolerance to the truncation error,
+and defaults to 0.01.
+.in -1.0i
+.I ite
+.in +1.0i
+.sp -1
+specifies the maximum number of iterations,
+and defaults to 300.
+.in -3m
+.ll +0.5i
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH EXAMPLE
+.in +3m
+mandelbrot > output_set
+.in -3m
+.SH SEE ALSO
+calcpix(1), ellipse(1), fgenframe(1), genframe(1), greylevel(1), saw(1)
+.SH AUTHOR
+Jin Zhengping - 8 March 1989
+.br
+Rewritten by Jin Zhengping - 31 August 1991

@@ -1,0 +1,79 @@
+.TH H_COMBINE 3 "8/9/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_combine \- subroutines to combine two real images into one complex image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_combine(hdi1,hdi2,hdo,phasemagflag)
+h_combine_f(hdi1,hdi2,hdo,phasemagflag)
+h_combine_d(hdi1,hdi2,hdo,phasemagflag)
+struct header *hdi1,*hdi2,*hdo;
+h_boolean phasemagflag;
+
+h_combine_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo,phasemagflag)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+h_boolean phasemagflag;
+
+h_combine_D(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo,phasemagflag)
+double *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+h_boolean phasemagflag;
+.fi
+.SH DESCRIPTION 
+These routines combine two input subimages (specified by
+.I hdi1
+and
+.IR hdi2 ,
+or by
+.I imagei1
+and
+.IR imagei2 ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_combine
+calls
+.I h_combine_f
+or
+.I h_combine_d
+depending upon whether the pixel format is float or double.
+.I h_combine_F
+and
+.I h_combine_D
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  If
+.I phasemagflag
+is TRUE, then the two images are treated as complex phase and complex
+magnitude, and the corresponding complex value is stored in the output image.
+Otherwise, they are treated as the real and imaginary parts of a single
+complex number.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float, double
+.SH "OUTPUT PIXEL FORMATS"
+complex (for float), double complex (for double)
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.\" .SH "SEE ALSO"
+.SH AUTHOR
+Michael Landy - 8/9/91

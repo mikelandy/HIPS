@@ -1,0 +1,24 @@
+.TH RGB2IHS 1 "3 March 1993" " "Version 2" "HIPS Manual"
+.SH NAME
+rgb2ihs \- transform a 3-frame sequence from RGB to IHS
+.SH SYNOPSIS
+.B rgb2ihs
+.RB [ \-T ]
+.SH DESCRIPTION 
+.I rgb2ihs
+transforms a 3-frame byte sequence from red-green-blue (RGB) to
+a 3-frame intensity-hue-saturation (IHS, Munsell coordinates) or
+luminance-blueness-grenness (LUV, Taylor coordinates)
+float sequence.
+Default is transformation to Munsell coordinates.
+.SH OPTIONS
+.TP
+.B \-T
+transform to Taylor coordinates
+.SH SEE\ ALSO
+ihs2rgb(1), ihsdecorr(1)
+.SH AUTHOR
+.nf
+Allan Aasbjerg Nielsen
+IMSOR, Technical University of Denmark
+e-mail: aa@imsor.dth.dk

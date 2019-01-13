@@ -1,0 +1,58 @@
+.TH DECORR 1 "11 December 1992" "Version 2" "HIPS Manual"
+.SH NAME
+decorr \- RGB to min/max autocorrelation factors, stretch MAFs, MAFs to RGB
+.SH SYNOPSIS
+.B decorr
+.RB [ \-s
+.I s1 s2
+.IR s3 ]
+.RB [ \-p \ [ \-c ]]
+.RB [ \-I
+.IR file \ |
+.B \-1
+.IR file ]
+.RB [ \-color ]
+.SH DESCRIPTION 
+.I decorr
+transforms from RGB to min/max autocorrelation factors (MAFs),
+stretches the MAFs linearly and replaces MAF1 if wanted before
+back-transformation from MAFs to RGB.
+This gives a colour decorrelation that enhances the colour information
+available in RGB images with even strongly correlated components.
+.sp 0.5
+The amount of stretching of the three MAFs is controlled by three scaling
+factors.
+.I s1
+gives scaling of MAF1 (defaults to 1.0),
+.I s2
+gives scaling of MAF2 (defaults to 0.5) and
+.I s3
+gives scaling of MAF3 (defaults to 0.2).
+.SH OPTIONS
+.TP
+.B \-s \ \fIs1 s2 s2
+gives the three above scale factors
+.TP
+.B \-p
+transform to principal components based on covariance matrix rather than MAFs
+.TP
+.B \-c
+transform to principal components based on correlation matrix rather than MAFs
+.TP
+.BR \-I \ | \ \-1 \ \fIfile
+replace MAF1 (or PC1) with HIPS image in
+.I file
+before back-transformation
+.TP
+.B \-color
+numcolor=3 in outseq
+.SH BUGS
+Stretching in the MAF space is not implemented yet so the default action does
+not work!
+.SH SEE\ ALSO
+ihsdecorr(1), rgb2ihs(1), ihs2rgb(1)
+.SH AUTHOR
+.nf
+Allan Aasbjerg Nielsen
+IMSOR, Technical University of Denmark
+e-mail: aa@imsor.dth.dk

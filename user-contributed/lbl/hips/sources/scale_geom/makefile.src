@@ -1,0 +1,26 @@
+#
+# makefile for user-contributed/lbl/hips/sources/scale_geom
+#
+
+PGMS = scale_geom.out
+
+OBJECTS = scaleg_main.o scale_g.o scanline.o filt.o hips.o hips_pic.o \
+		pic.o window.o
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+scale_geom.out:	$(OBJECTS)
+	$(LINKc) scale_geom $(OBJECTS) $(LIBRARIES)
+	mv scale_geom $(DESTDIR)
+	@touch $@
+
+FRC:

@@ -1,0 +1,241 @@
+.TH GENIAL 1 "27 August 1991" "LBL"
+.SH NAME
+.B genial
+- (GENeral Image AnaLysis): tool for quantitative analysis of HIPS images
+.SH SYNOPSIS
+.B genial
+.SH DESCRIPTION
+.I genial
+is an interactive image analysis environment for the X Window System.
+It provides a number of tools for exploration, quantitative analysis, and
+annotation of images of arbitrary size and resolution.  In addition,
+.I genial
+maintains a log of operations in the image header so that all analysis and
+annotation can be kept with the original image.   
+.SH OPTIONS
+Standard XView options
+.SH CONTROL WINDOW LAYOUT
+The window titled \*(lqGenial Control\*(rq is displayed immedeately upon
+startup.  It is divided into two parts:  The upper half is used to control
+.I
+genial's
+operation, and the bottom part displays status information.  The status
+information consists of four lines of instructions, and a bottom line which
+shows the image window status.  The (x,y) coordinates of the cursor position
+within the image are displayed, along with the pixel value under the cursor.
+The right hand portion of this line is used for gross features of the image.
+These features are the geometry, dynamic range, and pixel format (in that
+order).
+.br
+.sp
+The following describe the different parts of the top half of the control
+window:
+.TP
+.B \*(lqquit\*(rq button -
+allows you to quit the program.
+.TP
+.B \*(lqImage\*(rq items -
+allow you to load images, change image display parameters, and traverse the
+frames of a multiple frame image sequence.
+.TP
+.B \*(lqFunction\*(rq items -
+allow you changes the analytical or annotation function.  Also allow you to
+evaluate or clear the current function and bring up additional function
+options.
+.TP
+.B \*(lqLog\*(rq items -
+allow you to control whether or not automatic logging of functions takes place.
+.TP
+.B \*(lqRegions\*(rq items -
+allow you to change the region types and the line drawing mode.
+.TP
+.B \*(lqdone\*(rq button -
+button used to signal completion of an operation in certain parts of the
+program.
+.SH USAGE
+After the control window appears, a file is loaded by using the \*(lqfile\*(rq
+button.  This button displays a pop up window.  Type the name of a HIPS image
+file into the \*(lqFilename:\*(rq text field and press return.  This will load
+the image into memory and display it on the screen.
+.br
+.sp
+After the image is loaded, the user is free to use any of the analysis
+functions.  To do this, select an analysis function from the
+\*(lqFunction:\*(rq selector.  Then select a region type from the
+\*(lqType:\*(rq selector.  Then choose the control points in the image which
+define the region.  Control points are added by pressing the left mouse button.
+A cross will be displayed in the standout color over the image to give a
+visual indication that the point has been selected.  Points may be
+interactively \*(lqmoved\*(rq using the middle mouse button, and may be deleted
+using the right button.
+.br
+.sp
+After you have selected a region to your liking, hit the \*(lqeval\*(rq button
+in the control window.  The analytical function will be evaluated based on the
+region you specified, and the results of the analysis displayed.  In addition,
+the function will be entered into the log, and a log ID number will appear next
+to the first point you selected.
+.br
+.sp
+You may repeat this process indefinitely.  You may select a new analytical
+function or use the same function.  There is no limit to the number of
+invocations of the analysis functions.  
+.br
+.sp
+At any point, you may save your work by using the file button and typing the
+name of a new file in the save filename.  This will save both the image and a
+log of all operations.  If this file is later loaded, all functions in the log
+will also be displayed automatically.
+.SH IMAGE ITEMS
+.TP
+.B \*(lqfile\*(rq button -
+pops up a window for file I/O.  A HIPS image is loaded by typing
+the name of the file in the \*(lqFilename:\*(rq text field under the word \*(lqLoad:\*(rq.  The
+image (with the log) can be saved by typing the file name into the \*(lqFilename:\*(rq
+text field under the word  \*(lqSave:\*(rq.
+.TP
+.B \*(lqdisplay\*(rq button -
+pops up a window for modification of the display image.  All analysis will
+still happen on the original image dataset.  There is a slider for contrast
+enhancement, and two numeric text fields for changing the colormap scaling.  In
+addition, there is a \*(lqshrink factor\*(rq selection item.  The image width and
+height will be divided by this shrink factor.
+.I genial
+will keep track of the mapping between the display image and original image so
+that coordinate conversion happens transparently.  The smaller image is
+computed by local averaging, in order to arrive at a more suitable
+approximation of the original image.
+.TP
+.B \*(lq<\*(rq and \*(lq>\*(rq buttons -
+are used to traverse through the frames of a mutliple frame sequence of images.
+.SH FUNCTION ITEMS
+.TP
+.B \*(lqFunction:\*(rq selector -
+right button pulls down a stack to select the type of analytical function.
+.TP
+.B \*(lqeval\*(rq button -
+evaluates a function after a region has been selected.  Note that a region
+must be selected before a function can be evaluated.
+.TP
+.B \*(lqclear\*(rq button -
+clears away the current function.  The current function can be easily
+identified, as it has the highest numbered log ID.  During the middle of
+selecting points for the current region, the clear button will clear away those
+points.
+.TP
+.B \*(lqoptions\*(rq button -
+brings up an options window for the type of analytical function displayed by
+the \*(lqFunction:\*(rq selector.
+.SH LOG ITEMS
+.TP
+.B \*(lqAuto Log\*(rq checkbox -
+toggles whether analysis functions will automatically be stored in the log. The
+default is on, and it is probably a good idea to leave auto logging on.
+.SH REGIONS ITEMS
+.TP
+.B \*(lqType:\*(rq selector -
+right button brings up a stack of valid region types.  The set of valid region
+types is based on the current function type.  Obviously certain functions (e.g.
+zoom) can only operate on certain types of regions (in this case, rectangles).
+.TP
+.B \*(lqLine Drawing Mode:\*(rq selector -
+right button brings up a stack that allows the user to change the line
+drawing mode. \*(lqClick and Click\*(rq mode allows the user to just click on
+the two endpoints for the line.  \*(lqClick and Drag\*(rq mode requires the
+user to click on the start point and "drag" the line to the endpoint.
+\*(lqLeast Squares Fit\*(rq mode allows the user to click on an arbitrarily
+large number of points.
+.I genial
+will select the best line through the points.  Note: \*(lqClick and Drag\*(rq
+mode is abysmally slow in this implementation.
+.SH ANALYTICAL FUNCTIONS
+.TP
+.B trace
+Traces are simple graphs of the gray values along linear regions (lines or
+splines) of an image.  A simple control panel is also provided to allow for
+options such as an averaging radius which smooth the graph by displaying the
+\fIaverage\fR gray value at each point along the region.
+.br
+.sp
+In addition, there are two other region types for traces: Boxes, which give
+the average pixel value along a line paralell to the width of the box.
+Another region type, "Paralell Path" gives the average value pixel value on a
+line paralell to several reference lines which the user supplies.  
+.br
+.sp
+Traces may also be "integrated".  That is, it is possible to do a seperate
+graph of the area under specific portion of the trace graph.  To select regions
+for integration, click the left button to select the start and the right
+button to select the end markers in the trace display window.  When all regions
+are selected, click on the \*(lqdone\*(rq button in the main control window.
+.TP
+.B angle measure
+Allows measuring angles between two lines.  
+.TP
+.B distance
+Function which measures the linear distance, in pixels, between two points.
+.TP
+.B zoom
+Zoom allows the user to interactively zoom various rectangular regions of an
+image.  The zoomed region is displayed in a seperate window, and the user may
+increase and decrease the zoom factor interactively.  In addition, the user
+may interactively move the region which is zoomed.  This is done through an
+experimental interface, \fClog_chreg()\fR, which changes the region associated
+with a particular log entry.  This is discussed further in section 7.
+.TP
+.B display control
+A display control window is provided which allows the user to change the
+scaling and contrast of the colormap and select a shrink factor to facilitate
+analysis of huge images.  These are not actually implemented as function
+modules because they modify the colormap and the original image which are
+global resources, and display enhancement is not really a "quantitative
+analysis" function.
+.TP
+.B histograms
+Histograms are very useful for finding how and where the real information is
+in an image.  Histograms operate on closed regions of an image (polygons,
+closed splines and rectangles).  The histogram window displays the intensity
+values on the horizontal, and a pixel count on the vertical.  The height of any
+single bar in the graph represents the number of pixels in the selected region
+with that particular intensity value.  This information can be particularly
+useful for scaling the colormap.  The colormap is, by default scaled evenly
+between the minimum value and the maximum value in the image.  However, the
+actual distribution of useful data in the image might be in a much smaller
+region, and the extrema of the data values might just be artifacts.  A
+histogram can graphically illustrate this.  For example, if 90% of the data in
+a 16-bit image is located in the gray value range 200-250, but there were a
+very pixels with the value 3 and a very pixels with the value 32,564, the 
+data values between 200 and 250 would all be mapped to the same colormap entry.
+Based on seeing this huge disparity in the histogram, the user could rescale
+the colormap so that the data values between 200 and 250 cover achromatic gray
+from black to white.
+.br
+In addition, the histogram options window displays a palette of 6 colors.  The
+user may select a subrange of the histogram window, select a color from the
+palette, and all pixels within the selected range in the original image will
+be illuminated with the selected standout color.  This, also, is useful in
+analyzing just where and how the information in an image is distributed.
+.SH BUGS
+The \*(lqdone\*(rq button is very messy from a UI point of view.  It would be
+nice if there were some better way.
+.br
+.sp
+The log should be stored in the extended parameters section of the HIPS 2
+header, not in the sequence description field.
+.br
+.sp
+There are probably plenty of others.
+.SH AUTHOR
+Antony A. Courtney,
+.br
+Imaging Technologies Group, Lawrence Berkeley Laboratory and
+.br
+Computer Science Department, Trinity College, University of Dublin, Ireland.
+.br
+Email: antony@george.lbl.gov
+
+
+
+
+
+

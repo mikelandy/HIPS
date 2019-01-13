@@ -1,0 +1,66 @@
+.TH H_NNS 1 "31st August 1991" "Version 2" "HIPS Manual"
+.SH NAME
+h_nns - nearest-neighbour-smoothing filter
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_nns(hdi,hdo,size,k)
+h_nns_b(hdi,hdo,size,k)
+struct header   *hdi,*hdo;
+int             size,k;
+
+h_nns_B(imagei,imageo,nr,nc,ocols,size,k)
+byte    *imagei,*imageo;
+int     nr,nc,ocols;
+int     size,k;
+.fi
+.SH DESCRIPTION
+.I h_nns
+applies a nearest-neighbour-smoothing filter to the input subimage
+(ROI, specified by
+.I hdi
+or
+.I imagei,
+a pointer to the first pixel of the subimage)
+to suppress random noise,
+and stores the result in the output subimage
+(specified by
+.I hdo
+or
+.I imageo,
+a pointer to the first pixel of the subimage).
+.I h_nns
+then calls
+.I h_nns_b
+only if the image pixel format is byte.
+.I h_nns_b
+then calls
+.I h_nns_B
+which is the low-level routine and does not require image header.
+The subimage size is
+.I nr
+by
+.IR nc.
+The input and output images have
+.I ocols
+pixels per line.
+.I size
+is the window size in which nns filtering is performed.
+.I k
+is the number of nearest neighbours to be selected.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH REFERENCES
+S. L. Hurt and A. Rosenfeld, "Noise reduction in three-dimensional digital 
+images", Pattern Recognition, Vol. 17, No. 4, pp. 407-421, 1984.
+.SH SEE ALSO
+h_asl(1), h_mask(1), h_meanfilt(1), h_median(1), h_mls(1), h_sasmooth(1), h_snn(1)
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

@@ -1,0 +1,79 @@
+.TH GETOBJ 1 "1 September 1990" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+getobj \- select objects out of an image
+.SH SYNOPSIS
+.B getobj
+[-t NN][-b NN][-m NN][-a][-o][-v][-c NN NN][-f fname] < inseq > outseq
+.SH DESCRIPTION
+.I getobj
+selects an arbitrary number of distinct objects from an
+image, and sets the remaining image to a uniform background value
+(usually zero). This can be used when only certain objects are
+of interest, and can be used to eliminate background noise
+around a central object.  The program can also be helpful in that
+by making the entire background a constant value, data
+compression programs will perform better.
+This program
+works on hips formatted images of type int, short, and byte.
+.SH OPTIONS
+The following options are available:
+.TP
+.B "\-t threshold value" 
+All grey level values below this value are discarded. Default value is 50.
+.TP
+.B "\-b background value"
+All location not determined to be part of an object are set 
+to this value. Default value is 0.
+.TP
+.B "\-m minimum size object"
+Any object smaller than this size is ignored. Usually used in conjunction
+with the -a option. (default = 10)
+.TP
+.B "\-a"
+Find all objects in the image.
+.TP
+.B "\-o"
+Output is binary. All pixels in objects are set to 255, and all other pixels are
+set to 0.
+.TP
+.B "\-v"
+Verbose mode: displays information along the way. Useful on slow machines
+to know the current status of the program.
+.TP
+.B "\-c row column"
+The row, column point which is inside the desired object. If this  
+point is not in an object, the program exits. If the point is not
+specified, 
+.IR getobj
+uses the first object it finds from the center of the image.
+.TP
+.B "\-f value file"
+When this argument is given, (row,col) values of object locations
+are read from this file.  The format of the file should be an
+int telling the number of points in the file, followed by a list
+of points. For example: 
+    "2
+     100 120
+     200 210"
+means use 2 seed values,
+one at (100,120), and the other at (200, 210).
+This option over-rides the -c option.
+
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH "SEE ALSO"
+getobj3d(1)
+.SH DIAGNOSTICS
+.I getobj
+will give unpredictable results if the objects are not
+cleanly separated. This program also works on a sequence of images.
+However, the seed locations specified by the -c or -f options must be
+the same for all frames. 
+.sp
+This program may run out of memory is the object size is too large
+or if it is given a non-binary image.
+.SH BUGS
+Report to Brian Tierney.
+
+

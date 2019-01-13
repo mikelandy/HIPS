@@ -1,0 +1,74 @@
+.TH FRADD 1hips "NOVEMBER 18, 1991" 
+.SH NAME
+fradd, frsub, frdif, frmul, frdiv, frmin, frmax - perform pointwise operations
+.SH SYNOPSIS
+.B fradd
+( fname | - constant ) < iseq > oseq
+.br
+.B frsub
+( fname | - constant ) < iseq > oseq
+.br
+.B frdif
+( fname | - constant ) < iseq > oseq
+.br
+.B frmul
+( fname | - constant ) < iseq > oseq
+.br
+.B frdiv
+( fname | - constant ) < iseq > oseq
+.br
+.B frmin
+( fname | - constant ) < iseq > oseq
+.br
+.B frmax
+( fname | - constant ) < iseq > oseq
+.SH DESCRIPTION 
+These operations performs pointwise operations on the input sequence
+using a file sequence or a constant. If
+.I fname
+is used and this is a one frame sequence that frame is applied to
+all the frames in the input sequence. If fname has the same number
+of frames as the input sequence the operation is applied frame by
+frame. If
+.I constant
+is used this works as if fname contained constant frames.
+.TP
+\fBfradd\fP
+pixelwise addition of frames
+.TP
+\fBfrsub\fP
+pixelwise subtraction of frames
+.TP
+\fBfrdif\fP
+pixelwise absolute difference of frames
+.TP
+\fBfrmul\fP
+pixelwise multiplication of frames
+.TP
+\fBfrdiv\fP
+pixelwise division of frames
+.TP
+\fBfrmin\fP
+pixelwise minimum of frames
+.TP
+\fBfrmax\fP
+pixelwise maximum of frames
+.PP
+Sequences must be in byte, short, integer, float, double,
+complex, or double complex format.
+.SH EXAMPLES
+frsub background <iseq >oseq
+.PP
+subtracts background from the input image.
+.PP
+frmax - 27 <iseq >oseq
+.PP
+gives the maximum of the input sequence and 27.
+.SH SEE\ ALSO
+autodiff(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

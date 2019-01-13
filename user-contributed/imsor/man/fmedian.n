@@ -1,0 +1,29 @@
+.TH FMEDIAN 1 "1/8/91" "Version 2" "HIPS Manual"
+.SH NAME
+fmedian \- apply a median filter to an image
+.SH SYNOPSIS
+.B fmedian
+[-s size]
+.SH DESCRIPTION 
+.I Fmedian
+applies a median filter to an input image.
+The median filter is applied to a
+.I size
+by
+.I size
+window centered on each input pixel, where the edge pixels of the input
+subimage are replicated to fill out the window if necessary, and
+.I size
+defaults to 3.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, int, float
+.SH "SEE ALSO"
+extremum(1)
+.SH AUTHOR
+Mike Landy - 5/28/82
+.br
+median algorithm replaced <Pierre Landau 1/6/87>
+.br
+HIPS 2 - msl - 6/16/91
+.br
+modified for short, int, float   <Rasmus Larsen>

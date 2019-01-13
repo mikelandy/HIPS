@@ -1,0 +1,102 @@
+.TH H_THIN 3 "8/4/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_thin \- thin a white-on-black image
+.SH SYNOPSIS
+.nf
+.ta 2i
+#include <hipl_format.h>
+
+h_thin(hd,passflag,sflag,vflag,f)
+h_thin_b(hd,passflag,sflag,vflag,f)
+struct header *hd;
+h_boolean passflag[4],sflag,vflag;
+int f;
+
+h_thin_B(image,nr,nc,nlp,passflag,sflag,vflag,f)
+byte *image;
+int nr,nc,nlp,f;
+h_boolean passflag[4],sflag,vflag;
+.fi
+.SH DESCRIPTION 
+These routines thin a subimage (specified by
+.I hd
+or
+.IR image ),
+modifying that subimage in place.
+.I h_thin
+calls
+.I h_thin_b
+as long as the pixel format is byte.
+.I h_thin_B
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The iimage has
+.I nlp
+pixels per line.
+.PP
+This program thins white-on-black images in two ways, and then categorizes
+the points in the image.  The algorithms are derived from those of
+Sakai, et al. (Computer Graphics and Image Processing, Vol. 1, 1972, pp.
+81-96).  The program
+operates in several passes, any combination of which can be chosen by setting
+the corresponding element of the
+.I passflag
+argument to TRUE:
+.sp
+.TP
+Pass 1
+Thin the image by deleting points with 3 to 5
+8-neighbors and 2 transitions.  This pass is repeated
+until no further deletions occur unless 
+.I sflag
+(single pass) is TRUE.
+.TP
+Pass 2
+Thin the image further, so that diagonal lines are
+at most 1 pixel wide, but 8 connectivity is
+preserved.  Delete pixels which have 2-6 8-neighbors
+and exactly one 8-connected gap in the ring its
+8-neighbors.
+.TP
+Pass 3
+Categorize pixels as Endpoints, Multiple branch
+points, Isolated points, or Uninteresting points.
+Multiple branch points are categorized as M's if
+6 or more transitions are found, otherwise as MM.
+.TP
+Pass 4
+Multiple 8-neighbor MM point groups have an M point
+replace the MM closest to the center of the group.
+.sp
+.PP
+.I vflag
+(verbose) prints the number of deletions in pass 1, etc.
+.I sflag
+keeps the first two passes from being repeated if changes were made.
+.PP
+Unlike most subroutines,
+.I h_thin
+operates on the input image itself.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH "IN-PLACE PROCESSING"
+The image may only be processed in place.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_MSG - various strange bugs in h_thin have occurred
+.SH "SEE ALSO"
+h_thicken(3)
+.SH AUTHOR
+Michael Landy - 10/22/82
+.br
+HIPS 2 - msl - 8/4/91

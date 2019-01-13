@@ -1,0 +1,19 @@
+.TH PLOT3TOV 1 "8/1/91" "Version 2" "HIPS Manual"
+.SH NAME
+plot3tov \- convert PLOT3D images to UNIX PLOT format
+.SH SYNOPSIS
+.B plot3tov
+.SH DESCRIPTION 
+.I Plot3tov
+converts PLOT3D images to UNIX PLOT format, for viewing with
+standard UNIX plot filters.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH AUTHOR
+Yoav Cohen - 17/11/82
+.br
+HIPS 2 - msl - 8/1/91

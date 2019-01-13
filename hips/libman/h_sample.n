@@ -1,0 +1,125 @@
+.TH H_SUBSAMPLE 3 "3/9/94" "Version 2" "HIPS Manual"
+.SH NAME
+h_sample \- subroutines to subsample images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_sample(hdi,hdo,ratex,ratey,offsetx,offsety)
+h_sample_b(hdi,hdo,ratex,ratey,offsetx,offsety)
+h_sample_s(hdi,hdo,ratex,ratey,offsetx,offsety)
+h_sample_i(hdi,hdo,ratex,ratey,offsetx,offsety)
+h_sample_f(hdi,hdo,ratex,ratey,offsetx,offsety)
+h_sample_d(hdi,hdo,ratex,ratey,offsetx,offsety)
+h_sample_c(hdi,hdo,ratex,ratey,offsetx,offsety)
+h_sample_dc(hdi,hdo,ratex,ratey,offsetx,offsety)
+struct header *hdi,*hdo;
+int ratex,ratey,offsetx,offsety;
+
+h_sample_B(imagei,imageo,nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety;
+
+h_sample_S(imagei,imageo,nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety)
+short *imagei,*imageo;
+int nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety;
+
+h_sample_I(imagei,imageo,nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety;
+
+h_sample_F(imagei,imageo,nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety;
+
+h_sample_D(imagei,imageo,nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety)
+double *imagei,*imageo;
+int nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety;
+
+h_sample_C(imagei,imageo,nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety;
+
+h_sample_DC(imagei,imageo,nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety)
+double *imagei,*imageo;
+int nr,nc,nlpi,nlpo,ratex,ratey,offsetx,offsety;
+.fi
+.SH DESCRIPTION 
+These routines subsample the pixels in an input subimage (specified by
+.I hdi
+or
+.IR imagei )
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_sample
+calls
+.IR h_sample_b ,
+.IR h_sample_s ,
+.I h_sample_i ,
+.I h_sample_f ,
+.I h_sample_d ,
+.I h_sample_c
+or
+.I h_sample_dc
+depending on whether the pixel format is byte, short, integer float, double,
+complex or double complex.
+.IR h_sample_B ,
+.IR h_sample_S ,
+.I h_sample_I ,
+.I h_sample_F ,
+.I h_sample_D ,
+.I h_sample_C
+and
+.I h_sample_DC
+are the low-level routines which don't require an image header.  The input
+subimage size is
+.I nr
+by
+.IR nc ,
+and the input image has
+.I nlpi
+pixels per line.  The output subimage size is
+computed based on the other parameters.
+The output image has
+.I nlpo
+pixels per line.
+One column is sampled out of every
+.I ratex
+columns, beginning with column number
+.I offsetx
+(which must lie between 0 and
+.IR ratex -1).
+One row is sampled out of every
+.I ratey
+rows, beginning with row number
+.I offsety
+(which must lie between 0 and
+.IR ratey -1).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, double, complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the input
+region-of-interest is taken from
+.IR hdi ,
+and the size of the output region-of-interest is assumed to be appropriate
+given the input region size and the values of the four sampling parameters.
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+may be the same as
+.I hdo
+and
+.I imagei
+may be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_affine(3), h_extract(3), h_stretch(3)
+.SH AUTHOR
+Michael Landy - 3/8/94
+

@@ -1,0 +1,29 @@
+.TH HDEPTH 3 "3/8/94" "Version 2" "HIPS Manual"
+.SH NAME
+hdepth \- utility routines for getting and setting the header depth parameter
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+#include <stdio.h>
+
+int hgetdepth(hd)
+hsetdepth(hd,depth)
+struct header *hd;
+int depth;
+.fi
+.SH DESCRIPTION 
+These routines set and get the header extended parameter 
+.IR depth ,
+which indicates the number of depth planes in an image.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_BADDEPTH - depth must be positive
+.br
+HE_PCOUNT - supplied count doesn't match that of `depth'
+.SH "SEE ALSO"
+xparam(3)
+.SH AUTHOR
+Michael Landy - 3/8/94

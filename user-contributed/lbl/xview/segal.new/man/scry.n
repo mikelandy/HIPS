@@ -1,0 +1,53 @@
+.TH SCRY n "1992" "Scry Version 1.3" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+Scry - a distributed image handling system
+.SH DESCRIPTION
+Scry is a general purpose, distributed image handling system.
+It has been used for distributed scientific movie-making
+and image processing applications.  The system consists of a 
+client that compresses and transmits images, and servers that
+display and/or record images.
+Scry is specifically designed for operation over wide-area networks,
+as well as local-area networks.  It provides various
+image compression/decompression mechanisms to optimize use
+of the networks.  Tools are available to handle the
+common image formats RLE, HIPS, and Sun rasterfile, though the main client
+library deals in raw (headerless) images.
+.PP
+The client library has been written to be fairly portable, and runs
+on Unix and Unicos.  The client library is written in C.  The client
+requires a Unix-like run-time library and an implementation
+of 4BSD Unix sockets to support it.
+.PP
+There are three servers provided with Scry.  One of these
+servers runs on X window-based workstations, one specifically
+on Sun's using Sunview, and one on
+a PC based animation workstation.
+When invoked, the window-based servers open a window and display each frame
+that is sent by the client.  In addition to display, they
+have an option for
+writing the compressed images to a disk file.
+This disk file may be archived, sent to the PC animation
+workstation, or viewed and manipulated with Anima, a movie preview
+and editing program.  A typical use for this server is to
+monitor the progress of a client on a remote compute
+server, while saving the frames
+locally for subsequent video recording.
+.PP
+The PC server is used primarily to control video recording
+equipment.  As a server the PC runs standalone.  It receives
+images from a client, decompresses them into a local frame
+buffer, and records them one frame at a time on video tape
+or a video optical disk.
+.SH "SEE ALSO"
+\f3scry_client\f1(L), \f3pcserv\f1(L), \f3Xserv\f1(3), \f3svserv\f1(3),
+.PP
+W. E. Johnston, D. E. Hall, J. Huang, M. Rible, and D. Robertson.
+``Distributed Scientific Video Movie-Making''.
+Proceedings of the Supercomputing Conference 1988
+(The Computer Society of the IEEE).  Also available as LBL-24996, University
+of California, Lawrence Berkeley Laboratory, Berkeley, CA  (1988).
+.SH "AUTHORS"
+David Robertson, Bill Johnston, Nicole Texier,
+Fritz Renema, Max Rible, Teck-Joo Chua, James Huang, Antony Courtney,
+and Brian Tierney

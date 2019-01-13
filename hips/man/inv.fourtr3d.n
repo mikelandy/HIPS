@@ -1,0 +1,61 @@
+.TH INV.FOURTR3D 1 "11/17/92" "Version 2" "HIPS Manual"
+.SH NAME
+inv.fourtr3d \- Inverse 3D Fourier transform
+.SH SYNOPSIS
+.B inv.fourtr3d
+[-C | -F | -I | -S | -B] < iseq > oseq
+.SH DESCRIPTION 
+.I Inv.ourtr3d
+computes an inverse 3-dimensional Fourier transform or spectrum of an image
+sequence.
+The calculations are carried out in single precision complex format,
+however the user may specify the output format to be complex (\c
+.IR -C ,
+the default), float (\c
+.IR -F ),
+integer (\c
+.IR -I ),
+short (\c
+.IR -S )
+or byte (\c
+.IR -B ).
+As usual, the
+conversion from complex to real formats is controlled by the standard
+switch
+.IR -CR ,
+which defaults to outputting the real part of the inverse
+transform.
+.PP
+The program does not require cubic input sequences, but the linear
+dimensions must all be powers of 2.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+complex
+.SH "REGION-OF-INTEREST"
+The region-of-interest is cleared and ignored.
+The transform is computed on the entire sequence.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: R.  This is not the usual default, but makes sense for applying
+.I inv.fourtr3d
+to the result of applying
+.IR fourtr3d (1)
+to a real-valued image.
+.TP 1.3i
+.I "-RC [R | I | B]"
+Real-to-complex conversion: Set real part, imaginary part or both.
+Default: R.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+dog(1), fmask(1), fourtr(1), fourtr3d(1), inv.fourtr(1), mask(1)
+.SH AUTHOR
+Michael Landy - 11/17/92

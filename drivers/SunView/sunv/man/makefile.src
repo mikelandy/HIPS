@@ -1,0 +1,16 @@
+#
+# makefile for drivers/SunView/sunv/man
+#
+
+MANPAGES = sunv.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

@@ -1,0 +1,140 @@
+README:				Joseph M. Miller		May 12, 1989
+				miller@pixel.cps.msu.edu
+
+	This file documents the canny edge detecting programs, Makefile,
+   test data image and result.
+
+	See the file called FILES for documentation on EACH program in
+   this directory.
+
+
+-------------- Start of extended 'standard' disclaimer ------------------------
+
+*** COPYRIGHT NOTICE:  This software was created at Michigan State University
+   in the PRIP (Pattern Recognition and Image Processing) lab by Joe Miller
+   in the first half of 1989.   The software has been made public and can
+   be copied freely AS LONG AS NO MONETARY/BUSINESS gain is made from the
+   software.  In addition all copies of this software must include this
+   COPYRIGHT NOTICE.
+
+	Although reasonable care, documentation, and debugging standards were
+   attempted during the creation of this software package --- NO WARRANTY 
+   EXISTS.  No warranty is extended or even remotely implied with this software.
+   As usual we ARE NOT liable for any damages either physical, mental,
+   spiritual, psychological, etc. that may occur from use, application or 
+   miss-use of this software.
+
+	In addition, Michigan State University, the PRIP lab, and Joe Miller
+   in particular offer no formal software support of any kind.  You may
+   report problems/errors/modifications to manager@cpsvax.cps.msu.edu and
+   tell them to forward it to the PRIP lab Manager - but we do not guarantee
+   any help.
+
+-------------- End of extended standard disclaimer --------------------------
+
+
+General statement:  The 'canny' program can be compiled using the
+Makefile and files described in FILES to perform a single scale pass of
+the canny edge detector.  Type 'man canny' for the program defaults.
+
+
+Super friendly Makefile:  This readme file is listed as the default 
+"make" command.  In addition the Makefile can be used in compiling the
+canny edge detector programs by typing "make canny",  canny can be installed 
+into the prip library (and the manual page) by typing "make install", or
+the programs output can be compared to a previously known output format
+to see if it gives the same output using the "make test" command. 
+Finally, the old object files can be cleaned up (deleted if present) using 
+the "make clean" command.
+*** IMPORTANT NOTE:  The INSTALL option for Makefile may have to be
+changed to suit your system setup.
+
+
+Detailed information:  
+
+i. Program Objectives:
+	This program is a single scale implementation of the canny 
+edge detector.  The original program shell (written in C) was obtained 
+from the University of Michigan.  Several bugs were fixed and a 'hips'
+image and usage format was adopted.  The canny edge detector is
+described in more detail in:
+
+1) "A Computational Approach to Edge Detection", John Canny, IEEE
+Transactions on Pattern Analysis and Machine Intelligence (PAMI), 
+Vol. PAMI-8 No. 6, November 1986, pages 679-698.
+
+2) "Finding Edges and Lines in Images", John Francis Canny, MIT
+Artificial Intelligence Laboratory Technical Report # 720, June 1983,
+145 pages.
+
+ii. Program structure:
+
+	The canny package consists of 7 programs/definition files as
+described below.
+
+canny.c - Main canny program that calls the main canny routine (hips part).
+It is primarily concerned with reading in a hips image file, setting up
+the proper flags, calling the canny_top_level.c routine 'canny' and then 
+writing the results back out in hips format.  
+
+canny_top_level.c - Canny subroutines canny() which is the original high
+routine that starts the canny process, magnitude() that takes 2 images 
+and produces the magnitude (gx & gy) non_max_supp() which uses the magnitude
+image and the two gradient images to produce the non_maximal suppression
+of an image.
+
+canny_top_level.h - Canny header file of definitions used in compilation.
+
+gauss.c - Canny subroutines correlate_image() - convolves an image with
+a filter along 1 direction (x or y), make_gaussian_mask(), gauss_filter(), 
+copy_image().
+
+general.c - Canny subroutines of general usefulness.  E.g. min(), max(),
+nearestint(), nearestshort(), order(), fporder(), fpclip() where the 
+functions are self explanatory ? (fp = floating point)
+
+hthresh.c - Canny subroutines clear_borders() - sets the edge pixels of
+a char array to zero, follow_edges() - recursive routine for following 
+edges above the lower threshold, find_edges() - finds seed edge points 
+above the higher threshold and then calls follow_edges(), cleanup() - 
+sets remaining edges to non-edges.
+
+image_utils.c - Canny subroutines crop_image() - crops an image into a
+smaller sub image and returns a pointer to it, histogram() - produces a 
+0-255 histogram of the gray levels in an image, get_histogram_threshold() 
+finds the threshold level above which a certain percentage of the
+image pixels lie.
+
+thin.c - Canny subroutine thin(edgemap,cols,rows) is called from canny
+thin.c: by default (unless the user types a "-e") to thin all edges
+thin.c: down to 8 connected edges (that's what Deb Trytten wanted and
+thin.c: hacked the original hips thin.c to be - the thin.c in this
+thin.c: is her hacked and sparingly commented version.) 
+
+
+User information:
+
+i, ii, iii, iv: The interface, options, limitations and comments are
+all contained in the manual page canny.man.  Duplicating the information
+here would be both redundant and cause updating problems.
+
+
+Testing Results:
+
+i) Revision history: is contained in canny.c.  Once again duplicating
+this info would be unproductive and cause updating problems.
+
+ii & iii) Verification & sample run:
+
+	A sample of the default canny programs output is kept in the
+   file "phone.canny".  The test image data is in "phone.hips".  If you
+   modify the canny program and or simply wish to test it type:
+
+		make test
+
+   in this directory and the makefile will execute the testing steps
+   and let you know if it was successful or not.  
+
+			Can you get any more user friendly ?
+
+					- Joe

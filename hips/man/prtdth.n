@@ -1,0 +1,64 @@
+.TH PRTDTH 1 "8/2/91" "Version 2" "HIPS Manual"
+.SH NAME
+prtdth \- print halftones with 64 grey level dither on an Anadex printer
+.SH SYNOPSIS
+.ta .5i
+.B prtdth
+[-s shift] [-i 2 | -i 4] 
+.br
+	[-l label | -lf label [startframe] | -f labelfile | -ff label [startframe]]
+.SH DESCRIPTION 
+.I Prtdth
+program reads a sequence of byte-formatted frames, and
+outputs them as halftones on an Anadex printer.  It uses the Anadex
+graphics mode, presenting each pixel as a single dot, using an
+8x8 dither array, yielding a gray scale of 0-63.
+The pixels can be shifted, and the default shift is
+two, thus converting a 0-255 gray scale to 0-63.
+The maximum image size is 512 x 512.
+The printer is assumed to be at the top of page when
+the program begins, and it resets top of form to be the same
+when it exits. The 
+.I -l
+switches allows for a single line label
+to be placed below each frame of the sequence. The 
+.I -f
+switch allows for several lines of text from a file to be printed below
+the frame. The 
+.I -lf
+and 
+.I -ff
+switches act like 
+.I -l
+and 
+.IR -f ,
+respectively,
+and add a line giving the frame number.  An optional starting frame
+number may be specified which defaults to 0.  The 
+.I -i
+switch use
+interpolation to print smaller images at 2 or 4 times their normal size.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+The entire image is output.  The region of interest is ignored.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+prthlf(1), verdth(1)
+.SH AUTHOR
+Michael Landy - 5/5/82
+.br
+HIPS 2 - msl - 8/2/91

@@ -1,0 +1,17 @@
+#
+# makefile for hipsaddon/datacube/man
+#
+
+MANPAGES = \
+	dispic.n grabpic.n livepic.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

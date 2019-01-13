@@ -1,0 +1,72 @@
+.TH H_SNN 1 "31st August 1991" "Version 2" "HIPS Manual"
+.SH NAME
+h_snn - symmetric-nearest-neighbour filter
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_snn(hdi,hdo,med,size)
+h_snn_b(hdi,hdo,med,size)
+struct header   *hdi,*hdo;
+int             med,size;
+
+h_snn_B(imagei,imageo,nr,nc,ocols,med,size)
+byte    *imagei,*imageo;
+int     nr,nc,ocols;
+int     med,size;
+.fi
+.SH DESCRIPTION 
+.I h_snn
+applies a symmetric-nearest-neighbour filter to the input subimage
+(ROI, specified by
+.I hdi
+or
+.I imagei,
+a pointer to the first pixel of the subimage)
+to suppress random noise,
+and stores the result in the output subimage
+(specified by
+.I hdo
+or
+.I imageo,
+a pointer to the first pixel of the subimage).
+.I h_snn
+then calls
+.I h_snn_b
+only if the image pixel format is byte.
+.I h_snn_b
+then calls
+.I h_snn_B
+which is the low-level routine and does not require image header.
+The subimage size is
+.I nr
+by
+.IR nc.
+The input and output images have
+.I ocols
+pixels per line.
+If
+.I med
+is TRUE, then
+"median value method" is used for labelling,
+otherwise "mean value method" is used.
+.I size
+specifies the width of the window.
+If an even number is specified, it will
+be reduced by 1 automatically.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH REFERENCES
+D. Harwood, M. Subbarao, H. Hakalahti and L.S. Davis,
+"A new class of edge-preserving smoothing filters",
+CAR-TR-59 CS-TR-1397, University of Maryland, May 1984.
+.SH SEE ALSO
+h_asl(1), h_mask(1), h_meanfilt(1), h_median(1), h_mls(1), h_nns(1), h_sasmooth(1)
+.SH AUTHOR
+Jin Zhengping - 16/10/86
+.br
+Rewritten by Jin Zhengping - 31 August 1991

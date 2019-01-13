@@ -1,0 +1,48 @@
+.TH BTORLE 1 "8/15/94" "Version 2" "HIPS Manual"
+.SH NAME
+btorle \- convert to run-length encoded format
+.SH SYNOPSIS
+.B btorle
+[-v | -V] < iseq > oseq
+.SH DESCRIPTION 
+.I Btorle
+converts from byte format to RLE (run-length encoded) format.  The
+RLE format encodes each image row separately.  Runs are encoded as three
+bytes:  <255><length><byte-value>.  Bytes which are not in a run other
+than <255> are encoded as themselves.  <255>'s are encoded as a pair of
+<255>'s.  Thus, a run of two <255>'s will be coded as a run, but the run
+length must be at least 4 to bother coding any other value.  The length
+byte is the run-length minus 2 for runs of <255> and the run-length minus 4
+for runs of any other value.  The largest value of <length> allowed is 254.
+Each frame is preceded by the byte count for that frame.  If that count
+is as much or more than the number of bytes in the original input frame,
+then that frame is left unencoded.  The
+.I -v
+flag prints statistics for every frame, and
+.I -V
+prints summary statistics only.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "OUTPUT PIXEL FORMATS"
+RLE
+.SH "REGION-OF-INTEREST"
+The entire image is compressed, but the region-of-interest is preserved in the
+output image header.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+rle(1), rle_r(1), rletob(1)
+.SH AUTHOR
+Mike Landy - 8/12/94

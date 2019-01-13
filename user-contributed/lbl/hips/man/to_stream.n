@@ -1,0 +1,35 @@
+.TH "TO_HJPEG" 1 "DECEMBER 12, 1992" LBL
+.\" @(#).1 Complex Conversion tools 1.10 92/12/12 JIN;
+.SH NAME
+to_stream - convert the following type images to HIPS-STREAM images
+
+	HIPS, FITS, GIF, ICC, RLE, PICT, PNM, SUN-RASTER, TIFF, and JPEG
+.SH SYNOPSIS
+.nf
+	to_hjpeg [-c] [-n #] [-jpeg [-Q #]] [-pad] image.any > image.hstream
+.fi
+.SH DESCRIPTION
+.B to_stream
+generates or converts different images into HIPS STREAM images.
+
+.SH OPTIONS
+.TP
+.I -c
+force output a color image format.
+.TP
+.I -n #
+handle the first n frames.
+.TP
+.I -jpeg
+generate jpeg compressed stream movie images.
+.TP
+.I -Q #
+quantity factor [0 - 100] for jpeg compression. The default is 75.
+.TP
+.I -p
+pad compressed image to modulus of 8. This IS very important for Parallax users.
+
+.SH "SEE ALSO"
+ccs(1), cjpeg(1), elastic(1), magicprint(1), mainpeak(1), powertool(1), rotate90n(1), tuner(1), toany(1)
+.SH AUTHOR
+Jin Guojun - DECEMBER 12, 1992

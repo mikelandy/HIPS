@@ -1,0 +1,59 @@
+.TH H_SCALEADD 3 "8/26/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_scaleadd \- subroutines scale one image and add it to a second
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_scaleadd(hdi,hdo,s)
+h_scaleadd_f(hdi,hdo,s)
+struct header *hdi,*hdo;
+float s;
+
+h_scaleadd_F(imagei,imageo,nr,nc,nlpi,nlpo,s)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+float s;
+.fi
+.SH DESCRIPTION 
+These routines scale an input subimage (specified by
+.I hdi
+or by
+.IR imagei ),
+and add the result to the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_scaleadd
+calls
+.IR h_scaleadd_f ,
+as long as the pixel format is float.
+.I h_add_F
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place, although this doesn't make much sense
+(better to use
+.IR h_mulscale (3).
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_wtsum3(3)
+.SH AUTHOR
+Michael Landy - 8/26/91

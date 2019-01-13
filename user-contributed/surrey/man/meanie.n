@@ -1,0 +1,15 @@
+.TH MEANIE 1 "April 22, 1988"
+.SH NAME
+meanie - Apply a mean filter to an image
+.SH SYNOPSIS
+.B mean
+[-sN]
+.SH DESCRIPTION 
+.I Meanie
+replaces each input pixel by the average of a square of pixels centered on
+that input pixel (it is equivalent to a convolution using a square mask with
+equal values which sum to one).  The size of the area to be averaged may
+be specified using
+.IR -s ,
+defaults to 3, and must be between 3 and 9.  This program handles
+byte-formatted images.

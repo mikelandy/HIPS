@@ -1,0 +1,104 @@
+.TH H_SHUFFLEADD 3 "8/6/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_shuffleadd \- subroutines to shuffle one image and add it to another
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_shuffleadd(hdi1,hdi2,hdo)
+h_shuffleadd_bsb(hdi1,hdi2,hdo)
+h_shuffleadd_f(hdi1,hdi2,hdo)
+struct header *hdi1,*hdi2,*hdo;
+
+h_shuffleadd_BSB(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+byte *imagei1,*imageo;
+short *imagei2;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_shuffleadd_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines randomly permute the rows and columns of one input subimage
+(specified by
+.I hdi1
+or
+.IR imagei1 ),
+add the permuted image to a second input subimage (specified by
+.I hdi2
+or by
+.IR imagei2 ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_shuffleadd
+calls
+.I h_shuffleadd_bsb
+or
+.I h_shuffleadd_f
+depending upon whether the pixel format is byte (for imagei1 and imageo, and
+short for imagei2) or float.
+.I h_shuffleadd_BSB
+and
+.I h_shuffleadd_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.I H_shuffleadd_bsb
+and
+.I h_shuffleadd_BSB
+clip the sum to be in the range from 0 to 255, and count the underflows and
+overflows in
+.I hips_lclip
+and
+.IR hips_hclip ,
+respectively.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte (added to short and the sum stored in byte), float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+can be the same as
+.IR imageo .
+For
+.I h_add_bsb
+and
+.IR h_add_BSB ,
+clearly only the byte images may be processed in place.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_FMT3SUBR - can't handle this pixel format combination
+.SH "SEE ALSO"
+h_add(3), h_diff(3), h_gnoise(3)
+.SH AUTHOR
+Yoav Cohen 3/15/82
+.br
+modified for float images: Mike Landy 10/19/83
+.br
+HIPS 2 - msl - 8/5/91

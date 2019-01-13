@@ -1,0 +1,6 @@
+;GIL-3
+(
+	:interfaces             (trace.G display.G histo.G comment.G file.G main_control.G gfm.G zoom.G )
+	:actions                ()
+	:root_window            nil
+)

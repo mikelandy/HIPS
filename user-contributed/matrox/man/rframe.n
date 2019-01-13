@@ -1,0 +1,45 @@
+.TH RFRAME 1HIPS "August 13, 1988"
+.SH NAME
+rframe - read a frame from the Matrox VIP_1024 frame memory
+.SH SYNOPSIS
+.B rframe
+[rows [cols [initialrow [initialcol]]]] [-cCOLORPLANE] [-mac]
+.SH DESCRIPTION 
+.I Rframe
+reads a frame from the Matrox VIP-1024  starting at 
+(\fIinitialrow\fR,\fIinitialcol\fR)
+with size 
+.I rows
+x
+.IR cols .
+There is no wraparound, so large sizes will
+be truncated. 
+.I Rows 
+defaults to 480
+and
+.I cols
+defaults to 512.
+.I Initialrow
+and 
+.I initialcol
+default to 0.
+The 
+.I -cCOLORPLANE
+option specifies which color plane to read the frame from. Permissible
+values for the variable 
+.I COLORPLANE
+are a, A, r, R, g, G, b, and B.
+Specifing the colorplane option -cA, causes rframe to read a frame from
+each colorplane and to create a 24 bit color image. The hips image file will
+contain 3 image frames (one for red, green, and blue).
+The default is to read a frame from the GREEN color plane (normally
+the case if grey-scale images are being processed.)
+The
+.I -mac
+option causes rframe to create an image file for the Apple Macintosh.
+It is assumed that the user wishes to have a 24 bit color image saved.
+.SH SEE\ ALSO
+wframe(1HIPS), mclear(1HIPS)
+.SH AUTHOR
+Edmond Mesrobian - 8/13/88
+.br

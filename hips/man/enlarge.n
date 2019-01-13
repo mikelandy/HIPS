@@ -1,0 +1,57 @@
+.TH ENLARGE 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+enlarge \- enlarge a sequence in space and/or time
+.SH SYNOPSIS
+.B enlarge
+[-h hfactor] [-v vfactor] [-t tfactor] [-i]
+.br
+.B enlarge
+[-s [spacefactor]] [-t tfactor] [-i]
+.SH DESCRIPTION 
+.I Enlarge
+enlarges the input sequence by pixel replication (the default) or
+pixel interpolation.
+.I Enlarge
+enlarges the input sequence
+vertically by 
+.IR vfactor ,
+horizontally by 
+.I hfactor
+and temporally by 
+.IR tfactor .
+The spatial factors default to 1, and 
+.I tfactor
+defaults to 1.
+In the second calling sequence form, the user specifies 
+.IR spacefactor ,
+which is applied in both spatial dimensions, and defaults to 2.
+The 
+.I -i
+switch causes the program to (tri-linearly) interpolate the added pixels.
+If no space factors are specified, ``-s 2'' is the default.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, integer, float, complex
+.SH "REGION-OF-INTEREST"
+The entire image is enlarged.  The output image region-of-interest is the
+enlarged portion of the input image region-of-interest.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+reduce(1)
+.SH AUTHOR
+Rewritten by Charlie Chubb - 10/24/87
+.br
+msl - folded in the -i switch - 11/5/87
+.br
+HIPS 2 - msl - 1/12/91

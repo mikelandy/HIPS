@@ -1,0 +1,42 @@
+.TH FOURTR3D 1 "7/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+fourtr3d \- 3D Fourier transform and spectrum
+.SH SYNOPSIS
+.B fourtr3d
+[-s] < iseq > oseq
+.SH DESCRIPTION 
+.I Fourtr3d
+computes a 3-dimensional Fourier transform or spectrum of an image sequence.
+The output is a complex Fourier transform by default, or a float Fourier
+spectrum if
+.I -s
+is specified.  For spectra, the coefficients are shifted, so that the (0,0,0)
+coefficient is near the center of the output sequence.
+.PP
+The program does not require cubic input sequences, but the linear
+dimensions must all be powers of 2.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+complex, double complex
+.SH "REGION-OF-INTEREST"
+The region-of-interest is cleared and ignored.
+The transform is computed on the entire sequence.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-RC [R | I | B]"
+Real-to-complex conversion: Set real part, imaginary part or both.
+Default: R.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+dog(1), fmask(1), fourtr(1), inv.fourtr(1), inv.fourtr3d(1), mask(1)
+.SH AUTHOR
+Yoav Cohen 5/17/82
+.br
+HIPS 2 - msl - 7/10/91

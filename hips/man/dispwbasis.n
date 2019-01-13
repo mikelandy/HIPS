@@ -1,0 +1,19 @@
+.TH DISPWBASIS 1 "8/11/91" "Version 2" "HIPS Manual"
+.SH NAME
+dispwbasis \- output the basis set for the Walsh transform of a 16X16 array
+.SH SYNOPSIS
+.B dispwbasis
+.SH DESCRIPTION 
+.I Dispwbasis
+displays the basis for the
+Walsh transform for 16X16 array.
+.SH "OUTPUT PIXEL FORMATS"
+byte
+.SH STANDARD SWITCHES USED
+None
+.SH "SEE ALSO"
+inv.walshtr(1), walshtr(1)
+.SH AUTHOR
+Y.Cohen 2/24/82
+.br
+HIPS 2 - msl - 8/11/91

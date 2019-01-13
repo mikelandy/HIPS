@@ -1,0 +1,32 @@
+.TH SENDTO 1 "JANUARY 1, 1993" LBL-HIPS
+.\" @(#)NETWORKING TOOL.1  4/1/91 JIN;
+.SH NAME
+.B sendto
+\- network transmittor
+.SH SYNOPSIS
+.nf
+sendto	hostname [+udp] [+port #] [ | < ] input [-... options]
+.fi
+.SH DESCRIPTION
+
+.SH OPTIONS
+.TP
+.I +udp
+use UDP protocol. The default is use TCP.
+
+.TP
+.I +port #
+choose destination port number (default = 1900).
+
+.B \-...
+the options will be sent to destination. They are not processed for
+.I sendto
+using.
+
+.SH NOTE
+The input can be anything.
+
+.SH SEE ALSO
+ccs(1), netest(1), toany(1)
+.SH AUTHOR
+Jin Guojun - LBL 1/1/93

@@ -1,0 +1,145 @@
+.TH H_MINMAX 3 "6/19/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_minmax \- subroutines to compute the minimum and maximum of an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_minmax(hd,minval,maxval,nzflag)
+h_minmax_b(hd,minval,maxval,nzflag)
+h_minmax_sb(hd,minval,maxval,nzflag)
+h_minmax_s(hd,minval,maxval,nzflag)
+h_minmax_us(hd,minval,maxval,nzflag)
+h_minmax_i(hd,minval,maxval,nzflag)
+h_minmax_ui(hd,minval,maxval,nzflag)
+h_minmax_f(hd,minval,maxval,nzflag)
+h_minmax_d(hd,minval,maxval,nzflag)
+h_minmax_c(hd,minval,maxval,nzflag)
+h_minmax_dc(hd,minval,maxval,nzflag)
+struct header *hdi;
+Pixelval *minval,*maxval;
+h_boolean nzflag;
+
+h_minmax_B(image,nr,nc,nlp,rmin,rmax,nzflag)
+byte *image,*rmin,*rmax;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_minmax_SB(image,nr,nc,nlp,rmin,rmax,nzflag)
+sbyte *image,*rmin,*rmax;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_minmax_S(image,nr,nc,nlp,rmin,rmax,nzflag)
+short *image,*rmin,*rmax;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_minmax_US(image,nr,nc,nlp,rmin,rmax,nzflag)
+h_ushort *image,*rmin,*rmax;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_minmax_I(image,nr,nc,nlp,rmin,rmax,nzflag)
+int *image,*rmin,*rmax;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_minmax_UI(image,nr,nc,nlp,rmin,rmax,nzflag)
+h_uint *image,*rmin,*rmax;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_minmax_F(image,nr,nc,nlp,rmin,rmax,nzflag)
+float *image,*rmin,*rmax;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_minmax_D(image,nr,nc,nlp,rmin,rmax,nzflag)
+double *image,*rmin,*rmax;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_minmax_C(image,nr,nc,nlp,rmin,rmax,nzflag)
+float *image,*rmin,*rmax;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_minmax_DC(image,nr,nc,nlp,rmin,rmax,nzflag)
+double *image,*rmin,*rmax;
+int nr,nc,nlp;
+h_boolean nzflag;
+.fi
+.SH DESCRIPTION 
+These routines compute the minimum and maximum pixel values across an input
+subimage (specified by
+.I hd
+or
+.IR image ).
+The result is stored in 
+.I minval
+and
+.I maxval
+(for the generic routines), or in
+.I rmin
+and
+.I rmax
+(for the low-level routines).
+.I h_minmax
+calls
+.IR h_minmax_b ,
+.IR h_minmax_sb ,
+.IR h_minmax_s ,
+.IR h_minmax_us ,
+.IR h_minmax_i ,
+.IR h_minmax_ui ,
+.IR h_minmax_f
+.IR h_minmax_d
+.IR h_minmax_c
+or
+.IR h_minmax_dc
+depending upon whether the pixel format is byte, signed byte, short, unsigned
+short, integer, unsigned integer, float, double, complex or double complex.
+.IR h_minmax_B ,
+.IR h_minmax_SB ,
+.IR h_minmax_S ,
+.IR h_minmax_US ,
+.IR h_minmax_I ,
+.IR h_minmax_UI ,
+.IR h_minmax_F ,
+.IR h_minmax_D ,
+.I h_minmax_C
+and
+.I h_minmax_DC
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The image has
+.I nlp
+pixels per line.  For complex and double complex formats, the routines
+calculate and return the minimum and maximum complex magnitude.
+If
+.I nzflag
+is FALSE, then the minimum and maximum are computed over the entire subimage.
+If
+.I nzflag
+is TRUE, pixels with values identically zero are ignored in the calculation,
+and the returned minimum and maximum are set to zero only if the entire
+subimage is zero.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, signed byte, short, unsigned short, integer, unsigned integer, float,
+double, complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_max(3)
+.SH AUTHOR
+Michael Landy - 6/17/91

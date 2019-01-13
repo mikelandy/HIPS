@@ -1,0 +1,26 @@
+HIPS functions for image processing of stored files
+===================================================
+These functions are additions to the HIPS system 
+ 
+./hips_src 
+disp_line.c dual_thresh.c gen_poly_frame.c polyfit_line.c histo_line.c 
+averages.c pick_line.c meanie.c
+
+Description
+===========
+Having  the HIPS library installed as described in the release notes, these
+files are ready to be compiled and run.
+Modify the definitions of TOP, HOME and BIN in the Makefile to suit your file
+system. Alter HOME to reflect the directory the source files reside in, and 
+HIPSLIB to indicate where ./libhipl.a resides.
+
+Additional Note 
+===============
+averages  average batches of frames   
+pick_line pick a line from an image
+histo_line compute grey-level histograms for a line of data
+disp_line display grey-level histogram for a single line    
+polyfit_line compute a polynomial curve to fit a set of data points
+gen_poly_frame generate a frame from a line of data
+dual_thresh  two level threshold function
+meanie  low pass mean filter for noise reduction 

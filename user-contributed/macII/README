@@ -1,0 +1,26 @@
+This directory contains a HIPS image viewer for the macII.  This 
+improved version allows expansion of various portions of
+the images, or reading off of pixel values and x,y coordinates off of
+the screen.  This directory contains
+the binhex4.0 source for the macII application, and 
+the lightspeed C sources needed
+to build the application, which are the following:
+
+	Coordinates.c
+	data.c
+	displayops4.c
+	main.c
+	menu.c
+	MacTraps (LSC)
+--------------------------
+	stdio
+	storage
+	strings
+	unix
+---------------------------
+	halloc.c (HIPS)
+	read_header.c (HIPS)
+
+----------------------------------------------------------------
+8/23/91 - Michael Landy:  I've just updated this for HIPS-2 as best I could,
+but have no idea whether my edits will work.  G'luck.

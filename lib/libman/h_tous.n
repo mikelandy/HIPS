@@ -1,0 +1,32 @@
+.TH H_TOUS 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_tous \- conversions to unsigned short integer pixel format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_tous(hdi,hdo)
+h_itous(hdi,hdo)
+struct header *hdi,*hdo;
+.fi
+.SH DESCRIPTION 
+These routines convert from integer pixel format to unsigned short integer
+format.  The entire image pointed to by
+.I hdi
+is converted to unsigned short integer pixel format and stored in the image
+pointed to by
+.I hdo
+(any region-of-interest information is ignored).  The routine
+.I h_tous
+checks the pixel format of the input image and calls
+.IR h_itous
+if it is integer.
+All negative values are set to zero.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_toc(3), h_tod(3), h_todc(3), h_tof(3), h_toi(3), etc.
+.SH AUTHOR
+Michael Landy - 1/4/91

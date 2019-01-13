@@ -1,0 +1,15 @@
+.TH PICK_LINE 1 "September 7, 1987"
+.SH NAME
+pick_line - Extract a single row or column from an image
+.SH SYNOPSIS
+.B pick_line
+[-nN] [-v]
+.SH DESCRIPTION 
+.I Pick_line
+extracts a single row or column from an image.  The row or column number may
+be specified using
+.IR -n ,
+and defaults to the middle row or column.  By default, a single row is
+extracted, but by specifying
+.I -v
+a column is extracted instead.  This program handles byte-formatted images.

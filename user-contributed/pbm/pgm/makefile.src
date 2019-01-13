@@ -1,0 +1,54 @@
+#
+# makefile for user-contributed/pbm/pgm
+#
+
+LIBNAME =	libpgm.a
+
+OBJECTS =	libpgm1.o libpgm2.o
+
+PGMS =		fitstopgm.out fstopgm.out hipstopgm.out lispmtopgm.out \
+		pgmbentley.out \
+		pgmenhance.out pgmhist.out pgmnorm.out pgmoil.out pgmramp.out \
+		pgmtofits.out pgmtofs.out pgmtolispm.out pgmtopbm.out \
+		psidtopgm.out rawtopgm.out pgmedge.out pgmtexture.out
+
+MANPAGES =	fitstopgm.n fstopgm.n hipstopgm.n lispmtopgm.n pgmbentley.n \
+		pgmenhance.n pgmhist.n pgmnorm.n pgmoil.n pgmramp.n \
+		pgmtofits.n pgmtofs.n pgmtolispm.n pgmtopbm.n \
+		psidtopgm.n rawtopgm.n pgmedge.n pgmtexture.n \
+		libpgm.n pgm.n
+
+PBMDIR =	../pbm
+INCLUDEPBM =	-I$(PBMDIR)
+LIBPBM =	$(PBMDIR)/libpbm.a
+
+CPPFLAGSL = -I.. $(INCLUDEPBM)
+COMPILEc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+	$(CPPFLAGS) $(CPPFLAGSL) $(TARGET_ARCH) $(FASTCOPY) $(FLOAT) -c
+LINKc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+	$(CPPFLAGS) $(CPPFLAGSL) $(FLOAT) $(TARGET_ARCH) $(FASTCOPY) -o
+
+OTHERLIBS = $(LIBNAME) $(LIBPBM) -lm
+
+.c.o:
+	$(COMPILEc) $*.c
+	@-ld -s -r $*.o
+	@mv a.out $*.o
+
+$(LIBNAME):	$(OBJECTS)
+	@rm -f $(LIBNAME)
+	ar cr $(LIBNAME) `$(LORDER) $(OBJECTS) | $(TSORT)`;
+	$(RANLIB) $(LIBNAME)
+
+install:	$(LIBNAME) $(PGMS) man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

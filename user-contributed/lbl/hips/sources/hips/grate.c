@@ -1,0 +1,505 @@
+/*
+Disclaimer:  No guarantees of performance accompany this software,
+nor is any responsibility assumed on the part of the authors.  All the
+software has been tested extensively and every effort has been made to
+insure its reliability.   */
+
+/*
+*NAME
+* grate.c - generate gratings in 2 directions
+*
+* inspired by HIPS checkers2.c with many more options
+*  Bryan Skene, LBL
+*
+*SYNOPSIS
+* grate -r rows -c cols -fx funct_x -fy funct_y -cx cycles_x -cy cycles_y
+*	-ox offset_x -oy offset_y
+*	-sx scale_x -sy scale_y [-b, -s, -i, -f] -n num_frames
+*
+* Defaults:	rows: 512; cols: 512; byte output; frames: 1; offsets: 1.0;
+*		scales: 0.5; cycles: 0.5;
+*
+* Load:	cc -o grate grate.c -lhips -lm
+*
+*DESCRIPTION
+*
+*     Generate a checker board.
+*	-r   number rows in the image
+*	-c   number cols in the image
+*	-n   number of frames to generate
+*
+*	-fx %d number of function to apply in x direction
+*	-fy %d number of function to apply in y direction
+*
+*	-cx %f number of cycles to span funct_x over in x direction
+*	-cy %f number of cycles to span funct_y over in y direction
+*
+*	-ox %f offset to be applied to funct_x (i.e. funct_x(..) + ox)
+*	-oy %f offset to be applied to funct_y (i.e. funct_y(..) + oy)
+*
+*	-sx %f scale factor to be applied to funct_x (i.e. (sx * funct_x() + ox
+*	-sy %f scale factor to be applied to funct_y (i.e. (sy * funct_y() + oy
+*
+*	-pox %f phase offset applied to argument of funct_x (mult. by PI)
+*	-poy %f phase offset applied to argument of funct_y (mult. by PI)
+*
+*	-b   byte (8 bit) format (the default)
+*	-s   for short (16 bit) pixel output
+*	-i   for integer (32 bit) pixel output
+*	-f   for float (single precision) pixel output
+*
+*/
+
+#include <hipl_format.h>
+#include <stdio.h>
+#include <math.h>
+
+/* RANGE forces a to be in the range b..c (inclusive) */
+#define RANGE(a,b,c) { if (a<b) a=b;  if (a>c) a=c; }
+
+#define X		1	/* specifies to fn which dir and thus which
+				 * set of */
+#define Y		0	/* factors to use in computation. */
+
+#define PI		3.141592765	/* no comment */
+
+#define SQUARE		0	/* it's easy to add functions - and fun too! */
+#define SIN		1
+#define COS		2
+#define TRIANGLE	3
+
+#ifdef __STDC__
+void      AddToImage(int, int, double);
+float     fn(int, int, int);
+float     triangle(double);
+void      help(void);
+#else
+void      AddToImage();
+float     triangle();
+float     fn();
+double     atof();
+void      help();
+#endif
+
+int       rows = 512;
+int       cols = 512;
+int       i_frm;
+int       num_frms = 1;
+
+float     two_pow_8_m1 = 255.0;
+float     two_pow_15_m1 = 32767.0;
+float     two_pow_16_m1 = 65535.0;
+float     two_pow_31_m1 = 2147483647.0;
+float     two_pow_32_m1 = 4294967295.0;
+
+int       funct_x = SQUARE;	/* default to square wave */
+int       funct_y = SQUARE;
+
+float     cycles_x = 1.0;
+float     cycles_y = 1.0;
+
+float     offset_x = 0.0;
+float     offset_y = 0.0;
+
+float     scale_x = 1.0;
+float     scale_y = 1.0;
+
+float     poffset_x = 0.0;
+float     poffset_y = 0.0;
+
+double    max_gray = 255.0;
+double    min_gray = 0.0;
+
+int       foflag = 0;		/* -f specified, float output */
+int       ioflag = 0;		/* -i specified, integer output */
+int       soflag = 0;		/* -s specified, short output */
+int       boflag = 1;		/* -b specified, byte output (default) */
+int       debug = 0;
+int       debug2 = 0;
+
+/* output image declerations */
+unsigned char *start_out_image_buf_byte, *out_image_byte;
+unsigned short *start_out_image_buf_short, *out_image_short;
+unsigned int *start_out_image_buf_int, *out_image_int;
+float    *start_out_image_buf_float, *out_image_float;
+
+int       out_image_size_bytes;
+int       image_size;
+
+struct header hd;
+
+
+/*****************************/
+main(argc, argv)
+    int       argc;
+    char    **argv;
+{
+    int       ac = 1;
+    int       ga = 0;
+    int       x, y;
+	char      tmp[100];
+    double    gray_value;
+
+    Progname = strsave(*argv);
+
+    ga = ac;
+    if (argc > 1)
+	while (argv[ac][0] == '-') {
+	    if (argv[ac][1] == 'D')
+		debug = TRUE;
+	    if (argv[ac][1] == 'D' && argv[ac][2] == '2') {
+		debug2 = TRUE;
+		debug = TRUE;
+	    }
+/*-b   byte (8 bit) format (the default) */
+	    if (argv[ac][1] == 'b' && argv[ac][2] == '\0')
+		boflag = TRUE;
+/*-s   for short (16 bit) pixel output */
+	    if (argv[ac][1] == 's' && argv[ac][2] == '\0') {
+		soflag = TRUE;
+		boflag = 0;
+	    }
+/*-i   for integer (32 bit) pixel output */
+	    if (argv[ac][1] == 'i' && argv[ac][2] == '\0') {
+		ioflag = TRUE;
+		boflag = 0;
+	    }
+/*-f   for float (single precision) pixel output */
+	    if (argv[ac][1] == 'f' && argv[ac][2] == '\0') {
+		foflag = TRUE;
+		boflag = 0;
+	    }
+/*-n   number of frames in output image */
+	    if (argv[ac][1] == 'n' && argv[ac][2] == '\0')
+		num_frms = atoi(argv[++ac]);
+
+/*-r   number of rows in output image */
+	    if (argv[ac][1] == 'r' && argv[ac][2] == '\0')
+		rows = atoi(argv[++ac]);
+/*-c   number of rows in output image */
+	    if (argv[ac][1] == 'c' && argv[ac][2] == '\0')
+		cols = atoi(argv[++ac]);
+
+	    if ((foflag + ioflag + soflag) > 1)
+		perr(HE_MSG, "Only one of -s, -i or -f may be specified.");
+
+/*-fx %d funct_x specification */
+	    if (argv[ac][1] == 'f' && argv[ac][2] == 'x')
+		funct_x = atoi(argv[++ac]);
+
+/*-fy %d funct_y specification */
+	    if (argv[ac][1] == 'f' && argv[ac][2] == 'y')
+		funct_y = atoi(argv[++ac]);
+
+/*-cx %f cycles_x specification */
+	    if (argv[ac][1] == 'c' && argv[ac][2] == 'x')
+		cycles_x = atof(argv[++ac]);
+
+/*-cy %f cycles_y specification */
+	    if (argv[ac][1] == 'c' && argv[ac][2] == 'y')
+		cycles_y = atof(argv[++ac]);
+
+/*-ox %f offset_x specification */
+	    if (argv[ac][1] == 'o' && argv[ac][2] == 'x')
+		offset_x = atof(argv[++ac]);
+
+/*-oy %f offset_y specification */
+	    if (argv[ac][1] == 'o' && argv[ac][2] == 'y')
+		offset_y = atof(argv[++ac]);
+
+/*-sx %f scale_x specification */
+	    if (argv[ac][1] == 's' && argv[ac][2] == 'x')
+		scale_x = atof(argv[++ac]);
+
+/*-sy %f scale_y specification */
+	    if (argv[ac][1] == 's' && argv[ac][2] == 'y')
+		scale_y = atof(argv[++ac]);
+
+/*-pox %f poffset_x specification */
+	    if (argv[ac][1] == 'x' && argv[ac][2] == 'o'
+		&& argv[ac][3] == 'x')
+		poffset_x = atof(argv[++ac]);
+
+/*-poy %f poffset_y specification */
+	    if (argv[ac][1] == 'x' && argv[ac][2] == 'o'
+		&& argv[ac][3] == 'y')
+		poffset_y = atof(argv[++ac]);
+
+/*-h   Help! */
+	    if (argv[ac][1] == 'h' && argv[ac][2] == '\0') {
+		help();
+		exit(0);
+	    }
+	    ac++;
+	    if (ac > (argc - 1))
+		break;
+
+	    if (ga == ac)	/* no arg consumed */
+		perr(HE_MSG, "Incomprehensible arguments.");
+	}			/* end of arg processing */
+
+
+    if (debug > 0)
+	fprintf(stderr, "boflag:%d; soflag:%d; ioflag:%d; foflag:%d; rows:%d; cols:%d; num_frms:%d;\n",
+		boflag, soflag, ioflag, foflag, rows, cols, num_frms);
+
+    image_size = rows * cols;
+
+    /* PFBYTE  */
+    if (boflag > 0) {
+	start_out_image_buf_byte = (unsigned char *) halloc(image_size, sizeof(char));
+	out_image_byte = start_out_image_buf_byte;
+	out_image_size_bytes = image_size * (sizeof(char));
+
+	max_gray = two_pow_8_m1;
+	min_gray = 0;
+
+	/* allocate output image, write header   */
+	init_header(&hd, "", "", num_frms, "", rows, cols, PFBYTE, 1, "");
+
+	/*
+	 * Update the image header seq_history according to the current
+	 * command string. update_header(&image_header,argc,argv)
+	 */
+
+	update_header(&hd, argc, argv);
+
+	write_header(&hd);
+
+    }
+    if (ioflag > 0) {
+	start_out_image_buf_int = (unsigned int *) halloc(image_size, sizeof(int));
+	out_image_int = start_out_image_buf_int;
+	out_image_size_bytes = image_size * (sizeof(int));
+
+	max_gray = two_pow_31_m1;
+	min_gray = -(two_pow_31_m1 + 1);
+
+	/* allocate output image, write header   */
+	init_header(&hd, "", "", num_frms, "", rows, cols, PFINT, 1, "");
+
+	update_header(&hd, argc, argv);
+
+	write_header(&hd);
+
+    }
+    if (soflag > 0) {
+	start_out_image_buf_short = (unsigned short *) halloc(image_size, sizeof(short));
+	out_image_short = start_out_image_buf_short;
+	out_image_size_bytes = image_size * (sizeof(short));
+
+	max_gray = two_pow_15_m1;
+	min_gray = -(two_pow_15_m1 + 1);
+
+	/* allocate output image, write header   */
+	init_header(&hd, "", "", num_frms, "", rows, cols, PFSHORT, 1, "");
+
+	update_header(&hd, argc, argv);
+
+	write_header(&hd);
+
+    }
+    if (foflag > 0) {
+	start_out_image_buf_float = (float *) halloc(image_size, sizeof(float));
+	out_image_float = start_out_image_buf_float;
+	out_image_size_bytes = image_size * (sizeof(float));
+
+	max_gray = two_pow_32_m1;
+	min_gray = -(two_pow_32_m1 + 1);
+
+	/* allocate output image, write header   */
+	init_header(&hd, "", "", num_frms, "", rows, cols, PFFLOAT, 1, "");
+	update_header(&hd, argc, argv);
+
+	write_header(&hd);
+
+    }
+/* Generate the image - no kidding! */
+
+    for (y = 0; y < rows; y++)
+	for (x = 0; x < cols; x++) {
+	    gray_value = (max_gray * fn(funct_x, X, x) * fn(funct_y, Y, y));
+	    AddToImage(x, y, gray_value);
+	}
+
+    /* generate frames  */
+    for (i_frm = 0; i_frm <= (num_frms - 1); i_frm++) {
+	if (boflag)
+	    if (fwrite(start_out_image_buf_byte, out_image_size_bytes, 1, stdout)
+		!= 1) {
+		sprintf(tmp, "Error during write of frame number %d.\n", i_frm);
+		perr(HE_MSG, tmp);
+	    }
+	if (soflag)
+	    if (fwrite(start_out_image_buf_short, out_image_size_bytes, 1, stdout)
+		!= 1) {
+		sprintf(tmp, "Error during write of frame number %d.\n", i_frm);
+		perr(HE_MSG, tmp);
+	    }
+	if (ioflag)
+	    if (fwrite(start_out_image_buf_int, out_image_size_bytes, 1, stdout)
+		!= 1) {
+		sprintf(tmp, "Error during write of frame number %d.\n", i_frm);
+		perr(HE_MSG, tmp);
+	    }
+	if (foflag)
+	    if (fwrite(start_out_image_buf_float, out_image_size_bytes, 1, stdout)
+		!= 1) {
+		sprintf(tmp, "Error during write of frame number %d.\n", i_frm);
+		perr(HE_MSG, tmp);
+	    }
+    }
+    return (0);
+}
+
+
+/**********************************/
+void
+AddToImage(x, y, gray_value)
+    int       x, y;
+    double    gray_value;
+{
+    int       loc;
+
+    loc = x + y * cols;
+
+    if (boflag) {
+	RANGE(gray_value, min_gray, max_gray);
+	out_image_byte[loc] = (unsigned char) (gray_value + 0.5);
+	if (debug2)
+	    fprintf(stderr, "%d\n", (unsigned char) (gray_value + 0.5));
+    }
+    if (soflag) {
+	RANGE(gray_value, min_gray, max_gray);
+	out_image_short[loc] = (short) (gray_value + 0.5);
+	if (debug2)
+	    fprintf(stderr, "%d\n", (short) (gray_value + 0.5));
+    }
+    if (ioflag) {
+	RANGE(gray_value, min_gray, max_gray);
+	out_image_int[loc] = (int) (gray_value + 0.5);
+	if (debug2)
+	    fprintf(stderr, "%d\n", (int) (gray_value + 0.5));
+    }
+    if (foflag) {
+	out_image_float[loc] = (float) gray_value;
+	if (debug2)
+	    fprintf(stderr, "%f\n", (float) gray_value);
+    }
+}
+
+
+/*********************************/
+float
+fn(f, x_or_y, i)
+    int       f, x_or_y, i;
+{
+    double    n, g;
+
+    n = 2 * PI * i / ((x_or_y) ? cols : rows) * ((x_or_y) ? cycles_x : cycles_y)
+	+ PI * (x_or_y ? poffset_x : poffset_y);
+    /*
+     * All the following functions are assumed to be periodic with one cyle =
+     * 2 * PI
+     */
+    switch (f) {
+    case SQUARE:		/* square wave generation */
+	if ((int) (n / PI) % 2 == 0)
+	    g = 1.;
+	else
+	    g = -1.;
+	break;
+    case SIN:			/* sine wave generation */
+	g = sin(n) ; 
+        g = (g + 1)/2;
+	break;
+    case COS:			/* cosine wave generation */
+	g = cos(n);
+	g = (g + 1)/2;
+	break;
+    case TRIANGLE:		/* triangle (sawtooth) generation */
+	g = triangle(n);
+        g = 0.5 + 2*g;          /* scaling between 0 and 1 */ 
+	break;
+    default:
+	perr(HE_MSG, "function not recognized\n");
+	break;
+    }
+    
+    g = (g * ((x_or_y) ? scale_x : scale_y)) + ((x_or_y) ? offset_x : offset_y);
+
+    if (debug2)
+	fprintf(stderr, "fn(%d,%d) (x_or_y = %d) = %f\n",
+		f, i, x_or_y, g);
+    return ((float) g);
+}
+
+
+/****************************************/
+float
+triangle(n)
+    double    n;
+{
+/* generates the triangular (sawtooth) curve     */
+/* written by Bryan Skene (skene@george.lbl.gov) */
+
+    n = n / (2 * PI);		/* easier to deal with ... who cares about
+				 * speed? */
+    n = n - (int) n;		/* we only want the decimal part now anyway */
+    /* range of function now 0..1 (from 0..2*PI) */
+    if (n <= .25)
+	return (n);
+    else if (n > .25 && n <= .5)
+	return (.5 - n);
+    else if (n > .5 && n <= .75)
+	return (-(n - .5));
+    else if (n > .75)
+	return (-(1.0 - n));
+
+    return(-1.0);
+}
+
+
+/****************************************/
+void
+help()
+{
+    fprintf(stderr, "usage: grate [-r][-c][-n][-fx][-fy][-cx][-cy]\n");
+    fprintf(stderr, "-r   number rows in the image\n");
+    fprintf(stderr, "-c   number cols in the image\n");
+    fprintf(stderr, "-n   number of frames to generate\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "-fx (int) number of function to apply in x direction\n");
+    fprintf(stderr, "-fy (int) number of function to apply in y direction\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "-cx (float) number of cycles to span funct_x over in x direction\n");
+    fprintf(stderr, "-cy (float) number of cycles to span funct_y over in y direction\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "-ox (float) offset to be applied to funct_x (i.e. funct_x(..) + ox)\n");
+    fprintf(stderr, "-oy (float) offset to be applied to funct_y (i.e. funct_y(..) + oy)\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "-sx (float) scale factor to be applied to funct_x (i.e. sx * (funct_x() + ox)\n");
+    fprintf(stderr, "-sy (float) scale factor to be applied to funct_y (i.e. sy * (funct_y() + oy)\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "-pox (float) phase offset (mult. by PI) to be added to argument of funct_x\n");
+    fprintf(stderr, "-poy (float) phase offset (mult. by PI) to be added to argument of funct_y\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "-b   byte (8 bit) format (the default)\n");
+    fprintf(stderr, "-s   for short (16 bit) pixel output\n");
+    fprintf(stderr, "-i   for integer (32 bit) pixel output\n");
+    fprintf(stderr, "-f   for float (single precision) pixel output\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "-h   Help!\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "Functions:\n");
+    fprintf(stderr, "\t0 - Square Wave\n");
+    fprintf(stderr, "\t1 - Sine Wave\n");
+    fprintf(stderr, "\t2 - Cosine Wave\n");
+    fprintf(stderr, "\t3 - Triangular (Sawtooth) Wave\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "Defaults:\n");
+    fprintf(stderr, "\trows: 512; cols: 512; frames: 1;\n");
+    fprintf(stderr, "\tfunctions: 0 (square wave); offsets: 1.0; scales: 0.5; cycles: 0.5;\n");
+    fprintf(stderr, "\tbyte output");
+    fprintf(stderr, "\n\n");
+}

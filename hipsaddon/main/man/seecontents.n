@@ -1,0 +1,21 @@
+.TH SEECONTENTS 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+seecontents - image printer 
+.SH SYNOPSIS
+.B seecontents 
+.SH DESCRIPTION 
+.I seecontents
+prints the contents of each image of the input sequence.
+The present version can handle
+byte, short, int, float, double, complex, double complex,
+polyline, rgpline and rgispline pixel formats.
+.SH EXAMPLE
+.in -3m
+seecontents  < input_image
+.in +3m
+.SH SEE ALSO
+seeheader(1)
+.SH AUTHOR
+Jin Zhengping - 22 July 1988
+.br
+Rewritten by Jin Zhengping - 31 August 1991

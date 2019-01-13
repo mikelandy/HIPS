@@ -1,0 +1,103 @@
+.TH H_BNOISE 3 "8/6/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_bnoise \- add binomial noise to an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_bnoise(hdi,hdo,n,p,addc,mulc)
+h_bnoise_b(hdi,hdo,n,p,addc,mulc)
+h_bnoise_i(hdi,hdo,n,p,addc,mulc)
+h_bnoise_f(hdi,hdo,n,p,addc,mulc)
+struct header *hdi,*hdo;
+int n;
+double p;
+Pixelval *addc,*mulc;
+
+h_bnoise_B(imagei,imageo,nr,nc,nlpi,nlpo,n,p,addc,mulc)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo,n,addc,mulc;
+double p;
+
+h_bnoise_I(imagei,imageo,nr,nc,nlpi,nlpo,n,p,addc,mulc)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo,n,addc,mulc;
+double p;
+
+h_bnoise_F(imagei,imageo,nr,nc,nlpi,nlpo,n,p,addc,mulc)
+float *imagei,*imageo,addc,mulc;
+int nr,nc,nlpi,nlpo,n;
+double p;
+.fi
+.SH DESCRIPTION 
+These routines add binomially distributed noise to an input subimage (specified
+by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_bnoise
+calls
+.IR h_bnoise_b
+.I h_bnoise_i
+or
+.I h_bnoise_f
+depending upon whether the pixel format is byte, integer or float.
+.IR h_bnoise_B ,
+.I h_bnoise_I
+and
+.I h_bnoise_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.PP
+These routines add binomially distributed noise.
+Each pixel is summed with a random
+variable mulc*B + addc, where B is binomially distributed, and in
+particular, equal to the sum of
+.I n
+independent Bernoullian random variables,
+each taking the value 1 with probability
+.I p
+and 0 otherwise.  Thus the random
+variable mulc*B + addc has expectation mulc*Np + addc \- so set
+addc = -mulc*N*p to make the expectation 0 \- and variance mulc*mulc*Np(1-p).
+It uses the pseudo-random number generator
+.IR random (3),
+and hence its sequence may be initialized using
+.IR srandom (3).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, integer, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_gnoise(3), h_noise(3), h_shuffleadd(3)
+.SH AUTHOR
+Charlie Chubb - 10/15/87
+.br
+HIPS 2 - msl - 8/6/91

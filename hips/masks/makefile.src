@@ -1,0 +1,32 @@
+
+#
+# makefile for hips/masks
+#
+
+MASKFILES = \
+	mask1 mask10 mask100 mask101 mask102 mask103 mask104 mask105 \
+	mask106 mask107 mask11 mask12 mask13 mask14 mask15 mask16 \
+	mask161 mask165 mask17 mask18 mask19 mask2 mask20 mask200 \
+	mask201 mask202 mask203 mask21 mask22 mask23 mask24 mask25 \
+	mask26 mask261 mask27 mask28 mask29 mask3 mask30 mask31 \
+	mask32 mask33 mask34 mask4 mask5 mask6 mask7 mask8 mask9
+
+install:	$(MASKFILES)
+	@-if test ! -r $(MASKDIR) ; then mkdir $(MASKDIR) ; fi
+	chmod u+w $(MASKFILES)
+	cp $(MASKFILES) $(MASKDIR)
+	chmod u-w $(MASKFILES)
+	touch install
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:
+	for i in $(MASKFILES) ; \
+	do \
+		rm -f $(MASKDIR)/$$i ; \
+	done
+	rm -f install

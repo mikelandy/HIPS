@@ -1,0 +1,52 @@
+.TH HIPSTOPORTABLE 1 "4/19/95" "Version 2" "HIPS Manual"
+.SH NAME
+hipstoportable \- Convert from HIPS format to various portable formats
+.SH SYNOPSIS
+.B hipstoportable
+[-p] [-c] < hipsfile > portablefile
+.SH DESCRIPTION 
+.I Hipstoportable
+converts from HIPS format to a variety of Jef Poskanzer's
+portable formats.  This allows one to then use Poskanzer's routines to
+convert to a variety of other standard image formats.  This program does
+no automatic conversion between different HIPS image formats.  This program
+only accepts input files from the standard input.  Here are the conversions
+that it performs:
+.sp
+.nf
+.ta 1i 3i
+	Input pixel format	Output format
+.sp
+	MSBF packed	PBM (raw or plain)
+	byte	PGM (raw or plain)
+	short	PGM (plain only)
+	int	PGM (plain only)
+	RGB	PPM (raw or plain)
+.sp
+.fi
+For short and integer formats, values less than zero are clipped (and a message
+to that effect is produced).  For MSBF format, the code assumes that each
+row begins on a byte boundary (which is not stated explicitly in the PBM
+documentation but is true of the PBM library code).
+.PP
+Switches:
+.sp
+.TP
+-p
+Force the use of plain (not raw) format in the output.  This
+is basically an ASCII format, and hence is vastly slower to
+work with in subsequent processing.
+.TP
+-c
+Collapse a multiple frame HIPS image into a single frame on
+the output (with numberofrows*numberofframes rows).  The
+default is to output only the first frame of a HIPS sequence,
+omitting the others.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+most-significant-first bit-packed, byte, short, integer, RGB
+.SH "REGION-OF-INTEREST"
+The entire image is converted
+.SH "SEE ALSO"
+portabletohips(1)
+.SH AUTHOR
+Michael Landy - 4/13/95

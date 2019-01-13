@@ -1,0 +1,34 @@
+.TH MIXADD 1 "JANUARY 10, 1991" LBL-HIPS
+.\" @(#)mixadd.1  1.10 90/30/12 JIN;
+.SH NAME
+mixadd \- add each frame in a sequence with the corresponding frame of another
+sequence pixel by pixel
+.SH SYNOPSIS
+.B mixadd
+file [-base_#] < added_file
+.SH DESCRIPTION
+.I Mixadd
+adds each frame in a sequence with the corresponding frame of another sequence
+pixel by pixel. If the file consists of less frames,
+then its last frame is added to each later frame in the input sequence,
+otherwise corresponding frames are used.
+The following combinations of image formats are supported:
+
+.sp
+.ta 1i 3i
+.nf
+File sequence	Standard input sequence
+
+any non pyramid format combinations
+
+integer pyramid	integer pyramid
+float pyramid	float pyramid
+.fi
+.SH NOTE
+See ccs.n for input image types.
+.br
+The output is a HIPS image.
+.SH SEE\ ALSO
+mixmul(1), diffseq(1), divseq(1)
+.SH AUTHOR
+Jin Guojun - Dec. 30, 1990

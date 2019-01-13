@@ -1,0 +1,86 @@
+.TH SUBSEQ 1 "7/6/91" "Version 2" "HIPS Manual"
+.SH NAME
+subseq \- extract a subsequence of frames
+.SH SYNOPSIS
+.B subseq
+[-f fromframe [toframe [frameinc]]]
+.ta 1i
+.br
+	[-d fromdepth [todepth [depthinc]]]
+.br
+	[-c fromcolor [tocolor [colorinc]]]
+.SH DESCRIPTION 
+.I Subseq
+extracts a subsequence of frames from an image sequence.
+The frames are chosen using the following C code:
+.sp
+.ta 1i 1.5i 2i
+	for (frame=fromframe;frame<=toframe;frame+=frameinc)
+.br
+		for (depth=fromdepth;depth<=todepth;depth+=depthinc)
+.br
+			for (color=fromcolor;color<=tocolor;color+=colorinc)
+.sp
+The subset of image frames is specified using
+.IR -f ,
+the subset of image depths using
+.IR -d ,
+and the subset of color planes using
+.IR -c .
+If either
+.IR -f ,
+.I -d
+or
+.I -c
+is not specified, then all the frames, depths or colors are output,
+respectively.  Otherwise,
+.I toframe
+defaults to
+.IR fromframe ,
+.I todepth
+defaults to
+.IR fromdepth ,
+.I tocolor
+defaults to
+.IR fromcolor ,
+and
+.IR frameinc ,
+.I depthinc
+and
+.I colorinc
+default to 1.  Note that the
+.I -c
+flag may not be used with sequences in 3-color formats (RGB, RGBZ, ZRGB, BGR,
+BGRZ and ZBGR).  Such sequences should first be converted to byte format
+(using
+.IR htob (1)).
+.PP
+.I Subseq
+may be used with input sequences in mixed raster format.  For such sequences,
+the pixel formats of the frames to be extracted from the sequence are
+examined.  If they are all identical (e.g. all floating point) then the pixel
+format of the output sequence will be that format.  Otherwise, the output will
+remain in mixed raster format with the appropriate pixel formats table in the
+image header.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+all raster formats (including mixed raster format)
+.SH "REGION-OF-INTEREST"
+The region-of-interest is preserved in the output sequence.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+catframes(1), intercolor(1), interdepth(1)
+.SH AUTHOR
+Y. Cohen 3/1/82
+.br
+modified for lseek on disk files by Mike Landy 7/3/84
+.br
+HIPS 2 - msl - 7/6/91
+.br
+PFMIXED - msl - 11/12/92
+.br
+RGB/RGBZ/etc. - msl - 5/24/93
+.br
+-d flag - msl - 3/3/94

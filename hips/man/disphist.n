@@ -1,0 +1,79 @@
+.TH DISPHIST 1 "7/2/91" "Version 2" "HIPS Manual"
+.SH NAME
+disphist \- display histogram files as a bar graph
+.SH SYNOPSIS
+.B disphist
+[-m maxcnt | -p percent] [-w barwidth] [-h barheight]
+.br
+.ti 2i
+[-b borderwidth] [-g bordergreylevel]
+.SH DESCRIPTION 
+.I Disphist
+converts an image histogram into a raster image bar graph representing the
+histogram data.  The
+.I -m
+flag specifies an initial maximum bincount for use in scaling the
+displays.  The
+.I -p
+flag specifies a percentage of the total histogram area
+(not including underflow/overflow bins) which should be filled with bin
+data.  The default is
+.I -p
+30.  If the number of counts per bar specified by
+.I -m
+or
+.I -p
+is insufficient, the counts per bar is set to the maximum number
+of counts in a given frame's histogram (and a message is printed to that
+effect).  Each histogram bar is
+.I barwidth
+pixels wide and
+.I barheight
+pixels tall. 
+.I Barwidth
+defaults to 1 and
+.I barheight
+defaults to 256.  The entire histogram has a border of width
+.I borderwidth
+(which defaults to 1 pixel wide) with grey level
+.I bordergreylevel
+(default: 128).  A strip of width
+.I borderwidth
+and grey level
+.I bordergreylevel
+also separates the main histogram from the underflow and overflow bins.
+The main histogram bars have greylevel
+.I hips_lchar
+on a background of
+.IR hips_hchar, which may be specified using the standard switches
+.I -UL
+and
+.IR -UH ,
+which default to 0 and 255, respectively.
+The underflow and overflow bars have a background of
+.IR bordergreylevel ;
+they disappear into the background if empty.  The output image size is thus
+barheight+2*borderwidth rows and (nbins+2)*barwidth+4*borderwidth columns.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+histogram
+.SH "OUTPUT PIXEL FORMATS"
+byte
+.SH "REGION-OF-INTEREST"
+The output region-of-interest is cleared.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+histo(1), slice(1)
+.SH AUTHOR
+Michael Landy - 12/15/82
+.br
+HIPS 2 - msl - 7/2/91
+.br
+Added -p/-b/-g - msl - 1/20/92

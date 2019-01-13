@@ -1,0 +1,21 @@
+
+hview: an X-windows image display program for HIPS2 images.
+
+usage: hview image  or
+       hview < image
+
+The program is meant to be used as a model for using the colormap code
+included, rather than to be a really useful image display program.
+
+NOTES:
+
+BUG: contrast slider doesnt work in 'perfect' mode. (probaly a simple bug,
+I just havent had a change to fix it yet)
+
+See color.c for brief decription of the arguements for build_colormap()
+
+Send bug fixes, etc, to bltierney@lbl.gov
+
+Brian Tierney
+Lawrence Berkeley Laboratory
+March, 1992

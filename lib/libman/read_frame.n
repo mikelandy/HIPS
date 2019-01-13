@@ -1,0 +1,33 @@
+.TH READ_FRAME 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+read_frame \- read a plot3d frame
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+read_frame(fp,buf,buf_limit,flags,shift_vector,rot_matrix,fr,fname)
+FILE *fp;
+char *buf;
+double shift_vector[3],rot_matrix[3][3];
+int *flags,fr;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+.I read_frame
+reads a single plot3d frame.  It is supplied with a file pointer, buffer and
+buffer length.  It returns the frame flags (whether a shift and/or rotation
+matrix was read), the shift and rotation matrices, and the plot3d frame.
+The function returns the number of bytes transferred into the buffer
+(excluding the frame-end).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_BUF - buffer overflow
+.br
+HE_READFRFILE - error during read
+.br
+HE_FRMEND - can't find frame end
+.SH AUTHOR
+Yoav Cohen 11/3/82
+.br
+modified for HIPS 2 - msl - 1/3/91

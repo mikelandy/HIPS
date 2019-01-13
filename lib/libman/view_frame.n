@@ -1,0 +1,31 @@
+.TH VIEW_FRAME 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+view_frame \- apply a perspective transformation to a plot3d frame
+.SH SYNOPSIS
+.nf
+view_frame(inbuf,nbytes,outbuf,limit,dist)
+char *inbuf,*outbuf;
+double dist;
+.fi
+.SH DESCRIPTION 
+.I view_frame
+applies a perspective transformation to a plot3d frame.
+The
+.I dist
+argument, which must be positive, is the distance
+from the origin (0,0,0) to the the picture plane on which the
+frame is projected.
+The image plane is parallel to the x-y plane.
+Any point which is located behind dist/100 is discarded.
+Likewise, any vector which intersects the plane parallel
+to the x-y plane at z=dist/100 is projected up to that
+intersection point.
+It is assumed that the input frame has been transformed.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_CODE - unknown plot3d code
+.SH AUTHOR
+Yoav Cohen 11/11/82
+.br
+modified for HIPS 2 - msl - 1/3/91

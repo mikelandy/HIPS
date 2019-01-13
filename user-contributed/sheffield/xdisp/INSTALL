@@ -1,0 +1,65 @@
+Installation instructions for xdisp:
+-----------------------------------
+
+cd ./src
+edit Makefile for compiler, options, directories etc if needed
+if rebuilding, do a 'make clean'
+make
+cp xdisp destdir
+make clean
+
+There is a man page xdisp.l in doc, and also a LaTeX document describing the
+program and its use. There is a ready made .dvi and .ps (PostScript) version
+of the document also in ./doc, for people without TeX. If you haven't got
+PostScript - sorry! - I'll try and do an nroff/troff version at next release.
+
+If you want to include extra user defined LUTs or cursors (see document), 
+these should added to the ./src/luts and ./src/cursors before building. Note 
+that the parameter to gencursors and genluts in the Makefile are the default
+cursor and LUT used by xdisp on startup. A basic set of LUTs and cursors is
+supplied with the distribution.
+
+An example of a C program to process a HIPS image and a header file with
+polygons defined in it is included in ./example. It shouldn't be too 
+difficult to adapt this to work with raw polygon files as well. The program
+itself sets all pixels in a byte image which are inside the defined polygons 
+to 255.
+
+
+Possible build problems:
+-----------------------
+
+Fails to compile with messages about 'Boolean'. There was a clash between
+the HIPS header file definition of Boolean, and the X11/Intrinsics definition
+of Boolean. This has been sorted out in the most recent HIPS release, which
+uses h_boolean instead of Boolean to avoid the conflict.
+
+OpenWindows or X11 stuff not found. Ensure that $OPENWINHOME environment
+variable is set - or edit Makefile appropriately.
+
+Possible runtime problems:
+-------------------------
+
+OpenWindows or X11 stuff not found. Ensure that the OpenWindows and X
+libraries are include in your LD_LIBRARY_LIST environment variable.
+
+Occasional messages from OpenWindows/X11 about invalid colormaps when
+quitting xdisp. I believe this is an OpenWindows problem - I haven't seen
+it with more recent window managers incorporated into Solaris 2.
+
+Image colors sometimes slightly different on different occasions/machines.
+By default xdisp uses as many colors as it can without clashing with the
+existing OpenWindows applications, so it might use differing numbers at
+differing times. Use the -colors option to fix the number used.
+
+Message about insufficient colors, or small number of colors used. See
+previous comments. You may have other applications using lots of colors.
+
+Flashing colors on screen as cursor moves around. If you're not using the
+default for -colors, this will happen on 8-bit systems when there is a clash
+between xdisp color usage and other applications, or OpenWindows. This does
+not occur on 24-bit systems with multiple colormaps.
+
+Message about visual being read only. xdisp uses Pseudocolor visual (8-bit
+writable colormap). You may get this message with greyscale or Truecolor
+monitors.

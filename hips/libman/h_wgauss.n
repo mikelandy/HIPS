@@ -1,0 +1,74 @@
+.TH H_WGAUSS 3 "8/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_wgauss \- window an image with a 2-dimensional Gaussian
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_wgauss(hdi,hdo,rowmu,colmu,rowsigma,colsigma,factor)
+h_wgauss_f(hdi,hdo,rowmu,colmu,rowsigma,colsigma,factor)
+struct header *hdi,*hdo;
+double rowmu,colmu,rowsigma,colsigma,factor;
+
+h_wgauss_F(imagei,imageo,nr,nc,nlpi,nlpo,rowmu,colmu,rowsigma,colsigma,factor)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double rowmu,colmu,rowsigma,colsigma,factor;
+.fi
+.SH DESCRIPTION 
+These routines multiply an input subimage (specified by
+.I hdi
+or
+.IR imagei )
+by a Gaussian window, and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_wgauss
+calls
+.I h_wgauss_f
+as long as the pixel format is float.
+.I h_wgauss_F
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+These routines multiply an input image by a 2-dimensional Gaussian with mean
+(\fIrowmu\fR,\fIcolmu\fR) and standard deviation
+(\fIrowsigma\fR,\fIcolsigma\fR) in units of pixels.  The resulting
+window has a peak value of
+.I factor
+(allowing one to factor in a temporal
+Gaussian).  Negative values of either sigma are taken to indicate an
+infinite Gaussian (identically 1).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_add(3), h_diff(3), h_mul(3)
+.SH AUTHOR
+Michael Landy - 8/10/91

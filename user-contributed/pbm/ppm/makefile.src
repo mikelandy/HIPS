@@ -1,0 +1,75 @@
+#
+# makefile for user-contributed/pbm/ppm
+#
+
+LIBNAME =	libppm.a
+
+OBJECTS =	libppm1.o libppm2.o libppm3.o libppm4.o libppm5.o
+
+PGMS =		giftoppm.out gouldtoppm.out ilbmtoppm.out imgtoppm.out \
+		mtvtoppm.out \
+		pcxtoppm.out pgmtoppm.out pi1toppm.out picttoppm.out \
+		pjtoppm.out ppmdither.out ppmhist.out ppmmake.out ppmquant.out \
+		ppmrelief.out ppmtogif.out ppmtoicr.out ppmtoilbm.out \
+		ppmtopcx.out ppmtopgm.out ppmtopi1.out ppmtopict.out \
+		ppmtopj.out ppmtopuzz.out ppmtorgb3.out ppmtosixel.out \
+		ppmtotga.out ppmtouil.out ppmtoxpm.out ppmtoyuv.out \
+		qrttoppm.out \
+		rawtoppm.out rgb3toppm.out spctoppm.out sputoppm.out \
+		tgatoppm.out ximtoppm.out xpmtoppm.out yuvtoppm.out ppmpat.out
+
+SCRIPTS =	ppmquantall
+
+MANPAGES =	giftoppm.n gouldtoppm.n ilbmtoppm.n imgtoppm.n mtvtoppm.n \
+		pcxtoppm.n pgmtoppm.n pi1toppm.n picttoppm.n \
+		pjtoppm.n ppmdither.n ppmhist.n ppmmake.n ppmquant.n \
+		ppmrelief.n  ppmtogif.n ppmtoicr.n ppmtoilbm.n \
+		ppmtopcx.n ppmtopgm.n ppmtopi1.n ppmtopict.n \
+		ppmtopj.n ppmtopuzz.n ppmtorgb3.n ppmtosixel.n \
+		ppmtotga.n ppmtouil.n ppmtoxpm.n ppmtoyuv.n qrttoppm.n \
+		rawtoppm.n rgb3toppm.n spctoppm.n sputoppm.n \
+		tgatoppm.n ximtoppm.n xpmtoppm.n yuvtoppm.n \
+		ppmpat.n ppmquantall.n libppm.n ppm.n
+
+PGMDIR =	../pgm
+INCLUDEPGM =	-I$(PGMDIR)
+LIBPGM =	$(PGMDIR)/libpgm.a
+
+PBMDIR =	../pbm
+INCLUDEPBM =	-I$(PBMDIR)
+LIBPBM =	$(PBMDIR)/libpbm.a
+
+RGBDEF =	-DRGB_DB=\"$(XLIB)/X11/rgb.txt\"
+
+CPPFLAGSL = -I.. $(INCLUDEPGM) $(INCLUDEPBM) $(RGBDEF)
+COMPILEc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+        $(CPPFLAGS) $(CPPFLAGSL) $(TARGET_ARCH) $(FASTCOPY) $(FLOAT) -c
+LINKc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+        $(CPPFLAGS) $(CPPFLAGSL) $(FLOAT) $(TARGET_ARCH) $(FASTCOPY) -o
+
+OTHERLIBS = $(LIBNAME) $(LIBPGM) $(LIBPBM) -lm
+
+.c.o:
+	$(COMPILEc) $*.c
+	@-ld -s -r $*.o
+	@mv a.out $*.o
+
+$(LIBNAME):	$(OBJECTS)
+	@rm -f $(LIBNAME)
+	ar cr $(LIBNAME) `$(LORDER) $(OBJECTS) | $(TSORT)`;
+	$(RANLIB) $(LIBNAME)
+
+install:	$(LIBNAME) $(PGMS) man-pgm
+	cp $(SCRIPTS) $(DESTDIR)
+	cd $(DESTDIR) ; chmod +x $(SCRIPTS)
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

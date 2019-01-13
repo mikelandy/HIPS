@@ -1,0 +1,16 @@
+#
+# makefile for user-contributed/sheffield/xdisp/man
+#
+
+MANPAGES = xdisp.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

@@ -1,0 +1,185 @@
+.TH HIPS_IMM 1 "1 February 1994" "Version 2" "HIPS Manual"
+.SH NAME
+hips_imsor \- IMM HIPS programs in public domain
+.SH SYNOPSIS
+This is a synopsis of some HIPS programs written by members of
+the Image Group at IMM,
+the Institute of Mathematical Modelling
+at the Technical University of Denmark.
+The programs are developed and run on a network of HP9000/700 engines.
+The Image Group is headed by professor Knut Conradsen.
+.SH COPYRIGHT
+These programs are copyright \(co 1990\-1994,
+the author(s) and IMM.
+Anyone may reproduce this software,
+in whole or in part, provided that
+.TP .25i
+(1)
+any copy or redistribution shows
+IMM, the Institute of Mathematical Modelling,
+the Technical University of Denmark
+as the source, and
+includes this notice;
+.TP .25i
+(2)
+any use of this software references this distribution,
+state that the software copyright is held by
+the authors and IMM, and that the
+software is used by their permission.
+.PP
+This software is provided as a professional academic
+contribution for joint exchange.
+Thus it is experimental, it is
+provided "as is", with no warranties of any kind whatsoever,
+no support, promise of updates, or printed documentation.
+Bug reports or fixes may be sent to the author, who may or may
+not act on them as he desires.
+.SH DISCLAIMER
+No guarantees of performance accompany this software,
+nor is any responsibility assumed on the part of the authors.
+All the software has been tested extensively and every effort has been made to
+insure its reliability.
+.SH IMM HIPS PROGRAMS
+This is a listing of the IMM HIPS programs as
+described by the authors in the
+.B \s-1NAME\s+1
+section of the individual manual pages.
+.sp
+acf \- autocovariance function
+
+asc2hips \- transform a data-set in ASCII-format to a HIPS-file
+
+bigextract \- extract a subimage without loading the entire image
+
+bil \- bandinterleaving by line
+
+bmp2hips - converts from Windows bmp-format to HIPS.
+
+cbdilate - coefficient dilation on binary images.
+
+cberode - coefficient erosion on binary images.
+
+changehdr \- change value of header-field.
+
+cobjects - labelling objects and removing objects below a specified size. 
+
+
+crossv \- calculate cross-covariance or crossv-semivariance matrices of a 
+dataset in the IMSOR defined irregular format
+
+cubic \- performs interpolation by cubic convolution
+
+decorr \- RGB to min/max autocorrelation factors, stretch MAFs, MAFs to RGB
+
+deriche - a recursive implementation of the Canny-filter (without thresholding)
+
+distmin \- calculates global distances in binary images - DISTANCE
+TRANSFORMATION.
+
+equalpoints \- exclude coincident points in IMSOR defined irregular format file
+
+fhist - stretch float images for display
+
+fmedian \- apply a median filter to an image
+
+framecut - cut a frame into more frames
+
+fradd, frsub, frdif, frmul, frdiv, frmin, frmax - perform pointwise operations
+
+gauss \- generate Gaussian filter
+
+glcm - compute gray level cooccurrence matrix (GLCM) and GLCM features
+
+grad \- generate Gaussian gradient filter
+
+grow - coefficient dilation on byte images without merging features. 
+
+
+headfield \- return value of header-field.
+
+hips2imf - converts an image from HIPS to ContextVision GOP-302 format
+
+hips2pcl - converts a binary image for printing on an
+HP Laserjet printer.
+
+hips2tga - converts an image from HIPS to TrueVision's TGA format
+
+hips_imsor \- IMM HIPS programs in public domain
+
+histinfo - print histogram information of byte sequence
+
+histo2d \- 2-D Histogram of combinations on 2 images with several classes
+
+histobe \- histogram match to beta distribution
+
+hole_fill - Filling out small "holes" in binary objects. 
+
+
+ihs2rgb \- transform a 3-frame sequence from IHS to RGB
+
+ihsdecorr \- RGB to IHS, stretch S, IHS to RGB
+
+imf2hips - converts from ContextVision GOP-302 format to HIPS.
+
+irr2reg \- transform HIPS-file of the IMSOR-defined irregular format to
+regular HIPS-image
+
+isolate - coefficient erosion on binary images without deleting features
+completely. 
+
+
+linemeans \- calculate mean (or sum) and variance across each image line
+
+merode, mdilate, mopen, mclose - perform gray level morphological 
+operations
+
+mgradient - perform gray level morphological gradient operation
+
+mwtophat, mbtophat - perform gray level morphological tophat
+operations
+
+patchwork - patch an image from a sequence
+
+pcdecorr \- RGB to principal components, stretch PCs, PCs to RGB
+
+polyextract \- extract a polygon-shaped subpicture 
+
+prncpl - estimate principal components of a multi-frame image
+
+quantile \- apply a quantile filter to an image
+
+raw2hips - converts a raw byte image to HIPS-format by guessing the
+number of rows and columns.
+
+reduce_simp \- reduce a sequence by leaving out rows and columns
+
+reg2irr \- transform regular HIPS-image to HIPS-file of the IMSOR defined irregular format
+
+rgb2ihs \- transform a 3-frame sequence from RGB to IHS
+
+scale_all \- scale a sequence of images
+
+spinexch - Simulate binary Markov random fields using the Metropolis
+spin-exchange algorithm
+algorithm
+
+standard \- standardize (normalize) a sequence of frames
+
+subseq3 \- extract a 3-frame subsequence
+
+subseq5 \- extract a 5-frame subsequence
+
+taper \- perform tapering to be used prior to Fourier transformation
+
+tga2hips - converts from TrueVision's TGA format to HIPS.
+
+.SH IMM HIPS MAINTENANCE
+.nf
+J. Michael Carstensen, e-mail: jmc@imsor.dth.dk
+Allan Aasbjerg Nielsen, e-mail: aa@imsor.dth.dk
+IMM, Technical University of Denmark
+Building 321, DK\-2800 Lyngby, Denmark
+Phone +45 42 88 14 33, fax +45 42 88 13 97
+.fi
+.SH SEE ALSO
+All of the above programs have their own manual pages.

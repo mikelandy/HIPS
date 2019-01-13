@@ -1,0 +1,25 @@
+.TH VIEW 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+view \- generate a conic perspective of a 3D graph
+.SH SYNOPSIS
+.B view
+[-p dist]
+.SH DESCRIPTION 
+.I View
+performs the perspective transformation on a PLOT3D vector plot from a
+given viewing distance.
+Option
+.I dist
+gives the distance of the picture plane from the center
+of perspective, and defaults to 256
+(half the width of the screen).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH AUTHOR
+Yoav Cohen - 17/11/82
+.br
+HIPS 2 - msl - 7/24/91

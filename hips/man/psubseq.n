@@ -1,0 +1,28 @@
+.TH PSUBSEQ 1 "8/1/91" "Version 2" "HIPS Manual"
+.SH NAME
+psubseq \- extract a subsequence of frames in PLOT3D format
+.SH SYNOPSIS
+.B psubseq
+[-f fromframe [toframe [increment]]]
+.SH DESCRIPTION 
+.I Psubseq
+extracts subsequences from PLOT3D sequences, in the fashion of
+subseq.
+.I Fromframe
+defaults to 0,
+.I toframe
+to fromframe, and
+.IR increment
+to one.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+subseq(1)
+.SH AUTHOR
+Yoav Cohen - 3/1/82
+.br
+HIPS 2 - msl - 8/1/91

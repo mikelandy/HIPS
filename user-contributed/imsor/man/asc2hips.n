@@ -1,0 +1,156 @@
+.TH ASC2HIPS 1 "8 March 1993" "Version 2" "HIPS Manual"
+.SH NAME
+asc2hips \- transform a data-set in ASCII-format to a HIPS-file
+.SH SYNOPSIS
+.B asc2hips 
+.RB [ \-e
+.IR #elements ]
+.RB [ \-n
+.IR #records ]
+.RB [ \-x
+.IR xpos ]
+.RB [ \-y
+.IR ypos ]
+.RB [ \-a ]
+.br
+.RB 	[ \-r
+.IR #rows ]
+.RB [ \-s
+.IR end-of-record-sign ]
+[ \-form 
+.IR format-string \ [ format-string,... ]] 
+.RB [ \-w8 ]
+.br
+	< ASCII-file > HIPS-file 
+.br
+.B syntax for format-string:
+.br
+.RI [ #elements 
+.B f
+.IR size ]
+|
+.RI [ #chars-to-skip 
+.BR s ] 
+.SH DESCRIPTION 
+.I asc2hips
+transforms a dataset in ASCII-format to a sequence of HIPS-frames.
+Input
+is a sequence of data-records, all containing the same number of 
+elements.
+By option
+.B \-a 
+the input-form is changed so that input data are read element-wise instead of
+record-wise.
+The output is a HIPS-file with a frame for each element.  
+.sp 0.5
+The number of rows and columns may be specified by option
+.BR \-r .
+By default output is a file of the
+.B IMSOR defined irregular HIPS format:
+.B number of rows is 1,
+.B number of columns equals number of
+.B observations,
+.B number of frames equals number of
+.B variables (including x- and y-coordinates),
+.B the x-coordinate is stored in
+.B frame 0,
+.B the y-coordinate is stored in
+.B frame 1,
+.B and a Byte variable "Irregular"
+.B is set to 1 in the
+.B extended header. 
+.sp 0.5
+It is possible by options
+.B \-x
+and 
+.B \-y 
+to specify the record-position of the first
+two output frames \- a feature which supports the handling of irregularly
+distributed data (frame 0 holds x-coordinates, frame 1 holds y-coordinates).
+.sp 0.5
+To check for coinciding data-points the use of program
+.I equalpoints
+is advised.
+.sp 0.5
+Output format is float by default.
+This may be changed to double by option
+.BR \-w8 .
+.SH OPTIONS
+.TP
+.B \-a
+Input data is read element-wise instead of record-wise. 
+.TP
+.BI \-n \ #records 
+number of data-records.
+If end-of-file mark is met before
+.I #records
+records 
+are read, the program is halted. 
+.TP
+.BI \-e \ #elements
+number of elements in data-record.  
+.TP
+.BI \-x \ pos
+position of x-coordinate in data-record (default is 0).
+.TP
+.BI \-y \ pos
+position of y-coordinate in data-record (default is 1).
+.TP
+.BI \-r \ #rows 
+number of rows in the output (default is 1).
+Number of columns is set to records/rows.
+.TP
+.BI \-form \ formats
+If the record-values are not separated simply by spaces or newline,
+the record-syntax must be specified.
+The following formats are allowed:
+i)
+.IB n \ f \ size
+specifies
+.I n
+values of length
+.I size
+to be read, and
+ii)
+.IB n \ s 
+specifies
+.I n
+characters to be skipped.
+Any number of spaces/newlines are allowed between records. 
+.TP
+.BI \-s \ char
+end-of-record mark (default newline or space), which can be
+any ASCII character.
+Any sequence of characters is allowed between the
+last record-value and the end-of-record mark.
+Any number of spaces/newlines 
+are allowed between the end-of-record mark and the first value of the next
+record.
+.TP
+.B \-w8
+output format is double (default float). 
+.SH EXAMPLES
+Given the following data-sequence, consisting of three elements:
+.br
+	1.1 11 23 o 2.2 18 23 xlxo3.3 12 22 765 o  4.4 19 29 o 5.5 18 28 
+.br
+use:
+.br
+	asc2hips \-e 3 \-n 5 \-s o  < input  > output 
+.sp 0.5
+Given the following data-sequence, consisting of three elements:
+.br
+	1.111 23 o   2.218 23 o 3.312 22  o   4.419 29 xxxxxo 5.518 28 o 
+.br
+use:
+.br
+	asc2hips \-n 5 \-form 3 f 3  \-s o  < input  > output 
+.SH SEE\ ALSO
+irr2reg(1), reg2irr(1)
+.SH CREDIT
+The IMSOR irregular HIPS format was suggested by Allan Aasbjerg Nielsen.
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk

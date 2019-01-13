@@ -1,0 +1,35 @@
+.TH WFRAME 1BIPS "June 1, 1986"
+.SH NAME
+wframe - display a sequence on the ITEC boards or the LEX-90
+.SH SYNOPSIS
+.B wframe
+[initialrow [initialcol]] [abcd] [-rgbC] < sequence
+.SH DESCRIPTION 
+.I Wframe
+displays image frames on either the ITEC boards or the LEX-90.
+The output device is determined by the value of the environment variable
+DSPDEV, with the default device being the ITEC boards.
+The first image is displayed at the location specified by either
+.I [initialrow [initialcol]]
+which specifies the location of the top left corner of the image, or
+.I [abcd]
+which recursively specifies the quadrant location for the image.
+The
+.I [-rgbC]
+option [valid only for the ITEC display] specifies the 
+frame buffer color into which the image is written.
+The
+.I -C
+option takes a sequence of three images and writes them into the red, green,
+and blue frame buffers respectively.
+
+If there is more than one image in the input sequence wframe will display
+the next one immediately to the right of the first one if there is room.
+If there is not room on that "row" it will put it at the beginning of the
+next "row" if there is room.  It will continue until it runs out of either
+images to display or room on the screen.  In the later case it will indicate
+the number of images it was not able to display from the sequence.
+.SH SEE\ ALSO
+rframe(1BIPS) 
+.SH AUTHOR
+Charles Carman - 3/14/86

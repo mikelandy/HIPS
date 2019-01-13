@@ -1,0 +1,378 @@
+.TH TUNER 1 "APRIL 15, 1992" LBL-HIPS
+.\" @(#)Elastic Tuner & Analyzer.1  ETA 4/1/91 JIN;
+.SH NAME
+.B tuner
+\- integrated enhancement and analysis tool based on the elastic-tuning
+function and X window system.
+.SH SYNOPSIS
+.nf
+tuner [-display hostname] [-#( of grey levels)] [-images #] [-precision #]
+	[-s starting_speed_level] [-cc] [-cq[#]] [-nm] [-debug] [-verb]
+	[input_file_name]
+
+.fi
+.SH DESCRIPTION
+.TP 2
+Difference from color version:
+Press 'c' key in an image window is to close the image rather than to close
+the control panel. Press 'q' key wherever is to quit the entire system.
+.SH MULTIPLE WINDOW HANDLING AND ICONIFY
+
+When the cursor crosses or enters a image window, this image will become active
+and its name is displayed onto the File Control Button message line and all
+panel setting change to this image. There is no clicking needed to make a
+window active. When many image windows are opened by tuner on a screen,
+iconifying may be necessary. Press F3 key on an image window or click on
+up-left corner of an image window to iconify that image. Same operation on icon
+will deiconify the image.
+
+Important note:
+.br
+	Crossing the icon with the cursor will not activate its image window
+since the icon is not an activable window. So, use the icon to keep images
+inactive when many images are open.
+
+.SH COORDINATE AND PIXEL VALUE
+Move cursor into a image window and click left mouse button: the position
+coordinate and pixel value will display on either upper or lower side of the
+image. The first two numbers are X (columns) and Y (rows) corrdinate. After the
+coordinates, there is a equal sign "=" followed by original pixel and enhanced
+pixel value in a pair of square brackets.
+.SH PANEL USAGE (FUNCTIONS)
+.TP
+.I Keys:
+Only a few keys are used in tuner system \- 'h', 'c', 'q' key and 's' key.
+keys are noncase-sensitive.
+.br
+The 'h' or 'H' key taggles the HELP information window.
+The 'c' or 'C' key close the image window (deleted) when the cursor is in
+that image window.
+.br
+The 'q' or 'Q' quit from tuner system completely.
+.br
+The 's' key is used during movie action to stop the movies.
+.TP
+.I Mouse Buttons:
+(button alone)
+.br
+The left button (button 1) is the main control button. It controls all buttons
+keys and sliders on the control panel. When in an image or histogram window,
+press this button and move mouse to query information about these images.
+.br
+The middle button (button 2) is the histogram toggle button.
+.br
+The right button (button 3) is for movie and information control. It only
+controls
+the frame buttons ``Prev'' and ``Next'' and turns movie on. To stop movies,
+hit the `s' key on the keyboard.
+.br
+When this button is clicked in the histogram window, it draws a vertical mark
+line. Move mouse to move this mark in the histogram window.
+
+When the cursor is in an image window (not an icon window), click button 3 and
+drag mouse to crop a subimage which is a solid rectangle. As long as the
+rectangle is on an image window, any operation on that window only applies to
+the subimage. So, this is a way to save a subimage (which may be enhanced).
+To uncrop the subimage window, simply click this button once in that image
+window.
+
+.TP
+.I Control-Key used with Buttons
+CTRL-Button-1:	pop an editor MENU
+.br
+CTRL-Button-2:	pop a scaling MENU
+.br
+CTRL-Button-3:	pop a file MENU
+
+The following 3 actions are depended on compiling mode.
+(EXTENDED_COLOR-True_Color)
+.br
+SHIFT-Button-1:	Magnify
+.br
+SHIFT-Button-2:	Recenter magnified image at cursor pixel position.
+.br
+SHIFT-Button-3:	Unmagnify
+
+.TP
+.I Control Panel:
+1.
+Information line (area) is located at bottom of the control panel. When
+any special events start, they will print a message in this area and beep once.
+If it beeps continuously, it means something is wrong and a message will be
+given on the information line.
+
+2. File button:
+This is used to load an image file in order to analyze, enhance and save it.
+Whenever either the load or save button is clicked by mouse button 1, the
+system beeps and gives a message on the information line to tell you how to
+input the file name. The pressed file button will light up and the input area
+is at the right side
+of the file control button. If there is an old file name in the input area,
+you can modify it by using backspace key to erase or the Tab key to continue to
+add more characters. Any other key will erase the old file name and start to
+input of a new file name.
+
+If no more space is left, see replacement rule in option [-images #].
+
+3. Frame/Channel Control button:
+This button lets the user see the next frame or go back previous one.
+The current
+frame number is displayed on leftmost button in the button set. The
+Frame(second) button let you quickly jump to a special frame in the image.
+When right mouse button clicked on those button, the movie will start.
+In color version - getx, it controls RGB channels. SYNC adjusts 3 channels
+in same time.
+
+4. Histogram Control button:
+The GRID and NEG buttons can add a grid to the histogram image or negate the
+histogram image whenever a colormap change is needed.
+Set and Scale buttons:
+Set \- this sets linear scaling and histogram scaling to a fixed value. Every
+frame will use these same values. Scale \- uses log2 scale for histogram window,
+but linear scale will be changed along with min & max values in each frame.
+.br
+Scale sets the linear scale for each frame and uses the histogram enlarge scale
+factor with their own histogram maximum count, minimum and maximum gray level
+values across frames for analysis.
+
+5. HistoEq press button:
+This button sets enhance mode for histogram equalization. If the ETA mode was in
+linear mode, the HistoEq button will keep lighting up and histogram equalization
+mode is maintained. It can be reset to ETA mode by pressing the refresh button,
+or ETA is changed to other mode.
+
+6. Emphasis Control button:
+This is the main enhancement control button. It controls sliders above it.
+fore (emphasize foreground) and back (emphasize background) invoke the elastic
+histogram stetching algorithm. linear is linear scaling.
+.bk
+The elastic algorithm will use the lower and higher threshold which are set by
+linear scaling. For different frames, these thresholds can be fixed (set to a
+certain position) or variable (depend on min & max in that frame).
+
+7. Zero On-Off button:
+It controls whether or not to count zero's value for enhancement.
+
+8. RESET press button:
+It sets every thing to original state, but ETA control mode.
+
+9. Refresh press button:
+This button usually just refeshs the image, but it will clear histoeq mode to
+EAT mode.
+
+10. Quantizing button(14) / Fixed Panel Color button:
+This is used for tuner running with other color application windows which seize
+most color-map entrences. It will not change real data set but improve screen
+display.
+.br
+In COLOR version `getx', this button is the Fixed Panel Color control button.
+When ON, the panel color map is associated with current display image window.
+When OFF, the panel color map is pointed to the latest active image window.
+This function can fix colors on the control panel since the panel has no its
+own colors.
+
+11. DATA button:
+This button is always reset to Analysis (no update). The updating is done when
+the DATA button is pressed. No updating occurs when you are doing any adjustments.
+For color images, updating only applies to the sub-image, but is applied to the
+entire image whenever saving image to a file.
+
+12. Clip slider:
+Left control bar is to set how many top gray level values need to be clipped down.
+For example, 6 means to clip 255 - 249 to the value which set by right control
+bar. Right sliding bar sets where the top values are clipped to. If left bar=0
+or right bar=255, no clipping is done.
+
+13. Main Slider:
+There are a set of sliders at same line and only one shows up according to
+which ETA control button is clicked. They are used to adjust different curves.
+
+14. Quantization slider:
+It is used when there are too few graylevels. It functions when Quantizing
+button is on (10).
+
+.SH POP MENU
+.TP
+.I EDIT MENU
+.B INFO
+.br
+This is same as press `h' key.
+
+.B cut
+.br
+cut the sub-image (cropped) from destination window, and save it to editing
+buffer. In color version, only 8-bit images can be cut. For 24-bit images,
+it's same as copy command (not cut).
+
+.B copy
+.br
+copy the sub-image to editing buffer for pasting.
+
+.B crop
+.br
+do cropping in a super-size image in which the mouse cannt do it.
+
+.B draw
+.br
+draw line, rectangle, and arc in an image. For buttons, see paint.
+
+.B paste
+.br
+paste a sub-image in editing buffer to a destination window.
+
+.B paint
+.br
+paint an image. A menu comes for set-up color and pencil thickness, then
+a message window tells how to paint, change colors, and quit from painting.
+Press the left button to paint (to type in annotate, and to draw in draw mode).
+Press the middle button to change features:
+colors; (fonts for typing; shapes & line thicknesses for drawing.)
+Press the right button to quit from editing.
+
+.B annotate
+.br
+Annotate an image with text. Using middle button to change color and fonts.
+CTRL-Y to finish typing, or ESC to abort typing.
+
+.B NOP
+.br
+NO OPERATION
+
+.TP
+.I SCALE MENU
+.B FITS Type
+.br
+The type of machine in which FITS image is from.
+
+.B Change ETA Scale
+.br
+Change enhancemant slider (Tuner slider in the middle of the panel) range.
+
+.B Interpolation Level
+.br
+The default is 2. The maximum is 8. For detail, see elastic(1).
+
+.B R.G.B weight
+.br
+The default is 71, 150, 28 . Used for color to scale gray conversion.
+
+.B Background
+.br
+Set Background value for editing. The default is 0.
+
+.TP
+.I FILE MENU
+.B Empty Frame
+.br
+to generate a blank frame for editing (collage).
+
+.B Change DIR
+.br
+change current working for loading and saving images.
+
+.B Loading Frame
+.br
+Color version only. For reloading certain frame in multiple frame image.
+
+.B map 1 to 3
+.br
+Yes, convert 1 channel image (8-byte) to 3 channels image (24-byte) when
+loading new images.
+.br
+No, no changes for input.
+
+.B Output TYPE
+.br
+The image type for saving. Avaiables are HIPS, RLE, RAS (SUN-RASter).
+The default is HIPS (RLE for color version).
+
+.B QUIT
+.br
+completely quit from tuner system.
+
+.SH OPTIONS
+.TP
+.I -display hostname
+specify a point to display.
+.TP
+-#
+choose number of gray levels. Default is 64.
+.TP
+.IB -images #
+specify the maximum number of images which can be displayed at the same time.
+The default is 4.
+The maximum number totally depends on the system memory. The tuner system can
+handle as many images as you want.
+.br
+Replacement rule:
+.br
+When loading a new file (image), as long as there is space, build new image.
+Otherwise, if no same name image is on display, output a message in the
+information area. If an image with the same name displayed, replace it.
+If more than one image has the same name, replace the one recently created.
+.TP
+.I -precision #
+color precision. default is 256. Smaller value indicates higher precision,
+but easily to fail.
+.TP
+.I -s #
+starting speed level. The default is level 1. The level 0 is the
+slowest level, it uses more color-map entrences for control panel, so that
+the control panel colors are fixed, but it takes time to generate the panel.
+The level 3 is the fastest level (not available for getx), but panel colors
+will change along with enhancement degree.
+.TP
+.I -cc
+change colormap for new cmap with lazy window manager.
+.TP
+.IB -cq [#]
+query color map table. none or positive - sys one, negative - user one.
+.TP
+.I -nm
+new colormap -- use separate colormap table.
+.TP
+.I -debug
+.I -verb
+display runtime messages.
+.SH OTHER VERSIONS
+.TP
+.I Tuner--Fast_Version:
+The Fast version for large image is called Tuner (the captial tuner).
+This version takes all color map entries when no other image is being displayed,
+and no other application can share this color map with Tuner. If there is
+another image displayed on screen, the Tuner will create a new color map.
+.br
+This version is for fast analysis. Do not use it for enhancement while running
+with other color image(s).
+.TP
+.I getx--Color_Version
+The Color version is called getx. The option -T bring the Elastic Tuner
+control panel. The -r set the coordinate system to RLE standard. The 'c' key
+is used to close control panel. When press 'q' key in an image window, only
+quit that image if it is not first image. Press 'q' key in panel or in the
+first image, quit entire system.
+.br
+Improtant note for this color version:
+.TP 12
+While using -T option, only one or two image may use current color map.
+If more than one images are input at command line, only one image can be
+adjusted at a time.
+.br
+If input many images without the -T option, all images will share the color
+map with the first input image.
+
+.SH NOTE
+The input can be one of the following type images:
+
+	HIPS, FITS, GIF, ICC, JPEG, RLE, PICT, PNM, SUN-Raster, and TIFF
+.br
+The output can be HIPS, RLE, or SUN-Raster image.
+
+.SH BUGs
+.TP
+Report to jin@george.lbl.gov
+.SH SEE ALSO
+ccs(1), toany(1), elastic(1), mainpeak(1), segal(1), xhist(1),
+dcvtob(1), vfft(1), vfftpass(1), vfftfilter(1), inv-vfft(1)
+.SH AUTHOR
+Jin, Guojun - LBL 4/1/91

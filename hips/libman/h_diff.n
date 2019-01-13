@@ -1,0 +1,129 @@
+.TH H_DIFF 3 "7/3/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_diff \- subroutines to subtract two images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_diff(hdi1,hdi2,hdo)
+h_diff_s(hdi1,hdi2,hdo)
+h_diff_i(hdi1,hdi2,hdo)
+h_diff_ibi(hdi1,hdi2,hdo)
+h_diff_f(hdi1,hdi2,hdo)
+h_diff_d(hdi1,hdi2,hdo)
+h_diff_c(hdi1,hdi2,hdo)
+h_diff_dc(hdi1,hdi2,hdo)
+h_diff_ip(hdi1,hdi2,hdo)
+h_diff_fp(hdi1,hdi2,hdo)
+struct header *hdi1,*hdi2,*hdo;
+
+h_diff_S(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+short *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_diff_I(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+int *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_diff_IBI(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+byte *imagei2;
+int *imagei1,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_diff_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_diff_C(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_diff_D(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_diff_DC(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+double *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines subtract two input subimages (specified by
+.I hdi1
+and
+.IR hdi2 ,
+or by
+.I imagei1
+and
+.IR imagei2 ),
+and store the difference (image1 minus image2)
+in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_diff
+calls
+.IR h_diff_s ,
+.IR h_diff_i ,
+.IR h_diff_ibi ,
+.IR h_diff_f ,
+.IR h_diff_d ,
+.IR h_diff_c ,
+.IR h_diff_dc ,
+.IR h_diff_ip ,
+or
+.IR h_diff_fp
+depending upon whether the pixel format is
+short, integer (for both image1 and image2),
+integer (for imagei1 and imageo, and byte for the image2),
+float, double, complex,
+double complex, integer pyramid or float pyramid.
+.IR h_diff_S ,
+.IR h_diff_I ,
+.IR h_diff_IBI ,
+.IR h_diff_F ,
+.IR h_diff_D ,
+.IR h_diff_C
+and
+.IR h_diff_DC
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte (subtracted from integer and the sum stored in integer), short,
+integer, float, double, complex, double complex, integer pyramid, float
+pyramid
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+can be the same as
+.IR imageo .
+For
+.I h_diff_ibi
+and
+.IR h_diff_IBI ,
+clearly only the integer images may be processed in place.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_FMT3SUBR - can't handle this pixel format combination
+.SH "SEE ALSO"
+h_add(3)
+.SH AUTHOR
+Michael Landy - 7/3/91

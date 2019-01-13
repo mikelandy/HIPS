@@ -1,0 +1,27 @@
+#
+# makefile for user-contributed/lbl/sun/sources
+#
+
+PGMS = torast.out
+
+LIBRARIE6 = $(LDFLAGS) -lscs6 -lccs -ltiff -lrle $(LIBRARY2) $(OTHERLIBS) \
+	$(OTHERLIB2) -ljpeg -lpanel
+CPPFLAGS2 = -I$(CCS_ROOT)/include -DHIPS_IMAGE -DCOMMON_TOOL
+
+.c.out:
+	$(LINKc) $* $< $(LIBRARIE6) $(CPPFLAGS2) -lpixrect
+	mv $* $(DESTDIR)
+	@touch $@
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+pristine:	pristine-pgm
+
+man:
+
+doc:
+
+FRC:

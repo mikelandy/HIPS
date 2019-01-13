@@ -1,0 +1,42 @@
+.TH VECTCODE 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+vectcode \- spanning tree coding receiver
+.SH SYNOPSIS
+.B vectcode
+[-n] [-h] [-q]
+.SH DESCRIPTION 
+.I Vectcode
+computes bit rates for spanning tree images, and generates new
+byte formatted images corresponding to them.
+The options include:
+.TP
+.B -n
+Give no image output, and just computes bit rates.
+.TP
+.B -h
+Simulate the algorithm with half the resolution.
+.TP
+.B -q
+Simulate the algorithm with a quarter the resolution.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+spanning tree
+.SH "OUTPUT PIXEL FORMATS"
+byte
+.SH "REGION-OF-INTEREST"
+The entire image is reconstructed.  The region-of-interest is ignored.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+vectgen(1), thin(1)
+.SH AUTHOR
+Mike Landy - 1/12/83
+.br
+HIPS 2 - msl - 7/24/91

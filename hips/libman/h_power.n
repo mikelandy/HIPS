@@ -1,0 +1,113 @@
+.TH H_POWER 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_power \- raise to a power, and if PFBYTE then normalize
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_power(hdi,hdo,power)
+h_power_b(hdi,hdo,power)
+h_power_s(hdi,hdo,power)
+h_power_i(hdi,hdo,power)
+h_power_f(hdi,hdo,power)
+struct header *hdi,*hdo;
+double power;
+
+h_power_B(imagei,imageo,nr,nc,nlpi,nlpo,power)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double power;
+
+h_power_S(imagei,imageo,nr,nc,nlpi,nlpo,power)
+short *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+double power;
+
+h_power_I(imagei,imageo,nr,nc,nlpi,nlpo,power)
+int *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+double power;
+
+h_power_F(imagei,imageo,nr,nc,nlpi,nlpo,power)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double power;
+.fi
+.SH DESCRIPTION 
+These routines raise the values of an input subimage (specified by
+.I hdi
+or
+.IR imagei )
+to a power, and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_power
+calls
+.IR h_power_b ,
+.IR h_power_s ,
+.I h_power_i
+or
+.I h_power_f
+depending upon whether the pixel format is byte, short, integer or float.
+.IR h_power_B ,
+.IR h_power_S ,
+.I h_power_I
+and
+.I h_power_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line, and is
+in floating point format for all routines except for byte format input images,
+for which the output image is in byte format.
+The exponent is specified by
+.IR power .
+For byte images, pixels are renormalized to lie between 0 and 255.  For
+short, integer and float images, the output is a float image and no
+renormalization is performed.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float
+.SH "OUTPUT PIXEL FORMAT"
+byte (for byte input), float (for others)
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+Of course, this only makes sense for floating point input images.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_exp(3), h_log(3)
+.SH AUTHOR
+Yoav Cohen 2/16/82
+.br
+added int/float - Mike Landy - 3/16/89
+.br
+.ta 1i
+modified to use look-up table for byte and short images:
+.ti 1i
+Brian Tierney, LBL 10/90
+.br
+HIPS 2 - msl - 1/10/91

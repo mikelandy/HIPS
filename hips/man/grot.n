@@ -1,0 +1,21 @@
+.TH GROT 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+grot \- rotate a 3-D graph
+.SH SYNOPSIS
+.B grot
+[-p x [y [z]]]
+.SH DESCRIPTION 
+.I Grot
+rotates a PLOT3D graph globally.
+The rotation angle about each axis is given in degrees, and all angles default
+to 0.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH AUTHOR
+Yoav Cohen - 11/15/82
+.br
+HIPS 2 - msl - 7/24/91

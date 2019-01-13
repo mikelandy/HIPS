@@ -1,0 +1,62 @@
+.TH NONISOT 1 "8/13/91" "Version 2" "HIPS Manual"
+.SH NAME
+nonisot \- nonisotropic convolution
+.SH SYNOPSIS
+.B nonisot
+chooser mask0 ... maskn imagefile > blurredfile
+.SH DESCRIPTION 
+.I Nonisot
+performs nonisotropic convolution.  Each mask file contains a
+single frame convolution mask.  For each frame,
+.I nonisot
+does the following.
+After zeroing the output image, for every row and column, the value of the
+.I chooser
+image is used as an index into the list of masks.  The appropriate
+mask is scaled by the input and added into the output image.  The
+chooser values are used modulo the number of masks (i.e. a chooser value
+of n+1 uses mask0).  The mask is added to the output image starting from
+its first pixels (thus, it is added to the right and downward from the
+associated input pixel for an upper-left image origin, and to the right and
+upward, otherwise).
+The header text is generally taken from the last input header, although
+the treatment of history, sequence description and extended parameters depends
+on the standard switch settings (see below).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+integer
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest of the input image is processed.  Its size must
+match the size of the chooser image region-of-interest.  Only the
+regions-of-interest of the convolution masks are used as well.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -NFH
+Do not preserve the input sequence histories of all input sequences.
+.TP 1.3i
+.I -NFD
+Do not preserve the input sequence descriptions of all input sequences.
+.TP 1.3i
+.I -FXP
+Merge the extended parameter lists from all input sequences.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+convolve(1), correl(1), mask(1)
+.SH AUTHOR
+Michael Landy - 7/9/88
+.br
+HIPS 2 - Michael Landy - 8/13/91

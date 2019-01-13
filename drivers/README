@@ -1,0 +1,7 @@
+
+This directory includes various device drivers which may be installed
+automatically (see ../README_INSTALL). The Adage and Grinnell directories
+will require much human intervention.  Several of the entries are symbolic
+links to other parts of the hips directory hierarchy (because ctool is sold
+separately, and crs is a part of hipsaddon, and others are user-contributed,
+etc.), but that should be otherwise transparent to the installation.

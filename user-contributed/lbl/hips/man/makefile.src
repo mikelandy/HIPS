@@ -1,0 +1,32 @@
+#
+# makefile for user-contributed/lbl/hips/man
+#
+
+MANPAGES =  \
+	3dmask.n 3dog.n 3drotate.n 3drotate180.n 3drotate90.n \
+	3dscale_geom.n 3dslice.n Xhips.n \
+	addmask.n append.n applylut.n autocollage.n autoextract.n \
+	bclean2.n bdwindow.n bin_mask.n bthin.n ccs.n checkers2.n clip.n \
+	color_ps.n dcvtob.n disphist_short.n dog2.n elastic.n fill_holes.n \
+	frame.n getobj.n getobj3d.n grate.n gray_wedge.n headers.n \
+	hexdump.n hfant.n histo_simulate.n histoeq2.n hstat.n htorle.n \
+	inv-vfft.n isobuild.n linesegs.n logtbl.n \
+	magicprint.n mahe.n mainpeak.n make_mask.n mapapply.n \
+	mdisphist.n mean_scale.n mem-test.n mhisto.n mixadd.n mixmul.n \
+	mls_short.n multi_mask.n pattern.n powertbl.n powertool.n \
+	printxyz.n rotate90n.n scale_geom.n scale_gray.n scaletbl.n \
+	stretchtbl.n to3dplot.n toany.n tohips.n toicc.n tojpeg.n \
+	torast.n toraw_sep.n torle.n totiff.n tovida.n vfft.n \
+	vfftfilter.n vfftpass.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

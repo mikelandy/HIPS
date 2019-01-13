@@ -1,0 +1,43 @@
+.TH FRAMEVAR 1 "7/5/91" "Version 2" "HIPS Manual"
+.SH NAME
+framevar \- compute basic statistics of an image
+.SH SYNOPSIS
+.B framevar
+[-p] [-n] <iseq >oseq
+.SH DESCRIPTION 
+.I Framevar
+computes basic statistics on an image: maximum, minimum, sum, sum-of-squares,
+variance and standard deviation.  The variance and standard deviation are
+computed as population (not sample) values.  The switch
+.I -p
+specifies that the input images should be sent to the output (the
+statistics are reported on stderr).  The switch
+.I -n
+specifies that zero-valued pixels should be ignored in the calculations.  Note
+that the output images are identically the input images, even though
+statistics may be computed on a form of the image converted to byte or float
+format.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest contributes to the calculations.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+binentropy(1), disphist(1), histo(1), pixentropy(1)
+.SH AUTHOR
+Yoav Cohen 2/16/82
+.br
+Hips 2 - msl - 7/5/91

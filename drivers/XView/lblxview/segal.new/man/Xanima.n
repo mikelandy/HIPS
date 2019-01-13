@@ -1,0 +1,140 @@
+.TH XANIMA n "1992" "Scry Version 1.3" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+Xanima - X-based animation playback program.
+.SH SYNOPSIS
+.B Xanima
+[
+.B \-i
+Anima file]
+.SH DESCRIPTION
+Reads image data from an Anima file (usually created by \f3Xserv\f1)
+and allows the user to review the frames of a
+movie in forward or reverse order at various speeds, advance or reverse frame
+by frame, skip to a particular frame, or save a frame as a Postscript
+file or Sun rasterfile.
+.PP
+\f3Xanima\f1 should usually run on the local workstation which will
+display the image.  It can run on a different client,
+but that would cause a severe performance loss, unless the
+images are stored on
+a faster machine than the display workstation, that is connected to the
+display workstation over a local Ethernet. 
+.PP
+After \f3Xanima\f1 is invoked, two windows will appear on the screen, one
+a control panel, and the other the window in which the image(s) will
+appear.  These behave like ordinary X windows, e.g. they can be
+moved.
+.PP
+The best window manager to use with \f3Xanima\f1 is \f3olwm\f1.  \f3twm\f1
+can be used, but will fail to set the color map correctly if the
+number of colors allocated by \f3Xanima\f1 plus the number of
+colors already allocated by the window manager and other windows
+is more than 256.
+.PP
+The default number of colors to allocate is defined by
+\f3S_MAX_COL_DISPLAY\f1 in \f2scry/include/scry_limits.h\f1.  This
+can either be changed before making Scry, or reset with the \f3-c\f1
+option.  Any color map entries with indices greater than this
+number will be undefined.  The lower the number of colors
+allowed, the more likely it is that color flashing and blanking
+of the screen outside the display window will not occur.
+.PP
+The display window will come up with a width and height given
+by \f3S_DEF_WINSERV_WIDTH\f1 and \f3S_DEF_WINSERV_HEIGHT\f1
+in \f2scry/include/scry_limits.h\f1.  It will automatically
+resize to the size of whatever \f3Anima\f1 file is
+entered, up to the default maximum size, given by
+\f3S_MAX_WINSERV_WIDTH\f1 and \f3S_MAX_WINSERV_HEIGHT\f1 in
+\f2scry_limits.h\f1.  \f3Xanima\f1 will exit if
+images in an \f3Anima\f1 file are bigger than
+the maximum.
+.PP
+The usage of the buttons is as follows:
+Pushing the "quit" button causes the windows to be destroyed and \f3Xanima\f1
+to exit.
+.PP
+To stop at a particular frame and/or to clear all the text fields,
+click the "stop" button.
+.PP
+To read a file, type its name in after "File:" and then type "<CR>".
+If the caret is not in the file field, click the left button with
+the cursor to the right of "File:".  (All control features require
+the use of the left button.)  \f3Xanima\f1 must be in stopped
+mode to read in a file.
+.PP
+Entering a number in the "Number Input:" field and then pushing the
+"go to" button
+will display the image associated with that number.  The current frame
+number and the total number of frames in the sequence are displayed
+after the "#:" sign.
+.PP
+"< step" will step to the previous frame if one
+is not at the beginning of the sequence, and
+"> step" will step to the next frame if not at the end of the sequence.
+"   >   " instructs \f3Xanima\f1 to move forward through a sequence of images,
+and "    <    " instructs it to move backward.
+If the end of the sequence of frames is reached, \f3Xanima\f1 will go
+back to the beginning.  If frames are being played back in reverse
+order and the beginning is reached, \f3Xanima\f1 will start playing
+frames backwards from the end of the file.
+.PP
+"full" instructs \f3Xanima\f1 to display images at full speed.
+Alternatively, one can click on the slider to control the speed (10 is the
+same as "full" speed.)
+.PP
+Entering a number in the "gamma" field will adjust the
+gamma value of the next image displayed.
+\f3Xanima\f1 must be
+in stopped mode for this selection to have effect.
+The default value is 1, and the legal range is from 0.1 to 4.
+The default gamma value can be changed by resetting \f3S_DEF_GAMMA_VALUE\f1
+in \f2scry/include/scry_limits.h\f1 before making Scry.
+.PP
+To save a file on disk in Postscript form, first type in the
+dots per inch in the "Number Input:" field (the default is 60 dpi),
+and then push the "postscr button".  The file saved will be of
+the form "Anima_file_name.current_frame.post".
+Note that it will be grey-scale and not color Postscript format.
+.PP
+To save a file on disk in Sun rasterfile format,
+push the "sunrast" button.  The file saved will be of
+the form "Anima_file_name.current_frame.ras".
+.PP
+At full speed, \f3Xanima\f1 can play back \f2scry/Anima/data/dye2d.iff\f1
+at 8 frames per second on a Sun 4/110, and 17 frames per second on
+a Sparcstation 2 with the standard frame buffer.
+\f2scry/Anima/data/skull.iff\f1 can be played back at 2 frames per
+second on a Sun 4/110, and 5 frames per second on a Sparcstation 2.
+Note that both these files are the output of the program
+\f3genonemap\f1.
+.SH OPTIONS
+.TP
+.B \-i filename
+Read in the Anima file.  This is an optional argument.
+.TP
+.B \-c mapnum
+sets the maximum number of colors that can be allocated by \f3Xanima\f1.
+The default is 221.
+.SH FILES
+.TP
+Xanima is located in \f2scry/Anima/Xanima\f1
+.TP
+.I Makefile
+makes the executable of the server
+.TP
+.I xvwin.h
+X and XView stuff
+.TP
+.I Xanima.c
+starts up the animation playback program and handles panel set-up and buttons
+.TP
+.I xvdisplay.c
+load the color lookup table and display the images in the X window as
+they come in
+.SH WARNINGS
+\f3Xanima\f1 will die if there are images of different
+sizes in an Anima file.
+.SH SEE ALSO
+\f3scry(n),scry_client(n),Xserv(n),scripter(n),anima_utilities(n)\f1
+.SH AUTHORS
+David Robertson, Teck-Joo Chua, Max Rible, and Antony Courtney

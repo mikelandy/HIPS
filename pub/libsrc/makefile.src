@@ -1,0 +1,29 @@
+#
+# makefile for pub/libsrc
+#
+
+OBJECTS = hpub_perr.o hpub_rdhdr.o hpub_wrthdr.o hpub_xparam.o
+
+.c.o:
+	$(COMPILEc) $*.c
+#	@-ld $(LDLIBFLAGS) $*.o
+#	@mv a.out $*.o
+
+libhipspub.a:	$(OBJECTS)
+	@rm -f libhipspub.a
+	ar cr libhipspub.a `$(LORDER) *.o | $(TSORT)`;
+	mv libhipspub.a $(LIBDIR)/libhipspub.a
+	$(RANLIB) $(LIBDIR)/libhipspub.a
+	@touch libhipspub.a
+
+install:	libhipspub.a
+
+clean:
+	rm -f $(OBJECTS) libhipspub.a
+
+pristine:
+	rm -f $(OBJECTS) libhipspub.a $(LIBDIR)/libhipspub.a
+
+man:
+
+doc:

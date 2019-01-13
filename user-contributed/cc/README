@@ -1,0 +1,44 @@
+These are various HIPS filters written by Charlie Chubb at NYU (now at
+Rutgers).  The manual
+pages are in `man' and can be copied to /usr/man/mann.  The sources are in
+`source' and can be compiled in the usual way, e.g.:
+
+	cc -o updown updown.c -lhips -lm
+	install -s updown /usr/hips
+
+Enjoy.
+
+Some brief descriptions:
+
+updown independently flips the signs of the pixels of seq from stdin.
+
+hupdown flips the signs of pixels, but is constrained to flip exactly
+eight in each successive 4 by 4 box.
+
+rflipix generates a sequence of spatially white noise whose pixels
+reverse contrast from frame to frame with probability depending
+on the pixel values of a sequence read from stdin.
+
+normalize scales an input sequence so that output sequence has a
+specified root mean square.
+
+shiftmin adds a constant to a sequence to make its minimum
+equal to some specified value.
+
+revalue changes all occurrences of a specified set of values in
+a sequence to new specified values.
+
+scaleseq scales a sequence, first searching through the entire
+sequence to get max and min values.
+
+isobp applies a spatially isotropic filter to a (ffted) sequence.
+User specifies center freq and standard deviation of band.
+
+idealbp applies an ideal filter to a (ffted) seq.  The filter is
+a user psecified slice of an anulus in freq space.
+
+getmean, getmin and getmax are for use in shell scripts.  They
+write mean, max and min of a sequence directly to stdout.
+
+tex makes it easy to create perceptually distinct micropatterns with identical
+autocorrelation functions.

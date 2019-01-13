@@ -1,0 +1,41 @@
+.TH WSUBS 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+wsubs \- HIPS write header utility subroutines
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+int wnocr(fp,s)
+char *s;
+FILE *fp;
+
+int dfprintf(fp,i,fname)
+FILE *fp;
+int i;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+These routines are used by
+.IR write_header (3)
+to write portions of the image header and keep track of the header size.
+.I wnocr
+writes the string (up to, but not including, any <newline>
+characters) to the given stream.
+.I dfprintf
+prints the given integer in ascii (as in `fprintf(fp,"%d\\n",i)') to the given
+stream.  Both routines return the number of bytes actually written.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_HDRWRT - error writing header
+.SH "SEE ALSO"
+write_header(3)
+.SH AUTHOR
+Michael Landy - 2/1/82
+.br
+modified to use read/write - 4/26/82
+.br
+modified to return #chars - msl - 9/21/90
+.br
+modified for HIPS 2 - msl - 1/3/91

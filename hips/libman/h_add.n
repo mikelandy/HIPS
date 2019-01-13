@@ -1,0 +1,150 @@
+.TH H_ADD 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_add \- subroutines to add two images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_add(hdi1,hdi2,hdo)
+h_add_bii(hdi1,hdi2,hdo)
+h_add_bsb(hdi1,hdi2,hdo)
+h_add_s(hdi1,hdi2,hdo)
+h_add_i(hdi1,hdi2,hdo)
+h_add_f(hdi1,hdi2,hdo)
+h_add_d(hdi1,hdi2,hdo)
+h_add_c(hdi1,hdi2,hdo)
+h_add_dc(hdi1,hdi2,hdo)
+h_add_ip(hdi1,hdi2,hdo)
+h_add_fp(hdi1,hdi2,hdo)
+struct header *hdi1,*hdi2,*hdo;
+
+h_add_BII(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+byte *imagei1;
+int *imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_add_BSB(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+byte *imagei1,*imageo;
+short *imagei2;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_add_S(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+short *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_add_I(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+int *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_add_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_add_C(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_add_D(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_add_DC(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+double *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines sum two input subimages (specified by
+.I hdi1
+and
+.IR hdi2 ,
+or by
+.I imagei1
+and
+.IR imagei2 ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_add
+calls
+.IR h_add_bii ,
+.IR h_add_bsb ,
+.IR h_add_s ,
+.IR h_add_i ,
+.IR h_add_f ,
+.IR h_add_d ,
+.IR h_add_c ,
+.IR h_add_dc ,
+.IR h_add_ip ,
+or
+.IR h_add_fp
+depending upon whether the pixel format is byte (for imagei1, and integer for
+the other two), byte (for imagei1 and imageo, and short for imagei2),
+short, integer, float, double, complex,
+double complex, integer pyramid or float pyramid.
+.IR h_add_BII ,
+.IR h_add_BSB ,
+.IR h_add_S ,
+.IR h_add_I ,
+.IR h_add_F ,
+.IR h_add_D ,
+.IR h_add_C
+and
+.IR h_add_DC
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.I H_add_bsb
+and
+.I h_add_BSB
+clip the sum to be in the range from 0 to 255, and count the underflows and
+overflows in
+.I hips_lclip
+and
+.IR hips_hclip ,
+respectively.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte (added to integer and the sum stored in integer), byte (added to short
+and the sume stored in byte), short,
+integer, float, double, complex, double complex, integer pyramid, float
+pyramid
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+can be the same as
+.IR imageo .
+For
+.I h_add_bii
+and
+.IR h_add_BII ,
+clearly only the integer images may be processed in place.
+For
+.I h_add_bsb
+and
+.IR h_add_BSB ,
+clearly only the byte images may be processed in place.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_FMT3SUBR - can't handle this pixel format combination
+.SH "SEE ALSO"
+h_diff(3)
+.SH AUTHOR
+Michael Landy - 1/6/91

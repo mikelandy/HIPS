@@ -1,0 +1,40 @@
+#
+# makefile for user-contributed/lbl/hips/sources/3d-tools
+#
+
+DIRS = 3dmasks
+
+PGMS = \
+	3dmask.out 3dog.out 3drotate.out 3drotate180.out 3drotate90.out \
+	3dslice.out dog2.out 3dmasks.out
+
+LIBRARIES = $(LDFLAGS) -lscs1 -lccs $(LIBRARY) $(OTHERLIBS) $(OTHERLIB2)
+CPPFLAGS2 = $(CPPFLAGS) -I$(CCS_ROOT)/include -DHIPS_IMAGE
+MASKLOC = -DMY_LIB=\"$(MASK3DIR)/mask\"
+
+.c.out:
+	$(LINKc) $* $< $(LIBRARIES) $(CPPFLAGS2) -DFITS_IMAGE
+	mv $* $(DESTDIR)
+	@touch $@
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+	cd 3dmasks;	make clean
+clean-all:	clean_all
+	cd 3dmasks;	make clean-all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+	cd 3dmasks ; make pristine
+
+# Routines which require special parameters
+
+3dmasks.out: FRC
+	cd 3dmasks ; make
+	@touch $@
+
+FRC:

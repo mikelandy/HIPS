@@ -1,0 +1,144 @@
+.TH MASK_UTIL 3 "7/14/91" "Version 2" "HIPS Manual"
+.SH NAME
+mask_util \- convolution mask-set I/O and memory management
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+#include <stdio.h>
+
+read_num_mask(mask,masknum)
+read_mask(mask,maskfile)
+free_maskcon(mask)
+mask_itof(mask)
+struct hips_mask *mask;
+int masknum;
+Filename maskfile;
+.fi
+.SH DESCRIPTION 
+These routines read, allocate, free, and convert sets of convolution masks
+(used by
+.IR h_mask (3)
+and
+.IR mask (1)).
+A convolution mask set consists of 1 or more masks
+(arrays of floats or ints), each with associated size and row and column
+offsets (to denote which mask pixel is centered on the image pixel before
+cross-correlating).  It is important to note that
+.IR h_mask (3)
+cross-correlates with the
+masks rather than convolves; in other words, the rows and columns are not
+first reflected;  for the usual mirror symmetric masks this poses no
+complications.
+The masks are read into a mask structure, which gives the
+mask name, format (PFFLOAT or PFINT), size, offsets, and mask values.
+.PP
+.I read_num_mask
+is used to read a standard HIPS mask set (usually kept in
+/usr/hips/masks/mask#, although the directory in which standard masks are
+stored is set at HIPS installation time).
+All of the standard masks have integer mask values, and
+hence may be used either as ints or as floats (by converting after reading
+using
+.IR mask_itof ).
+.I read_mask
+reads a mask set from a file.
+.PP
+The format of the filter definition file is as follows:
+.sp
+.nf
+.ta 1.5i 2i
+	"filter name"
+	number-of-masks function-number mask-format
+
+	mask-1-rows mask-1-cols mask-1-rowoffset mask-1-coloffset
+	mask-1-values
+		.
+		.
+		.
+	mask-(number-of-masks)-rows cols rowoffset coloffset
+	mask-(number-of-masks)-values
+
+.fi
+.I mask-rows
+and
+.I mask-cols
+give the side lengths of the rectangular mask.
+.I mask-rowoffset
+and
+.I mask-coloffset
+identify the pixel which overlaps a given
+image position to produce the mask value corresponding to that image
+position.  Again, note that the earlier mask values are applied to earlier
+image values.  Thus, the interpretation of the mask orientation depends on the
+definition of ULORIG (set at HIPS installation time).
+If ULORIG is defined (images have their origin at
+the upper-left), then the first mask row is topmost relative to the image.
+Otherwise, the last mask row is topmost relative to the image.
+Said another way, if image data are treated as ULORIG (upper-left origin),
+so are the mask data.  Mask
+values are given as a sequence of integers or floats in column-fastest order.
+.PP
+Mask sets can include 1 or more masks.  The mask program applies a
+function to the set of mask output values which results in the single
+pixel value placed in a given position in the output image.  The second
+line of the mask definition identifies which function is to be used,
+chosen from:
+.sp
+.TP
+1
+MASKFUN_MAXABS - the maximum absolute value of all mask outputs
+.TP
+2
+MASKFUN_MEANSQ  - the square root of the sum of the squares of all masks
+.TP
+3
+MASKFUN_SUMABS  - the sum of the absolute value of all mask outputs
+.TP
+4
+MASKFUN_MAX - the maximum mask output
+.TP
+5
+MASKFUN_MAXFLR - the maximum mask output, floored at zero
+.TP
+6
+MASKFUN_MXASFLR - the larger of |mask-1| and |mask-2|, minus |mask-3|, floored
+at zero
+.TP
+7
+MASKFUN_MUL - the product of the mask outputs, each floored at zero
+.TP
+8
+MASKFUN_NORM - the first mask output normalized by the sum of the mask entries
+.TP
+9
+MASKFUN_DIFF - the value of the pixel minus the normalized mask output
+.TP
+10
+MASKFUN_ORIENT - compute orientation: 360*atan(mask2/mask1)/2*PI
+.TP
+11
+MASKFUN_IDENT - the value of the first mask output (simple convolution)
+.PP
+.I free_maskcon
+is used to free the arrays in a mask structure.
+.PP
+.I mask_itof
+converts an integer mask set to floating point.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBRFILE - can't handle this pixel format
+.br
+HE_MSKFUNFILE - bad mask function number
+.br
+HE_OPEN - can't open file
+.br
+HE_READFILE - error during read
+.SH "SEE ALSO"
+h_mask(3)
+.SH AUTHOR
+Based on HIPS-1 mask: Michael Landy - 4/21/82
+.br
+HIPS-2 - msl - 7/12/91

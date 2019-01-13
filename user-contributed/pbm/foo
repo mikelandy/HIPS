@@ -1,0 +1,7 @@
+cd ./pbm
+cp atktopbm brushtopbm cmuwmtopbm g3topbm  icontopbm gemtopbm macptopbm mgrtopbm  pbmlife pbmmake pbmmask pbmreduce  pbmtext pbmto10x pbmtoascii pbmtoatk  pbmtobbnbg pbmtocmuwm pbmtoepson pbmtog3  pbmtogem pbmtogo pbmtoicon pbmtolj pbmtomacp  pbmtomgr pbmtopi3 pbmtoplot pbmtoptx  pbmtox10bm pbmtoxbm pbmtoybm pbmtozinc  pbmupc pi3topbm xbmtopbm  ybmtopbm /tmp/pbmtools
+cd ../pgm
+cp fitstopgm fstopgm hipstopgm lispmtopgm pgmbentley  pgmenhance pgmhist pgmnorm pgmoil pgmramp  pgmtofits pgmtofs pgmtolispm pgmtopbm  psidtopgm rawtopgm pgmedge pgmtexture /tmp/pbmtools
+cd ../ppm
+cp giftoppm gouldtoppm ilbmtoppm imgtoppm mtvtoppm  pcxtoppm pgmtoppm pi1toppm picttoppm  pjtoppm ppmdither ppmhist ppmmake ppmquant  ppmrelief ppmtogif ppmtoicr ppmtoilbm  ppmtopcx ppmtopgm ppmtopi1 ppmtopict  ppmtopj ppmtopuzz ppmtorgb3 ppmtosixel  ppmtotga ppmtouil ppmtoxpm ppmtoyuv qrttoppm  rawtoppm rgb3toppm spctoppm sputoppm  tgatoppm ximtoppm xpmtoppm yuvtoppm ppmpat /tmp/pbmtools
+

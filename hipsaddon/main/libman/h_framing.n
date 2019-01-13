@@ -1,0 +1,60 @@
+.TH H_FRAMING 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_framing - image framer
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_framing(hdi,hdo,frameval)
+h_framing_b(hdi,hdo,frameval)
+struct header   *hdi,*hdo;
+int             frameval;
+
+h_framing_B(imagei,imageo,nr,nc,nex,frameval)
+byte    *imagei,*imageo;
+int     nr,nc,nex;
+int     frameval;
+.fi
+.SH DESCRIPTION 
+.I h_framing
+paints a thin frame around the input subimage
+(ROI, specified by
+.I hdi
+or
+.I imagei,
+a pointer to the first pixel of the subimage),
+and stores the result in the output subimage
+(specified by
+.I hdo
+or
+.I imageo,
+a pointer to the first pixel of the subimage).
+.I h_asl
+then calls
+.I h_asl_b
+only if the image pixel format is byte.
+.I h_asl_b
+then calls
+.I h_asl_B
+which is the low-level routine and does not require image header.
+The subimage size is
+.I nr
+by
+.IR nc.
+.I nex
+is the difference of the number of columns of the input image and
+the number of columns of the input subimage.
+.I frameval
+is the gray level for the frame.
+.sp
+It can be used for image decoration in documentation.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is framed.
+.SH AUTHOR
+Jin Zhengping - 22 July 1988
+.br
+Rewritten by Jin Zhengping - 31 August 1991

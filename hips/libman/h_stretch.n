@@ -1,0 +1,104 @@
+.TH H_STRETCH 3 "6/15/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_stretch \- subroutines to stretch image pixel range
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_stretch(hdi,hdo,bdry,expt1,expt2,mval)
+h_stretch_b(hdi,hdo,bdry,expt1,expt2,mval)
+h_stretch_s(hdi,hdo,bdry,expt1,expt2,mval)
+struct header *hdi,*hdo;
+double bdry,expt1,expt2;
+Pixelval *mval;
+
+h_stretch_B(imagei,imageo,nr,nc,nlpi,nlpo,bdry,expt1,expt2,mval)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double bdry,expt1,expt2;
+byte mval;
+
+h_stretch_S(imagei,imageo,nr,nc,nlpi,nlpo,bdry,expt1,expt2,mval)
+short *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double bdry,expt1,expt2;
+short mval;
+.fi
+.SH DESCRIPTION 
+These routines stretch the greyscale of an input subimage (specified by
+.I hdi
+or
+.IR imagei )
+using two different power functions and store the result in an output image
+(specified by
+.I hdo
+or
+.IR imageo ).
+The parameter
+.I bdry
+is used to split the range of pixel values into two parts:
+from 0 to
+.IR mval*bdry ,
+and from
+.I mval*bdry
+to
+.IR mval .
+Then, pixels in the first range have a power function applied with exponent
+.IR expt1 ,
+and are then rescaled so that the boundary value is unchanged.
+Similarly, pixels in the second range have a power function applied with
+exponent
+.IR expt2 ,
+and are then linearly rescaled so that the boundary and
+maximum values are unchanged.  Values less than zero are set to zero.
+.I h_stretch
+calls
+.I h_stretch_b
+or
+.I h_stretch_s
+depending upon whether the pixel format is byte or short.
+.I h_stretch_B
+and
+.I h_stretch_S
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_exp(3), h_log(3), h_power(3)
+.SH AUTHOR
+Yoav Cohen 2/19/82
+.br
+exponentiation bug fixed - WEJohnston 9/89
+.br
+added support for short images and modified to use look-up table for
+byte and short images: Brian Tierney, LBL 10/90
+.br
+HIPS 2 - msl - 6/13/91

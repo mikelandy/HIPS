@@ -1,0 +1,42 @@
+.TH VSHIFT 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+vshift \- translate an observer in a 3-D graph over time
+.SH SYNOPSIS
+.B vshift
+[-p from to [x [y [z]]]
+.SH DESCRIPTION 
+.I Vshift
+translates the viewer in a 3-D plot over time.
+Frame 
+.I from
+and all the preceeding frames are  
+output intact, but therafter the origin
+in each frame is shifted according to 
+.IR x ,
+.IR y ,
+.I z
+relative to the preceeding frame. 
+All frames after frame 
+.I to
+are shifted by the same constant;
+e.g. the x-shift factor for frame 
+.I to
+and all the following frames is 
+.IR x *( to - from ).
+Frame numbering starts at zero.
+.I Y
+and
+.I z
+default to 0.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+gshift(1)
+.SH AUTHOR
+Yoav Cohen 11/16/82
+.br
+HIPS 2 - msl - 7/24/91

@@ -1,0 +1,158 @@
+.TH H_DIV 3 "7/4/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_div \- subroutines to divide two images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_div(hdi1,hdi2,hdo)
+h_div_b(hdi1,hdi2,hdo)
+h_div_s(hdi1,hdi2,hdo)
+h_div_i(hdi1,hdi2,hdo)
+h_div_f(hdi1,hdi2,hdo)
+h_div_fc(hdi1,hdi2,hdo)
+h_div_d(hdi1,hdi2,hdo)
+h_div_ddc(hdi1,hdi2,hdo)
+h_div_c(hdi1,hdi2,hdo)
+h_div_cf(hdi1,hdi2,hdo)
+h_div_dc(hdi1,hdi2,hdo)
+h_div_dcd(hdi1,hdi2,hdo)
+h_div_ip(hdi1,hdi2,hdo)
+h_div_fp(hdi1,hdi2,hdo)
+struct header *hdi1,*hdi2,*hdo;
+
+h_div_B(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+byte *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_div_S(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+short *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_div_I(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+int *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_div_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_div_FC(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_div_C(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_div_CF(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_div_D(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_div_DDC(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_div_DC(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_div_DCD(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+double *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines divide one input subimage (specified by
+.I hdi1
+or
+.IR imagei1 )
+by a second input subimage (specified by
+.I hdi2
+or
+.IR imagei2 ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_div
+calls
+.IR h_div_b ,
+.IR h_div_s ,
+.IR h_div_i ,
+.IR h_div_f ,
+.IR h_div_fc ,
+.IR h_div_d ,
+.IR h_div_ddc ,
+.IR h_div_c ,
+.IR h_div_cf ,
+.IR h_div_dc ,
+.IR h_div_dcd ,
+.IR h_div_ip ,
+or
+.IR h_div_fp
+depending upon whether the pixel format is byte, short, integer, float, one
+float image divided by one complex image, double, one double image divided by
+one double complex image, complex, complex divided by float, double complex,
+double complex divided by double, integer pyramid or float pyramid.
+.IR h_div_B ,
+.IR h_div_S ,
+.IR h_div_I ,
+.IR h_div_F ,
+.IR h_div_FC ,
+.IR h_div_D ,
+.IR h_div_DDC ,
+.IR h_div_C ,
+.IR h_div_CF ,
+.I h_div_DC
+and
+.I h_div_DCD
+are the low-level routines which don't require an image header.  For
+.IR h_div_fc ,
+.IR h_div_ddc ,
+.I h_div_FC
+and
+.IR h_div_DDC ,
+the first image is single-valued and the second and output images are
+double-valued (complex). For
+.IR h_div_cf ,
+.IR h_div_dcd ,
+.I h_div_CF
+and
+.IR h_div_DCD ,
+the second image is single-valued and the first and output images are
+double-valued (complex).
+The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+Attempts to divide by zero are counted in the HIPS global variable
+.I hips_zdiv ,
+and the corresponding output pixels are set to 255 (for byte images),
+32767 (for short images), 10000000 (for integer, float and double output
+images) or 10000000+10000000i (for complex and double complex output images).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, float/complex, double, double/double complex,
+complex, complex/float, double complex, double complex/double, integer pyramid,
+float pyramid
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+can be the same as
+.IR imageo .
+Of course this only makes sense if they are the same pixel format.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_FMT3SUBR - can't handle this pixel format combination
+.SH "SEE ALSO"
+h_absdiff(3), h_add(3), h_diff(3), h_mul(3)
+.SH AUTHOR
+Michael Landy - 7/4/91

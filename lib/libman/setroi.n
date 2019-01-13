@@ -1,0 +1,39 @@
+.TH SETROI 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+setroi \- set image region-of-interest
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+setroi(hd,fr,fc,nr,nc)
+setroi2(hd,roi)
+getroi(hd,roi)
+clearroi(hd)
+struct header *hd;
+int fr,fc,nr,nc;
+struct hips_roi *roi;
+.fi
+.SH DESCRIPTION 
+These routines are used to manipulate the image region-of-interest.
+.I setroi
+and
+.I setroi2
+are used to set a region-of-interest, and
+.I clearroi
+resets the region-of-interest to be the entire image.  These routines set the
+header value
+.I firstpix
+as well as the region-of-interest parameters.  For bit-packed images, the
+left-hand edge of the region-of-interest must lie on a byte boundary (\c
+.I fc
+must be a multiple of eight).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ROI - region-of-interest goes beyond the image boundaries
+.br
+HE_ROI8 - invalid bit-packed region-of-interest (not a multiple of eight)
+.SH "SEE ALSO"
+setformat(3), setsize(3)
+.SH AUTHOR
+Michael Landy - 1/3/91

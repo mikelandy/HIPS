@@ -1,0 +1,54 @@
+#
+# makefile for hipsaddon/main//sources/binatts
+#
+
+PGMS = binatts.out
+
+
+OBJECTS =\
+	binatts.o\
+	getattval.o\
+	getpicbuf.o\
+	blobops.o\
+	makeblob.o\
+	blobmoments.o\
+	moments.o\
+	bloblen.o\
+	blobcnt.o\
+	border.o\
+	shrinkfrm.o\
+	findblob.o\
+	area.o\
+	copyframe.o\
+	AinB.o\
+	setframe.o\
+	setblob.o\
+	changeblob.o\
+	maxminrad.o\
+	expandfrm.o\
+	merge.o\
+	fillit.o
+
+CPPFLAGS2 = -DDSTDIR=\"$(DESTDIR)\" 
+
+.c.o:
+	$(COMPILEc) $(CPPFLAGS2) $<
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+binatts.out:	$(OBJECTS)
+	$(LINKc) $* $(OBJECTS) $(LIBRARIES)
+	strip $*
+	mv $* $(DESTDIR)
+	cp atts.35 $(DESTDIR)
+	@touch $@
+
+FRC:

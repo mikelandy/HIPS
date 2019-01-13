@@ -1,0 +1,91 @@
+.TH RFRAME 1HIPS "February 22, 1987"
+.SH NAME
+rframe - read a frame(using the camera) from the IP-512, display it on
+the monitor and store it in a file (the standard output)
+
+.SH SYNOPSIS
+.B rframe
+[-r rows] [-c cols] [-y initialrow] [-x initialcol] [-d dev] [-p pan]
+[-s scroll] [-b fbnum] [-h] [-m mask] [-G gain] [-L level] [-I]>frame
+
+.SH DESCRIPTION
+.I Rframe
+reads a frame from the IP-512 starting at
+(\fIinitialrow\fR,\fIinitialcol\fR) with size
+.I rows
+*
+.IR cols .
+There is a wraparound.  If using an ALU, the program increases
+\fIpan\fR and \fIinitialcol\fR by ALU_DELAY(=11) in order to correct
+the ALU pipeline delay.  Use
+.I mask
+in order to take a picture only into specific bits of the pixels.  That
+includes protecting the high or low byte of a 16-bits frame buffer.
+Bits that are set in
+.I mask
+are not changed by the input ("protected").  \fI-m\fR is followed by
+hexadecimal value.
+.I pan
+and
+.I scroll
+are set before the picture is taken, and thus determine the location of
+the taken picture in the frame buffer. \fIx\fR, \fIy\fR, \fIc\fR &
+\fIr\fR determine the output picture origin and dimensions.  When
+taking a picture by \fIdevice\fR /dev/ipfb1, the camera supplies the
+clock (PLL).  When taking a picture by \fIdevice\fR /dev/ipfb0, XTAL
+supplies the clock (internal).  In any case, the user has to make sure
+that the camera is connected properly. Another difference between the
+two devices is the ability to set the \fIGAIN\fR and \fILEVEL\fR
+registers. The AP-512 of /dev/ipfb0 is such that the user cannot set
+these registers. /dev/ipfb1 allows the user do that, using either the
+\fI-G\fR and \fI-L\fR options, or the \fI-I\fR option.  The data for
+\fI-L\fR and \fI-G\fR is hexadecimal. \fI-I\fR allows the user tune the
+AP by setting the \fIGAIN\fR and \fILEVEL\fR registers while the
+picture is being acquired. If the user does not want to set them, they
+default to \fIGAIN\fR=0x80; \fILEVEL\fR=0x08.
+.I Device
+/dev/ipfb0a does not initiate the camera for continuous grabbing
+frames.  Because of that the contents of frame buffers, other than
+\fIfbnum\fR, are preserved. One can also use other IP-512 devices (look
+at /dev/ipfb* to find all of them). If their START_CAMERA bit is on,
+the contents of all the frame buffers of the device are lost.  Thus, do
+not use /dev/ipfb0b, /dev/ipfb0d if you want only to take a picture
+into fbnum, and you want to keep the picture which already resides in
+the other frame buffers.
+
+.SH DEFAULTS
+.I Rows
+and
+.I cols
+default to IPFB_SIZEY (=512), IPFB_SIZEX (=512).
+.I Initialrow
+and
+.I initialcol
+default to 0.
+.I dev
+defaults to /dev/ipfb0a.
+.I Pan
+and
+.I scroll
+default to 0.
+.I fbnum
+defaults to MASTER_FB ( =0).
+.I h
+is reset; low byte chosen.
+.I Mask
+defaults to 0xff00; high byte (if there) stays intact.
+.I Gain
+defaults to 0x80.
+.I Level
+defaults to 0x08.
+.I I
+is reset. Not iterative version is chosen.
+
+.SH SEE\ ALSO
+wframe(1HIPS), rbuffer(1HIPS)
+
+.SH AUTHOR
+Michael Landy/Yoav Cohen - 2/4/82
+.br
+Modified: YC 6/9/82
+         LEAH MORY 27/11/86 LEAH MORY 22/02/87

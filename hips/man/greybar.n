@@ -1,0 +1,44 @@
+.TH GREYBAR 1 "8/16/91" "Version 2" "HIPS Manual"
+.SH NAME
+greybar \- generate a ramp of grey bars
+.SH SYNOPSIS
+.B greybar
+[-s barheight [barwidth]] [-n numbar] [-f frames] [-nc numcolor]
+.br
+.ta 1i
+	[-g mingrey maxgrey | -i mingrey step] >oseq
+.SH DESCRIPTION 
+.I Graybar
+creates a sequence consisting of a ramp of vertical grey bars.
+.I -s
+specifies the size of each bar (\c
+.I barheight
+defaults to 512 and
+.I barwidth
+to 16).
+.I -n
+specifies the number of bars (the default is enough to make the
+width of the image be 512 or nearly so).  The frame will be output the
+number of times specified by
+.I -f
+multiplied by that specified by
+.IR -nc .
+The leftmost bar has greylevel
+.IR mingrey .
+The greylevels either step by the amount specified by
+.I -i ,
+or so as to reach the maximum level specified by
+.IR -g .
+The default is `-g 0 255'.
+.SH "OUTPUT PIXEL FORMATS"
+byte
+.SH "REGION-OF-INTEREST"
+The output region of interest is cleared.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+checkers(1), genframe(1)
+.SH AUTHOR
+HIPS 2 - Michael Landy - 8/16/91

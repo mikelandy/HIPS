@@ -1,0 +1,109 @@
+.TH PYRALLOC 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+pyralloc \- image pyramid allocation routines
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+extern int Image_border;
+
+def_ipyr(pyr,lev,nr,nc)
+alloc_ipyr(pyr,botlev,toplev)
+free_ipyr(pyr,botlev,toplev)
+IPYR pyr;
+int lev,nr,nc,botlev,toplev;
+
+def_fpyr(pyr,lev,nr,nc)
+alloc_fpyr(pyr,botlev,toplev)
+free_fpyr(pyr,botlev,toplev)
+FPYR pyr;
+int lev,nr,nc,botlev,toplev;
+
+alloc_iimage(img)
+IIMAGE *img;
+
+alloc_fimage(img)
+FIMAGE *img;
+
+int **_alloc_iimage(nr,nc)
+int nr,nc;
+
+float **_alloc_fimage(nr,nc)
+int nr,nc;
+
+free_iimage(img)
+IIMAGE img;
+
+free_fimage(img)
+FIMAGE img;
+
+_free_iimage(img)
+int **img;
+
+_free_fimage(img)
+float **img;
+.fi
+.SH DESCRIPTION 
+These routines are used to allocate and free image pyramids.
+.I def_ipyr
+and
+.I def_fpyr
+are used to define integer and float pyramid, filling in the number of rows
+and columns for each level given the size of the bottom level image.
+.I alloc_ipyr
+and
+.I alloc_fpyr
+allocate a subset of the pyramid levels and
+.I free_ipyr
+and
+.I free_fpyr
+deallocate a subset of the pyramid levels.  The other routines are utility
+routines which allocate and free single pyramid levels, and set up the
+pointers appropriately.
+.PP
+Note that all images are described by number of rows and columns, but
+are allocated larger on all borders by an amount `Image_border' which
+must be set by the calling program.  The image pointer points to an array
+of pointers to the image rows.  The image pointer actually points to the
+pointer corresponding to the first real row after the top border, and every
+row pointer actually points to the first real column after the left-hand
+border.
+.PP
+Also note, we reduce the images in the same way originally described
+by Burt.  The original algorithm was meant to deal with images of size
+(2**m)+1 (or some multiple of that), but the code will in fact work for
+any size image.  If there are nr rows and nc columns in one level of the
+pyramid, then the next level will have (nr+1)/2 rows and (nc+1)/2 columns,
+where each figure is truncated to be an integer.  So, a 65x65 image is
+subsampled horizontally as follows:
+.sp
+.ce
+Sample locations:
+.sp
+.nf
+Level\07\0*
+Level\06\0*\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0*
+Level\05\0*\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0*\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0*
+Level\04\0*\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0*\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0*\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0*\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0*
+Level\03\0*\0\0\0\0\0\0\0*\0\0\0\0\0\0\0*\0\0\0\0\0\0\0*\0\0\0\0\0\0\0*\0\0\0\0\0\0\0*\0\0\0\0\0\0\0*\0\0\0\0\0\0\0*\0\0\0\0\0\0\0*
+Level\02\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*\0\0\0*
+Level\01\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*\0*
+Level\00\0*****************************************************************
+.fi
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FREE - can't free memory
+.SH "SEE ALSO"
+alloc_image(3)
+.SH AUTHOR
+The pyramid utilities are derived from code originally written by
+Raj Hingorani at SRI/David Sarnoff Research Institute.  The original
+Gaussian and Laplacian pyramid algorithms were designed by Peter Burt (also
+currently at SRI/DSRC).  See:  Computer Graphics and Image Processing,
+Volume 16, pp. 20-51, 1981, and IEEE Transactions on Communications,
+Volume COM-31, pp. 532-540, 1983.
+.sp
+modified for HIPS 2 - msl - 1/3/91

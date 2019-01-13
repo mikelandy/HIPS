@@ -1,0 +1,26 @@
+#
+# makefile for user-contributed/canny/sources
+#
+
+SRCFILES = canny.c canny_top_level.c gauss.c general.c image_utils.c \
+	hthresh.c thin.c
+
+PGMS = canny.out
+
+canny.out:	$(SRCFILES)
+	$(LINKc) $* $(SRCFILES) $(LIBRARIES)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

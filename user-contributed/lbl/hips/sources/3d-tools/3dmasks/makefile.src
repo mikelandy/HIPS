@@ -1,0 +1,38 @@
+
+#
+# makefile for hips/masks
+#
+
+MASKFILES = \
+	mask1 mask111.smo mask113.smo mask1_90.mns mask1_90.shp mask215 \
+	mask311.smo mask318.smo mask318m.smo mask318s.smo mask321.r45 \
+	mask321.s45 mask321.smo mask3210 mask321s.z90 mask321shaper \
+	mask322.m45 mask322.smo mask322p.z90 mask322s.z90 mask3301 \
+	mask331s.d45 mask331s.zx9 mask332p.d90 mask332s.zx9 mask333s.zx9 \
+	mask336 mask337 mask341s.t45 mask3_2 mask3_3 mask418.smo mask511.smo \
+	mask514 mask518.smo mask518z.smo mask541.t45 maskb321 maskb321.1 \
+	maskb321.2 maskb321.3 maskb322 maskb322.1 maskb322.2 maskb322.3 \
+	maskba0 maskba1 maskba2 maskba3 maskba5 maskba52 maskba7 maskba9 \
+	maskxm90.321 maskzm90.321
+
+install:	$(MASKFILES)
+	@-if test ! -r $(MASK3DIR) ; then mkdir $(MASK3DIR) ; fi
+	chmod u+w $(MASKFILES)
+	cp $(MASKFILES) $(MASK3DIR)
+	chmod u-w $(MASKFILES)
+	touch install
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:
+	for i in $(MASKFILES) ; \
+	do \
+		rm -f $(MASK3DIR)/$$i ; \
+	done
+	rm -f install

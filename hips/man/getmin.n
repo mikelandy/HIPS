@@ -1,0 +1,56 @@
+.TH GETMIN 1 "4/13/95" "Version 2" "HIPS Manual"
+.SH NAME
+getmin \- calculate the minimum value in a sequence
+.SH SYNOPSIS
+.B getmin
+[-c] [-s] [-i] [-p] < iseq [> oseq]
+.SH DESCRIPTION 
+.I Getmin
+finds the minimum value in each frame of a sequence and prints that value out
+(along with the frame number).  The switch
+.I -c
+specifies that the coordinates (frame, row, column) of every pixel equal to
+that minimum should be printed.  A global minimum is printed (over the entire
+sequence) if
+.I -s
+is specified.  The combination of
+.I -c
+and
+.I -s
+works as well, but requires that the input file accept a `seek' command (i.e.,
+it can't be a piped output from another command, but rather should be a file).
+For complex and double complex formatted images, the minimum complex magnitude
+is computed.  For the various floating point and complex formats, the minimum
+is printed as a floating point number.  However, if
+.I -i
+is specified, the minimum is rounded and printed as an integer.  If
+.I -n
+is specified, then only nonzero pixels are included in the determination of
+the minimum.
+For a completely zero frame, assuming that
+.I -c
+was not specified, then the minimum will print out as zero.
+Finally, if
+.I -p
+is specified, the input sequence is sent (unmodified) to the standard output
+so that this command may be used in a pipeline.  The command output is sent to
+stderr.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, signed byte, short, unsigned short, integer, unsigned integer, float,
+double, complex and double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest contributes to the calculations.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+binentropy(1), disphist(1), framevar(1), getmax(1), histo(1), pixentropy(1)
+.SH AUTHOR
+Mike Landy - 4/13/95

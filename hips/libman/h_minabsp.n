@@ -1,0 +1,102 @@
+.TH H_MINABSP 3 "8/17/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_minabsp \- subroutines to compute the minimum absolute value
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_minabsp(hdi1,hdi2,hdo)
+h_minabsp_s(hdi1,hdi2,hdo)
+h_minabsp_i(hdi1,hdi2,hdo)
+h_minabsp_f(hdi1,hdi2,hdo)
+h_minabsp_d(hdi1,hdi2,hdo)
+h_minabsp_ip(hdi1,hdi2,hdo)
+h_minabsp_fp(hdi1,hdi2,hdo)
+struct header *hdi1,*hdi2,*hdo;
+
+h_minabsp_S(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+short *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_minabsp_I(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+int *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_minabsp_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_minabsp_D(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+double *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines compute the minimum absolute value of two input subimages
+(specified by
+.I hdi1
+and
+.IR hdi2 ,
+or by
+.I imagei1
+and
+.IR imagei2 )
+pixel by pixel,
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_minabsp
+calls
+.IR h_minabsp_s ,
+.IR h_minabsp_i ,
+.IR h_minabsp_f ,
+.IR h_minabsp_d ,
+.IR h_minabsp_ip ,
+or
+.IR h_minabsp_fp
+depending upon whether the pixel format is short, integer, float, double,
+integer pyramid or float pyramid.
+.IR h_minabsp_S ,
+.IR h_minabsp_I ,
+.I h_minabsp_F
+and
+.I h_minabsp_D
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+short, integer, float, double, integer pyramid, float pyramid
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_maxabsp(3), h_maxp(3), h_minp(3)
+.SH AUTHOR
+Michael Landy - 8/17/91

@@ -1,0 +1,18 @@
+**
+	List for use with SEGAL 3D - by Bryan Skene
+**
+** Name: bs.list **
+** Description:  **
+** Image Directory **
+/home/gracie/users/skene/images/brain
+** Image Filename **
+brain.90-120.small
+** Directory of all Masks **
+/home/gracie/users/skene/images/brain/masks
+** Edit Mask **
+brain.small.mask
+** Other Masks (optional) **
+<None>
+<None>
+<None>
+<None>

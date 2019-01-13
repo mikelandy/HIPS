@@ -1,0 +1,156 @@
+.TH 3DMASK 1 "May 2 1991" LBL-HIPS
+.\" @(#)3dmask.1  1.M2 10/24/90 JIN;
+.SH NAME
+3dmask \- generalized convolution for 3D images
+.SH SYNOPSIS
+.B 3dmask
+[-m mask-number] [-M] [+r] [-d] [<] input [[>] | [+o] output]
+.br
+.B 3dmask
+-f filter-descriptor-file [-M] [+r] [<] input [[+o] | [>] output]
+.SH DESCRIPTION
+.I 3dmask
+filters an image by applying a set of convolution masks, and then
+applies another function to the various mask outputs. Thus, this program is
+not only capable of simple linear filtering/convolution, but nonlinear
+combinations of the results of one or more linear filter outputs.  As a result,
+.I 3dmask
+is capable of performing a variety of standard edge detection schemes which
+require the outputs of several oriented masks to be combined (as maximum
+absolute value, sum of absolute values, etc.).  The
+.I -m
+option specifies a filter from a system library (usually
+kept in subdirectory `3dmasks'
+of the directory in which the binaries are stored).
+The naming scheme for the filters is somewhat standardized as a sequence of
+four fields `XYZ?' as follows:
+.TP
+X
+filter size (the range is 3-9 and 0, which is used to designate a size of
+10).
+.TP
+Y
+the number of filter sets (the range is 1-9 and 0, which represents a set
+size of 10)
+.TP
+Z
+filter function (See below for explanation, again the possible values are 0-9)
+.TP
+?
+this field is either missing or may be an alphanumeric string representing
+the same filter with one of a number of possible operators, such as
+`s' for Sobel, `p' for Prewitt, `g' for Gaussian, etc.
+.sp
+.LP
+Any filter designation which begins with the digits 1 or 2, and any filter
+designation which is not a 3 or 4 digit number is a nonstandard filter.  Here
+are a number of the nonstandard filters in the library:
+.nf
+.ta 1.3i 2.6i
+filter number	3dmask type	function
+1	3-level (3x3x3)	max_abs
+2	3-level (5x5x5)	max_abs
+215	2x2x2	discrete differentiation in y (x-z surface)
+290.x	Sobel	(3x3x3)	mean_square
+zm90.321	Alternative (3x3x3)	max_abs
+
+\...
+
+.fi
+The default filter is 1.  The definition for each of these filters is 
+generally to be found in subdirectory 3dmask of the directory in which the
+HIPS binaries are stored, but is specified at HIPS installation time.
+The
+.I -f
+switch allows a new filter to be supplied by the user.
+The format of the filter definition file is as follows:
+
+.nf
+"filter name and description"
+masksize number_of_sets_of_masks function_name
+number_of_masks_in_set1
+frame_position		mask-1
+			..
+			..
+			..
+frame_position		mask-(masksize)
+.
+.
+.
+number_of_masks-(number-of-sets)
+frame_position		mask-1
+			..
+			..
+			..
+frame_position		mask-(masksize)
+.fi
+
+where the masksize is the length of a side of all masks (which must be
+square), masks are given as a sequence of integers in column-fastest order;
+frame-position is for the third dimension (frames), its range is from
+-masksize/2 to masksize/2; the number of masks may be different for each
+mask set.  For example, if a particular 3d mask has one frame which is
+identically zero, then it can be omitted in order to process the input more
+efficiently.
+The function applied to the output of the masks is chosen from among:
+
+.sp
+.ta 1i 2i 3i
+.nf
+1	MAXABS	- the maximum absolute value of all mask outputs
+2	MEANSQ  - the square root of the sum of the squares of all masks
+3	SUMABS  - the sum of the absolute value of all mask outputs
+4	MAX	- the maximum mask output
+5	MAXFLR	- the maximum mask output, floored at zero
+6	MXASFLR	- the larger of |mask-1| and |mask-2|, minus |mask-3|,
+			floored at zero
+7	MUL	- the product of the mask outputs, each floored at zero.
+8	NORM	- the first mask output normalized by the sum of the mask elements
+9	DIFF	- the value of the pixel minus the normalized mask output
+10	ORIENT	- the orientation: 360*atan(mask2/mask1)/2*PI
+
+Examples:
+.br
+.ta .5i 1i
+	mask321p.z90 \- mask size = 3
+		number of mask sets = 2
+		function is maximum_absolute value
+		Prewitt filter rotated around Z axis by 90 degrees
+	mask332s.zx9 \- mask size = 3
+		mask set = 3
+		function is mean_square
+		Sobel filter rotated twice around Z and X by 90 degrees
+.fi
+.TP
+.I +o output
+this option is for those machines that require an output file which is binary
+to be specified on open (such as the IBM/PC).
+.TP
+.I +r
+this option will make use the negative of each mask value
+.TP
+.I -M
+display tracing messages
+.TP
+.I -d
+Debugging. The result depends on compiling directives
+.SH "SEE ALSO"
+mask(1), f3dmaskm(1), 3dog(1)
+.br
+There is a multiple processor version
+.I f3dmaskm
+which runs on a Stardent MIPS_3000 (M version).
+It runs 7-12 times faster than on a Sun4.
+Be sure not to write across network file mounts with this program too often,
+it is very time consuming. It is better to pipe the output to
+.I scale_gray
+to convert to byte format,
+and then redirect to another file system. For large images,
+One suggestion is to use the local disk for file output.
+.I f3dmasku
+or
+.I f3dmaskr
+should be used. The U (unshared) version is faster than the R version
+(each reads its data alone). There are no other difference from the M version.
+.SH AUTHOR
+Jin Guojun, LBL - 10/24/90

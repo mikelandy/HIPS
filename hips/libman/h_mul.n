@@ -1,0 +1,138 @@
+.TH H_MUL 3 "7/3/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_mul \- subroutines to multiply two images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_mul(hdi1,hdi2,hdo)
+h_mul_b(hdi1,hdi2,hdo)
+h_mul_s(hdi1,hdi2,hdo)
+h_mul_i(hdi1,hdi2,hdo)
+h_mul_f(hdi1,hdi2,hdo)
+h_mul_fc(hdi1,hdi2,hdo)
+h_mul_d(hdi1,hdi2,hdo)
+h_mul_ddc(hdi1,hdi2,hdo)
+h_mul_c(hdi1,hdi2,hdo)
+h_mul_dc(hdi1,hdi2,hdo)
+h_mul_ip(hdi1,hdi2,hdo)
+h_mul_fp(hdi1,hdi2,hdo)
+struct header *hdi1,*hdi2,*hdo;
+
+h_mul_B(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+byte *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_mul_S(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+short *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_mul_I(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+int *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_mul_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_mul_FC(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_mul_C(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_mul_D(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_mul_DDC(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_mul_DC(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+double *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines multiply two input subimages (specified by
+.I hdi1
+and
+.IR hdi2 ,
+or by
+.I imagei1
+and
+.IR imagei2 ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_mul
+calls
+.IR h_mul_b ,
+.IR h_mul_s ,
+.IR h_mul_i ,
+.IR h_mul_f ,
+.IR h_mul_fc ,
+.IR h_mul_d ,
+.IR h_mul_ddc ,
+.IR h_mul_c ,
+.IR h_mul_dc ,
+.IR h_mul_ip ,
+or
+.IR h_mul_fp
+depending upon whether the pixel format is byte, short, integer, float, one
+float image and one complex image (in either order), double, one double and
+one double complex image (in either order), complex,
+double complex, integer pyramid or float pyramid.
+.IR h_mul_B ,
+.IR h_mul_S ,
+.IR h_mul_I ,
+.IR h_mul_F ,
+.IR h_mul_FC ,
+.IR h_mul_D ,
+.IR h_mul_DDC ,
+.IR h_mul_C
+and
+.IR h_mul_DC
+are the low-level routines which don't require an image header.  For
+.IR h_mul_fc ,
+.IR h_mul_ddc ,
+.I h_mul_FC
+and
+.IR h_mul_DDC ,
+the first image is single-valued and the second and output images are
+double-valued (complex).
+The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, float*complex, double, double*double complex,
+complex, double complex, integer pyramid, float
+pyramid
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+can be the same as
+.IR imageo .
+Of course this only makes sense if they are the same pixel format.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_FMT3SUBR - can't handle this pixel format combination
+.SH "SEE ALSO"
+h_add(3), h_diff(3), h_div(3)
+.SH AUTHOR
+Michael Landy - 7/3/91

@@ -1,0 +1,32 @@
+.TH RFRAME 1HIPS "January 2, 1984"
+.SH NAME
+rframe - read a frame from the Adage
+.SH SYNOPSIS
+.B rframe
+[rows [cols [initialrow [initialcol]]]] [-v]
+.SH DESCRIPTION 
+.I Rframe
+reads a frame from the Adage starting at (\fIinitialrow\fR,\fIinitialcol\fR)
+with size 
+.I rows
+x
+.IR cols .
+There is no wraparound, so large sizes will
+be truncated. 
+.I Rows 
+and
+.I cols
+default to 512.
+.I Initialrow
+and 
+.I initialcol
+default to 0.
+The
+.I -v
+switch uses 30Hz video.
+.SH SEE\ ALSO
+wframe(1HIPS)
+.SH AUTHOR
+Michael Landy/Yoav Cohen - 2/4/82
+.br
+Modified: YC 6/9/82

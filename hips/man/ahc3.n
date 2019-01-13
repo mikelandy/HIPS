@@ -1,0 +1,103 @@
+.TH AHC3 1 "7/22/91" "Version 2" "HIPS Manual"
+.SH NAME
+ahc3 \- 3D adaptive hierarchical coding into binary trees of binary images
+.SH SYNOPSIS
+.B ahc3
+[-t stackrow stackcol] [-f stackdepth] [-d] [-s] [-v] [-g | -a > outseq] < inseq
+.SH DESCRIPTION 
+.I Ahc3
+gives statistics on compression of a binary sequence using
+adaptive hierarchical coding in 3D into binary-trees.
+.IR Stackrow ,
+.I stackcol
+and
+.I stackdepth
+determine the size of the area
+which is ahc3-encoded as a tree in the forest.  All must be powers of
+2,
+.I stackrow
+and
+.I stackcol
+must be divisors of their corresponding
+spatial dimensions.
+.I Stackdepth
+defaults to the largest power of 2
+divisor of the number of frames, and
+.I stackrow
+and
+.I stackcol
+default to
+the largest power of 2 which is a divisor of the number of rows and
+the number of columns, respectively.
+.PP
+.I -g
+indicates that actual code should be generated.  The full code
+is: {W,B,V,H,D}-->{10,11,00,010,011}.  (If only two cuts are possible
+they are encoded by {00,01}; if one only, by {0}.)  The output is in a
+special format: PFAHC3, each frame is bit-packed, with the last word
+of the tree padded with zeroes to the right.  The number of output
+bytes is reported on ``stderr''.
+.I -a
+specifies that actual code be generated
+in ASCII.  Only one of
+.I -g
+and
+.I -a
+may be specified.  If
+.I -a
+is specified, the
+output is not in HIPS format (there is no header).  Specification of
+.I -s
+produces statistics for each frame in addition to totals.
+.I -v
+(verbose)
+is useful only for debugging purposes, and prints messages about the 
+program's progress.
+.I -d
+(debug) is another debugging flag, which outputs
+the entire stored tree structure.
+.PP
+The input must be in byte-unpacked-format with 1 bit per pixel (in other
+words,
+.I ahc3
+only codes nonzero vs zero pixels).  The coding
+assumptions are 2 bits per black or white node, 2 or 3 bits per meta
+symbol. Except at the lowest level where the two pixels are coded as a
+``nibble'' in 1 bit.  Also if an area is divided into two homogenous
+areas, the second area is coded in 1 bit (0), since it must be of
+color different from that of the first area.  (If
+.I -g
+is specified, the actual
+code is generated.  It is left shifted and packed, with the last word of
+each tree padded with 1's to the right.)  Compression statistics are
+given on ``stderr''.  The program computes the number of input bits,
+output bits and compression ratio.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "OUTPUT PIXEL FORMATS"
+AHC3 (with
+.IR -g )
+.SH "REGION-OF-INTEREST"
+The region-of-interest is ignored and the entire image is coded.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+ahc3_r(1), binquad(1), binquad_r(1), hc_bin(1), hc_bin_r(1)
+.SH AUTHOR
+Yoav Cohen - 4/10/83
+.br
+modified by Mike Landy - 6/21/83
+.br
+HIPS 2 - msl - 7/22/91

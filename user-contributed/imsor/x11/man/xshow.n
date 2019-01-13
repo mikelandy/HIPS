@@ -1,0 +1,157 @@
+.TH XSHOW 1hips "NOVEMBER 3, 1992" 
+.SH NAME
+xshow - show HIPS-images in an X11 window 
+.SH SYNOPSIS
+.B xshow
+[-animate] 
+.br
+[-debug]
+.br
+[-display display] 
+.br
+[-interval nmusec]
+.br
+[-load]
+.br
+[-lut lutfile | -hot | -rainbow]
+.br
+[-name title | -title title]
+.br
+[-newcmap]
+.br
+[-pipe]
+.br
+[-unscaled]
+.br
+[-Usage]
+.br
+[-wrap]
+.br
+[-16] [-256]
+.br
+< iseq | <input file>
+.SH DESCRIPTION 
+.I Xshow
+opens a window in X11 and displays the image from stdin or
+from a file. It accepts
+input formats byte, short, int, float, double, rgb and rgbz. By default all
+these except rgb and rgbz are scaled linearly before display.
+.TP
+Options:
+.TP
+\-\fBanimate\fP
+animates the input sequence and stops at the last frame
+.TP
+\-\fBdebug\fP
+prints out debug information
+.TP
+\-\fBdisplay\fP\fI display\fP
+standard X11
+.TP
+\-\fBhot\fP
+selects a "temperature" pseudo coloring
+.TP
+\-\fBinterval\fP\fI nmusec\fP
+sets minimum time in microseconds between frames during animation.
+(default 40000)
+.TP
+\-\fBload\fP
+forces the program to load all frames into memory.
+Useful for fast animation.
+.TP
+\-\fBlut\fP
+selects a pseudo coloring from an ascii file in the lut directory
+.TP
+\-\fBname\fP\fI title\fP
+\-\fBtitle\fP\fI title\fP
+standard X11
+.TP
+\-\fBnewcmap\fP
+don't keep the default colormap
+.TP
+\-\fBpipe\fP
+pipes the input unchanged to stdout
+.TP
+\-\fBrainbow\fP
+selects a rainbow pseudo coloring
+.TP
+\-\fBunscaled\fP
+when byte images should not be scaled (this is faster, too) 
+.TP
+\-\fBUsage\fP
+prints a usage message
+.TP
+\-\fBwrap\fP
+makes the sequence wrap around so that the first frame follows
+the last frame. Useful in animation. Sets load option as well.
+.TP
+\-\fB16\fP,\-\fB256\fP
+sets the number of colors allocated in the colormap (default 64)
+.SH MOUSE 
+With the right button you can
+make a rubber rectangle to select a subimage. This image will
+be written in a file
+.I xshow.hips
+in the current directory. The middle button is used to draw
+training sets. The training set image is written to the file
+.I trainingsets.hips
+in the current directory.
+.SH INFORMATION COLUMN
+You can push the maximize button or drag in the sides of
+the window to reveal the
+information column. This column will show you the colormap
+of pseudocolor images, the frame number, the cursor position,
+the current pixel value and the mouse button modes.
+.SH KEYS
+.TP
+\fBa\fP\fI or \fP\fB>\fP
+starts animation
+.TP
+\fB<\fP
+animate backwards
+.TP
+\fBb\fP
+make convex beta histogram match (approximately Gaussian)
+.TP
+\fBB\fP
+make concave beta histogram match 
+.TP
+\fBe\fP
+make histogram equalization 
+.TP
+\fBh\fP
+prints the header information
+.TP
+\fBH\fP
+opens a new window and plots the histogram (byte format only)
+.TP
+\fBn\fP\fI or \fP\fB)\fP\fI or \fP\fB<space>\fP
+move one frame ahead
+.TP
+\fB(\fP
+move one frame back
+.TP
+\fBc\fP
+sets a new training set class.
+.TP
+\fBf\fP
+fills from the cursor position with the current class.
+.TP
+\fBq\fP
+exits the program.
+.TP
+\fBS\fP
+stops animation
+.PP
+It is easy to assign other functions to keys by editing the code.
+.SH SEE\ ALSO
+xhips(1)
+.SH COMMENTS,\ SUGGESTIONS,\ BUG-REPORTS\ AND\ -FIXES
+on this program are welcome, preferably through e-mail.
+Threshold and profile do not work on this version.
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

@@ -1,0 +1,58 @@
+.TH H_TOF 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_tof \- conversions to floating point pixel format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_tof(hdi,hdo)
+h_btof(hdi,hdo)
+h_stof(hdi,hdo)
+h_itof(hdi,hdo)
+h_dtof(hdi,hdo)
+h_ctof(hdi,hdo)
+h_dctof(hdi,hdo)
+struct header *hdi,*hdo;
+.fi
+.SH DESCRIPTION 
+These routines convert from a variety of pixel formats to floating point
+format.  The entire image pointed to by
+.I hdi
+is converted to float pixel format and stored in the image pointed to by
+.I hdo
+(any region-of-interest information is ignored).  The routine
+.I h_tof
+checks the pixel format of the input image and calls the appropriate
+individual routines
+.IR h_btof ,
+.IR h_stof ,
+.IR h_itof ,
+.IR h_dtof ,
+.IR h_ctof
+or
+.IR h_dctof
+according to whether it is byte, short, integer, double,
+complex or double complex.
+.I h_ctof
+and
+.I h_dctof
+convert complex-valued pixels to real-valued pixels using complex magnitude,
+the real part, the imaginary part or complex phase according to whether
+.I hips_cplxtor
+has the value CPLX_MAG, CPLX_REAL, CPLX_IMAG or CPLX_PHASE.
+In addition,
+.I h_tof
+or
+.I h_itof
+will also convert an input image in integer pyramid format to floating point
+pyramid format.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_CTORTP - unknown complex to real conversion type
+.SH "SEE ALSO"
+h_tob(3), h_toc(3), h_tod(3), h_todc(3), h_toi(3), etc.
+.SH AUTHOR
+Michael Landy - 1/4/91

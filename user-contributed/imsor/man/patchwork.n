@@ -1,0 +1,21 @@
+.TH PATCHWORK 1hips "April 15, 1994" 
+.SH NAME
+patchwork - patch an image from a sequence
+.SH SYNOPSIS
+.B patchwork
+[-c npics] [-e] [-g gray-level]
+.SH DESCRIPTION 
+.I Patchwork
+patches an image from a sequence.
+.I npics
+is the number of frames per column (default 2). Missing frames in
+the last row are set to 
+.I gray-level
+(default 0).
+.I -e
+embeds frame 1 in frame 0.
+.SH SEE\ ALSO
+framecut(1), frameglue(1)
+.SH AUTHOR
+J. Michael Carstensen
+IMSOR, Technical University of Denmark

@@ -1,0 +1,80 @@
+.TH H_SLICE 3 "6/29/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_slice \- display slices through an image as a graph
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_slice(hdi,hdo,rowcol,vflag)
+h_slice_b(hdi,hdo,rowcol,vflag)
+struct header *hdi,*hdo;
+int rowcol;
+h_boolean vflag;
+
+h_slice_B(imagei,imageo,nr,nc,nlpi,nlpo,rowcol,vflag)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+int rowcol;
+h_boolean vflag;
+.fi
+.SH DESCRIPTION 
+These routines take a slice through an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store a bargraph of the greylevels in the slice in the output subimage
+(specified by
+.I hdo
+or
+.IR imageo ).
+.I h_slice
+calls
+.IR h_slice_b
+as long as the pixel format is byte.
+.IR h_slice_B
+is the low-level routine which doesn't require an image header.  The input
+subimage size is
+.I nr
+by
+.IR nc ,
+and the input image has
+.I nlpi
+pixels per line.  The output subimage size is
+.I nor
+by
+.IR noc ,
+and the output image has
+.I nlpo
+pixels per line.
+If vflag is FALSE, then a horizontal slice through the image is computed,
+otherwise a vertical slice is computed.  The grey values in the row
+or column specified are displayed as a bar graph.  For horizontal slices,
+the number of columns in the output subimage must be 2 wider than the input
+subimage, and there must be 257 rows (one for each possible nonzero grey level
+plus 2 for a border).  For vertical slices, the same thing is reflected.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The output region-of-interest is
+cleared.
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_RCSELN - row/column selection out of range
+.SH "SEE ALSO"
+h_histo(3)
+.SH AUTHOR
+Michael Landy - 8/4/87
+.br
+HIPS 2 - msl - 6/29/91

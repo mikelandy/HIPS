@@ -1,0 +1,65 @@
+.TH  POLYEXTRACT hips2 "October 10 1992" 
+.SH NAME
+polyextract \- extract a polygon-shaped subpicture 
+.SH SYNOPSIS
+.B polyextract 
+.RB [ -f 
+.I polygon file 
+.RB | -p 
+.IR points ] 
+.RB [ -s 
+.IR skipvalue ] 
+.RB [ -i 
+] 
+.br
+.RI < \ input_seq  
+.RI > \ output_seq 
+.br
+.IR polygon \= 
+.I <vertice 1> 
+, ..., 
+.I <vertice N>
+.br
+.IR vertice \= 
+.I <horizontal position> 
+.I <vertical position>
+
+.SH DESCRIPTION
+.I polyextract 
+extracts a polygon-shaped figure from a ordinary HIPS-image or from a
+file of the IMSOR defined Irregular format.
+The points outside the polygon gets the value:
+.I skip-value
+which is -1 by default.
+If parameter
+.I -i
+is set, the points inside the polygon are skipped instead.
+
+The polygon is specified by its vertices, and is read from 
+the file  
+.I polygon-file
+or read directly from the parameter-list ( 
+.I points ).
+A vertex consists of two coordinates - a horisontal and a vertical.  
+If the dataset is Irregular, the form is: 
+.I <x> 
+.IR <y> . 
+If the dataset is a ordinary HIPS-grid, the form is: 
+.I <col> 
+.IR <row> . 
+The vertices may be listet either clockwise or counter-clockwise.
+
+.SH SEE ALSO
+extract(1), asc2hips(1), irr2reg(1).
+
+.SH REFERENCES
+.sp 0.4
+R. Sedgewick (1990):
+Algorithms in C, Addison-Wesley Publishing Company , 
+347\-359.
+
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk 

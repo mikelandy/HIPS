@@ -1,0 +1,30 @@
+#
+# makefile for loginfo
+#
+
+PGMS = loginfo.out
+OBJECTS = loginfo.o compute.o parse.o
+
+.c.o:
+	$(COMPILEc) -I../include -I$(XVIEWHOME)/include $<
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+loginfo.out:	$(OBJECTS)
+	$(LINKc) loginfo $(OBJECTS) $(LIBRARIES)
+#	strip loginfo
+	mv loginfo $(DESTDIR)
+#	cp loginfo $(DESTDIR)
+	@touch $@
+
+
+FRC:

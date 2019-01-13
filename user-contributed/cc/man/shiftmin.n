@@ -1,0 +1,30 @@
+.TH SHIFTMIN 1HIPS "May 24, 1989"
+.SH NAME
+Shiftmin -- Adds a constant to a floating point sequence to shift its minumum
+to a specified value
+.SH SYNOPSIS
+.B shiftmin
+[-u] [-f seq] [-m newmin] [-V] > outseq
+.SH DESCRIPTION 
+.I Shiftmin
+First finds the minimum value of
+.I seq,
+then produces
+.I outseq
+by adding
+\fInewmin\fR-minus-the-old-minimum-value
+to each pixel of seq.  If
+the
+.I -V
+option is elected, the original minimum value of
+.I seq
+is written to stderr when it is obtained.  
+.I Newmin
+defaults to 0..
+The
+.I -u
+option displays a usage summary.
+.SH SEE\ ALSO
+framevar(1HIPS), getmin(1HIPS), addseq(1HIPS)
+.SH AUTHOR
+Charlie Chubb - 5/24/89

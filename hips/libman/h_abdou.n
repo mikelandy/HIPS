@@ -1,0 +1,76 @@
+.TH H_ABDOU 3 "8/7/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_abdou \- Abdou's edge fitting procedure
+.SH SYNOPSIS
+.nf
+.ta 2i
+#include <hipl_format.h>
+
+h_abdou(hdi,hdo,size)
+h_abdou_b(hdi,hdo,size)
+h_abdou_B(imagei,imageo,nr,nc,nlpi,nlpo,size)
+
+struct header *hdi,*hdo;
+byte *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo,size;
+.fi
+.SH DESCRIPTION 
+These routines apply Abdou's edge enhancement algorithm
+to an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_abdou
+calls
+.I h_abdou_b
+as long as the input pixel format is byte.
+.I h_abdou_B
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.I Size
+is the length of a side of the nonoverlapping domains in which the
+algorithm operates.  The program is an implementation of
+the edge fitting algorithm described in I. E. Abdou's doctoral thesis,
+``Quantitative Methods of Edge Detection'', published by the USC Image
+Processing Institute as USCIPI Report 830.  Input is in byte format, output
+is in floating format, and gives either zero, or the signal-to-noise ratio
+for each edge pixel.  All computations are done with pixels scaled by
+size*size in order for integer calculations to be exact.  This yields the
+same signal-to-noise ratio as nonscaled pixels would.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "OUTPUT PIXEL FORMAT"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+The dimensions should be an even multiple of
+.IR size .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place since the output image is in a
+different format from the input image.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.\" .SH "SEE ALSO"
+.SH AUTHOR
+Mike Landy 7/12/82
+.br
+HIPS 2 - msl - 8/7/91

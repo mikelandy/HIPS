@@ -1,0 +1,136 @@
+.TH  H_ASL 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_asl - an adaptive-surface-labeling smoothing filter
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+h_asl(hdi,hdo,sigma2,order,dumpall,median,verbose)
+h_asl_b(hdi,hdo,sigma2,order,dumpall,med,verbose)
+h_asl_f(hdi,hdo,sigma2,order,dumpall,med,verbose)
+struct header   *hdi,*hdo;
+float           sigma2;
+char            *order;
+h_boolean         dumpall,med,verbose;
+
+h_asl_B(oimagei,oimageo,imagei,imageo,
+	nr,nc,onr,onc,sigma2,order,dumpall,med,verbose)
+byte            *oimagei,*oimageo,*imagei,*imageo;
+int             nr,nc,onr,onc;
+float           sigma2;
+char            *order;
+h_boolean         dumpall,med,verbose;
+
+h_asl_F(oimagei,oimageo,imagei,imageo,
+	nr,nc,onr,onc,sigma2,order,dumpall,med,verbose)
+float           *oimagei,*oimageo,*imagei,*imageo;
+int             nr,nc,onr,onc;
+float           sigma2;
+char            *order;
+h_boolean         dumpall,med,verbose;
+.fi
+.SH DESCRIPTION 
+.I h_asl
+applies an adaptive-surface-labeling smoothing filter to the subimage
+(ROI, specified by
+.I hdi
+or
+.IR oimagei,
+a pointer to the first pixel of the image,
+or
+.IR imagei,
+a pointer to the first pixel of the subimage)
+to suppress random noise,
+and stores the result in the output subimage (specified by
+.I hdo
+or
+.IR oimageo,
+a pointer to the first pixel of the image,
+or
+.IR imageo,
+a pointer to the first pixel of the subimage).
+.I h_asl
+then calls
+.I h_asl_b
+if the pixel format is byte or
+.I h_asl_f 
+if the pixel format is float.
+.I h_asl_b
+or
+.I h_asl_f
+then respectively calls
+.I h_asl_B
+or
+.I h_asl_F
+which are the low-level routines and do not require image headers.
+The subimage size is
+.I nr
+by
+.IR nc.
+The input and output images have
+.I onc
+pixels per line, and
+.I onr
+lines.
+.I sigma2
+is a real which specifies the deviation
+of noise of the image and defaults to the square of the
+standard deviation
+in the extended parameter section of the header
+produced by
+.B sigmaspat
+or by 
+.B sigmatemp.
+.I order
+is an alphanumeric string which specifies the order of 
+processing modules and defaults to fwfw-1...f3s3, 
+where w is the window size 
+and s3 contains the forcing phase. 
+The syntax of 
+.I order 
+is:
+.sp
+.I order 
+= AN[N]{AN[N]}*[t]
+.sp
+where:
+.in +2m
+A = z | f | s 
+.br
+N = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+.sp
+where z for zero order, 
+f for first order and s for second order modules, 
+and t stands for termination which means the final phase is also a forcing one.
+.in -2m
+.sp
+Note: a theoretical order beginning from zero order 7x7 is z7z5f7z3f5s7s5f3s3.
+.I dumpall
+allows for outputting intermediate results as well as
+the final processed image.
+If it is not set, only the final processed image is produced.
+.I med
+specifies the "median value" averaging method is used,
+otherwise 
+"mean value" method is used.
+.I verbose
+allows for printing messages during processing.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte and float.
+.SH "OUTPUT PIXEL FORMATS"
+byte and float.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH REFERENCES
+P.H. Mowforth and Z.P. Jin,
+"Implementation for noise suppression in images",
+Image and Vision Computing, Vol. 4, No. 1, pp. 29-37, 1986.
+.SH SEE ALSO
+h_mask(1), h_meanfilt(1), h_median(1), h_mls(1), h_nns(1), h_sasmooth(1), h_snn(1)
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 8/5/1985
+.br
+Peter Mowforth and Jin Zhengping - Modified 17/4/1987
+.br
+Rewritten by Jin Zhengping - 31 August 1991

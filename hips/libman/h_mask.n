@@ -1,0 +1,191 @@
+.TH H_MASK 3 "7/14/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_mask \- apply a set of masks to an image
+.SH SYNOPSIS
+.nf
+.ta 2i
+#include <hipl_format.h>
+
+.ta 1i
+h_mask(hdi,mask,hdo)
+h_mask_bif(hdi,mask,hdo)
+h_mask_bff(hdi,mask,hdo)
+h_mask_iif(hdi,mask,hdo)
+h_mask_iff(hdi,mask,hdo)
+h_mask_fff(hdi,mask,hdo)
+struct header *hdi,*hdo;
+struct hips_mask *mask;
+
+h_mask_BIF(imagei,imageo,nr,nc,nlpi,nlpo,nmasks,maskfunc,masks,mrows,mcols,
+	mrowoff,mcoloff)
+byte *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo,nmasks,maskfunc,**masks,*mrows,*mcols,*mrowoff,*mcoloff;
+
+h_mask_BFF(imagei,imageo,nr,nc,nlpi,nlpo,nmasks,maskfunc,masks,mrows,mcols,
+	mrowoff,mcoloff)
+byte *imagei;
+float *imageo,**masks;
+int nr,nc,nlpi,nlpo,nmasks,maskfunc,*mrows,*mcols,*mrowoff,*mcoloff;
+
+h_mask_IIF(imagei,imageo,nr,nc,nlpi,nlpo,nmasks,maskfunc,masks,mrows,mcols,
+	mrowoff,mcoloff)
+int *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo,nmasks,maskfunc,**masks,*mrows,*mcols,*mrowoff,*mcoloff;
+
+h_mask_IFF(imagei,imageo,nr,nc,nlpi,nlpo,nmasks,maskfunc,masks,mrows,mcols,
+	mrowoff,mcoloff)
+int *imagei;
+float *imageo,**masks;
+int nr,nc,nlpi,nlpo,nmasks,maskfunc,*mrows,*mcols,*mrowoff,*mcoloff;
+
+h_mask_FFF(imagei,imageo,nr,nc,nlpi,nlpo,nmasks,maskfunc,masks,mrows,mcols,
+	mrowoff,mcoloff)
+float *imagei,*imageo,**masks;
+int nr,nc,nlpi,nlpo,nmasks,maskfunc,*mrows,*mcols,*mrowoff,*mcoloff;
+.fi
+.SH DESCRIPTION 
+These routines apply a set of correlation masks to an input subimage
+(specified by
+.I hdi
+or
+.IR imagei ),
+apply a function to the outputs of these masks,
+and store the result of that function in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_mask
+calls
+.IR h_mask_bif ,
+.IR h_mask_bff ,
+.IR h_mask_iif ,
+.I h_mask_iff
+or
+.I h_mask_fff
+depending on the combination of input image pixel format and mask pixel format
+(byte and integer, byte and float, integer and integer, integer and float, or
+float and float).
+.IR h_mask_BIF ,
+.IR h_mask_BFF ,
+.IR h_mask_IIF ,
+.I h_mask_IFF
+and
+.I h_mask_FFF
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.PP
+A convolution mask set consists of 1 or more masks (arrays of floats or
+ints), each with associated size and row and column offsets (to denote
+which mask pixel is centered on the image pixel before cross-correlating, with
+rows and columns numbered starting with zero).
+It is important to note that
+.I h_mask
+cross-correlates with the masks rather than
+convolves; in other words, the rows and columns are not first reflected;
+for the usual mirror symmetric masks this poses no complications.  The
+masks are supplied as a mask structure, which gives the mask name, format
+(PFFLOAT or PFINT), size, offsets, mask values, and function number.  For the
+low-level routines, these values and arrays are given as separate arguments.
+.PP
+.I h_mask
+cross-correlates the input image with each of the supplied masks.
+Each mask can be of a different size, and for each mask, the mask structure
+designates the position of that mask with respect to the input image
+(in other words, which pixel of the mask overlays a given input image pixel
+in order to compute the cross-correlation corresponding to the
+corresponding output image pixel).  The cross-correlation extends the edges
+of the subimage whenever the mask extends beyond the subimage edges.
+.PP
+Note that the earlier mask values are applied to earlier image
+values.  Thus, the interpretation of the mask orientation depends on the
+definition of ULORIG (the HIPS installation parameter which defines the
+vertical orientation of the image coordinate system).
+If ULORIG is defined (images have their origin at
+the upper-left), then the first mask row is topmost relative to the image.
+Otherwise, the last mask row is topmost relative to the image.  Otherwise
+stated, a ULORIG coordinate system applies to masks as well as to images.
+.PP
+Mask sets can include one or more masks.
+.I h_mask
+applies a function to the
+set of mask output values which results in the single pixel value placed in
+a given position in the output image.  The function number in the mask
+structure identifies which function will be applied from among:
+.TP 1.5i
+MASKFUN_MAXABS
+the maximum absolute value of all mask outputs
+.TP
+MASKFUN_MEANSQ
+the square root of the sum of the squares of all masks
+.TP
+MASKFUN_SUMABS
+the sum of the absolute value of all mask outputs
+.TP
+MASKFUN_MAX
+the maximum mask output
+.TP
+MASKFUN_MAXFLR
+the maximum mask output, floored at zero
+.TP
+MASKFUN_MXASFLR
+the larger of |mask-1| and |mask-2|, minus |mask-3|, floored at zero
+.TP
+MASKFUN_MUL
+the product of the mask outputs, each floored at zero
+.TP
+MASKFUN_NORM
+the first mask output normalized by the sum of the mask entries
+.TP
+MASKFUN_DIFF
+the value of the pixel minus the normalized mask output
+.TP
+MASKFUN_ORIENT
+compute orientation: 360*atan(mask2/mask1)/2*PI
+.TP
+MASKFUN_IDENT
+the value of the first mask output (simple convolution)
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, integer, float
+.SH "OUTPUT PIXEL FORMAT"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_FMT3SUBR - can't handle this combination of image and mask pixel format
+.br
+HE_MSKCNT - inappropriate number of masks for the mask function
+.br
+HE_MSKFUNSUBR - unknown mask function
+.SH "SEE ALSO"
+mask_util(3)
+.SH AUTHOR
+Based on HIPS-1 mask: Michael Landy - 4/21/82
+.br
+HIPS-2 - msl - 7/12/91

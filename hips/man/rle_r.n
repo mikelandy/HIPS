@@ -1,0 +1,37 @@
+.TH RLE_R 1 "7/23/91" "Version 2" "HIPS Manual"
+.SH NAME
+rle_r \- decode an rle-coded sequence into a byte formatted sequence.
+.SH SYNOPSIS
+.B rle_r
+< input_tree >output_sequence
+.SH DESCRIPTION 
+.I Rle_r
+converts a sequence coded using 
+.IR rle (1)
+into a byte formatted sequence.
+The input must be in the special PFRLED, PFRLEW or PFRLEB format.
+The code is assumed to be left shifted and packed, with last word of each
+frame padded with 0's to the right.
+The number of bits read is given on ``stderr''.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+RLED, RLEW, RLEB
+.SH "OUTPUT PIXEL FORMATS"
+byte
+.SH "REGION-OF-INTEREST"
+The region-of-interest is ignored and the entire image is decoded.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when reconstructing. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when reconstructing. Default: 255.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+rle(1), dpcm(1), dpcm_r(1)
+.SH AUTHOR
+Yoav Cohen - 5/24/83
+.br
+Hips 2 - msl - 7/23/91

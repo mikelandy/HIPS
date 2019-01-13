@@ -1,0 +1,81 @@
+/**************************************************************************
+ *                                                                        * 
+ * Function: max_wframe()					                   		    *
+ *                                                                        *
+ * Usage:	max_wframe [initialrow [initialcolumn]] < frame              	    *
+ * Returns:  none							                        *
+ * Defaults: centered                                                     *
+ * Loads: cc -o -DDG max_wframe max_wframe.c -lhipl  -lfslib.a -lldgib.a  *
+ *                        -Imaxvideo/include -Ilocaldir/include           *
+ * Modified:TK 20-III-88                                                  *
+ *                                                                        *
+ * Description:Writes a frame onto the Datacube Framestore fs0 at screen  *
+ *             position (initialrow,initialcol)for frame coordinate (0,0).*
+ *             Connections should be as follows	     			    *
+ *              DIGI             FRM                                      * 
+ *              P3       ->      P3                                       * 
+ *    CAMERA -> P12                                                       * 
+ *    TV     <- P13                                                       * 
+ *              P7       <-      P7                                       * 
+ *              P10      ->      P10                                      * 
+ **************************************************************************
+ *                    Copyright (c) 1988                                  *
+ *                    Captain Chaos   V.2.1 MAX_WARE                      *
+ **************************************************************************
+ */
+#include <fsHead.h>
+#include <dgHead.h>
+#include <maxdefs.h>
+#include <stdio.h>
+
+main(argc,argv)
+int argc;
+char **argv;
+{
+     FS_DESC *fsfd;	/* FRAMSTORE device descriptor */
+     DG_DESC *dgfd;	/* DIGIMAX device descriptor */
+	char *picbuf,*inp,*outp;
+	int  ir,ic,r,c,n,verbose;
+	struct header hd;
+
+	Progname = strsave(*argv);
+     /* initialize parameters */
+	read_header(&hd);
+	ir=(512-hd.orows)/2; ic=(512-hd.ocols)/2; /* centre display of frame */
+	RS_T50 = 0;r = hd.orows; c = hd.ocols;n = r*c ;verbose = 0;
+
+	if(argv[argc-1][0]=='-')argc--; /* assign parameters */
+	if(argc>1) ir=atoi(argv[1]) ;
+	if(argc>2) ic=atoi(argv[2]) ;
+
+	/* display error message on terminal(stderr) */
+	if (hd.pixel_format != PFBYTE) {
+		fprintf(stderr,"max_wframe: frame must be in byte format\n");
+		exit(1);
+	}
+	fprintf(stderr,"max_wframe:frame size: %d rows : %d cols:\n",r,c);
+	fprintf(stderr,"max_wframe:initial start point: %d %d\n",ir,ic);
+
+	if ( (picbuf = (char *) calloc(n,sizeof(char))) == 0) { 
+			fprintf(stderr,"max_wframe:can't allocate core\n");
+			exit(1);
+		}
+	outp = inp = picbuf;
+
+     /* Allocate memory for the boards' register structures */
+     fsfd = fsOpen(FS_BASE, verbose);
+     dgfd = dgOpen(DG_BASE, verbose);
+
+	/* Reading file from stdin */
+	fread(inp,n,1,stdin);
+
+	/* Calling FRAMESTORE write function  */
+	rsMvBitBlt(fsfd,MOVE,outp,FS_FS0,ic,ir,c,r);
+
+	/*closing all open file devices*/
+     if (rsClose(fsfd) == NOOK)
+	 printf("FRAMESTORE, problems with freeing the memory\n");
+     if (dgClose(dgfd) == NOOK)
+	 printf("DIGIMAX, problems with freeing the memory\n");
+	return(0) ;
+}

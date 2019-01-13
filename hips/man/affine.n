@@ -1,0 +1,77 @@
+.TH AFFINE 1 "6/29/91" "Version 2" "HIPS Manual"
+.SH NAME
+affine \- warp an image using an affine transformation
+.SH SYNOPSIS
+.B affine
+[-ll x y] [-lr x y] [-ul x y] [-ur x y] [-s nr nc] [-C]
+.SH DESCRIPTION 
+.I Affine
+warps an image using an affine transformation.  The image is 
+considered to have a coordinate system with the origin at the lower-left
+corner, x horizontal, and y vertical.  The rightmost column is treated as
+having x=1.0, and the top row as having y=1.0.  The user specifies to which
+coordinate points up to three of the four image corners map in the output
+image:  the lower left (\c
+.IR -ll ),
+the lower-right (\c
+.IR -lr ),
+the upper-left (\c
+.IR -ul ),
+and the upper-right (\c
+.IR -ur ).
+Specification of three of the four mappings
+uniquely defines an affine map (involving translation, rotation, 
+scaling, and shear).  The user-specified arguments need not be confined
+to the interval [0,1], and clipping will be performed appropriately.  If
+.I -C
+is specified, the user-specified arguments are in column and row numbers
+of the output image, rather than as fractions of each. The default mappings
+depend on the number of arguments specified:
+.sp
+.in +1i
+.ta 1i
+.nf
+0	identity mapping
+1	translation only
+2	translation, scaling, and rotation
+3	full affine transformation
+4	error (try another warp program)
+.fi
+.in -1i
+.sp
+For each output pixel, the corresponding input coordinates are computed.
+If that input point is outside of the image, then the output pixel is
+set to the background value (set by the standard switch
+.IR -UL ,
+the default is zero).  Otherwise,
+the value is bilinearly interpolated between the surrounding four pixels
+in the input.  The output image size may be specified using
+.IR -s ,
+and defaults to the input image size.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+The entire image is warped.  The output image region-of-interest is cleared.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+enlarge(1), reduce(1), stretch(1)
+.SH AUTHOR
+Mike Landy - 8/7/88
+.br
+HIPS 2 - msl - 6/29/91

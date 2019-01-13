@@ -1,0 +1,96 @@
+.TH H_NEG 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_neg \- subroutines to take the negative of an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_neg(hdi,hdo)
+h_neg_mp(hdi,hdo)
+h_neg_lp(hdi,hdo)
+h_neg_b(hdi,hdo)
+h_neg_s(hdi,hdo)
+h_neg_i(hdi,hdo)
+h_neg_f(hdi,hdo)
+struct header *hdi,*hdo;
+
+h_neg_MP(imagei,imageo,nr,nc,nlpi,nlpo)
+h_neg_LP(imagei,imageo,nr,nc,nlpi,nlpo)
+h_neg_B(imagei,imageo,nr,nc,nlpi,nlpo)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+
+h_neg_S(imagei,imageo,nr,nc,nlpi,nlpo)
+short *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+
+h_neg_I(imagei,imageo,nr,nc,nlpi,nlpo)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+
+h_neg_F(imagei,imageo,nr,nc,nlpi,nlpo)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines take the negative of an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_neg
+calls
+.IR h_neg_lp ,
+.IR h_neg_mp ,
+.IR h_neg_b ,
+.IR h_neg_s ,
+.I h_neg_i
+or
+.I h_neg_f
+depending upon whether the pixel format is LSBF, MSBF, byte, short, integer or
+float.
+.IR h_neg_LP ,
+.IR h_neg_MP ,
+.IR h_neg_B ,
+.IR h_neg_S ,
+.I h_neg_I
+and
+.I h_neg_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  For bit-packed images, 0's and 1's are exchanged.  For byte
+images, a photographic negative results (e.g. 0 and 255 are exchanged).  For
+other formats, the pixel signs are changed.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+MSBF, LSBF, byte, short, integer, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_abs(3)
+.SH AUTHOR
+Michael Landy - 1/6/91

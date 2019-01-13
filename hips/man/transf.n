@@ -1,0 +1,20 @@
+.TH TRANSF 1 "8/1/91" "Version 2" "HIPS Manual"
+.SH NAME
+transf \- transform a PLOT3D sequence
+.SH SYNOPSIS
+.B transf
+.SH DESCRIPTION 
+.I Transf
+transforms a sequence. All the entries are transformed
+according to the shift-vector and the rotation-matrix
+which are set to zero and identity and are not written out.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH AUTHOR
+Yoav Cohen - 17/11/82
+.br
+HIPS 2 - msl - 1/8/91

@@ -1,0 +1,29 @@
+.TH SEEHIST 1 "8/17/91" "Version 2" "HIPS Manual"
+.SH NAME
+seehist \- display histogram files as readable Ascii text
+.SH SYNOPSIS
+.B seehist
+[-p] [-z]
+.SH DESCRIPTION 
+.I Seehist
+converts an image histogram into a readable form.
+Switch
+.I -z
+suppresses the printing of empty bins.
+Switch
+.I -p
+pipes the histogram to the standard output for use with other filters; the
+displayed data are sent to stderr.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+histogram
+.SH "OUTPUT PIXEL FORMATS"
+histogram (with
+.IR -p )
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+disphist(1), histo(1)
+.SH AUTHOR
+Michael Landy - 8/17/82

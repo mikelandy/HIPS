@@ -1,0 +1,29 @@
+.TH WRITE_FRAME 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+write_frame \- write a plot3d frame
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+write_frame(fp,buf,nbytes,shift_v,rot_m,fr)
+FILE *fp;
+char *buf;
+double shift_v[3],rot_m[3][3];
+int fr;
+.fi
+.SH DESCRIPTION 
+.I write_frame
+writes a single plot3d frame.  It is supplied with a file pointer, buffer and
+buffer length, a shift and rotation matrix, and the frame number (for more
+informative error messages).
+It adds a frame-end at the correct position.
+It sets the flags appropriately if either the shift vector or rotation matrix
+is the identity transformation.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_WRITEFR - error during write
+.SH AUTHOR
+Yoav Cohen 11/3/82
+.br
+modified for HIPS 2 - msl - 1/3/91

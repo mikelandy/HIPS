@@ -1,0 +1,10 @@
+#!/bin/csh
+# Jens Michael Carstensen, IMSOR 1991
+
+set file1 = /tmp/grad1$$
+set file2 = /tmp/grad2$$
+cat >$file1
+merode $argv[1] <$file1 >$file2
+mdilate $argv[1] <$file1 | frdif $file2
+rm $file1
+rm $file2

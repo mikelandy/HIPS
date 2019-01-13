@@ -1,0 +1,64 @@
+#
+# makefile for jpeg/jpeg-v4/lib
+#
+
+# This makefile is suitable for Unix-like systems with any C compilers.
+
+LIBNAME = libjpeg.a
+
+LOCAL_INC = -I. -I$(CCS_ROOT)/include
+LOCALCFLAGS = $(LOCAL_INC) $(JPEG_FLAGS) $(CPL_FLAGS)
+
+# virtual source files (not present in distribution file, see SETUP)
+VIRTSOURCES= jmemsys.c
+# system-dependent implementations of virtual source files
+SYSDEPFILES= jmemansi.c jmemname.c jmemnobs.c jmemdos.c jmemdos.h jmemdosa.asm
+# files included by source files
+INCLUDES= jinclude.h jconfig.h jpegdata.h jversion.h jmemsys.h
+
+# objectfiles common to compress and decompress
+COMOBJECTS= jutils.o jerror.o jmemmgr.o jmemsys.o strmjpeg.o hread_jheader.o
+# compression objectfiles
+NOTUSED_COBJS = jrdgif.o jrdppm.o jrdrle.o
+CLIBOBJECTS= jcmaster.o jcdeflts.o jcarith.o jccolor.o jcexpand.o jchuff.o \
+        jcmcu.o jcpipe.o jcsample.o jfwddct.o jwrjfif.o jrdtarga.o
+# decompression objectfiles
+DLIBOBJECTS= jdmaster.o jddeflts.o jbsmooth.o jdarith.o jdcolor.o jdhuff.o \
+        jdmcu.o jdpipe.o jdsample.o jquant1.o jquant2.o jrevdct.o jrdjfif.o \
+        jpeg_r.o jpeg_w.o jwrgif.o jwrppm.o jwrrle.o jwrtarga.o
+
+# These objectfiles are included in libjpeg.a
+LIBOBJECTS= $(CLIBOBJECTS) $(DLIBOBJECTS) $(COMOBJECTS)
+ANSI_OBJ = $(LIBOBJECTS)
+
+default: $(ANSI2KNR) $(LIBNAME)
+install: $(ANSI2KNR) $(LIBNAME)
+
+ANSI2KNR = cp	# make non-ANSI anyway
+include ansi-knr
+
+.c.o:
+	$(COMPILEc) $(LOCALCFLAGS) $*.c
+
+$(LIBNAME):	$(LIBOBJECTS)
+	@rm -f $(LIBNAME) tmpansi.c
+	ar cr $(LIBNAME) `$(LORDER) $(LIBOBJECTS) | $(TSORT)`;
+	mv $(LIBNAME) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIBNAME)
+	@touch $(LIBNAME)
+
+$(INCLUDES):
+	cp -p $(INCLUDES) $(INCLUDE_DIR)
+
+jmemsys.c:
+	echo You must select a system-dependent jmemsys.c file.
+	echo Please read the SETUP directions.
+	exit 1
+
+clean:
+	rm -f *.o $(LIBNAME)
+clean-all:	clean_all
+
+man:
+
+doc:

@@ -1,0 +1,142 @@
+.\" $Header$
+.\" a few macros
+.de Cs		\" code start
+.DS
+.ft B
+.ta 9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n
+..
+.de Ce		\" code end
+.ft R
+.DE
+..
+.de Ss		\" subroutine definition start
+.nf
+.ft B
+.ta 9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n,+9n
+..
+.de Sd		\" subroutine documentation
+.ft R
+.fi
+.in +4n
+..
+.de Se		\" subroutine definition&documentation end
+.in -4n
+..
+.de DS
+.nf
+.in +3n
+.sp .5v
+..
+.de DE
+.sp .5v
+.in -4n
+.fi
+..
+.TH SCALE_GEOM 1 "31 August 1989" LBL-HIPS
+.SH NAME
+scale_geom \- filtered image scale and translate
+.nf
+.SH SYNOPSIS
+.DS
+Usage: scale_geom [options]
+-s %d%d%d%d     source box (row col #rows #cols)
+-dc %d          # of cols in destination file (default = source size) 
+-dr %d          # of rows in the destination file  
+-d %d%d         # of cols, rows in file dest file 
+-filt %s[%s     filter name in x and y (default=triangle) 
+                        "-filt '?'" prints a filter catalog
+-supp %f[%f     filter support radius
+-blur %f[%f     blur factor: >1 is blurry, <1 is sharp
+-window %s[%s   window an IIR filter (default=blackman)
+-debug %d       print filter coefficients
+-xy             filter x before y
+-yx             filter y before x
+-plain          disable filter coercion
+-keep0          keep zeros in xfilter
+Where %d denotes integer, %f denotes float, %s denotes string,
+and '[' marks optional following args
+
+.DE
+.fi
+.SH DESCRIPTION
+\fIscale_geom\fP scales the geometry of a Hips image file
+to another file. Any sub-window of the input image can be
+specified by a location and the number of rows and columns to include.
+The output image size can be given in terms of the number of
+row or columns, and the other dimension will automatically be
+set to yield square pixels.
+
+.PP
+To run \fIscale_geom\fP, the user specifies the source and destination file
+using unix stdin and stdout. For example: scale_geom < infile > outfile.
+The default source box is the entire image, and the default destination
+box is the source box.
+
+.PP
+Filters are selected with the \fB-filt\fP option.
+If given one filter name, \fB-filt\fP will use that filter in both x and y;
+if given two names, different filters can be used in the two dimensions.
+The command \fBscale_geom -filt '?'\fP prints
+the list of filters currently known to \fIscale_geom\fP.
+That list is:
+.DS
+NAME      SUPPORT
+point       0
+box         0.5
+triangle    1
+quadratic   1.5
+cubic       2
+catrom      2
+mitchell    2
+gaussian    1.25
+sinc        4
+bessel      3.24
+.DE
+The option \fB-filt point\fP gives fast pixel replication,
+\fB-filt triangle\fP (the default) gives bilinear interpolation,
+which is suitable for most purposes,
+and \fB-filt mitchell\fP gives slower, very high quality results.
+The other filters are provided for experimentation.
+The time required by a filter is proportional to its support.
+.PP
+Most of the filters known to \fIscale_geom\fP are FIR (finite impulse response),
+with an intrinsic support (width),
+but some of them (gaussian, sinc, bessel) are IIR (infinite impulse response),
+and must be truncated at some arbitrary support.
+This can be done with the \fB-supp\fP option.
+Again, the defaults are reasonable.
+The IIR filters can be windowed (brought down to zero) with various window
+functions listed below:
+.Cs
+hanning
+hamming
+blackman
+kaiser
+.Ce
+The sinc and bessel filters are blackman-windowed by default.
+Filters can be scaled artificially to blur or sharpen them with the \fB-blur\fP
+option.
+.SH EXAMPLES
+.Ss
+scale_geom -dr 400 < infile > outfile 
+.Sd
+The output file will have 400 rows and whatever number of columns
+necessary to give square pixels. The default filter (triangle) is
+used.
+.Se
+
+.Ss
+scale_geom -s 10 10 200 200 -d 250 300 -filt sinc < infile > outfile 
+.Sd
+The output file will be the image starting at location (10,10) in the
+input file, and extending 200 rows and columns from that point. This 
+image will be scaled to a size of 250 by 300, using a sinc filter.
+.Se
+
+.SH SEE ALSO
+\fIDiscrete Time Signal Processing\fP, Alan Oppenheim, Ronald Schafer, 1989.
+.SH AUTHOR
+Paul Heckbert, UC Berkeley, August 1989.
+ph@miro.berkeley.edu
+.PP
+Brian Tierney, LBL, modified for use with hips files.  tierney@george.lbl.gov

@@ -1,0 +1,98 @@
+.TH GETOBJ3D 1 "1 September 1990" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+getobj3d \- select objects out of an image (3D version)
+.SH SYNOPSIS
+.B getobj3d
+[-t NN][-b NN][-m NN][-g N][-c NN NN][-s][-a][-o][-v][-f fname] < inseq > outseq
+.SH DESCRIPTION
+.I getobj3d
+selects an arbitrary number of distinct objects from an
+image, and sets the remaining image to a uniform background value
+(usually zero). This can be used when only certain objects are
+of interest, or to eliminate background noise
+around a central object.  The program can also be helpful in that
+by making the entire background a constant value, data
+compression programs will perform better.
+This is a 3D version of
+.IR getobj .
+This program
+works on HIPS formatted images of type int, short, and byte.
+.SH OPTIONS
+The following options are available:
+.TP
+.B "\-t threshold value" 
+All grey level values below this value are discarded. Default value is 50.
+.TP
+.B "\-b background value"
+All locations not determined to be part of an object are set 
+to this value. Default value is 0.
+.TP
+.B "\-m minimum size object"
+Any object smaller than this size is ignored. Usually used in conjunction
+with the -a option. (default = 10) NOTE: voxels which fall on a surface
+between object and background are not counted in the object size.
+.TP
+.B "-g N"
+N is the type of connectivity bridge. 0 = no checking (default), 1 = 
+check for 2D bridges, 2 = check for weak 3D bridges, 3 = check for strong
+3D bridges. 
+Bridges are defined as follows:
+  2D bridges: in the 2D slice, objects must be connected by at least 3 voxels
+  3D weak bridges: in 3D, objects must be connected by at least 3 voxels
+  3D strong bridges: in 3D, objects must be connected by at least 5 voxels
+.TP
+.B "\-d"
+Display statistics (object area, total intensity, 
+and average intensity) on each object.
+.TP
+.B "\-a"
+Find all objects in the data set.
+.TP
+.B "\-o"
+Output is binary. All pixels in objects are set to 255, and all other pixels are
+set to 0.
+.TP
+.B "\-v"
+Verbose mode: displays information along the way. Useful on slow machines
+to know the current status of the program.
+.TP
+.B "\-c row column"
+The row, column point which is inside the desired object. If this  
+point is not in an object, the program exits. If the point is not
+specified, 
+.IR getobj3d
+uses the first object it finds from the center of the image.
+.TP
+.B "\-f value file"
+When this argument is given, (col, row, frame) values of object locations
+are read from this file.  The format of the file should be an
+int telling the number of points in the file, followed by a list
+of points. For example: 
+    "2
+     100 120 12 
+     200 210 13"
+means use 2 seed values,
+one at (100,120,12), and the other at (200, 210,13).
+This option over-rides the -c option.
+
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH "SEE ALSO"
+getobj(1)
+.SH DIAGNOSTICS
+.I getobj3d
+will give unpredictable results if the objects are not
+cleanly separated. If an object is not found at the seed value
+specified, it will look for objects within 10 voxels of the
+given seed value. Otherwise an error message is printed.
+.sp
+This program may run out of memory if the object size is too large
+or if it is given a non-binary image.
+.SH BUGS
+Report to Brian Tierney.
+
+
+
+
+

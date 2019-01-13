@@ -1,0 +1,40 @@
+.TH H_TOSB 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_tosb \- conversions to signed byte pixel format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_tosb(hdi,hdo)
+h_stosb(hdi,hdo)
+h_itosb(hdi,hdo)
+struct header *hdi,*hdo;
+.fi
+.SH DESCRIPTION 
+These routines convert from a variety of pixel formats to short integer format.
+The entire image pointed to by
+.I hdi
+is converted to signed byte pixel format and stored in the image pointed to by
+.I hdo
+(any region-of-interest information is ignored).  The routine
+.I h_tosb
+checks the pixel format of the input image and calls the appropriate
+individual routines
+.IR h_stosb
+or
+.IR h_itosb
+according to whether it is short or integer.
+All values are clipped to lie between -128 and +127.
+The number of clipped pixels is recorded in HIPS global variables
+.I hips_lclip
+(for values less than -128) and
+.I hips_hclip
+(for values greater than 127).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_toc(3), h_tod(3), h_todc(3), h_tof(3), h_toi(3), etc.
+.SH AUTHOR
+Michael Landy - 1/4/91

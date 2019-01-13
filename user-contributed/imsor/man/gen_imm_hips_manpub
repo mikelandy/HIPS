@@ -1,0 +1,99 @@
+#!/bin/csh
+# script to generate man page summarizing IMM HIPS programs
+# (partly from Brian Tierney, LBL)
+# Allan Aasbjerg Nielsen, IMM
+#
+#set echo
+set verify
+set sdir=$cwd/
+# set output file name here
+set outname=hips_imm
+set outfile=$outname.n
+#et outfile=$outname.1
+#
+# list of directories containing man pages
+
+#ZZ
+#et DIRS = (~aa/hips2/manpub ~aa/hips2/man ~jmc/hips2/man1 ~rl/manpub ~rl/man ~kah/HIPS2/manpub ~kah/HIPS2/manpriv ~lk/man ~lk/manpub)
+set DIRS = (.)
+#
+rm -f $outfile
+echo '.TH HIPS_IMM 1 "\c' > $sdir/$outfile
+echo "`date +'%%%d %B %Y' | sed -e 's/%0/%/' | sed -e 's/%//'`\c" >> $sdir/$outfile
+echo '" "Version 2" "HIPS Manual"' >> $sdir/$outfile
+#echo '.TH HIPS_IMM 1 "`date +'%d %B %Y'`" "Version 2" "HIPS Manual"' > $sdir/$outfile
+echo '.SH NAME' >> $sdir/$outfile
+#ZZ
+#cho "$outname \- IMM HIPS programs" >> $sdir/$outfile
+echo "$outname \- IMM HIPS programs in public domain" >> $sdir/$outfile
+echo '.SH SYNOPSIS' >> $sdir/$outfile
+echo 'This is a synopsis of some HIPS programs written by members of' >> $sdir/$outfile
+echo 'the Image Group at IMM,' >> $sdir/$outfile
+echo 'the Institute of Mathematical Modelling' >> $sdir/$outfile
+echo 'at the Technical University of Denmark.' >> $sdir/$outfile
+echo 'The programs are developed and run on a network of HP9000/700 engines.' >> $sdir/$outfile
+#echo '.sp' >> $sdir/$outfile
+echo 'The Image Group is headed by professor Knut Conradsen.' >> $sdir/$outfile
+echo '.SH COPYRIGHT' >> $sdir/$outfile
+echo "These programs are copyright \(co 1990\-`date +'%Y'`," >> $sdir/$outfile
+echo 'the author(s) and IMM.' >> $sdir/$outfile
+echo 'Anyone may reproduce this software,' >> $sdir/$outfile
+echo 'in whole or in part, provided that' >> $sdir/$outfile
+echo '.TP .25i' >> $sdir/$outfile
+echo '(1)' >> $sdir/$outfile
+echo 'any copy or redistribution shows' >> $sdir/$outfile
+echo 'IMM, the Institute of Mathematical Modelling,' >> $sdir/$outfile
+echo 'the Technical University of Denmark' >> $sdir/$outfile
+echo 'as the source, and' >> $sdir/$outfile
+echo 'includes this notice;' >> $sdir/$outfile
+echo '.TP .25i' >> $sdir/$outfile
+echo '(2)' >> $sdir/$outfile
+echo 'any use of this software references this distribution,' >> $sdir/$outfile
+echo 'state that the software copyright is held by' >> $sdir/$outfile
+echo 'the authors and IMM, and that the' >> $sdir/$outfile
+echo 'software is used by their permission.' >> $sdir/$outfile
+echo '.PP' >> $sdir/$outfile
+#cho 'It is acknowledged that the U.S. Government has rights' >> $sdir/$outfile
+#cho 'to this software under Contract DE-AC03-765F00098 between the U.S.' >> $sdir/$outfile
+#cho 'Department of Energy and the University of California.' >> $sdir/$outfile
+#cho '.sp' >> $sdir/$outfile
+echo 'This software is provided as a professional academic' >> $sdir/$outfile
+echo 'contribution for joint exchange.' >> $sdir/$outfile
+echo 'Thus it is experimental, it is' >> $sdir/$outfile
+echo 'provided "as is", with no warranties of any kind whatsoever,' >> $sdir/$outfile
+echo 'no support, promise of updates, or printed documentation.' >> $sdir/$outfile
+echo 'Bug reports or fixes may be sent to the author, who may or may' >> $sdir/$outfile
+echo 'not act on them as he desires.' >> $sdir/$outfile
+echo '.SH DISCLAIMER' >> $sdir/$outfile
+echo 'No guarantees of performance accompany this software,' >> $sdir/$outfile
+echo 'nor is any responsibility assumed on the part of the authors.' >> $sdir/$outfile
+echo 'All the software has been tested extensively and every effort has been made to' >> $sdir/$outfile
+echo 'insure its reliability.' >> $sdir/$outfile
+echo '.SH IMM HIPS PROGRAMS' >> $sdir/$outfile
+echo 'This is a listing of the IMM HIPS programs as' >> $sdir/$outfile
+echo 'described by the authors in the' >> $sdir/$outfile
+echo '.B \s-1NAME\s+1' >> $sdir/$outfile
+echo 'section of the individual manual pages.' >> $sdir/$outfile
+echo '.sp' >> $sdir/$outfile
+
+# get everything from NAME to SYNOPSIS
+# then delete NAME and SYNOPSIS
+set names = (`ls -l *.n | grep -v "^lr" | cut -c55-`)
+foreach man_file ($names)
+   sed -n -e '/SH NAME/,/SH SYNOPSIS/p' $man_file | \
+   sed '/.SH NAME/d' | \
+   sed 's/.SH SYNOPSIS//' >> $sdir/$outfile
+#  /bin/rm $man_file
+end
+
+echo '.SH IMM HIPS MAINTENANCE' >> $sdir/$outfile
+echo '.nf' >> $sdir/$outfile
+echo 'J. Michael Carstensen, e-mail: jmc@imsor.dth.dk' >> $sdir/$outfile
+echo 'Allan Aasbjerg Nielsen, e-mail: aa@imsor.dth.dk' >> $sdir/$outfile
+echo 'IMM, Technical University of Denmark' >> $sdir/$outfile
+echo 'Building 321, DK\-2800 Lyngby, Denmark' >> $sdir/$outfile
+echo 'Phone +45 42 88 14 33, fax +45 42 88 13 97' >> $sdir/$outfile
+echo '.fi' >> $sdir/$outfile
+echo '.SH SEE ALSO' >> $sdir/$outfile
+echo 'All of the above programs have their own manual pages.' >> $sdir/$outfile
+exit(0)

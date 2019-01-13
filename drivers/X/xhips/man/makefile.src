@@ -1,0 +1,16 @@
+#
+# makefile for drivers/X/xhips/man
+#
+
+MANPAGES = xhips.n mhips.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

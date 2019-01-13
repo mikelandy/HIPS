@@ -1,0 +1,51 @@
+#
+# makefile for user-contributed/sheffield/xdisp/sources
+#
+
+CFLAGS2 = -I$(XVIEWHOME)/include -I.
+RM = rm -f
+PGMS = xdisp.out
+STRIP = strip
+
+COMPILEc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) $(CFLAGS2) -DHIPS_IMAGE \
+	$(CPPFLAGS) $(TARGET_ARCH) $(FASTCOPY) $(FLOAT) -c
+
+install:	$(PGMS)
+
+xdisp.out: create_lut_list.o lut.o create_cursor_list.o cursor.o\
+	global.o buffers.o draw.o sample.o \
+	cursor.o hinter.o daccess.o widgets.o \
+	pan.o hist.o poly.o image.o\
+	ask.o file.o stats.o\
+	error.o xinit.o event.o callback.o xdisp.o \
+	ov.o
+	$(LINKc) xdisp *.o -L$(XVIEWHOME)/lib $(LIBRARIES) -lXol -lXt -lX11
+	$(STRIP) $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+clean:	clean-pgm
+	$(RM) *%
+	$(RM) create_cursor_list.c
+	$(RM) ./cursors/*%
+	$(RM) create_lut_list.c
+	$(RM) ./luts/*%
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+	$(RM) *%
+	$(RM) create_cursor_list.c
+	$(RM) ./cursors/*%
+	$(RM) create_lut_list.c
+	$(RM) ./luts/*%
+
+FRC:
+
+create_cursor_list.c:./cursors/*
+	./gencursors xhair_3
+
+create_lut_list.c:./luts/*
+	./genluts mono

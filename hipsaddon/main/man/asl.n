@@ -1,0 +1,116 @@
+.TH  ASL 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+asl - an adaptive-surface-labeling smoothing filter
+.SH SYNOPSIS
+.B asl
+[-a] [-d] [-o order | -w size] [-s sigma] [-v] 
+.SH DESCRIPTION 
+.I asl
+applies an adaptive-surface-labeling smoothing filter to each image
+of the input sequence to suppress random noise.
+Options available are as follows.
+.ll -0.5i
+.in +3 
+.I -a
+.in +1.0i
+.sp -1
+allows for outputting intermediate results as well as
+the final processed image.
+If it is not set, only the final processed image is produced.
+.in -1.0i
+.sp
+.I -d
+.in +1.0i
+.sp -1
+specifies the averaging method used.
+With 
+.I -d
+, "median value" method is used, otherwise 
+"mean value" method is used.
+.in -1.0i
+.sp
+.I order
+.in +1.0i
+.sp -1
+is an alphanumeric string which specifies the order of 
+processing modules and defaults to fwfw-1...f3s3, 
+where w =
+.I size 
+and s3 contains the forcing phase. 
+The syntax of 
+.I order 
+is:
+.sp
+.I order 
+= AN[N]{AN[N]}*[t]
+.sp
+where:
+.in +2m
+A = z | f | s 
+.br
+N = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+.sp
+where z for zero order, 
+f for first order and s for second order modules, 
+and t stands for termination which means the final phase is also a forcing one.
+.in -2m
+.sp
+Note: a theoretical order beginning from zero order 7x7 is z7z5f7z3f5s7s5f3s3.
+.in -1.0i
+.sp
+.I sigma
+.in +1.0i
+.sp -1 
+is a real which specifies the standard deviation
+of noise of the image and defaults to the standard deviation
+in the extended parameter section of the header
+produced by
+.B sigmaspat
+or by 
+.B sigmatemp
+.in -1.0i
+.sp
+.I -v
+.in +1.0i
+.sp -1
+allows for printing messages during processing.
+.in -1.0i
+.sp
+.I size 
+.in +1.0i
+.sp -1
+specifies the size of the window.
+It is required to be an odd positive number and defaults to 7,
+i.e., 7 x 7 window.
+If an even number is specified, it will be reduced by 1 automatically.
+.in -1.0i
+.sp
+.in -3
+.ll +0.5i
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte and float.
+.SH "OUTPUT PIXEL FORMATS"
+byte and float.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH EXAMPLE
+.in +3m
+asl -a -o "f3s3t" -v < input_seq > output_seq
+.in -3m
+.sp
+.br
+will smooth every image in input_seq first by a first-order 3x3 operator,
+and then by a second-order 3x3 forcing operator.
+output_seq will also contain all of the half processed images.
+.SH REFERENCES
+P.H. Mowforth and Z.P. Jin,
+"Implementation for noise suppression in images",
+Image and Vision Computing, Vol. 4, No. 1, pp. 29-37, 1986.
+.SH SEE ALSO
+mask(1), mean(1), median(1), mls(1), nns(1), sasmooth(1), snn(1)
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 8/5/1985
+.br
+Peter Mowforth and Jin Zhengping - Modified 17/4/1987
+.br
+Rewritten by Jin Zhengping - 31 August 1991

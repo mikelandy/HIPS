@@ -1,0 +1,31 @@
+.TH READ_ROI 3 "6/23/91" "Version 2" "HIPS Manual"
+.SH NAME
+read_roi \- read an image region-of-interest
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+read_roi(hd,fr)
+fread_roi(fp,hd,fr,fname)
+
+FILE *fp;
+struct header *hd;
+int fr;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+.I read_roi
+and
+.I fread_roi
+read a single image into the region-of-interest subimage pointed to by the
+supplied image header.
+.I read_roi
+is used for reading from the standard input.  The frame number and file name
+are supplied for more informative error messages.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_READFRFILE - error during read
+.SH AUTHOR
+Michael Landy - 6/23/91

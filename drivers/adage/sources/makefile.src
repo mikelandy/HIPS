@@ -1,0 +1,33 @@
+#
+# makefile for drivers/adage/sources
+#
+
+OTHERLIBS = -lm -lIkonas
+
+PGMS = bmovie.out movie.out portmovie.out rframe.out wframe.out bpsmovie.out \
+		vaximgld.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:
+
+bps_viewport.out:
+	/usr/local/adage/bpscc -O -c bps_viewport.c
+	/usr/local/adage/bpscc -o bps_viewport bps_viewport.o -lsubs
+	mv bps_viewport ${DESTDIR}
+	@touch $@
+
+vaximgld.out:
+	$(LINKc) $* vaximgld.c loadimg.c loadimgl.c \
+		$(LIBRARIES) -lIkonas
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@

@@ -1,0 +1,22 @@
+This directory contains the source for three programs: sunv,
+suntohips, and hipstosun.  They are installed simply by typing 
+"make install" having run the Configure program, as described in
+README_INSTALL in the top-level HIPS-2 directory.
+
+Sunv is an implementation of a suntool. It's function is to take a HIPS file
+as input and display the first frame on the Sun console.  For binary images,
+the image will be converted to most-significant-bit-first or
+least-significant-bit-first as specified by MSBFVERSION/LSBFVERSION in the
+configuration file, and so this should correspond to what your Sun hardware
+requires (again, see README_INSTALL).  Sunv must be invoked from within
+SunView. 
+
+**********************
+
+suntohips and hipstosun convert between HIPS-format images and
+Sun-standard raster format images.  Only the first image of a sequence will be
+converted.  Single-bit-depth images become bit-packed in HIPS, and
+8-bit-depth images become byte-formatted in hips.  Usage is as follows:
+
+		suntohips < Sun-image > HIPS-image
+		hipstosun < HIPS-image > Sun-image

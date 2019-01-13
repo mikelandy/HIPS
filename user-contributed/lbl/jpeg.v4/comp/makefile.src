@@ -1,0 +1,39 @@
+#
+# makefile for lbl/jpeg/comp
+#
+
+LOCAL_INC = -I../libsrc -I$(CCS_ROOT)/include
+LOCALCFLAGS = $(LOCAL_INC) $(JPEG_FLAGS) $(CPPFLAGS) $(CFLAGS)
+LIBS = $(LDFLAGS) -lscs6 -ljpeg -lccs -lrle -ltiff -lpixrect \
+	$(LIBRARY) $(OTHERLIBS) $(OTHERLIB2)
+
+ANSI_OBJ = cjpeg.o djpeg.o
+
+PRGMS = cjpeg.out djpeg.out
+
+default: $(PRGMS)
+install: $(PRGMS)
+
+# This rule causes ansi2knr to be invoked.  If you use this makefile,
+# make sure PROTO is not defined by jconfig.h.
+
+ANSI2KNR = cp	# make non-ANSI anyway
+include ansi-knr
+
+.c.o:
+	$(COMPILEc) -c $(LOCALCFLAGS) $*.c
+
+$(PRGMS):	$(ANSI_OBJ)
+	$(LINKc) $* $*.o $(LIBS)
+	mv $* $(DESTDIR)
+	@touch $@
+	@rm -f tmpansi.c
+
+clean:
+	rm -f *.o* tmpansi.c
+clean-all:	clean_all
+
+man:
+
+doc:
+

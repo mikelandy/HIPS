@@ -1,0 +1,132 @@
+.TH LABEL 1HIPS "March 25, 1986"
+.SH NAME
+label - add text to hips image sequences
+.SH SYNOPSIS
+.B label
+[-T textfile | text-string] [-j{rcl}] [-o{udrl}] [-x n] [-y n] [-a d]
+.br
+.ti 1.5i
+[-v n] [-f n] [-b n] [-F fontname] < inseq > outseq
+.br
+.B label
+-g [-T textfile | text-string] [-j{rcl}] [-o{udrl}]
+.ti 1.5i
+[-v n] [-f n] [-b n] [-F fontname] > outseq
+.SH DESCRIPTION 
+.I Label
+allows the user to conveniently label hips image sequences with arbitrary text.
+First the text is used to create a text raster, a rectangular array
+of pixels, which is then rotated and, if needed, combined with
+the input image frames at specified coordinates.
+If the 
+.I -g
+switch is given the program
+produces a single HIPS frame containing only the
+text raster (in proper orientation.)
+Otherwise, the text is written in the fashion specified by the remaining
+options onto each of the frames comprising the input sequence 
+.IR inseq .
+(Note that the input sequence must be in byte format.)
+The remaining switch options, specifiable in any order, include:
+.TP 1.5i
+.BI \-j [lrc]
+For multiline text, this specifies how the lines are justified:
+.I l
+- all lines are justified at the left margin of the text block,
+.I r
+- lines are justified at the right, and
+.I c
+- each line is centered within the block.
+.TP
+.BI \-o [udrl]
+specifies the orientation of the text;
+.I u
+- upward (i.e. rotated by 90 degrees counterclockwise,)
+.I d
+- downward (i.e. 90 degrees clockwise,)
+.I r
+- normal text orientation ( left to right), and
+.I l
+- leftward (i.e. upside down and running right to left).
+.TP
+.BI \-x " coord"
+.TP
+.BI \-y " coord"
+gives the x and y  coordinates of the point of alignment relative
+to the input frame.
+This may be any integer (positive or negative,) or the literal
+.I M
+meaning the middle row or column, or
+.I E
+meaning just after the last row or column.
+.TP
+.BI \-a " digit"
+specifies which point in the text block is used as the point of
+alignment (with the image coordinates given by the -x and -y flags.)
+This may be a digit between 0 and 8, and
+follows a convention identical to that of Leroy's:
+.TS
+center, box;
+c c
+c l.
+If \fBdigit\fP is:	then the point is:
+		
+0	lower-left corner
+1	left mid-edge
+2	upper-left corner
+3	bottom mid-edge
+4	center
+5	top mid-edge
+6	lower-right corner
+7	right mid-edge
+8	upper-right corner
+		
+.TE
+.TP
+.BI \-T " Textfile"
+allows label text to be taken from a file, rather than from
+.I text_string.
+This is especially useful when the text contains newline characters, or
+when
+.I text_string
+begins with a minus sign (making it confusable with other command line
+options).
+.TP
+.BI \-v " nnn"
+This specifies the vertical spacing in pixels between successive lines.
+.TP
+.BI \-f " nnn"
+.TP
+.BI \-b " nnn"
+These specify the foreground and background pixel values of the text block.
+When overlaying text onto a background image, a zero value of either
+foreground or background leaves the image as it was, allowing a matte.
+.TP
+.BI \-F " Fontname"
+specifies a font to use in generating characters. All standard Berkeley
+distribution fonts are usable with
+.I label.
+.I Fontname
+is the last component of the desired font file
+in the font directory /usr/lib/vfont.
+(The default font is times.6.r)
+.sp
+.PP
+Thus for example the command line:
+.sp
+.ti 1.5i
+label ``Label Text'' -jl -or -x M -y E -a 5 < inseq > outseq
+.sp
+will place the quoted literal directly underneath each frame of the
+input sequence
+.IR inseq ,
+centering it (under the image). These options are the current defaults.
+To make this text run upward and centered along the left edge of the image, use
+.sp
+.ti 1.5i
+label ``Label Text'' -jl -ou -x -1 -y M -a 3 < inseq > outseq
+.sp
+Space between option letters and their modifiers or arguments is optional
+and may be included or ommitted for readability.
+.SH AUTHOR
+Roman Yangarber - 3/25/86

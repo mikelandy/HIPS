@@ -1,0 +1,161 @@
+*** vip.c.orig	Tue Mar  1 19:32:49 1988
+--- vip.c	Thu Jun  2 21:50:43 1988
+***************
+*** 92,100 ****
+--- 92,109 ----
+   * both be specified in the config file, the register base address is hard
+   * wired in, right here... */
+  
++ /* for vme32d16 address space (MPL) */
+  static int vip_fudge_reg_base[ MAX(NVIP, 6) ] =
++     {0x7FF00000, 0x7FF10000, 0x7FF20000, 0x7FF30000, 0x7FF40000, 0x7FF50000};
++ 
++ 
++ /* for vme32d16 address space (CMU) */
++ /*
++ static int vip_fudge_reg_base[ MAX(NVIP, 6) ] =
+      {0x2F00000, 0x2F10000, 0x2F20000, 0x2F30000, 0x2F40000, 0x2F50000};
++ */
+  
++ /* for vme24d16 address space (CMU) */
+  /*
+  static int vip_fudge_reg_base[ MAX(NVIP, 6) ] =
+      {0xF00000, 0xF10000, 0xF20000, 0xF30000, 0xF40000, 0xF50000};
+***************
+*** 355,360 ****
+--- 364,375 ----
+       * 
+       * Open() initializes the VIP-1024 logical registers to "user-friendly"
+       * default state (unless the VIP_NOTALONE bit is set).
++      * This is not the case for the MPL version of the driver. Due to our
++      * needs to have HIPS commands (like mlive and msnap), 
++      * Open() DOES NOT initialize the VIP-1024 logical registers 
++      * to "user-friendly" state. User programs should use the 
++      * VIPXIOCRESETREGISTERS ioctl to initialize the VIP-1024 logical registers
++      * to a user friendly state. 
+       */
+  
+      if (vip->state & VIP_OPEN)
+***************
+*** 363,376 ****
+  	else
+  	    return(EIO);
+  
+      /*
+       * If alone, Initialize software copy of registers and install them.
+       */
+! 
+!     if (!(vip->state & VIP_NOTALONE)) {		/* if alone */
+  	set_default_registers(vip);
+  	install_registers(vip);
+      }
+  
+      vip->state |= VIP_OPEN;			/* device now open */
+  
+--- 378,393 ----
+  	else
+  	    return(EIO);
+  
++ 
+      /*
+       * If alone, Initialize software copy of registers and install them.
+       */
+! /*
+!     if (!(vip->state & VIP_NOTALONE)) {	
+  	set_default_registers(vip);
+  	install_registers(vip);
+      }
++ */
+  
+      vip->state |= VIP_OPEN;			/* device now open */
+  
+***************
+*** 659,664 ****
+--- 676,690 ----
+  	    *arg = vip->close_time;
+  	    break;
+  
++ 	case VIPBIOCGETCONTFRAMEGRAB:	/* added by Edmond Mesrobian 3/1/88 */
++ 	    *arg = vip->ctl1.cont_framegrab;
++    	    break;
++ 
++ 	case VIPXIOCRESETREGISTERS:	/* added by Edmond Mesrobian 3/1/88 */
++ 	    set_default_registers(vip);
++ 	    install_registers(vip);
++    	    break;
++ 
+  	default:
+  	    return (ENOTTY);		/* Not a Typewriter (Really.) */
+  	    break;
+***************
+*** 712,717 ****
+--- 738,744 ----
+      int offset, count, len, i;
+      unsigned char *udata;	/* Pointer to user data */
+      unsigned char *vdata;	/* Pointer to VIP data */
++     int num_chars_written = 0;
+  
+      if (VIPUNIT(dev) >= NVIP)
+  	return(ENXIO);
+***************
+*** 733,740 ****
+--- 760,818 ----
+  	    *vdata++ = *udata++;
+  	    offset++;
+  	    len--;
++ 	    num_chars_written++;
+  	}
+      }
++     return(num_chars_written);
++ }
++ 
++ /***********************************************************************\
++ *									*
++ * vipread()								*
++ *	The read routine is used only to read from the lookup tables.	*
++ * This is used instead of an ioctl, because you can't pass >= 128	*
++ * bytes to an ioctl. Lseek is used to position the pointer to the	*
++ * right LUT before the read, and read() read from the LUT.		*
++ *									*
++ * Added by Edmond Mesrobian (MPL Lab) 6/2/88				*
++ \***********************************************************************/
++ 
++ vipread(dev, uio)
++ dev_t dev;
++ struct uio *uio;
++ {
++     register struct vip_device *vip;
++     struct iovec *iov;
++     int iovcnt;
++     int offset, count, len, i;
++     unsigned char *udata;	/* Pointer to user data */
++     unsigned char *vdata;	/* Pointer to VIP data */
++     int total_chars_read = 0;
++ 
++     if (VIPUNIT(dev) >= NVIP)
++ 	return(ENXIO);
++ 
++     vip = &vip_array[VIPUNIT(dev)];
++     offset = uio->uio_offset;
++     count = uio->uio_resid;
++     /* Make sure not reading beyond bounds of LUT area */
++     if ((offset + count) > VIP_LUT_SIZE)
++ 	return(ENOSPC);
++     vdata = vip->reg_base + offset;
++ 
++     iovcnt = uio->uio_iovcnt;
++     for (i = 0; i < iovcnt; i++) {
++ 	iov = &(uio->uio_iov[i]);
++ 	udata = (unsigned char *)iov->iov_base;
++ 	len = iov->iov_len;
++ 	while (len > 0) {
++ 	    *udata++ = *vdata++;
++ 	    offset++;
++ 	    len--;
++ 	    total_chars_read++;
++ 	}
++     }
++     return(total_chars_read); 
+  }
+  
+  #endif

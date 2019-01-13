@@ -1,0 +1,21 @@
+.TH DS 1BIPS "January 2, 1986"
+.SH NAME
+ds - display the ITEC or LEX-90 frame buffers using a specific LUT.
+.SH SYNOPSIS
+.B ds [i|n|c|r|g|b|0-9]
+.SH DESCRIPTION
+.I ds
+.nf
+     -  input arguments definitions:
+	'i':  the identity transform 
+	'n':  inverse transform (i.e. produces negative of image)
+	'c':  false color spectrum assigning gray levels to 10
+		different discrete colors using the colors defined in
+		/usr/files/lut/wrcolor.map and the discrete color 
+		transformation /usr/files/lut/colormap.
+	'r','g','b':  display image in red, green, or blue respectively
+.fi
+.SH SEE \ALSO
+wrlut(1BIPS), lutmake(1BIPS) 
+.SH AUTHOR
+Chuck Carman - 11/18/85

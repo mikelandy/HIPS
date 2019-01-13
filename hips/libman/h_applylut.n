@@ -1,0 +1,114 @@
+.TH H_APPLYLUT 3 "8/17/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_applylut \- subroutines to apply a lookup table to an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_applylut(hdi,hdo,count,lut)
+struct header *hdi,*hdo;
+int count;
+byte-or-short-or-int *lut;
+
+h_applylut_b(hdi,hdo,count,lut)
+struct header *hdi,*hdo;
+int count;
+byte *lut;
+
+h_applylut_s(hdi,hdo,count,lut)
+struct header *hdi,*hdo;
+int count;
+short *lut;
+
+h_applylut_i(hdi,hdo,count,lut)
+struct header *hdi,*hdo;
+int count,*lut;
+
+h_applylut_B(imagei,imageo,nr,nc,nlpi,nlpo,count,lut)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo,count;
+byte *lut;
+
+h_applylut_S(imagei,imageo,nr,nc,nlpi,nlpo,count,lut)
+short *imagei,*imageo;
+int nr,nc,nlpi,nlpo,count;
+short *lut;
+
+h_applylut_I(imagei,imageo,nr,nc,nlpi,nlpo,count,lut)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo,count;
+int *lut;
+.fi
+.SH DESCRIPTION 
+These routines pass the values of an input image (specified by
+.I hdi ,
+or by
+.IR imagei )
+through a supplied lookup table,
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_applylut
+calls
+.IR h_applylut_b ,
+.I h_applylut_s
+or
+.I h_applylut_i
+depending upon whether the pixel format is byte, short or integer.
+.IR h_applylut_B ,
+.I h_applylut_S
+and
+.I h_applylut_I
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+The lookup table has
+.I count
+entries.  A pixel with value
+.I v
+is replaced with
+.IR lut[v] .
+If
+.I v
+is less than zero, the pixel is replaced with
+.I lut[0]
+and such underflows are counted in
+.IR hips_lclip .
+If
+.I v
+is greater than or equal to
+.IR count ,
+the pixel is replaced with
+.I lut[count-1]
+and such underflows are counted in
+.IR hips_hclip .
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.\" .SH "SEE ALSO"
+.SH AUTHOR
+Michael Landy - 8/17/91

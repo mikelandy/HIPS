@@ -1,0 +1,45 @@
+.TH CMAPIO 3 "8/16/91" "Version 2" "HIPS Manual"
+.SH NAME
+cmapio \- HIPS colormap file I/O
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+readcmap(filename,maxcount,count,r,g,b)
+Filename filename;
+int maxcount,*count;
+byte *r,*g,*b;
+.fi
+.SH DESCRIPTION 
+This routine is used to read a colormap (or color lookup table).  The user
+supplies a maximum count (the size of the supplied arrays).  The routine
+returns the actual count from the file and fills the arrays.
+The file format is:
+.sp
+.in +1i
+.ta .4i
+.nf
+number-of-entries
+r(0) g(0) b(0)
+r(1) g(1) b(1)
+	.
+	.
+	.
+r(n-1) g(n-1) b(n-1)
+.sp
+.fi
+.in -1i
+All values are integers, and the color map entries must lie between 0 and 255.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_COLOVF - more entries in colormap file than fit in supplied arrays
+.br
+HE_OPEN - can't open colormap file
+.br
+HE_READFILE - error during read
+.br
+HE_WRITEFR - error during write
+.SH AUTHOR
+Michael Landy - 8/16/91

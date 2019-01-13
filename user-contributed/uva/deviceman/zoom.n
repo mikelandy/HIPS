@@ -1,0 +1,21 @@
+.TH ZOOM 1BIPS "January 2, 1986"
+.SH NAME
+zoom - zoom in 1/4 quadrant of image displayed on ITEC 
+frame buffer boards.
+.SH SYNOPSIS
+.B zoom
+[a-d]
+.SH DESCRIPTION
+.I Zoom 
+quickly zooms into 1/4 of the image currently displayed in the 
+frame buffer using the hardware capabilities of the
+ITEC boards.
+.nf
+	-  letters indicate a quadrant
+	-  no argument defaults to center of current display
+ 
+.fi
+.SH SEE\ ALSO
+home(1BIPS)
+.SH AUTHOR
+Chuck Carman - 11/18/85

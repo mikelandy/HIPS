@@ -1,0 +1,20 @@
+#
+# makefile for user-contributed/lbl/hips/sources/hips
+#
+
+PGMS = seeheader.out fixframes.out htee.out
+
+OTHERLIBS = -ljpeg -lscs1 -llbl -lhips -lm
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

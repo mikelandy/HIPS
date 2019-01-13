@@ -1,0 +1,121 @@
+
+			view.help  (V1.0)
+         HIPSVIEW: A gray Scale Display & Analysis Tool
+
+		**** Help => Mouse & Toggle Cmds ****
+  mouse sw
+  LEFT   - Drags box or slice cursors when in image area.
+         - Plot graphs on down sw transitions & when mouse
+             becomes still or leaves window.
+  MIDDLE - Prints values/average of boxed pixels when IN sp/sa MODE.
+         - Moves plot cursor & updates picture cursor
+             to match it when IN sx, sy, sv MODES.
+         - Draws threshold mapped binary image when IN st MODE,
+             lo & hi thresholds are mouse selected from histogram plot.
+         - Draws magnified image when IN sm MODE, pixels within
+             boxed region are expanded to fit hipsview window.
+  LT&MID - Rubberband box IN sa, shw, sm, sp, sw MODES or vector IN sv MODE.
+  RIGHT  - Show menues.
+  MID&RT - Toggle cursor arrow between picture & plot.
+  MID&RT - Toggle image via mouse keys. Same as period key.
+    .    - Toggle between magnified & non-mag image IN sm MODE.
+    .    - Toggle between Threshold Mapped Binary & non-TMB image.
+    /    - Toggle cursor arrow between image & plot IN sx, sy, sv MODES.
+    ,    - Toggle cursor arrow color to enhance visibility via comma key.
+
+		**** Slice => cmds ****
+  sx - set Slice X plot mode.
+  sy - set Slice Y plot mode.
+  sv - set Slice Vector plot mode.
+  a  - print Average, Sigma, Range, Max & Min values of boxed pixels. 
+  p  - Print boxed pixels values & above statistics.
+             Boxed pixel values may be appended with the following
+                   L:low  H:high  c:clipped &  z:zone-filled codes,
+                   and > marks the current x y cursor position.
+             Pixel values in slice plot text are marked by c & z codes.
+  H  - select boxed Hi pixel.
+  L  - select boxed Lo pixel.
+  s0 - iterate Select HL off.
+  s1 - iterate Select HL on. Enable peak/valley hill climb search algorithm.
+
+		**** File => Cmds ****
+  l name - Load file "name".
+  l"     - reLoad previously named file.
+  sw     - set Show Write boxed pixel mode & mouse drag the boxed area.
+  w name - Write boxed image if in sw mode. Same format as input image.
+         - Write sliced pixels to file name if in sx, sy, sv mode.
+         - Write boxed pixels if in sp mode. In p format, see slice=>cmds.
+  w"     - overWrite previously named file.
+  q #    - Quit
+
+		**** Set Show Mode => Cmds ****
+  sa     - set Show Average & Sigma of boxed pixels.
+  sp     - set Show Print boxed pixels.
+                 Print above on MID sw press, see slice=>cmds a & p.
+  sm # # - set Show Magnify boxed pixels mode. Magnify on MID sw press.
+                 #'s are magnification (wd ht) scale factors.
+  st     - set Show histogram Threshold mapped binary image,
+           MIDDLE sw selects (low hi) thresholds from histogram plot.
+           The second sw press draws the binary image.
+
+		**** Histogram => Cmds ****
+sh|shf - Set hist generate mode to use full  image. Plot mode is unchanged.
+   shw - Set hist generate mode to use boxed image. Plot mode is unchanged.
+   h   - Set hist plot mode to standard   & plot the histogram.
+   he  - Set hist plot mode to equalized  & plot the equalized histogram.
+   hi  - Set hist plot mode to integrated & plot the integrated histogram.
+
+		**** Draw mode => Cmds ****
+  d      - Draw normal/raw image.
+  de     - Draw histogram Equalized image.
+  dm # # - Draw Magnified image, #'s are magnification (wd  ht) scales.
+  dt # # - Draw Threshold mapped binary image, #'s are (low hi) threshold.
+
+		**** Reset => Cmds ****
+  rd     - ReDisplay.
+  ri     - ReInitialize hipsview <image window set to 512X512>.
+  rs     - ReSize window to fit current raw image.
+  rw # # - Set canvas Window to new (wd ht) and resize window to fit.
+
+		**** Render => Cmds ****
+  I  - Interchange foreground & background, ie. colormap bytes 0 & 255.
+  i  - Invert grayscale ramp map & load color lut with it.
+  D0 - Sun canvas Dither mode OFF. Color/GrayScale Sun default.
+  D1 - Sun canvas Dither mode ON . Monochrome Sun default.
+  D2 - Sun canvas Dither invert mode ON .
+
+		**** Show & Set Parameter => Cmds ****
+  u # # - set box wd ht in s[ampw] & shw modes & ap box wd ht in s[xyv] modes.
+  v #   - set box ht    in s[ampw] & shw modes & ap box ht    in s[xyv] modes.
+  x # # - set upper left box or slice XY coord.
+  y #   - set upper left box or slice Y  coord.
+ du # # - set vector lengths du dv in sv mode.
+ dv #   - set vector length  dv    in sv mode.
+              The second arg in cmds u, x & du is optional.
+  c #'s - set image Clip&scale points args=(lo hi). Enter r to disable clipping.
+  z #'s - set image pix fill Zone args=(lo hi val). Enter r to disable filling.
+  s   - Status printed.
+  % # - Change print boxed pixels format.
+  > # - Print current working directory & execute chdir system call.
+  ! # - Execute system cmd.
+          The above Cmds always print the current # arg values.
+
+		 **** Help => Misc (non menu) Cmds ****
+  ? # - Prints help files 1 to 4.
+  C   - Reload Color Map with previously loaded Sun Raster File color map.
+  w view.help - Writes view.help file to pwd.
+
+  image state <Bn.m Hf Cn Sp>	Code is printed by status s cmd.
+     where
+       B  is Base  pic  type [n, e], the .m means magnify mode is on.
+       H  is Hist  mode [f, w]  f:full image  w:windowed image.
+       C  is Current pic type [n, e, m, t].
+       S  is Show mode [a, h, m, p, t, w, x, y, v].
+
+    Image File Header:    HIPS format
+      hdtype
+      PFBYTE
+      PFSHORT
+      PFINT
+      PFFLOAT
+

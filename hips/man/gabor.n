@@ -1,0 +1,68 @@
+.TH GABOR 1 "8/11/91" "Version 2" "HIPS Manual"
+.SH NAME
+gabor \- create a 3-dimensional Gabor packet
+.SH SYNOPSIS
+.ta 1i
+.B gabor
+[-s nr [nc]] [-f nf] [-xf xfrq] [-yf yfrq] [-tf tfrq]
+.br
+	[-xm xmean] [-ym ymean] [-tm tmean]
+.br
+	[-xs xsigma] [-ys ysigma] [-ts tsigma]
+.br
+	[-p phase] [-a amplitude] > outseq
+.SH DESCRIPTION 
+.I Gabor
+generates a 3-dimensional Gabor function (a sinusoid multiplied by a Gaussian
+window).  The user specifies the size of the output sequence and the
+parameters of the Gabor function.
+The number of rows defaults to 64, the number of columns to the number of rows,
+and the number of frames to 4.  The other arguments specify:
+.TP 1i
+.I xf
+horizontal frequency in cycles per frame width (default: 0)
+.TP
+.I yf
+vertical frequency in cycles per frame height (default: 0)
+.TP
+.I tf
+temporal frequency in cycles per frame height (default: 0)
+.TP
+.I xm
+horizontal mean pixel position (default: centered)
+.TP
+.I ym
+vertical mean pixel position (default: centered)
+.TP
+.I tm
+temporal mean pixel position (default: centered)
+.TP
+.I xs
+horizontal standard deviation in pixels (default: 10)
+.TP
+.I ys
+vertical standard deviation in pixels (default: 10)
+.TP
+.I ts
+temporal standard deviation in pixels (default: 2)
+.TP
+.I phase
+degrees of phase angle (0 = cosine phase at the mean,
+-90 = sine phase at the mean), (default: 0)
+.TP
+.I amplitude
+multiplier (peak value if in cosine phase) (default: 1)
+.SH "OUTPUT PIXEL FORMATS"
+float
+.SH "REGION-OF-INTEREST"
+The output region of interest is set to be the entire image.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+cosum(1), fastcosum(1), grating(1)
+.SH AUTHOR
+Charlie Chubb 11/6/86
+.br
+HIPS 2 - msl - 8/11/91

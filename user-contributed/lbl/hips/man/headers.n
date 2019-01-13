@@ -1,0 +1,20 @@
+.TH "HEADERS" 1 "JANUARY 20, 1992" LBL-HIPS
+.\" @(#).1 Complex Conversion tools 1.10 91/10/1 JIN;
+.SH NAME
+headers - displays different image headers for
+
+	HIPS, FITS, GIF, ICC, RLE, PICT, PNM, SUN-RASTER, TIFF, and JPEG
+.SH SYNOPSIS
+.nf
+	headers	files...
+.fi
+.SH DESCRIPTION
+.I headers
+displays all header information.
+
+.SH OPTIONS
+
+.SH "SEE ALSO"
+ccs(1), cjpeg(1), elastic(1), mainpeak(1), powertool(1), rotate90n(1), tuner(1)
+.SH AUTHOR
+Jin, Guojun - OCTOBER 1, 1991

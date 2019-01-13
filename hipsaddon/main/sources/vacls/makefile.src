@@ -1,0 +1,43 @@
+#
+# makefile for hipsaddon/main/sources/vacls
+#
+
+PGMS = vacls.out
+
+HELPTEXT = vacls.cmds.txt
+
+OBJECTS =\
+	vacls.decl.o\
+	vacls.driver.o\
+	parserule.o\
+	tree.o\
+	examp.o\
+	attr.o\
+	utils.o
+
+CPPFLAGS2 = -DHELPDIR=\"$(DESTDIR)\" 
+
+.c.o:
+	$(COMPILEc) $< $(CPPFLAGS2)
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm pristine-text
+
+pristine-text:
+	rm $(DESTDIR)/$(HELPTEXT)
+
+vacls.out:	$(OBJECTS)
+	$(LINKc) vacls $(OBJECTS) $(LIBRARIES)
+	strip vacls
+	mv vacls $(DESTDIR)
+	chmod u+w $(HELPTEXT)
+	cp $(HELPTEXT) $(DESTDIR)
+	chmod u-w $(HELPTEXT)
+	@touch $@

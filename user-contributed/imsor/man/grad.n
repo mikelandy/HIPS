@@ -1,0 +1,40 @@
+.TH GRAD 1 "18 January, 1993" "Version 2" "HIPS Manual"
+.SH NAME
+grad \- generate Gaussian gradient filter
+.SH SYNOPSIS
+.B grad 
+[\-x | \-y ]
+[\-size filter_size ]
+[\-w width]
+.SH DESCRIPTION
+.I grad
+generates a Gaussian gradient filter mask to be used by the HIPS
+program
+.I mask.
+.SH OPTIONS
+.TP
+.B \-x 
+generate filter to calculate gradient in the x-direction (horizontal)
+.TP
+.B \-y 
+generate filter to calculate gradient in the y-direction (vertical)
+.TP
+.B \-size filter_size
+make the filter of size 
+.B filter_size
+by
+.B filter_size.
+Default is 11 by 11.
+.TP
+.B \-w width 
+set the positive central region of the second order derivative of the
+Gaussian to 
+.B width.
+Default is 4.
+.SH SEE ALSO
+mask(1),gauss(1)
+.SH AUTHOR
+.nf
+Joergen V. Beck / Rasmus Larsen  
+IMSOR, Technical University of Denmark \\
+e-mail: rl@imsor.dth.dk

@@ -1,0 +1,76 @@
+.TH MHISTO 1 "FEBURARY 13, 1991" LBL-HIPS
+.\" @(#)mhisto.1  1.20 91/1/8 JIN;
+.SH NAME
+mhisto \- compute grey-level histogram for any file
+.SH SYNOPSIS
+.nf
+.ta 1i
+mhisto [-l #] [-c] [-m #] [-b # -n #] [-f -t] [-M] [-r -R] [-z] [-s #]
+	[-a -1 -2 #] [-S[#]] [<] input [> [-o]outhist]
+.fi
+.SH DESCRIPTION
+.TP 12
+.I -l #
+log(bins) is the log2 of the number of bins. The default is 8 (bins=256).
+.TP
+.I -c
+causes multiple frame sequences to collapse to a single histogram,
+instead of a separate histogram being generated for each input frame.
+It can be used to compute a 3D image histogram.
+.TP
+.I -m #
+specify the maximum output value. The maximum integer input is 2\n31\b.
+.TP
+.I -b #
+begin processing with the #'th frame. The default is 1.
+.TP
+.I -n #
+process # frames.
+.TP
+.I -f -t
+will eliminate the frequent top or zero value count.
+.TP
+.I -r
+recalculate maximum count for each frame (with this option,
+.I -R
+should be used in
+.I mdisphist
+to retrieve these counts.
+.TP
+.I -s #
+set display scale (maximum count) for the entire histogram.
+.TP
+.I -S[#]
+smooth the histogram for analysis purposes. small value gives less smoothing.
+The default = 5 (range in 1 - 17).
+.TP
+.I -z
+count zeros. The default is to eliminate zero values.
+.TP
+.I -12a #
+compute histogram for any file (ascii, binary...) with file size # in byte.
+.I mhisto
+treats input as byte (-a), short (-1), or long integer (-2).
+.TP
+.I -M
+display some important status messages.
+.SH EXAMPLE
+.B mhisto
+bird | powertool (-a > bird.hg, | lpr)
+.br
+generate gnuplot data (-a), or print the histogram table.
+
+.B mhisto MRI_3D.256
+-b 10 -n 5 -r -S 2 | mdisphist -R | tuner
+.br
+extract frame number 10 to 15 from a 256 frame 3D MRI image, calculate
+maximum pixel number for each frame, and use smoothing algorithm to generate
+histogram graphs.
+.SH NOTE
+	see ccs.n for input image types
+.br
+The output is a Histogram data.
+.SH "SEE ALSO"
+mdisphist(1), histo_simulate(1), powertool(1)
+.SH AUTHOR
+Jin Guojun, LBL - 1/8/91

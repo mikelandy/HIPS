@@ -1,0 +1,89 @@
+.TH MORPHERODE 1 "8/3/91" "Version 2" "HIPS Manual"
+.SH NAME
+morpherode \- apply the morphological operator of erosion
+.SH SYNOPSIS
+.B morpherode
+element < iseq > oseq
+.SH DESCRIPTION 
+.I Morpherode
+applies the erosion operation to an image.  Although it
+applies to byte-formatted images, it effectively treats the image as a
+binary image, where dark pixels (with grey levels below 128) are treated as
+`foreground' or `object' pixels, and others are treated as background.  The
+erosion of the input image is controlled by another HIPS image, specified
+in the command line, the structuring element.  For each foreground element
+in the image, the structuring element is centered on that pixel.  All
+other pixels lying at the same position as foreground pixels of the
+structuring element will receive a `vote'.  After applying this procedure
+to all foreground image elements, the program computes the maximum number
+of `votes' received by any image pixel (the best foreground fit with the
+structuring element).  Then, pixels with that many votes are set to the
+darkest value that overlaps that pixel position (among the structural
+element pixels that overlapped, and its former value in the input image).
+Foreground pixels which received fewer votes are set to 255. Background
+input image pixels which received fewer votes are left unchanged in the
+output image.
+.PP
+The program determines the smallest rectangle which fits around the
+foreground pixels in the structuring element, and only uses these pixels
+in the loops, for efficiency.  However, the center of the structure element
+is centered over the pixel, so the user may determine the shift caused by
+the erosion operation.  For example, if the element image is the following
+5x5 image:
+.sp
+.in 1i
+.nf
+\0\01 255 255 255 255
+255 255 255 255 255
+255 255 \0\01 255 255
+255 255 255 255 255
+255 255 255 255 255,
+.sp
+.in -1i
+.fi
+then the output image will have foreground pixels where the input image had
+a foreground pixel in that position and in the position which is two pixel
+positions down and to the right.  The element image is effectively
+reflected about its vertical and horizontal axes before it is used.
+If either sequence is shorter than the other, the last frame is repeated
+a sufficient number of times to match (and a warning message is printed).
+The sequence on the standard
+input (the second one specified) is treated as the primary sequence for
+history, description and extended parameters.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+The region of interest of the input image is eroded by the structuring
+element's region of interest, and the result replaces the input image's region
+of interest.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -NFH
+Do not preserve the input sequence histories of all input sequences.
+.TP 1.3i
+.I -NFD
+Do not preserve the input sequence descriptions of all input sequences.
+.TP 1.3i
+.I -FXP
+Merge the extended parameter lists from all input sequences.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+morphdilate(1)
+.SH AUTHOR
+Ahmed. Abbood 19/10/1988
+.br
+rewritten by Michael Landy 10/29/89
+.br
+HIPS 2 - msl - 8/3/91

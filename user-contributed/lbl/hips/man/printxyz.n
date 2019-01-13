@@ -1,0 +1,22 @@
+.TH PRINTXYZ 1 "April 1990" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+printxyz \- print coordinates of non-zero objects
+.SH SYNOPSIS
+.B printxyz
+[outfile] < binary_image > outseq
+.SH DESCRIPTION
+.I printxyz
+prints the x,y,z coordinates of non-zero objects in
+a sequence of hips images.
+The input image must be in byte format.
+If the outfile name is present, output files are created for each
+frame in a sequence, otherwise the output goes to stdout.
+.SH OPTIONS
+[-v NN]   pixel value for thinned output objects (default = 255).
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH "SEE ALSO"
+bclean(1), fill_holes(1)
+.SH BUGS
+Report to Brian Tierney.

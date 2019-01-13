@@ -1,0 +1,55 @@
+.TH GRABPIC 1 "September 12, 1991"
+.SH NAME
+grabpic - Capture an image from a Datacube DIGIMAx/FRAMESTORE system
+.SH SYNOPSIS
+.ta 1i
+.B grabpic
+[-c channel] [-d rows cols] [-o from_row from_col]
+.br
+[-r row_resolution col_resolution] [-s num_frames [delay]]
+.br
+imagefile
+.br
+.SH DESCRIPTION 
+.I grabpic
+captures an image sequence from a Datacube DIGIMAX/FRAMESTORE system.
+The 
+.I -c
+switch selects the channel from which the image is captured and defaults
+to channel 0.
+This should lie in the range 0 to 7 since DIGIMAX supports 8 inputs.
+The window from which the immage is taken is given by the
+.I -d
+switch which specifies the size in terms of rows and columns and
+the
+.I -o
+switch which gives an offset from the top left corner (origin) of the
+frame. By default, the window is set to 512 x 512 and placed at the top
+left hand corner, ie offset (0,0).
+An image of any integral resolution can be captured using the
+.I -r
+switch which gives the resolution factor for both the rows and
+columns. This defaults to 4 and 4 so that a quarter of the capture window
+is taken, ie every 4th pixel.
+The resolution must be an integral divisor of the capture window size.
+A sequence of frames can be captured using the
+.I -s
+switch which gives the number of frames to grab and a delay in seconds
+between the capture of successive frames. By default, a single frame
+is grabbed and there is no delay between  the capture of successive frames.
+The captured image is writen in PFBYTE format to the file
+.I imagefile.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH SEE ALSO
+livepic(1), dispic(1).
+.SH LIMITATIONS
+This filter should be extended to save the image in a range of pixel
+formats.
+.br
+Currently, only CCIR signals are handled.
+.SH AUTHOR
+David Wilson, The Turing Institute - September 1991.
+

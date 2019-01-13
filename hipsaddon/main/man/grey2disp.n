@@ -1,0 +1,58 @@
+.TH GREY2DISP 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+grey2disp - random-dot stereogramme generator
+.SH SYNOPSIS
+.B grey2disp
+[-c] [-d ldisp hdisp] [-t]
+.SH DESCRIPTION
+.I  grey2disp
+generates a random-dot stereogramme given a
+disparity image relating to the left stereo half. 
+It should be gray level coded with darker pixels
+representing small disparities and lighter pixels representing
+larger disparities. 
+The maximum gray level allowed (255) will be read as the maximum disparity and
+the minimum gray level allowed (0) will be read as the minimum disparity. 
+Intensities in between will be given appropriately graded disparities.
+Uses gray level interpolation.
+Here,
+.ll -0.5i
+.sp 1
+.in +3 
+.I -c
+.in +1.0i
+.sp -1
+If set, pixel disparity accuracy  is required (corresponds to the original
+module "grey2disp". Otherwise sub-pixel disparity accuracy is required.
+(corresponds to the original module "grey2dispcnt").
+.in -1.0i
+.I ldisp,hdisp
+.in +1.0i
+are the disparity range for interpreting the disparity image. 
+They default to 0 and 4 respectively;
+.in -1.0i
+.I -t
+.in +1.0i
+.sp -1
+is an option which allows for thresholding of the generated stereogramme.
+This defaults to FALSE.
+.in -1.0i
+.ll +0.5i
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH EXAMPLE
+.in +3m
+grey2disp -c -t < input_image > output_stereogram
+.in -3m
+.sp
+.br
+will generate a stereogramme possibly containing disparities
+of 0,1, ... , 4.
+.SH AUTHOR
+Linda Gillespie - August 1987
+.br
+Rewritten by Jin Zhengping - 31 August 1991

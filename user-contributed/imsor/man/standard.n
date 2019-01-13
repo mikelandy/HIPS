@@ -1,0 +1,31 @@
+.TH STANDARD 1 "October 10 1991" "Version 2" "HIPS Manual"
+.SH NAME
+standard \- standardize (normalize) a sequence of frames
+.SH SYNOPSIS
+.B standard 
+.RB [ \-m
+.IR missing ]  
+.SH DESCRIPTION
+.I standard 
+standardizes (normalizes)
+the input sequence so that the mean and variance in each
+frame become 0 and 1, respectively.
+Input is an ordinary HIPS-image or a HIPS-file of the IMSOR defined
+irregular format, see
+.IR asc2hips .
+In the case of irregular format the two coordinate frames
+are not transformed.
+Option
+.B \-m
+specifies a missing value.
+Elements with this value are not included in
+the calculations, and are left unchanged in the output.
+Output format is equal to input format.
+Calculations are done in double precision.
+.SH SEE ALSO
+asc2hips(1), irr2reg(1), reg2irr(1)
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk 

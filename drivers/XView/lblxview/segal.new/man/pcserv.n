@@ -1,0 +1,162 @@
+.TH PCSERV n "1992" "Scry Version 1.3" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+pcserv \- remote procedure call server running on PC server workstation
+.SH SYNOPSIS
+\f3pcserv \f1 [\f3-r\f1] [\f3-b r g b\f1]
+.SH DESCRIPTION
+Serves incoming remote procedure calls (RPC's) to display and optionally
+record images sent over the network.
+The Sun RPC package calls the remote ``program''
+\f3graphics_dispatch\f1 (located in \f2dispatch\f1.c)
+based on information in the header of the incoming RPC call.
+Cases in \f3graphics_dispatch\f1
+correspond to remote procedures.  The remote procedure number identifying
+a particular case is also located in the RPC call header, which is
+internal to the Sun RPC package.  Routines starting with \f3xdr_\f1
+decode incoming information from network byte to PC byte order.
+For more information on how RPC's are implemented
+on the PC,
+see Robertson, D. W., W. E. Johnston, D. E. Hall, and Mendel Rosenblum.
+Video Movie Making Using Remote Procedure Calls and UNIX IPC,
+LBL-22767, University of California, Lawrence Berkeley Laboratory,
+Berkeley, CA (1986).
+.PP
+Remote procedure calls made by the client to the PC are used for the
+following:
+.sp
+(1)  requesting server display characteristics (height, width,
+and color depth).
+.sp
+(2)  initializing the associated video recorder.
+.sp
+(3)  transmitting an image to the PC, where it is
+optionally decompressed, displayed in
+the frame buffer associated with the PC, and optionally recorded
+on an associated video recorder.
+.sp
+(4)  informing the server that the client is finished with it.
+.PP
+The routines in \f2scry/pcserv\f1, \f2scry/pcrpc\f1,
+and/or \f2scry/exlnrpc\f1 must be \f3ftp\f1'd to the PC,
+and compiled there.  Before the client can run, the server must be
+invoked on the PC.
+.LP
+The components of the PC server workstations are an IBM PC ``compatible'',
+equipped with an Ethernet board, a frame buffer, and a recording device.
+Routines are available for a variety of combinations of devices for
+use for video recording using Scry.
+Ethernet boards that can be used with the animation workstation
+to receive incoming Sun RPC's
+are the Excelan EXOS 205 and 3COM 3C503 boards,
+which have 4BSD socket libraries provided with them.
+Frame buffers that can be used with the animation workstation are
+the TARGA, 16-bit frame buffer (TARGA-16),
+the TARGA, 8-bit greyscale frame buffer (TARGA M8), and
+the ATVista frame buffer.
+Video recorders that can be used are
+(1) the Panasonic, TQ-2026F videodisk recorder, and (2) the Sony, LVR-5000
+videodisk recorder.
+Routines will be provided in the next revision to allow the use of
+videotape recorders
+with an associated DiaQuest, DQ-50P animation controller,
+Stubs for these routines are located in \f2dq50p\f1.c
+.LP
+To configure the server for the Excelan board,
+make \f2rpcserv.lib\f1 in
+\f2scry/exlnrpc\f1, link it in when making the server,
+and use \f2/DEXCELAN\f1 while compiling the main server routines.
+To configure the server for PC-NFS, make \f2rpcserv.lib\f1 in
+\f2scry/nfsrpc\f1.
+.LP
+To configure the server for the TARGA M8 board,
+compile and link in the files \f2targam8\f1.c and \f2graph8\f1.c.
+For the TARGA 16 board,
+use the files \f2targa16\f1.c and \f2graph16\f1.c.
+For the ATVISTA board,
+use the files \f2atvista\f1.c and \f2graph32\f1.c.
+.LP
+Compile and link in \f2sony\f1.c if the SONY LVR-5000
+is used, and \f2panason\f1.c if the Panasonic is used.
+.LP
+See \f2scry/NOTES.install\f1 for further information on
+installing the Scry server on the PC.
+.SH OPTIONS
+.TP
+.B \-r
+record incoming images
+.TP
+.B \-b r g b
+set border color for images smaller than the display resolution.
+r, g, and b should range from 0 to 255.
+.SH FILES
+Contained in \f2scry/pcserv\f1:
+.HP 1.3i
+.TP
+.IB Makefile
+makes the executable of the server
+.TP
+.IB scrysrv .h
+definitions and declarations
+.TP
+.IB start .c
+start up server
+.TP
+.IB dispatch .c
+remote ``program''
+.TP
+.IB xdrread .c
+XDR routines for information sent using software frame buffer approach
+.TP
+.IB pcdisplay .c
+display and optionally record image
+.TP
+.IB cccdec .c
+CCC and run-length decompression
+.TP
+.IB lzwdec .c
+performs Lempel-Ziv decompression.
+.TP
+.IB lzwdec .h
+header file for Lempel-Ziv decompression.
+.TP
+.IB targa16 .c
+TARGA 16 specific routines
+.TP
+.IB graph16 .c
+16-bit image display routines
+.TP
+.IB targam8 .c
+TARGA M8 specific routines
+.TP
+.IB graph8 .c
+8-bit greyscale image display routines
+.TP
+.IB atvista .c
+ATVista specific routines
+.TP
+.IB graph32 .c
+32-bit image display routines
+.TP
+.IB panason .c
+Panasonic videodisk driver
+.TP
+.IB sony .c
+Sony videodisk driver
+.HP
+.SH WARNINGS
+If you are using the TARGA boards, you can use the overscan option,
+but you will have to generate the image taking account of the distortion
+involved with the overscan option.
+.SH AUTHORS
+David Robertson, Fritz Renema, Max Rible, Nicole Texier, and James Huang
+.SH "SEE ALSO"
+.B scry_client(n), scry_libclient(n), scripter(n)
+.LP
+D. Robertson, W. Johnston, D. Hall, and M. Rosenblum.  ``Video Movie
+Making Using Remote Procedure Calls and UNIX IPC'', LBL-22767,
+University of California, Lawrence Berkeley Laboratory, Berkeley, CA  (1986).
+.LP
+W. Johnston, D. Hall, F. Renema, D. Robertson, ``Principles
+and  Techniques  for  Low Cost Computer Generated
+Video Movies,''  LBL-22330,  University  of  California,
+Lawrence Berkeley Laboratory, Berkeley, CA, 1987.

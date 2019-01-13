@@ -1,0 +1,91 @@
+.TH TXTUR 1 "10/8/92" "Version 2" "HIPS Manual"
+.SH NAME
+txtur \- calculate textural features of an image
+.SH SYNOPSIS
+.B txtur
+[-d distance]
+.SH DESCRIPTION 
+.I Txtur
+calculates textural features
+based on spatial greylevel coocurrence matrices at
+0, 45, 90, and 135 degrees for a given distance 
+(default = 1). Textural features include:
+.IP
+(1) Angular Second Moment,
+.br
+(2) Contrast,
+.br
+(3) Correlation,
+.br
+(4) Variance,          
+.br
+(5) Inverse Difference Moment,
+.br
+(6) Sum Average,
+.br
+(7) Sum Variance,
+.br
+(8) Sum Entropy,
+.br
+(9) Entropy,
+.br
+(10) Difference Variance,
+.br
+(11) Difference Entropy,
+.br
+(12, 13) Information Measures of Correlation, and
+.br
+(14) Maximal Correlation Coefficient.
+.PP
+The algorithm are taken from:
+.br
+Haralick, R.M., Shanmugam, K. & Dinstein, I. (1973). Textural features
+for image classification.  
+.IR "IEEE Transactions on Systems, Man, and Cybernetics" ,
+.IR SMC-3 ,
+610-621.
+.sp
+However, unlike the Haralick paper, rather than implementing a histogram
+equalization prior to calculating the matrices, instead the greyscale is
+simply compressed toward zero to eliminate unused greylevels.  You might
+consider running
+.I histoeq
+prior to applying this program.  Also, grey
+tones are labeled 0 through tones-1 (rather than 1 through tones), so some
+of the descriptor values change, although their usefulness for
+discriminations does not.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+histoeq(1)
+.SH BUGS
+The program can run incredibly slowly for large images (larger than 64 x 64)
+and for large numbers of distinct greylevels.
+The method for finding (14) the maximal correlation coefficient, which
+requires finding the second largest eigenvalue of a matrix Q, does not
+always converge.
+.SH AUTHOR
+James Darrell McCauley
+.br
+Copyright (C) 1991 by Texas Agricultural Experiment Station
+.br
+Hips 2 version - Mike Landy - 10/8/92

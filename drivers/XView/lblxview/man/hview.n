@@ -1,0 +1,19 @@
+.TH HIPS n "1992" "LBL-HIPS" "HIPS"
+.SH NAME
+.B hview
+- displays a HIPS image using the xview toolkit.
+.SH SYNOPSIS
+.B hview
+< inseq 
+.SH DESCRIPTION
+.I hview
+is a simple program to display a HIPS image. This program uses special
+colormap handling routines to eliminate color 'flash' by mapping colors
+to the closest possible colors.  This program should handle color
+or gray-scale images on 8 and 24 bit systems.
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH SEE ALSO
+getx(1)
+.SH BUGS
+Report to Brian Tierney.

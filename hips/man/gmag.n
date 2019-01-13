@@ -1,0 +1,20 @@
+.TH GMAG 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+gmag \- scale a 3-D graph
+.SH SYNOPSIS
+.B gmag
+[-p x [y [z]]]
+.SH DESCRIPTION 
+.I Gmag
+magnifies a 3D plot by the given factors along the x, y, and z dimensions.
+The y and z factors default to 1.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH AUTHOR
+Yoav Cohen - 11/15/82
+.br
+HIPS 2 - msl - 7/24/91

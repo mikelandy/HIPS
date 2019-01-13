@@ -1,0 +1,24 @@
+.TH 3DROTATE180 1 "FEBURARY 14, 1991" LBL-HIPS
+.SH NAME
+3drotate180 \- rotate a 3D HIPS or FITS image from back to front.
+.SH SYNOPSIS
+.B 3drotate180
+[-f #] [-n #] [-r] [<] input [> | -o output]
+.SH DESCRIPTION
+.I 3drotate180
+rotates the back slices of a 3D image to the front, and output a HIPS image.
+.SH OPTIONS
+.TP
+.I -f #
+starting frame for rotation. The default is the last frame.
+.TP
+.I -n #
+The number of frames that will be rotated.
+.TP
+.I -r
+The image is rotated front to back. The default is to rotate horizontally
+(left to right).
+.SH SEE ALSO
+3dslice(1), 3drotate90(1), 3drotate(1), powertool(1)
+.SH AUTHOR
+Jin Guojun - 2/14/91

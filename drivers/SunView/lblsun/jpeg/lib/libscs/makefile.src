@@ -1,0 +1,116 @@
+#
+# makefile for user-contributed/lbl/libscs
+#
+
+OBJECTS1 = convertu.o sysenv.o
+OBJECTS2 = convertu2.o sysenv2.o
+OBJECTS3 = convertu3.o sysenv3.o
+OBJECTS4 = convertu4.o sysenv4.o
+OBJECTS5 = convertu5.o sysenv5.o
+OBJECTS6 = convertu6.o sysenv6.o
+OBJECTS= $(OBJECTS1) $(OBJECTS2) $(OBJECTS3) $(OBJECTS4) $(OBJECTS5) $(OBJECTS6)
+
+LOCALINC = $(CCS_ROOT)/include
+LIBNAME = libscs
+LIB1 = $(LIBNAME)1.a
+LIB2 = $(LIBNAME)2.a
+LIB3 = $(LIBNAME)3.a
+LIB4 = $(LIBNAME)4.a
+LIB5 = $(LIBNAME)5.a
+LIB6 = $(LIBNAME)6.a
+LIBS = $(LIB1) $(LIB2) $(LIB3) $(LIB4) $(LIB5) $(LIB6)
+
+COMMON_FLAGS = -DFITS_IMAGE
+COLOR_FLAGS = -DRLE_IMAGE -DEXTENDED_U_IMAGE
+LIBFLAG1 = $(COMMON_FLAGS) -D_DEBUG_
+LIBFLAG2 = $(COMMON_FLAGS) $(COLOR_FLAGS) -D_DEBUG_
+LIBFLAG3 = $(COMMON_FLAGS) $(COLOR_FLAGS) -DCOMMON_TOOL
+LIBFLAG4 = $(LIBFLAG3) -DPICT_IMAGE
+LIBFLAG5 = $(LIBFLAG4) -DJPEG_IMAGE
+LIBFLAG6 = $(LIBFLAG5) -DWRITE_ANY_IMAGE
+
+default:	$(OBJECTS) $(LIBS)
+install:	$(OBJECTS) $(LIBS)
+
+$(OBJECTS1):	$(LOCALINC)/function.h
+	$(COMPILEc) $(LIBFLAG1) -I$(LOCALINC) $<
+	@-ld $(LDLIBFLAGS) $*.o
+	@mv a.out $*.o
+
+$(OBJECTS2):	$(LOCALINC)/function.h
+	$(COMPILEc) $(LIBFLAG2) -I$(LOCALINC) $<
+	@-ld $(LDLIBFLAGS) $*.o
+	@mv a.out $*.o
+
+$(OBJECTS3):	$(LOCALINC)/function.h
+	$(COMPILEc) $(LIBFLAG3) -I$(LOCALINC) $<
+	@-ld $(LDLIBFLAGS) $*.o
+	@mv a.out $*.o
+
+$(OBJECTS4):	$(LOCALINC)/function.h
+	$(COMPILEc) $(LIBFLAG4) -I$(LOCALINC) $<
+	@-ld $(LDLIBFLAGS) $*.o
+	@mv a.out $*.o
+
+$(OBJECTS5):	$(LOCALINC)/function.h
+	$(COMPILEc) $(LIBFLAG5) -I$(LOCALINC) $<
+	@-ld $(LDLIBFLAGS) $*.o
+	@mv a.out $*.o
+
+$(OBJECTS6):	$(LOCALINC)/function.h
+	$(COMPILEc) $(LIBFLAG6) -I$(LOCALINC) -I$(RLEDIR)/include $<
+	@-ld $(LDLIBFLAGS) $*.o
+	@mv a.out $*.o
+
+$(LIB1):        $(OBJECTS1)
+	@rm -f $(LIB1)
+	ar cr $(LIB1) `$(LORDER) $(OBJECTS1) | $(TSORT)`;
+	mv $(LIB1) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIB1)
+	@touch $(LIB1)
+
+$(LIB2):        $(OBJECTS2)
+	@rm -f $(LIB2)
+	ar cr $(LIB2) `$(LORDER) $(OBJECTS2) | $(TSORT)`;
+	mv $(LIB2) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIB2)
+	@touch $(LIB2)
+
+$(LIB3):        $(OBJECTS3)
+	@rm -f $(LIB3)
+	ar cr $(LIB3) `$(LORDER) $(OBJECTS3) | $(TSORT)`;
+	mv $(LIB3) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIB3)
+	@touch $(LIB3)
+
+$(LIB4):        $(OBJECTS4)
+	@rm -f $(LIB4)
+	ar cr $(LIB4) `$(LORDER) $(OBJECTS4) | $(TSORT)`;
+	mv $(LIB4) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIB4)
+	@touch $(LIB4)
+
+$(LIB5):        $(OBJECTS5)
+	@rm -f $(LIB5)
+	ar cr $(LIB5) `$(LORDER) $(OBJECTS5) | $(TSORT)`;
+	mv $(LIB5) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIB5)
+	@touch $(LIB5)
+
+$(LIB6):        $(OBJECTS6)
+	@rm -f $(LIB6)
+	ar cr $(LIB6) `$(LORDER) $(OBJECTS6) | $(TSORT)`;
+	mv $(LIB6) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIB6)
+	@touch $(LIB6)
+
+clean:
+	rm -f *.o $(LIBNAME)*.a
+clean-all:	clean_all
+
+pristine:
+	rm -f *.o $(LIBNAME)*.a $(LIBDIR)/$(LIBNAME)*.a
+
+man:
+
+doc:

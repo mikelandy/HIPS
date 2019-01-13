@@ -1,0 +1,16 @@
+char	limited_info[] = "Demo version \"tuner\" for using before %d-%d-%d\n\
+* This software is copyrighted as noted below.  It may be freely copied,\n\
+* modified, and redistributed, provided that the copyright notices are\n\
+* preserved on all copies.\n\
+*\n\
+* There is no warranty or other guarantee of fitness for this software,\n\
+* it is provided solely \"as is\".  Bug reports or fixes may be sent\n\
+* to the author, who may or may not act on them as he desires.\n\
+*\n\
+* Author:       g_jin@lbl.gov\n\
+*\n\
+* Copyright (c) Lawrence Berkeley Laboratory\n";
+
+/*
+exit_timeout(limited_info, 93, 12, 10, 10, 0);
+*/

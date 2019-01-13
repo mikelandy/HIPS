@@ -1,0 +1,25 @@
+.TH STRETCHTBL HIPS "30 January 1991" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+.B stretchtbl 
+- generates table simulating two exponential functions applied to an image.
+.SH SYNOPSIS
+.B stretchtbl 
+[exp [percentage [exp]]] <inseq > tbl_name 
+.SH DESCRIPTION
+.I stretchtbl 
+- builds a table of values corresponding to two exponential functions applied
+to the gray-levels in the image.  The first function is applied to a percentage
+of the gray-levels, starting with zero, and the second function is applied to
+the remaining gray-levels.  Use mapapply to filter the image through this map.
+.SH OPTIONS
+[-a]   specify results of log(old_gray_value + 1) to avoid log(0) = -1.0.
+.SH AUTHOR
+Bryan Skene, LBL        email: skene@lbl.gov
+.SH SEE ALSO
+powertbl(1), mapapply(1), stretchtbl(1)
+.SH DIAGNOSTICS
+.PP
+Only byte or short formatted images can be processed.
+.SH BUGS
+Report to Bryan Skene.

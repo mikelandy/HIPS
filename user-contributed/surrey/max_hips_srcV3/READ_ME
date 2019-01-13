@@ -1,0 +1,31 @@
+Functions to interface Datacube Software and HIPS
+=================================================
+These functions allow frames to be read from Datacube products and be stored as HIPS files, and HIPS files to be written to Datacube products for display.
+              Connections should be as follows	     			    
+               DIGI             ROI                                       
+               P3       ->      P3                                        
+     CAMERA -> P12                                                        
+     TV     <- P13                                                        
+               P7       <-      P7                                        
+                        ->      P9                                        
+               P10      ->      P10                                       
+
+MaxWare v.3.0
+-------------
+./max_hips_srcV3 /* Functions interfacing DIGIMAX and ROISTORE to HIPS */
+max_Rroi.c max_Wroi.c
+
+Description
+===========
+Having followed the Datacube MaxWare V.3.0 installation proceedure as laid down in the documentation supplied, and already having the HIPS library installed as
+described in the release notes, these files are ready to be compiled and run.
+Modify the definitions of TOP, HOME and BIN in the Makefile to suit your file
+system: ie. if MaxWare lib files reside at /mnt/temp/fred/maxvideo/lib then 
+alter TOP to reflect this;  TOP = /mnt/temp/fred/maxvideo.
+Alter HOME to reflect the directory the source files reside in, and HIPSLIB to
+indicate where ./libhipl.a resides.
+
+Additional Note 
+===============
+max_Rroi  reads a frame from the Datacube Roistore    
+max_Wroi  writes a frame onto the Datacube Roistore     

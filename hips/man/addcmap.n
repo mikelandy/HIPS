@@ -1,0 +1,48 @@
+.TH ADDCMAP 1 "8/16/91" "Version 2" "HIPS Manual"
+.SH NAME
+addcmap \- add a colormap to a HIPS image header
+.SH SYNOPSIS
+.B addcmap
+[-f colormapfile | -g gammar [gammag [gammab]]] < iseq
+.SH DESCRIPTION 
+.I Addcmap
+is used to add a colormap to an image, saving it in the header
+parameter
+.IR cmap .
+The colormap file format is:
+.sp
+.in +1i
+.ta .4i
+.nf
+number-of-entries
+r(0) g(0) b(0)
+r(1) g(1) b(1)
+	.
+	.
+	.
+r(n-1) g(n-1) b(n-1)
+.sp
+.fi
+.in -1i
+All values are integers, and the color map entries must lie between 0 and 255.
+The switch
+.I -g
+is used to specify an inverse gamma lookup table, where
+.I gammag
+defaults to
+.I gammar
+and
+.I gammab
+defaults to
+.IR gammag .
+The overall default is `-g 2'.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+All formats
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+addparam(1)
+.SH AUTHOR
+Mike Landy - 8/16/91

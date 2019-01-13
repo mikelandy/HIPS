@@ -1,0 +1,69 @@
+.TH STRETCHPIX 1 "6/15/91" "Version 2" "HIPS Manual"
+.SH NAME
+stretchpix \- stretch or compress the range of gray-levels
+.SH SYNOPSIS
+.B stretchpix
+[-p expt1 [ boundary [ expt2 ]]] [-m max | -f]
+.SH DESCRIPTION 
+.I Stretchpix
+stretches the greyscale using two different power functions.  The parameter
+.I boundary
+is used to split the range of pixel values into two parts:
+.sp
+.ce 3
+From 0 to max*bdry
+and
+From max*bdry to max
+.sp
+Then, pixels in the first range have a power function applied with exponent
+.IR expt1 ,
+and are then rescaled so that the boundary value is unchanged.
+Similarly, pixels in the second range have a power function applied with
+exponent
+.IR expt2 ,
+and are then linearly rescaled so that the boundary and
+maximum values are unchanged.  Values less than zero are set to zero.
+.sp
+The maximum value may either be specified (switch
+.IR -m )
+or computed as the maximum
+pixel value in the input frame (recomputed for each frame, switch
+.IR -f ).
+For byte images the default is `\c
+.I -m
+255'.  For short images the default is `\c
+.IR -f '.
+.I Expt1
+defaults to 2,
+.I boundary
+defaults to .5, and
+.I expt2
+defaults to
+.IR 1/expt1 .
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+powerpix(1), scale(1), shiftpix(1)
+.SH AUTHOR
+Yoav Cohen - 2/19/82
+.br
+Hips 2 - msl - 6/15/91

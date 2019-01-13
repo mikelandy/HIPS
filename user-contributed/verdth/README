@@ -1,0 +1,3 @@
+This directory includes a program for producing halftones of HIPS images on a
+Versatec printer/plotter.  The output is sent directly to the printer, rather
+than being spooled.

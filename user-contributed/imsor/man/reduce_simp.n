@@ -1,0 +1,41 @@
+.TH  REDUCE_SIMP 1 "October 10 1992" "Version 2" "HIPS Manual"
+.SH NAME
+reduce_simp \- reduce a sequence by leaving out rows and columns
+.SH SYNOPSIS
+.B reduce_simp 
+.RB [ \-h
+.I hfactor
+.RI [ first ]]
+.RB [ \-v
+.I vfactor
+.RI [ first ]]
+.br
+.B reduce_simp 
+.RB [ \-s
+.I spacefactor
+.RI [ first ]]
+.SH DESCRIPTION
+.I reduce_simp 
+reduces a sequence by omitting rows and columns in the output image.
+The sequence is reduced vertically by 
+.I vfactor
+and horizontally by
+.I hfactor.
+In the second calling sequence form, the user specifies
+.I spacefactor,
+which is applied in both spatial dimension, and defaults to 2. If
+no factors are specified
+.B \-s
+2 is the default. 
+.sp 0.5
+The first row and column to be included is 
+.I first
+which is a number between 0 and (factor\-1).
+By default the first row/column to be included is number 0. 
+.SH SEE ALSO
+reduce(1), enlarge(1)
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk 

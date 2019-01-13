@@ -1,0 +1,49 @@
+.TH EXTRACT 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+extract \- extract a subpicture
+.SH SYNOPSIS
+.B extract
+[-s rows [cols]] [-p from-row [from-col]]
+.SH DESCRIPTION 
+.I Extract
+extracts a rectangular subpicture from a sequence.
+The new frame size is specified by 
+.I rows
+and 
+.IR cols ,
+and the offset from the corner of the input picture by
+.I from-row
+and
+.IR from-col .
+If
+.I rows
+is negative then
+.I from-row
+is taken to be the final row of the subpicture.  Similarly if
+.I cols
+is negative then
+.I from-col
+is taken to be the final columns of the subpicture.  Only those elements of
+the subpicture which actually lie in the input image are output.
+.I rows
+and
+.I cols
+default to one half of the input dimensions, and 
+.I from-row
+and
+.I from-col
+such that the sub-picture is centered.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+All raster formats (including mixed raster format)
+.SH "REGION-OF-INTEREST"
+The extraction is based on the entire image.  The output image
+region-of-interest is that portion of the input image region-of-interest which
+intersects the extracted subimage.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+pad(1)
+.SH AUTHOR
+HIPS 2 - msl - 1/16/91

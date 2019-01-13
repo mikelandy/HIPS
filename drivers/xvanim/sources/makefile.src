@@ -1,0 +1,25 @@
+#
+# makefile for sunanim/xvanim/sources
+#
+
+CFLAGS2 = -I$(XVIEWHOME)/include -L$(XVIEWHOME)/lib -L$(XLIB)
+
+.c.out:
+	$(LINKc) $* $< $(CFLAGS2) $(LIBRARIES) $(LIBXVIEW)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+PGMS = xvanim.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

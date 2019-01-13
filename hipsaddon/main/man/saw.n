@@ -1,0 +1,26 @@
+.TH SAW 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+saw - image generator
+.SH SYNOPSIS
+.B saw
+[-d rows cols]
+.SH DESCRIPTION
+.I saw
+generates an image with saw-tooth like intensity profile.
+.I rows
+and
+.I cols
+are the numbers of rows and columns of the image generated and
+default to (128,128).
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH EXAMPLE
+saw > saw_image
+.SH SEE ALSO
+calcpix(1), ellipse(1), fgenframe(1), genframe(1), greylevel(1), mandelbrot(1)
+.SH AUTHOR
+Jin Zhengping - 12/6/85 
+.br
+Jin Zhengping - 20/3/1986 2nd Ed.
+.br
+Rewritten by Jin Zhengping - 31 August 1991

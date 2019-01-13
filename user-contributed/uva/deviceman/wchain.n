@@ -1,0 +1,18 @@
+.TH WCHAIN 1BIPS "June 1, 1986"
+.SH NAME
+wchain - display chain coded data on the ITEC boards or the LEX-90
+.SH SYNOPSIS
+.B wchain
+[pixel value] [abcd] < sequence
+.SH DESCRIPTION 
+.I Wchain
+displays chain coded data on either the ITEC boards or the LEX-90.
+The output device is determined by the value of the environment variable
+DSPDEV, with the default device being the ITEC boards.
+The first image is displayed at the location specified by
+.I [abcd]
+which recursively specifies the quadrant location for the image.
+.SH SEE\ ALSO
+wframe(1BIPS) 
+.SH AUTHOR
+Charles Carman - 3/14/86

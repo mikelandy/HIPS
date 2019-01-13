@@ -1,0 +1,78 @@
+.TH DISCEDGE2 1 "8/8/91" "Version 2" "HIPS Manual"
+.SH NAME
+discedge2 \- a discrete domain regional edge detector with offsets
+.SH SYNOPSIS
+.B discedge2
+[-s size] [-c varcrit] [-t edgethresh]
+.SH DESCRIPTION 
+.I Discedge2
+applies a variant of an edge fitting algorithm of Shaw.
+.I Size
+is the length of a side of the nonoverlapping domains in which
+the algorithm operates,
+.I varcrit
+is the threshold on the variance
+in the normalized region (normalized by mean only) below which no
+edge is sought in that region, and
+.I edgethresh
+is a threshold applied to edge values.
+.I Size
+defaults to 7,
+.I varcrit
+to 0, and
+.I edgethresh
+to 1.
+This program is an implementation of the discrete domain regional operator
+described by G. B. Shaw (Computer Graphics and Image Processing, Volume 9,
+1979, pp. 135-149.
+The algorithm outlined therein is sketchy and contains errors, which
+hopefully are corrected here.  Also, the article does not clarify what to do
+with edges which appear to travel along a border of the region (the algorithm
+purports to be symmetric with respect to horizontal and vertical edges, but
+isn't really).  In this implementation, the first pixels on the light
+side of a light/dark edge are marked, and when the light/dark boundary
+travels along the boundary of the region, only the ``middlemost'' pixel is
+marked, since otherwise horizontal edges will all include little ``tails'' at
+an edge of each region.  Lastly, note that any excess after multiples of
+size in rows and columns is not edge detected.  The output image is integer
+(not byte), and gives the score for the edge to each edgel in a given region.
+The computations are done with integer arithmetic with all pixels scaled by
+size*size in order that the normalization by the mean can be exact.
+.PP
+This program is a modification of
+.IR discedge (1)
+in which the algorithm
+operates twice on an image, at offsets of (0,0), (1,1),...,(size-1,size-1).
+The edge value which the algorithm would give to a given pixel at a given
+offset is thresholded by edge-thresh, and if above threshold, then a bit is
+set in the output image at that pixel. Bit 0 is set for offset (0,0), bit 1
+for offset (1,1), and so on. Thus, the output can be thresholded at 1 or 
+(2**size)-1 to give the ``or'' or ``and'' of the two offset images,
+respectively.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+abdou(1), discedge(1), dog(1), fmask(1), mask(1)
+.SH AUTHOR
+Mike Landy 6/1/82
+.br
+HIPS 2 - msl - 8/8/91

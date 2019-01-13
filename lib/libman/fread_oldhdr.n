@@ -1,0 +1,54 @@
+.TH FREAD_OLDHDR 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+fread_oldhdr \- read an old (HIPS-1) format header
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+fread_oldhdr(fp,hd,firsts,fname)
+FILE *fp;
+struct header *hd;
+char *firsts;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+.I fread_oldhdr
+is used to read old-style (pre-HIPS-2) image headers.  It is typically called
+by
+.I fread_header
+after having read the first line and discovering that it is not the HIPS magic
+line (the text `HIPS' on a line by itself).  It is provided with the first
+line that has already been read.  The parameters
+.I binleft
+and
+.I numbin
+(for histograms),
+and
+.I toplev
+(for pyramids) are read and set appropriately (in the old format, they
+immediately followed the header, and were in binary).
+For histograms, the header parameters
+.I binwidth
+and
+.I imagepixfmt
+are set appropriately.
+The global variable
+.I hips_oldhdr
+is set to TRUE (for later use by
+.IR read_histo (3)).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_HDRREAD - error reading header
+.br
+HE_HDRBREAD - error reading binary information following header
+.SH "SEE ALSO"
+halloc(3), hcalloc(3), memalloc(3)
+.SH AUTHOR
+Michael Landy - 2/1/82
+.br
+modified to use read/write 4/26/82
+.br
+modified for HIPS 2 - msl - 1/3/91

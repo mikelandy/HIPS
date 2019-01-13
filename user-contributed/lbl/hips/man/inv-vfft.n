@@ -1,0 +1,19 @@
+.TH INV-VFFT 1 "May 15, 1991" LBL-HIPS
+.\" @(#)inverse virtual-very fourier transform .1  1.10 91/5/15 JIN;
+.SH NAME
+inv-vfft \- inverse virtual-very fast fourier transform
+.SH SYNOPSIS
+.nf
+inv-vfft [-B] [<] VFFT_file [> [-o] Image]
+
+.SH DESCRIPTION
+see VFFT(1)
+
+.SH OPTION
+.TP
+.I -B
+output BYTE hips format. The default is float output.
+.SH "SEE ALSO"
+vfftpass(1), vfftfilter(1), vfft(1), dcvtob(1), tuner(1)
+.SH AUTHOR
+Jin Guojun - 5/15/91

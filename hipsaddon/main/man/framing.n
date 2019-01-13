@@ -1,0 +1,30 @@
+.TH FRAMING 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+framing - image framer
+.SH SYNOPSIS
+.B framing
+[-f frameval]
+.SH DESCRIPTION 
+.I framing
+paints a thin frame around the image.
+.I frameval
+is the gray level for the frame and defaults to 0.
+.sp
+It can be used for image decoration in documentation.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is framed.
+.SH EXAMPLE
+.in +3m
+framing -f 100 < input_seq > output_seq
+.in -3m
+.sp
+.br
+will frame the ROI of every image in input_seq with value 100.
+.SH AUTHOR
+Jin Zhengping - 22 July 1988
+.br
+Rewritten by Jin Zhengping - 31 August 1991

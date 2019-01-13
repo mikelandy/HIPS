@@ -1,0 +1,39 @@
+.TH WRAPIMG 1 "11/13/92" "Version 2" "HIPS Manual"
+.SH NAME
+wrapimg \- shift and wrap around an image sequence
+.SH SYNOPSIS
+.B wrapimg
+[-s x-shift [y-shift [t-shift]]]
+.SH DESCRIPTION 
+.I Wrapimg
+shifts an input sequence with wraparound.  In other words, pixels
+which are shifted off one edge of the region reappear at the opposite
+edge.  The x-shift/y-shift wraparound values refer to pixels within the region
+of interest.  The t-shift allows wraparound of frames, and applies to the
+order frames are written regardless of any spatial shift and/or region of
+interest.  Positive values of x-shift and y-shift move the image rightward
+and upward, respectively.  The x-shift defaults to 1 and the other shifts
+to 0.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, double, complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is drifted and the rest of the image stays put.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+affine(1), drift(1)
+.SH AUTHOR
+Mike Landy - 11/13/92
+.br
+added depths - msl - 3/8/94

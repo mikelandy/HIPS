@@ -1,0 +1,81 @@
+.TH XHIPS 1 "8/21/91" "Version 2" "HIPS Manual"
+.SH NAME
+xhips \- HIPS viewers for X-windows
+.SH SYNOPSIS
+.B xhips
+[-d display] [-c] [-b] [-g] [-L framelabel]
+.br
+.B xhipsc
+[-d display] [-c] [-b] [-g] [-l lut-file] [-24 | -8] [-L framelabel]
+.SH DESCRIPTION 
+.I Xhips
+and
+.I xhipsc
+are basic HIPS viewers for the X windows environment which will run on
+absolutely any platform because they use only Xlib calls.
+They simply open a window and put the first image in the input sequence into
+it.  The image is still visible when iconified.  When the cursor lies over the
+image window, the right button is used to quit.
+The switch
+.I -d
+is used to specify a display in the usual X-windows fashion.  The flag
+.I -c
+specifies that a brand new colormap should be allocated. The flag
+.I -b
+prints large amounts of debugging data.  The flag
+.I -g
+specifies that a full 256-color lookup table should be used (the default is to
+shift the image pixels and use only 64 colors in order to reduce color
+flashing.
+.PP
+The program
+.I xhips
+may only be used with byte-formatted greyscale images and knows nothing much
+about color.  The program
+.I xhipsc
+is an extended version which can deal with a number of color formats.  On
+24-bit color displays it has the ability to display true 24-bit RGB images.
+This will occur if the input image is in PFRGBZ format (see the program
+.IR htorgbz (1HIPS)).
+On either 8-bit or 24-bit displays
+.I xhipsc
+may be used to display images in pseudocolor by specifying a color lookup
+table from a file (using flag
+.IR -l )
+or in the extended header parameter
+.IR cmap .
+With flag
+.IR -l ,
+the lookup table is formatted in the standard HIPS fashion:
+.sp
+.nf
+.in +1i
+.ta .4i
+#-of-entries
+r(0) g(0) b(0)
+r(1) g(1) b(1)
+	.
+	.
+	.
+r(n-1) g(n-1) b(n-1)
+.in -1i
+.fi
+The user may force 24-bit or 8-bit operation when sensible by specifying
+.I -24
+or
+.IR -8 .
+The flag
+.I -g
+will not only force 256 colors, but will also force a colormap stored in the
+header to be ignored.
+.PP
+By default the frame label contains the name of the file being
+displayed.  The label may also be specified with the
+.I -L
+switch.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, PFRGBZ (xhipsc), PFZRGB (mhips)
+.SH "REGION-OF-INTEREST"
+The entire image is displayed.
+.SH AUTHOR
+Patrick Flynn

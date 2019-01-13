@@ -1,0 +1,21 @@
+#! /bin/csh
+#
+#set echo
+#set verify
+
+# possible invocation methods
+#  a)  Xhips -d DISPLAY < file
+#  b)  Xhips < file     (gets DISPLAY from evironment)
+#  c)  filter < file | Xhips 
+#  d)  filter < file | Xhips -d DISPLAY
+
+if ($#argv == 2) then		
+	picinvert | htorle | getx11 -d $argv[2]
+else if ($#argv == 1) then
+	picinvert < $argv[1] | htorle | getx11 -d $DISPLAY
+else if($#argv == 0) then
+	picinvert | htorle | getx11 -d $DISPLAY
+else
+	echo "Usage: Xhips [-d display] [< hips_file]"
+	exit (1)
+endif

@@ -1,0 +1,42 @@
+.TH VMAG 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+vmag \- scale a world around an observer in a 3-D graph over time
+.SH SYNOPSIS
+.B vmag
+[-p from to [x [y [z]]]
+.SH DESCRIPTION 
+.I Vmag
+scales the world around an observer in a 3-D graph over time.
+Frame 
+.I from
+and all the preceeding frames are  
+output intact, but therafter the coordinates
+in each frame are multiplied by 
+.IR x ,
+.IR y ,
+.I z
+relative to the preceeding frame. 
+All frames after frame 
+.I to
+are scaled by the same constant;
+e.g. the x factor for frame 
+.I to
+and all the following frames is 
+.IR x *( to - from ).
+Frame numbering starts at zero.
+.I Y
+and 
+.I z
+default to 1.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+gmag(1)
+.SH AUTHOR
+Yoav Cohen - 2/1/83
+.br
+HIPS 2 - msl - 7/24/91

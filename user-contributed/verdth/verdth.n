@@ -1,0 +1,22 @@
+.TH VERDTH 1 "January 2, 1984"
+.SH NAME
+verdth - print halftones with 64 grey level dither on the Versatec
+.SH SYNOPSIS
+.B verdth
+[-n]
+.SH DESCRIPTION 
+.I Verdth
+reads a sequence of byte-formatted frames, and
+outputs them as halftones on the Versatec.  It uses the Versatec
+plot mode, presenting each pixel as an array of dots, using a
+16x16 dither array, yielding a gray scale of 0-255.
+The maximum image size is 2048 x 2048. Smaller images will be
+blown up to fill the 2048 x 2048 area as much as possible.
+If 
+.I -n
+is specified, the enlargement factor is fixed at 4, filling a page
+with 512x512, and centering anything smaller.
+.SH SEE\ ALSO
+prtdth(1), prthlf(1)
+.SH AUTHOR
+Michael Landy - 2/24/83

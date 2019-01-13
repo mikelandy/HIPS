@@ -1,0 +1,73 @@
+.TH HISTO 1 "6/30/91" "Version 2" "HIPS Manual"
+.SH NAME
+histo \- compute grey-level histograms
+.SH SYNOPSIS
+.B histo
+[-N numbins] [-m min max] [-c] [-n]
+.SH DESCRIPTION 
+.I Histo
+computes an image histogram over the input image sequence, resulting in a
+histogram-format output sequence.  In HIPS, a histogram is characterized by
+the number of bins, the left-hand edge of the first bin, and the bin width.
+Each bin is used to count pixels whose value is greater than or equal to the
+left-hand edge and less than the right-hand edge.  A histogram has the number
+of requested bins plus a bin for underflows (values less than the left-hand
+edge of the first bin) and a bin for overflows (values greater than or equal
+to the right-hand edge of the last bin).  Also, bin widths for the various
+integer-format images (byte, signed byte, short, unsigned short, integer and
+unsigned integer) are integer as well.
+.PP
+The
+.I -N
+switch allows the user to specify the number of bins in the histogram.  For
+the various floating point image formats (float, double, complex and double
+complex) this value defaults to 256.  For the integer formats, it defaults to
+either 256 or the number of values in the histogram range, whichever is less.
+The
+.I -m
+switch is used to specify the left-hand edge of the first bin and the
+right-hand edge of the last bin.  For integer format images, 1 is added to
+the value of
+.I max
+so that pixels with value equal to
+.I max
+are included in the last bin.  For floating point formats, the maximum is
+increased only slightly to insure this.  For most formats, the default
+values of
+.I min
+and
+.I max
+are the minimum and maximum pixel value in the first input frame.  For
+byte-formatted images,
+.I min
+defaults to 0 and
+.I max
+defaults to 255.
+Normally a separate histogram is computed for each input frame.  Specifying
+.I -c
+computes a single histogram across the entire input sequence.
+Specifying
+.I -n
+causes zero-valued pixels to be ignored entirely.  For complex and double
+complex images, complex magnitudes are histogrammed.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, signed byte, short, unsigned short, integer, unsigned integer, float,
+double, complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is histogrammed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+disphist(1)
+.SH AUTHOR
+Michael Landy - 12/14/82
+.br
+HIPS 2 - msl - 6/30/90

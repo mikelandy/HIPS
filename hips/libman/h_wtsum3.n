@@ -1,0 +1,120 @@
+.TH H_WTSUM3 3 "8/17/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_wtsum3 \- subroutines to compute a weighted sum of three images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_wtsum3(hdi1,hdi2,hdi3,hdo,wt1,wt2,wt3)
+h_wtsum3_b(hdi1,hdi2,hdi3,hdo,wt1,wt2,wt3)
+h_wtsum3_s(hdi1,hdi2,hdi3,hdo,wt1,wt2,wt3)
+h_wtsum3_i(hdi1,hdi2,hdi3,hdo,wt1,wt2,wt3)
+h_wtsum3_f(hdi1,hdi2,hdi3,hdo,wt1,wt2,wt3)
+struct header *hdi1,*hdi2,*hdi3,*hdo;
+float wt1,wt2,wt3;
+
+h_wtsum3_B(imagei1,imagei2,imagei3,imageo,nr,nc,nlpi1,nlpi2,nlpi3,nlpo,wt1,wt2,wt3)
+byte *imagei1,*imagei2,*imagei3,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpi3,nlpo;
+float wt1,wt2,wt3;
+
+h_wtsum3_S(imagei1,imagei2,imagei3,imageo,nr,nc,nlpi1,nlpi2,nlpi3,nlpo,wt1,wt2,wt3)
+short *imagei1,*imagei2,*imagei3,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpi3,nlpo;
+float wt1,wt2,wt3;
+
+h_wtsum3_I(imagei1,imagei2,imagei3,imageo,nr,nc,nlpi1,nlpi2,nlpi3,nlpo,wt1,wt2,wt3)
+int *imagei1,*imagei2,*imagei3,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpi3,nlpo;
+float wt1,wt2,wt3;
+
+h_wtsum3_F(imagei1,imagei2,imagei3,imageo,nr,nc,nlpi1,nlpi2,nlpi3,nlpo,wt1,wt2,wt3)
+float *imagei1,*imagei2,*imagei3,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpi3,nlpo;
+float wt1,wt2,wt3;
+.fi
+.SH DESCRIPTION 
+These routines compute the weighted sum of three input subimages (specified by
+.IR hdi1 ,
+.I hdi2
+and
+.IR hdi3 ,
+or by
+.IR imagei1 ,
+.I imagei2
+and
+.IR imagei3 ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_wtsum3
+calls
+.IR h_wtsum3_b ,
+.IR h_wtsum3_s ,
+.I h_wtsum3_i
+or
+.I h_wtsum3_f
+depending upon whether the pixel format is byte, short, integer or float.
+.IR h_wtsum3_B ,
+.IR h_wtsum3_S ,
+.I h_wtsum3_I
+and
+.I h_wtsum3_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.IR nlpi1 ,
+.I nlpi2
+and
+.I nlpi3
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+The images are weighted by
+.IR wt1 ,
+.I wt2
+and
+.I wt3
+before summing.
+All values are rounded (except for floating point images).
+For byte-formatted images, if the resulting value is less than 0, the output
+pixel is set to 0 and such underflows are counted in
+.IR hips_lclip .
+If the resulting value is greater than 255, the output
+pixel is set to 255 and such underflows are counted in
+.IR hips_hclip .
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+and/or
+.I hdi3
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+and/or
+.I imagei3
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_add(3), h_avg(3)
+.SH AUTHOR
+Michael Landy - 8/17/91

@@ -1,0 +1,28 @@
+.TH FREE_HEADER 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+free_header \- header deallocation
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+free_header(hd)
+free_hdrcon(hd)
+struct header *hd;
+.fi
+.SH DESCRIPTION 
+.I free_hdrcon
+deallocates all memory pointed to by the supplied image header for which this
+header has deallocation rights, including the orig_name, seq_name, orig_date,
+image, history, description,
+parameter structures, and parameter arrays (which are only deallocated if the
+header has rights to deallocate the structures as well).
+.I free_header
+does all of this, and then frees the header structure itself.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+None
+.SH "SEE ALSO"
+read_header(3)
+.SH AUTHOR
+Michael Landy - 1/4/91

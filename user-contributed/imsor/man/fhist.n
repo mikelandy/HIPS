@@ -1,0 +1,50 @@
+.TH FHIST 1hips "OCTOBER 9, 1991" 
+.SH NAME
+fhist - stretch float images for display
+.SH SYNOPSIS
+.B fhist
+[-e] [-n ng] [-r] [-s sd] [-a ap] [-b bp] 
+.br
+< iseq > oseq
+.SH DESCRIPTION 
+.I Fhist
+stretches float images for display.
+Default is a match to gaussian.
+Options:
+.TP
+\-\fBe\fP
+for histogram equalisation 
+.TP
+\-\fBn\fP\fI ng\fP
+number of gray levels
+.TP
+\-\fBr\fP
+result is an int image with ranked pixel values
+.TP
+\-\fBs\fP\fI sd\fP
+standard deviation for gaussian match
+.TP
+\-\fBa\fP\fI ap\fP
+alpha parameter for beta match (default=2.0)
+.TP
+\-\fBb\fP\fI bp\fP 
+beta parameter for beta match (default=2.0)
+.PP
+For the beta match the following might help in choosing 
+the parameters
+.TP
+ap=bp=1.0       equalization
+.TP
+ap>1.0 & bp>1.0 convex histogram
+.TP
+ap<1.0 & bp<1.0 concave histogram
+.TP
+ap=bp=4.0       approximate gaussian
+.SH SEE\ ALSO
+histoeq(1), histobe(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

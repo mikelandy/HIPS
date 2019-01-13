@@ -1,0 +1,29 @@
+.TH CUBIC 1 "1/10/93" "Version 2" "HIPS Manual"
+.SH NAME
+cubic \- performs interpolation by cubic convolution
+.SH SYNOPSIS
+.B cubic
+[-m scalefactor | -s new_row new_col]
+.SH DESCRIPTION 
+.I Cubic
+performs an enlargement of the input image by cubic convolution.
+The dimension of the new image is determined by 
+.I scalefactor
+or by
+.I new_row new_col.
+If the -m option is used, the image will be equally scaled in the
+horizontal and vertical direction. The option -s allows for different scale
+of the horizontal and the vertical axes.
+Per default the image is scaled a factor 2 in both directions.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, int, float, complex
+.SH "SEE ALSO"
+pyrexpand(1)
+.SH AUTHOR
+Niels Christain Krieger Lassen, IMSOR/DTH
+.br
+modified for short, int, float, complex <Rasmus Larsen>
+.nf
+Rasmus Larsen
+IMSOR, Technical University of Denmark
+e-mail: rl@imsor.dth.dk

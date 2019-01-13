@@ -1,0 +1,40 @@
+.TH TRANSLATE HIPS "31st August 1991" "Version 2" "HIPS Manual"
+.SH NAME
+translate - image 2D geometric transformer
+.SH SYNOPSIS
+.B translate
+[-d rows cols] [-o srow scol]
+.SH DESCRIPTION 
+.I translate
+translates each image of the input sequence.
+.I rows
+and
+.I cols
+specify the size of the output image,
+and defaults to the size of the input image.
+.I srow
+and
+.I scol
+specify the distance to be translated,
+and default to half of
+the input image size.
+
+Note: any part of the translated image that lie outside the output
+image will be clipped.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH EXAMPLE
+.in +3m
+translate -o 20 20 < input_seq > output_seq
+.in -3m
+.SH SEE ALSO
+enlarge(1), pictranspose(1), project(1), reflect(1),
+rotate(1), rotate90(1), rotate180(1)
+.SH AUTHOR
+Jin Zhengping - 13 March 1989
+.br
+Rewritten by Jin Zhengping - 31 August 1991

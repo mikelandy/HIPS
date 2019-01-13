@@ -1,0 +1,48 @@
+.TH AUTOEXTRACT 1 "January 16, 1990" LBL-HIPS
+.SH NAME
+autoextract - generate a csh script file to automatically extract
+smaller images from a larger HIPS image
+.SH SYNOPSIS
+.B autoextract
+<-f file> <-s x y OR -p r c> [-q] > outfile
+.SH DESCRIPTION 
+.I Autoextract
+generates a c shell script, (sent to the standard output),
+to extract sub-images from a large
+HIPS image.  It will work with HIPS images of the following formats:
+byte, short, int, float, complex, double, and double complex.
+.PP
+Regardless of input specifications, the output images created by executing the 
+script will be named with the following name convention:
+.I infile.row.col,
+where row and col represent the location of the sub-image in reference to
+its location on the original image.
+By HIPS convention, the upper left represents a row and col of zero.
+.SH OPTIONS
+.TP
+.B \-f 
+specify the large image input file.  This image file must be available
+to 
+.I autoextract
+so that sizing information can be obtained.
+.TP
+.B \-s 
+set the size of the sub-images by specifying the 
+number of pixels along the x (horizontal) and y (vertical) 
+directions. A size that breaks
+the large image into a non-integer number of equally sized sub-images
+will result in one or more of the sub-images being smaller than the size 
+requested.
+.TP
+.B \-p 
+this option lets the user select the number of 
+rows and columns to break the large image into.  Sub-image pixel size
+is then automatically computed.
+.TP
+.B \-q
+put the sub-images into a sequence named 
+.I infile.seq
+.SH SEE ALSO
+extract(1), catframes(1)
+.SH AUTHOR
+Fritz Renema  1/16/90

@@ -1,0 +1,108 @@
+.TH H_LOG 3 "6/13/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_log \- natural logarithm
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_log(hdi,hdo,offset)
+h_log_b(hdi,hdo,offset)
+h_log_s(hdi,hdo,offset)
+h_log_i(hdi,hdo,offset)
+h_log_f(hdi,hdo,offset)
+struct header *hdi,*hdo;
+double offset;
+
+h_log_B(imagei,imageo,nr,nc,nlpi,nlpo,offset)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double offset;
+
+h_log_S(imagei,imageo,nr,nc,nlpi,nlpo,offset)
+short *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+double offset;
+
+h_log_I(imagei,imageo,nr,nc,nlpi,nlpo,offset)
+int *imagei;
+float *imageo;
+int nr,nc,nlpi,nlpo;
+double offset;
+
+h_log_F(imagei,imageo,nr,nc,nlpi,nlpo,offset)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double offset;
+.fi
+.SH DESCRIPTION 
+These routines take the natural logarithm of an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+The constant
+.i offset
+is added to each pixel before the logarithm is taken, and if the result is
+zero or negative, the result is set to -999999.
+.I h_log
+calls
+.IR h_log_b ,
+.IR h_log_s ,
+.I h_log_i
+or
+.I h_log_f
+depending upon whether the pixel format is byte, short, integer or float.
+.IR h_log_B ,
+.IR h_log_S ,
+.I h_log_I
+and
+.I h_log_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line, and is
+in floating point format for all routines.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float
+.SH "OUTPUT PIXEL FORMAT"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+Of course, this only makes sense for floating point input images.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_exp(3), h_power(3)
+.SH AUTHOR
+Mike Landy - 5/10/82
+.br
+Mike Landy - 5/17/85 - added float input
+.br
+Charles Carman - 12/11/87 - added short input
+.br
+HIPS 2 - msl - 6/13/91

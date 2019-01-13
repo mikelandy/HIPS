@@ -1,0 +1,31 @@
+.TH LIVEPIC 1 "September 12, 1991"
+.SH NAME
+livepic - Live video display via a Datacube DIGIMAX/FRAMESTORE system
+.SH SYNOPSIS
+.ta 1i
+.B livepic
+[-c channel]
+.br
+.SH DESCRIPTION 
+.I livepic
+sets up a Datacube DIGIMAX/FRAMESTORE system to display live video from
+a selected analogue input.
+The 
+.I -c
+switch selects the channel  to be displayed and defaults to channel 0.
+This should lie in the range 0 to 7 since DIGIMAX supports 8 inputs.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH SEE ALSO
+grabpic(1), dispic(1)
+.SH AUTHOR
+David Wilson, The Turing Institute - September 1991.
+

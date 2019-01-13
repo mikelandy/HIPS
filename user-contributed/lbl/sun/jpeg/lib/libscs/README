@@ -1,0 +1,18 @@
+libccs.a and libscs#.a \- conversion libarary for following type of images:
+
+	HIPS, FITS, GIF, ICC, RLE, PNM, SUN-RASTER, AND TIFF
+
+The -lscs# is the conversion library initial routine. This makes your program
+	as small as possible when linked with libccs.a (-libccs).
+The -lscs1 (libscs1.a) reads only HIPS and FITS images.
+The -lscs2 (libscs2.a) can read one more type - RLE image.
+The -lscs3 (libscs3.a) reads all of the supporing type images, except
+	PICT & JPEG.
+The -lscs4 (libscs4.a) reads all of the above types except JPEG.
+he -lscs[1-4] only output HIPS and RLE images. For other output formats,
+	see "man toany".
+The -lscs5 (libscs5.a) reads all.
+The -lscs6 (libscs6.a) reads all and writes some of the supporing types:
+	HIPS, RLE, and Sun-Raster image.
+It will be able to write all above types, or this ability will be implemented
+in the future.

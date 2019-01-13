@@ -1,0 +1,154 @@
+.TH H_COLORKEY 3 "8/14/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_colorkey \- color keying
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_colorkey(hdc,nimage,hdi,hdo,bflag)
+h_colorkey_bb(hdc,nimage,hdi,hdo,bflag)
+h_colorkey_bi(hdc,nimage,hdi,hdo,bflag)
+h_colorkey_bf(hdc,nimage,hdi,hdo,bflag)
+h_colorkey_ib(hdc,nimage,hdi,hdo,bflag)
+h_colorkey_ii(hdc,nimage,hdi,hdo,bflag)
+h_colorkey_if(hdc,nimage,hdi,hdo,bflag)
+h_colorkey_ipip(hdc,nimage,hdi,hdo,bflag)
+h_colorkey_ipfp(hdc,nimage,hdi,hdo,bflag)
+struct header *hdc,**hdi,*hdo;
+int nimage;
+h_boolean bflag;
+
+h_colorkey_BB(imagec,nimage,imagei,imageo,nr,nc,nlpc,nlpi,nlpo,bflag)
+byte *imagec,**imagei,*imageo;
+int nimage,nr,nc,nlpc,*nlpi,nlpo;
+h_boolean bflag;
+
+h_colorkey_BI(imagec,nimage,imagei,imageo,nr,nc,nlpc,nlpi,nlpo,bflag)
+byte *imagec;
+int **imagei,*imageo,nimage,nr,nc,nlpc,*nlpi,nlpo;
+h_boolean bflag;
+
+h_colorkey_BF(imagec,nimage,imagei,imageo,nr,nc,nlpc,nlpi,nlpo,bflag)
+byte *imagec;
+float **imagei,*imageo;
+int nimage,nr,nc,nlpc,*nlpi,nlpo;
+h_boolean bflag;
+
+h_colorkey_IB(imagec,nimage,imagei,imageo,nr,nc,nlpc,nlpi,nlpo,bflag)
+int *imagec;
+byte **imagei,*imageo;
+int nimage,nr,nc,nlpc,*nlpi,nlpo;
+h_boolean bflag;
+
+h_colorkey_II(imagec,nimage,imagei,imageo,nr,nc,nlpc,nlpi,nlpo,bflag)
+int *imagec,**imagei,*imageo,nimage,nr,nc,nlpc,*nlpi,nlpo;
+h_boolean bflag;
+
+h_colorkey_IF(imagec,nimage,imagei,imageo,nr,nc,nlpc,nlpi,nlpo,bflag)
+int *imagec;
+float **imagei,*imageo;
+int nimage,nr,nc,nlpc,*nlpi,nlpo;
+h_boolean bflag;
+.fi
+.SH DESCRIPTION 
+These routines perform a color keying operation on an array of 
+.I nimage
+input subimages (specified by
+.I hdi
+or
+.IR imagei ),
+with the key defined by a control image (specified by
+.I hdc
+or
+.IR imagec ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_colorkey
+calls
+.IR h_colorkey_bb ,
+.IR h_colorkey_bi ,
+.IR h_colorkey_bf ,
+.IR h_colorkey_ib ,
+.IR h_colorkey_ii ,
+.IR h_colorkey_if ,
+.I h_colorkey_ipip
+or
+.I h_colorkey_ipfp
+depending on the combination of control image format (byte, integer, or
+integer pyramid) and input image formats (byte, integer, float, integer
+pyramid or float pyramid).
+.IR h_colorkey_BB ,
+.IR h_colorkey_BI ,
+.IR h_colorkey_BF ,
+.IR h_colorkey_IB ,
+.I h_colorkey_II
+and
+.I h_colorkey_IF
+are the low-level routines which don't require an image header.  The input,
+control and output subimage sizes are
+.I nr
+by
+.IR nc .
+Input image
+.I i
+has
+.I nlpi[i]
+pixels per line, the control image has
+.I nlpc
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.PP
+.I H_colorkey
+performs the equivalent of a color keying operation.  All images
+must be the same size.  For each pixel, the control image pixel is used
+to choose which input image pixel will be used in the output image.  A
+control value of 1 chooses the first input image (note that this is
+different from the usual C convention), 2 chooses the 2nd, and so on.  If
+.I bflag
+is TRUE, control pixel values which correspond to no input image
+(i.e. values less than 1 or greater than
+.IR nimage )
+result in an output pixel value of
+.IR hips_lchar .
+If
+.I bflag
+is FALSE, control pixel values less than 1
+choose the first image, and control pixel values greater than
+.I nimage
+choose the last image.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+control image: byte, integer, integer pyramid
+.br
+input image: byte, integer, float, integer pyramid, float pyramid
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from the control image header.
+.SH "IN-PLACE PROCESSING"
+The input may be processed in place.  In other words,
+.I hdo
+may be the same as
+.I hdi[i]
+for some value of
+.I i
+or the same as
+.I hdc
+and
+.I imageo
+may be the same as
+.I imagei[i]
+for some value of
+.I i
+or the same as
+.IR imagec .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMT2SUBR - can't handle this combination of pixel formats
+.\" .SH "SEE ALSO"
+.SH AUTHOR
+Mike Landy - 3/11/89
+.br
+Hips 2 - msl - 8/13/91

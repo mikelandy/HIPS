@@ -1,0 +1,49 @@
+
+This directory (hips2/pub) contains source code and documentation which,
+unlike the rest of hips2, is considered to be public domain software.
+Included here is a library for reading and writing hips image headers (both
+HIPS-1 and HIPS-2, both read and write).  These routines do not implement the
+entire set of functionality of the standard HIPS-2 routines, but simply
+enough to be able to read and write standard raster image sequences.  Thus,
+the only HIPS header variables which are handled reasonably completely are
+the pixel format (only the raster formats), number of rows and columns
+(actually, orows/ocols) and the number of frames.  We hereby give permission
+for anyone to make any use of the code in these subdirectories whatsoever,
+including copying the code, including it with freely distributed software,
+including it with commercially available software, and including it in
+ftp-able code.  This permission applies to the following files:
+
+README			README_INSTALL			makefile.src
+include/hipspub.h	include/makefile.src		libman/hipspub.n
+libman/makefile.src	libsrc/hpub_perr.c		libsrc/hpub_rdhdr.c
+libsrc/hpub_wrthdr.c	libsrc/makefile.src		libsrc/makefile.unix
+man/hipstoportable.n	man/makefile.src		man/portabletohips.n
+sources/hipstoportable.c sources/makefile.src		sources/makefile.unix
+sources/portabletohips.c
+
+We do not assert that this software is completely bug-free (although we hope
+it is), and we do not support the software (officially) in any way.  The
+intention is to make it possible for people to read and write standard HIPS
+formatted image sequences, and write conversion programs to other formats,
+without owning a license for HIPS-proper.  However, we do require that all
+distributed copies of these source files include the following copyright
+notice.
+
+Note, if you are interested in using the CEDAR image database, there
+is a public domain package for reading the HIPS images into MATLAB
+by Patrick Hew (grab
+
+	http://maths.uwa.edu.au/~phew/postgrad/sourcecode/cedintf.tar.Z
+
+and follow the instructions within).
+
+*****************************************************************************
+
+Copyright (c) 1992 Michael Landy
+
+Disclaimer:  No guarantees of performance accompany this software,
+nor is any responsibility assumed on the part of the authors.  All the
+software has been tested extensively and every effort has been made to
+insure its reliability.
+
+*****************************************************************************

@@ -1,0 +1,34 @@
+.TH PICINVERT 1 "6/23/91" "Version 2" "HIPS Manual"
+.SH NAME
+picinvert \- invert a frame
+.SH SYNOPSIS
+.B picinvert
+.SH DESCRIPTION 
+.I Picinvert
+reflects a frame about a horizontal axis (turns it upside-down).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+bit-packed (MSBF/LSBF), byte, integer, float
+.SH "REGION-OF-INTEREST"
+The entire image is inverted.  The output image region-of-interest is the
+inverted input image region-of-interest.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+rotate180(1), rotate90(1), pictranspose(1), reflect(1)
+.SH AUTHOR
+HIPS 2 - msl - 6/23/91

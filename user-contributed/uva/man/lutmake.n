@@ -1,0 +1,26 @@
+.TH LUTMAKE 1BIPS "June 1, 1986"
+.SH NAME
+lutmake - to define a LUT based on a color file.
+.SH SYNOPSIS
+.B lutmake
+<filename> > lutfile
+.SH DESCRIPTION 
+.I Lutmake
+permits the user to define a LUT using a color definition file
+with the following specifications:
+.nf
+	-  the available colors (now 10 with maximum of 20) are 
+		defined in the file /usr/files/lut/lutmake.map
+	-  the filename is assumed to be in the current directory 
+	-  the format of the color file is the following:
+		+  the first line must be a comment line
+		+  all following lines contain, in the following order:
+		   beginning value, ending value, color code
+		+  see /usr/files/lut/colormap for example of discrete
+		   color transformation
+.fi 
+The resulting file is writen in HIPL format on the standard output.
+.SH SEE\ ALSO
+ds(1BIPS), rdlut(1BIPS), wrlut(1BIPS) 
+.SH AUTHOR
+Charles Carman - 3/14/86

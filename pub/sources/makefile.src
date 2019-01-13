@@ -1,0 +1,15 @@
+#
+# makefile for pub/sources
+#
+
+PGMS = hipstoportable.out portabletohips.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm

@@ -1,0 +1,28 @@
+.TH SMEAR 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+smear - image expander 
+.SH SYNOPSIS
+.B smear
+[-n rows]
+.SH DESCRIPTION
+.I smear
+expands a one-row image into a rectangular image by repeatedly copying that row.
+.I rows
+is the number of rows to be copied, and defaults to the
+the number of columns of the input image so that the output image is square.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH EXAMPLE
+.in +3m
+smear < input_seq > output_seq
+.in -3m
+.SH SEE ALSO
+extract(1)
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 31/1/1986
+.br
+Rewritten by Jin Zhengping - 31 August 1991

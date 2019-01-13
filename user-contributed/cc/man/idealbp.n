@@ -1,0 +1,27 @@
+.TH IDEALBP 1HIPS "May 23, 1989"
+.SH NAME
+idealbp -- multiply the Fourier transform of a sequence by the Fourier
+transform of an ideal, bandpass, oriented filter.
+.SH SYNOPSIS
+.B idealbp
+[-u] -l lo_freq -h hi_freq -a startangle endangle < inseq > outseq
+.SH DESCRIPTION 
+.I Idealbp
+Multiplies inseq (which is presumed to be the Fourier transform of a sequence)
+by a (complex-valued) function that takes the value (1, 0) for each
+frequency that is contained both in the pieslice between
+.I startangle
+and
+.I endangle
+and in the annulus between
+.I lo_freq
+and
+.I hifreq.
+The conjugate slice of annulus (the negative frequencies of the frequencies
+in the specfied slice of annulus) gets the same treatment.
+.I -u
+displays a usage summary.
+.SH SEE\ ALSO
+isobp(1HIPS), fourtr(1HIPS), inv.fourtr(1HIPS)
+.SH AUTHOR
+Charlie Chubb - 5/23/89 

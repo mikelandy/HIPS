@@ -1,0 +1,57 @@
+.TH CONVERTXHD 1 "8/14/91" "Version 2" "HIPS Manual"
+.SH NAME
+convertxhd \- convert a HIPS-1 image with extended header to HIPS-2 format
+.SH SYNOPSIS
+.B convertxhd
+[-f descriptionfile] <iseq >oseq
+.SH DESCRIPTION 
+.I Convertxhd
+is used to convert a HIPS-1 image which includes extended header
+information (using the HIPS-1 XHEADER package) to HIPS-2 format, storing
+the extended header information as HIPS-2 extended parameters.  Two
+header entries are handled automatically:
+.I colormap
+and
+.IR cmap .
+.I Colormap
+is assumed to be an integer, and is stored as parameter
+.IR maplength .
+.I Cmap
+is assumed to be a color map with the length specified by
+.IR colormap ,
+and encoded as a string of hex digits (two hex digits per entry).  If the user
+wants to convert other extended header entries, they must be specified in
+a description file.  The description file consists of a series of lines,
+one for each parameter.  Each line contains the following information:
+.sp
+.ce
+oldname format count newname
+.sp
+.I Oldname
+is the name of the parameter as stored in the input header.  A
+warning will be printed if the entry is not found.
+.I Newname
+is the name
+which will be used in the output header parameters section.
+.I Format
+is the parameter type.  This is a single character which may be `b', `c',
+`s', `i' or `f' for byte, Ascii, short, integer or floating point.
+.I Count
+is the count
+of values.  If count is -1, then the count is determined by reading as many
+values as possible from the next header line (and for Ascii, the string is
+null-terminated).  The scanf format `%d' is used
+for byte, short and integer types, `%f' is used for floating point types, and
+the raw uninterpreted Ascii data are used for the Ascii type.
+Each extended header entry may be converted only once, and a warning
+message is printed if any entries remain unconverted.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+all formats
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+addparam(1)
+.SH AUTHOR
+Mike Landy - 8/14/91

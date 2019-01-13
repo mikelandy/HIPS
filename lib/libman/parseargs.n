@@ -1,0 +1,694 @@
+.TH PARSEARGS 3 "27/3/91" "Version 2" "HIPS Manual"
+.SH NAME
+parseargs \- to parse the command line arguments to a HIPS filter
+.sp
+.SH SYNOPSIS
+.sp
+.nf
+#include <hipl_format.h>
+
+int parseargs (argc,argv,flagfmt[,paramptrs],filefmt[,fileptrs])
+int parseargsu (argc,argv,flagfmt[,paramptrs],filefmt[,fileptrs],fileusage)
+print_usage()
+
+int  argc;
+char  **argv;
+Flag_Format  *flagfmt;
+Filename_Format  filefmt;
+char *fileusage;
+.fi
+.sp
+.SH DESCRIPTION 
+.I parseargs
+is used to parse the command line arguments passed to a HIPS filter.
+Making use of this routine ensures that all HIPS filters present a consistent
+user interface. If you wish to develop a HIPS filter which is fully
+compatible with HIPS-2 libraries, you must use this filter.
+In particular,
+.I parseargs
+deals with the handling of predefined HIPS flag
+options, setting defaults for the operating mode, constructing a usage
+message, verifying the syntax of the command line and retrieving command
+line values for both the flag options and their associated parameters.
+.LP
+.I parseargs
+makes use of two format descriptors
+.I flagfmt
+and
+.I filefmt
+to interpret the flag options and the input image filenames associated
+with each filter.
+These descriptors permit the parser to verify and extract the desired
+operating mode from the command line arguments,
+.I argc
+and 
+.I argv,
+and must be defined and initialized prior to invoking the parser.
+.LP
+The flag format descriptor contains an entry for each flag option
+recognized by the filter.
+This defines the flag value, any mutually exclusive flags and a list
+of all parameters associated with that flag.
+Immediately following this descriptor in the call to
+.I parseargs
+should be a list of pointer variables
+.I paramptrs
+which are assigned either the default value or the command line value
+(if any is given) for each of the flags and flag parameters associated
+with the filter.
+The order in which these parameter pointers are listed is significant and
+should be the same as the order in which the corresponding parameter was
+defined in
+.I flagfmt.
+It is essential that the number of parameter pointer variables exactly
+matches the number of flags and parameters defined for the filter.
+.LP
+The filename format descriptor defines how many input image filenames can
+be accepted for the filter.
+The arguments immediately following 
+.I filefmt
+in the call to
+.I parseargs
+should be pointer variables which are assigned either the default or
+command line values (if any are given) for the input filenames associated
+with the filter.
+Once again, it is essential that the number of pointer variables exactly
+matches the  number required by filename format descriptor.
+If the user wishes to supply text which describes the meaning of the file
+arguments to the filter, then 
+.I parseargsu
+is used, and a final string of file usage specification is supplied.  This is
+used to build the usage statement (printed on errors or when ``-U'' is
+specified).
+.I parseargs
+simply indicates the number of required filenames.
+.LP
+.I parseargs
+assumes that both these descriptors are correctly specified and will fail
+if  they are not.
+To ensure that the descriptors are correctly  specified, the author of
+a HIPS filter should make use of the library routine
+.I checkargs (3)
+during development.
+.LP
+.I print_usage
+prints the usage message and then exits.
+.sp
+.IP "Command Line Syntax" 3
+The grammar of the command line accepted by
+.I parseargs
+adheres to the following basic rules.
+The program name must appear as the first argument on the command line.
+If any flag options are present, these should be specified next
+together with any associated parameters.
+All parameters must be associated with a flag option.
+Any input image filenames must appear at the end of the command
+line following both the program name and the flag options.
+White space must separate the program name and all flags, parameters
+and filenames which are present.
+Each flag must begin with a leading `-' followed by a string of one or
+more characters.
+The only parameter types which are currently recognized are characters,
+character strings, filenames, integers and real numbers, and literal
+values for these types should be given according to following conventions.
+An additional parameter type (a `list' parameter) is available for a single
+parameter which is an arbitrary length list of items preceded by a count.
+This parameter type is specified in the command line as a count (of items)
+followed by these items (each of which may be any string not containing
+control characters).
+A character may be any legal character except a control character and
+character strings may be of any length.
+Filenames may be given as either absolute or relative paths (basically, any
+Ascii string of length at least one not containing control characters is a
+valid filename, and the string `-' is taken to indicate that
+.I stdin
+should be used).
+Integers may have a leading sign followed by one or more digits.
+Real numbers may also have a leading sign and may be given in either
+exponent or decimal point notation.
+If exponent notation is used, the exponent may also have a leading sign.
+.IP "Greedy Lexical Analysis" 3
+When scanning the command line, \fIparseargs\fP uses greedy lexical
+analysis.
+This means that if it is parsing a flag which takes optional parameters
+and it finds an argument which is of the same type as the next expected
+optional argument, then the parser will assume that this argument is
+associated with this flag.
+For example, consider the situation where a flag takes an optional
+filename parameter and the filter can accept trailing filenames. 
+If the parser comes across a command line of the form
+.sp
+.ce
+filter -l filename
+.sp
+then the argument \fIfilename\fP will be assumed to be an optional
+parameter for the flag ``-l'' and not a trailing image filename.  Since
+filenames and strings match basically anything, this means that an optional
+filename or string parameter will always grab the next token on the command
+line if there is another token to grab.  Similarly, if there is an optional
+`list' parameter and the next token is an integer, it will be taken to be the
+count for that list parameter and that many additional parameters will be
+taken from the command line as the token list for that parameter.
+.sp
+.IP "Flag Format Descriptors" 3
+The flag format descriptor should consist of an array of
+.I Flag_Format
+structures, with a unique entry for each flag to be associated with the
+filter.
+The structure contains four fields which define in order the value of
+the flag (\c
+.I i.e.
+the string after the leading `-'), a list of any flags with which it
+is mutually exclusive, the minimum number of parameters which must
+be specified with the flag and the type and default value of all parameters
+associated with it.
+.IP
+For example, a descriptor for the HIPS convolution filter
+.I mask
+would look like:
+.sp
+.nf
+.ps -1
+.ta 0.1i 0.4i 0.7i 1.0i
+	static Flag_Format flagfmt[] = {
+		{"f", {"m", LASTFLAG}, 1,
+			{{PTBOOLEAN, "TRUE"}, {PTINT, "1", "filter-number"},
+			LASTPARAMETER}},
+
+		{"m", {"f", LASTFLAG}, 1,
+			{{PTBOOLEAN, "FALSE"}, {PTFILENAME, " ", "filterfile"},
+			LASTPARAMETER}},
+
+		LASTFLAG
+	};
+.ps +1
+.fi
+.sp
+There are two entries, one for the ``-f'' flag and one for the ``-m'' flag.
+The last entry in the flag format descriptor array should be the value
+LASTFLAG.
+Note that the first field gives the flag value, the second field
+indicates that both these flags are mutually exclusive to each other, the
+third and fourth fields identify that both flags require a boolean
+parameter to signify when that option has been selected, that the ``-f'' flag
+requires a single integer parameter which defaults to 1 whilst the
+``-m'' flag requires a single filename parameter which defaults to being
+undefined.  The parameter descriptions include text which is used to build the
+usage message, and which should describe the meaning of each parameter.
+.sp
+.IP "Mutually Exclusive Flag Options" 3
+The mutually exclusive flag list is an array containing the values
+of all flags which are mutually exclusive to the flag under definition.
+The last entry in this list should be the terminator LASTFLAG.
+In the above example, the ``-f'' and ``-m'' flags are mutually exclusive to
+each other so each list contains the other flag.
+If a flag has no mutually exclusive options, then the first and only
+entry in this list should be the terminator LASTFLAG.
+.sp
+.IP "Parameters to Flag Options" 3
+The parameter list is an array of 
+.I Parameter
+structures with a unique entry for each parameter attached to the flag
+which contains three fields defining respectively the type of the parameter,
+its default value, and its meaning (for the usage message).
+This list should be terminated with the value LASTPARAMETER.
+Each parameter must be assigned one of the types PTBOOLEAN, PTCHAR, PTSTRING,
+PTFILENAME, PTINT, PTDOUBLE or PTLIST
+and its default value must match the chosen type (a PTLIST parameter may not
+be initialized, and defaults to having a count of zero items).
+The default value should be enclosed in double quotes,
+.I e.g.
+"-27", "this a default string" or "TRUE".
+Note that the pointer variable which corresponds to each parameter must
+also match the parameter type,
+.I i.e.,
+the pointer variable should be of type h_boolean *, char *, char *, char
+*, int *, double * or Listarg *,
+respectively. (Note that a special type, `Listarg', has been defined to hold
+the count and item list for a PTLIST parameter type.)
+The third entry for a parameter describes
+it, and is a string which will be included in the usage message.  This entry
+may be omitted for boolean parameters.
+.IP
+The minimum parameter count determines how many parameter must be
+specified with a particular flag option.
+This count may range from 0 to the total number of parameters associated
+with the flag.
+If the minimum count is less than the total number of parameters, then
+the remaining parameters are deemed optional and need not be specified
+with the flag.
+The optional parameters are placed at the end of the parameter list.
+Note that boolean parameters are not included in the minimum parameter
+count since the count only refers to parameters which appear on the
+command line.
+.sp
+.IP "Boolean Parameters" 3
+Boolean parameters are special in the sense that they do not appear
+explicitly on the command line with the flag to which they are attached.
+Instead, boolean parameters should be used in situations where a flag
+option disables or enables a fundamental operating mode for the filter.
+Take as an example, the filter
+.I rotate90
+which rotates an image by 90 degrees.
+The  synopsis for this filter is:
+.sp
+.ce
+rotate90 [-l]
+.sp
+If the ``-l'' flag is present, the image is rotated in a counterclockwise
+direction, otherwise it is rotated in the default clockwise direction.
+Although the parameter list for this flag will contain no explicit
+command line parameters, 
+.I i.e.
+no reals, integers, strings,
+.I etc.,
+it must contain a boolean parameter which will be set to indicate if the
+flag was present on the command line.
+So, the flag format descriptor  should look like:
+.sp
+.nf
+.ps -1
+.ta 0.1i 0.4i
+	static Flag_Format flagfmt[] =
+	{
+		{"l", {LASTFLAG}, 0,
+		{{PTBOOLEAN, "FALSE"}, LASTPARAMETER}},
+
+		LASTFLAG
+	};
+.ps +1
+.fi
+.sp
+As shown in the descriptor for
+.I mask,
+boolean parameters are also useful (although not strictly required)
+for mutually exclusive options to
+indicate which one of the mutually exclusive group has been selected.
+Boolean parameters may be assigned the values ``TRUE'' or ``FALSE''.
+If that particular option has been selected, then the corresponding
+boolean parameter should be assigned the value ``TRUE''.
+So, the default option from a mutually exclusive group should have the
+associated boolean parameter default to ``TRUE'' and all others set to
+``FALSE''.
+If the user selects one of a mutually exclusive groups of flags, the other
+flags in that group which have an initial boolean parameter will have that
+parameter set to ``FALSE'' by
+.IR parseargs .
+For the convolution filter, the ``-f'' flag is selected by default.
+Similarly, flags with no command line options such as the ``-l'' flag for
+.I rotate90
+should default to ``FALSE'' since the flag has not been selected in that case.
+.fi
+.sp
+.IP "Predefined Flag Options" 3
+Certain flag options have been reserved and are predefined across the
+board for all HIPS filters.
+These predefined flag options are hardwired into the parser and should not
+be redefined for each individual filter.
+These flags need not be included in the flag format descriptor for each
+individual filter.
+Note however that they will not be included in the usage messages which
+are generated.
+The current set of predefined options consists of ``-D'', ``-U'', ``-P'', ``-CR'',
+``-RC'', ``-UL'', ``-UH'', ``-CB'', ``-NFH'', ``-NFD'' and ``-FXP'' flags.
+.IP
+The ``-D'' flag sets the date at which a transformation was applied and is
+used mainly for documentation purposes.
+The ``-U'' flag causes the filter to print a usage message and then to quit
+execution.
+.IP
+The ``-CR \fImode\fP'' and ``-RC \fImode\fP'' flags both deal with the task of
+converting between real-valued and complex-valued images.
+The first flag sets the prevailing \fImode\fP for converting from complex
+to real images.
+In this case, the \fImode\fP may be set to either ``M'', ``P'', ``R'' or ``I''
+indicating respectively that the real-valued image should be formed from
+the complex magnitude, the complex phase, the real part or the imaginary
+part of the complex image. 
+The default is to take the complex magnitude image.
+The ``-RC''  flag sets the \fImode\fP  for converting from real to complex
+images.
+In this case, the \fImode\fP may be set to either ``R'', ``I'' or ``B''
+indicating respectively  that the  complex-valued image should be formed
+by setting the real part from the input image and clearing the imaginary
+part, by setting the imaginary part from the input image and clearing the
+real part or by setting both parts to equal the input image.
+This defaults to setting the real part and clearing the imaginary part.
+The effect of these flags is to set the HIPS external variables
+.I hips_cplxtor
+and
+.IR hips_rtocplx ,
+respectively.
+.IP
+The ``-P \fImode\fP'' flag sets the prevailing mode for packing images.
+Here, the \fImode\fP may be set to either ``M'' or ``L'' to signify
+respectively least significant bit first or most significant bit first
+packing. The default value is defined in the main HIPS Makefile and will
+depend on your machine.  It sets the HIPS external variable
+.IR hips_packing .
+The ``-UL \fIvalue\fP'' and ``-UH \fIvalue\fP'' flags deal with the task of
+unfolding packed images.
+The ``-UL'' flag set the \fIvalue\fP to be substituted for a bit 0 during
+unpacking and defaults to 0.
+The ``-UH'' flag set the \fIvalue\fP to be substituted for a bit 1 during
+unpacking and defaults to 255.
+Both these \fIvalues\fP must lie in the range 0 - 255.
+These flags set the HIPS external variables
+.I hips_lchar
+and
+.IR hips_hchar ,
+respectively.
+.IP
+The ``-CB'' flag specifies that if a filter changes the pixel format before
+processing, then it should convert back to the input pixel format when
+completed.
+The ``-NFH'' flag specifies that only a single input sequence history should
+be preserved in the output rather than combining the histories of all of the
+input sequences to the filter.  Generally the primary input is used, such as
+the last filename specified or the standard input.
+The ``-NFD'' flag specifies that only a single input sequence description should
+be preserved in the output rather than combining the descriptions of all of the
+input sequences to the filter.  Generally the primary input is used, such as
+the last filename specified or the standard input.
+The ``FXP'' flag specifies that the extended parameters of all of the input
+sequences should be merged, rather than saving only the extended parameters of
+the primary input file.  These switches set (or in the case of ``-NFH'' and
+``-NFD'', clear) the HIPS external variables
+.IR hips_convback ,
+.IR hips_fullhist ,
+.I hips_fulldesc
+and
+.IR hips_fullxpar ,
+respectively.
+.sp
+.IP "Filename Format Descriptors" 3
+.I parseargs
+will accept input image filenames for a filter  on the command line
+and will treat this equivalently to images which have been redirected via
+.I stdin.
+So, the commands
+.sp
+.nf
+.ta 1.5i
+	filter imagefile > outimagefile
+.fi
+.sp
+and
+.sp
+.nf
+.ta 1.5i
+	filter < imagefile > outimagefile
+.fi
+.sp
+are equivalent.
+These input image filenames must appear as the last arguments on the
+command line after any flag options which are present.
+A filename specified as ``-'' is taken to indicate
+that \fIstdin\fP should be used.  Of course, this may only be specified once
+in a given command line.
+Various filters can accept different numbers of input images  dependent
+on the transformation which is performed and so, in order to specify how
+many filenames should be accepted for each individual filter, 
+.I parseargs
+expects to see a filename format descriptor.
+This descriptor must take one of the values FFNONE, FFONE, FFTWO or
+FFLIST.
+.IP
+If the format is FFNONE, the filter doesn't accept any input image filenames
+at all.
+This is appropriate for filters which have no image input such  as those
+which generate  synthetic images.
+In this case, no filename pointer variables are required in the call to
+.I parseargs
+since there are no filenames to retrieve.
+.IP
+If the format is FFONE, the filter expects at most one input filename.
+If none is given, the input image is assumed to come from the standard
+input.
+This format is suitable for the vast majority of HIPS filters.
+In this case, a single filename pointer variable is required which is
+a pointer to an unallocated character array.
+.IP
+The format descriptor FFTWO is suitable for filters which perform dyadic
+operations such as adding two images.
+This indicates that the filter expects either one or two image filenames
+on the command line.
+If only one is present, the other input image is assumed to come from the
+standard input.
+For this format, two filename pointer variables are required which again
+should be pointers to unallocated character arrays.
+.IP
+The last format descriptor  is FFLIST which indicates that a list of one
+or more input image filenames can be accepted.
+This format is appropriate for filters which operate on a sequence of
+images.
+If no filenames appear on the command line, the filter expects only a
+single image from the standard input. If one or more filenames appear on
+the command line, the input images are taken to come from these files.
+With this format, two filename pointer variables are expected. 
+the first variable is a pointer to an integer which is set to indicate
+the number of filenames in the list.
+The second variable is a pointer to a list of unallocated character
+arrays (char ***) which will be set to contain each of the filenames in
+the sequence.
+.IP
+In all cases, a file argument which is to be substituted with
+.I stdin
+returns the string ``<stdin>'' as the filename.
+This happens when
+.I stdin
+was the default or when the user specifies a file as ``-''.
+Thus, it is impossible to actually specify the filename ``<stdin>'', and any
+attempt to do so will be mapped to the standard input.  The routine
+.IR hfopenr (3)
+should be used to open these files, since it maps the string ``<stdin>''
+appropriately.
+.sp
+.SH EXAMPLES
+The following examples illustrate the use of
+.I parseargs
+in various situations.
+In each case, the flag format descriptors are defined prior to calling
+the parser.
+The first example is a simple filter
+.I neg
+which takes no flag options and only a single input image file.
+The flag format descriptor looks like:
+.sp
+.nf
+.ps -1
+.ta 1i 1.4i
+	static Flag_Format flag_fmt[] = {LASTFLAG};
+.ps +1
+.fi
+.sp
+and the call to
+.I parseargs
+should be:
+.sp
+.nf
+.ps -1
+.ta 1i
+	char  *image_file;
+
+	parseargs (argc, argv, flag_fmt, FFONE, &image_file);
+.ps +1
+.fi
+.sp
+.LP
+A more complex filter such as
+.I joinframes
+with the following synopsis
+.sp
+.ce
+joinframes [-b greylevel] [-m margin] [-s rows cols] file1 [file2 .. fileN]
+.sp
+will require a correspondingly more complex flag format descriptor such
+as
+.sp
+.nf
+.ps -1
+.ta 1i 1.4i 1.8i 2.2i
+	static Flag_Format flag_fmt[] = {
+		{"b", {LASTFLAG}, 1, {{PTINT, "0", "greylevel"},
+			LASTPARAMETER}},
+
+		{"m", {LASTFLAG}, 1, {{PTINT, "0", "margin"}, LASTPARAMETER}},
+
+		{"s", {LASTFLAG}, 2, {{PTINT, "-1", "rows"},
+			{PTINT, "-1", "cols"}, LASTPARAMETER}},
+
+		LASTFLAG
+	};
+.ps +1
+.fi
+.sp
+and the call to the parser should ensure that the parameter pointer
+variables are placed in the same order in which they appear in the
+parameter list.
+.sp
+.nf
+.ps -1
+.ta 1i 1.7i
+	char  **image_files;
+
+	int  greylevel;
+	int  margin;
+	int  rows, cols;
+	int  num_files;
+
+
+	parseargs (argc, argv,
+		flag_fmt, &greylevel, &margin, &rows, &cols,
+		FFLIST, &num_files, &image_files);
+.ps +1
+.fi
+.sp
+.LP
+A filter with mutually exclusive options such as
+.I stretch
+would require a flag format descriptor such as:
+.sp
+.nf
+.ps -1
+.ta 0.1i 0.4i 0.7i 1.0i
+	static Flag_Format flag_fmt[] =
+	{
+		{"f", {"s", LASTFLAG}, 2,
+		{{PTBOOLEAN, "TRUE"},
+		{PTDOUBLE, "-1", "rfactor"}, {PTDOUBLE, "-1", "cfactor"},
+			LASTPARAMETER}},
+
+		{"s", {"f", LASTFLAG}, 2,
+		{{PTBOOLEAN, "FALSE"},
+		{PTINT, "-1", "rows"}, {PTINT, "-1", "cols"}, LASTPARAMETER}},
+
+		LASTFLAG
+	};
+.ps +1
+.fi
+.sp
+This indicates that the filter has only two options ``-f'' and ``-s'' which are
+mutually exclusive with each other. By default, the ``-f'' option is
+enabled.
+For each flag, the value ``-1'' is used as the default for all associated
+parameters.
+This is meant to indicate that these parameters have not (yet) been specified.
+Note that the minimum parameter count for each flag ignores the boolean
+parameters which are required to indicate which option has been enabled.
+The call to 
+.I parseargs
+should be of the form:
+.sp
+.nf
+.ps -1
+.ta 1i 1.7i
+	char  *image_file;
+
+	int  row_target, col_target;
+
+	double row_factor, col_factor;
+
+	h_boolean use_factors, use_targets;
+
+
+	parseargs (argc, argv,
+		flag_fmt, &use_factors, &row_factor, &col_factor,
+		&use_targets, &row_target, &col_target,
+		FFONE, &image_file);
+.ps +1
+.fi
+.sp
+The PTLIST parameter type was included for the case of a parameter which needs
+to have an arbitrary number of tokens.  This is a special case which should be
+avoided if possible.  It was required by
+.IR calcpix (1)
+and
+.IR fcalcpix (1),
+which allow the user to specify a list of arguments for the newly created
+program (the
+.I -A
+flag).  But, whenever possible, avoid these arbitrary lists, or simply hide
+them in the filename list and use
+.I parseargsu
+so that the usage is made clear (see
+.IR collage (1)
+for an example of this approach).  As an example of PTLIST usage, consider the
+following flag format descriptor:
+.sp
+.nf
+.ps -1
+.ta 0.1i 0.4i 0.7i 1.0i
+	static Flag_Format flag_fmt[] =
+	{
+		{"A", {LASTFLAG}, 1,
+			{{PTLIST,"","numargs<integer> arg1 ...  argn"},
+			LASTPARAMETER}},
+		LASTFLAG
+	};
+.ps +1
+.fi
+.sp
+This flag format descriptor is used in the following fashion:
+.sp
+.nf
+.ps -1
+.ta 1i 1.7i
+	char  *image_file;
+	Listarg arguments;
+
+	parseargs (argc, argv, flag_fmt, &arguments, FFONE, &image_file);
+.ps +1
+.fi
+.sp
+After this call, the user may refer to arguments.argcount, which is an integer
+specifying the number of arguments, and arguments.args, which is a pointer to
+a list of strings (char **) in the manner of
+.IR argc .
+In the command line, the user specifies this argument as follows:
+.sp
+.ce
+-A 5 arg1 arg2 arg3 arg4 arg5
+.sp
+.SH "RETURN VALUE"
+A return value of 0 is given upon successful completion.
+Otherwise, one of the following error codes will be returned if
+.I parseargs
+detects a syntax error in the command line arguments.
+.sp
+.nf
+HE_UNKFLG - unrecognized flag option
+.br
+HE_MUTEX - flags are mutually exclusive
+.br
+HE_MISSFPAR - missing parameter for flag
+.br
+HE_INVFPAR - invalid parameter for flag
+.br
+HE_SYNTAX - invalid syntax
+.br
+HE_FILECNT - too may image filenames
+.br
+HE_MISSFILE - missing image filename
+.br
+HE_INVFILE - invalid image filename
+.fi
+.sp
+.SH FILES
+/usr/local/lib/libhips.a
+.sp
+.SH "SEE ALSO"
+A Programmer's Guide to the HIPS Software (HIPS-2 Version)
+.br
+checkargs (3)
+.sp
+.SH BUGS
+The routine relies on variable argument handling library routines to
+cope with the parameter pointer variables associated with each filter.
+If the actual number of pointer variables does not match the expected
+number of pointer variables, the action of 
+.I parseargs
+is undefined and may cause the filter program to terminate abruptly.
+.sp
+.SH AUTHOR
+David Wilson - 30/1/91

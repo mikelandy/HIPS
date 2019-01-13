@@ -1,0 +1,74 @@
+#
+# makefile for user-contributed/pbm/pnm
+#
+
+LIBNAME =	libpnm.a
+
+OBJECTS =	libpnm1.o libpnm2.o libpnm3.o libpnm4.o
+
+PGMS =		pnmarith.out pnmcat.out pnmconvol.out pnmcrop.out pnmcut.out \
+		pnmdepth.out pnmenlarge.out pnmfile.out pnmflip.out \
+		pnminvert.out \
+		pnmnoraw.out pnmpaste.out pnmscale.out pnmtile.out pnmtops.out \
+		pnmtorast.out pnmtoxwd.out rasttopnm.out xwdtopnm.out \
+		pnmgamma.out pnmrotate.out pnmshear.out \
+		tifftopnm.out pnmtotiff.out
+
+MANPAGES =	pnmarith.n pnmcat.n pnmconvol.n pnmcrop.n pnmcut.n \
+		pnmdepth.n pnmenlarge.n pnmfile.n pnmflip.n pnminvert.n \
+		pnmnoraw.n pnmpaste.n pnmscale.n pnmtile.n pnmtops.n \
+		pnmtorast.n pnmtoxwd.n rasttopnm.n xwdtopnm.n \
+		pnmgamma.n pnmrotate.n pnmshear.n \
+		anytopnm.n pnmindex.n pnmmargin.n pnmsmooth.n \
+		tifftopnm.n pnmtotiff.n libpnm.n pnm.n
+
+SCRIPTS =	anytopnm pnmindex pnmmargin pnmsmooth
+
+TIFFDEF =	-DLIBTIFF
+TIFFINC =	-I../tifflib
+TIFFLIB =	-ltiff
+
+PPMDIR =	../ppm
+INCLUDEPPM =	-I$(PPMDIR)
+LIBPPM =	$(PPMDIR)/libppm.a
+
+PGMDIR =	../pgm
+INCLUDEPGM =	-I$(PGMDIR)
+LIBPGM =	$(PGMDIR)/libpgm.a
+
+PBMDIR =	../pbm
+INCLUDEPBM =	-I$(PBMDIR)
+LIBPBM =	$(PBMDIR)/libpbm.a
+
+CPPFLAGSL = -I.. $(INCLUDEPPM) $(INCLUDEPGM) $(INCLUDEPBM) $(TIFFDEF) $(TIFFINC)
+COMPILEc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+        $(CPPFLAGS) $(CPPFLAGSL) $(TARGET_ARCH) $(FASTCOPY) $(FLOAT) -c
+LINKc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+        $(CPPFLAGS) $(CPPFLAGSL) $(FLOAT) $(TARGET_ARCH) $(FASTCOPY) -o
+
+OTHERLIBS = $(LIBNAME) $(LIBPPM) $(LIBPGM) $(LIBPBM) $(TIFFLIB) -lm -lz
+
+#.c.o:
+#	$(COMPILEc) $*.c
+#	@-ld -s -r $*.o
+#	@mv a.out $*.o
+
+install:	$(LIBNAME) $(PGMS) man-pgm
+	cp $(SCRIPTS) $(DESTDIR)
+	cd $(DESTDIR) ; chmod +x $(SCRIPTS)
+
+$(LIBNAME):	$(OBJECTS)
+	@rm -f $(LIBNAME)
+	ar cr $(LIBNAME) `$(LORDER) $(OBJECTS) | $(TSORT)`;
+	$(RANLIB) $(LIBNAME)
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

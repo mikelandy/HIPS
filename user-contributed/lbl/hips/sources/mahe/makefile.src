@@ -1,0 +1,26 @@
+#
+# makefile for user-contributed/lbl/hips/sources/mahe
+#
+
+PGMS = mahe.out
+
+OBJECTS = ahecalc.o ahecalc_short.o aheclip.o mahe.o
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+mahe.out:	$(OBJECTS)
+	$(LINKc) mahe $(OBJECTS) $(LIBRARIES)
+	mv mahe $(DESTDIR)
+	@touch $@
+
+FRC:
+

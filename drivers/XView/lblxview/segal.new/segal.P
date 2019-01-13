@@ -1,0 +1,162 @@
+;GIL-3
+(
+	:interfaces             (file.G filter.G image_reg.G list.G mask_grow.G mask_log.G paint.G preferences.G threshold.G view.G )
+	:actions                (
+		(
+		:from                   (view.G menu_image)
+		:when                   (Notify )
+		:to                     (file.G pop_new_mask)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_segment "Filter ...")
+		:when                   (Notify )
+		:to                     (filter.G pop_filter)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_preferences "Display ...")
+		:when                   (Notify )
+		:to                     (preferences.G pop_preferences_display)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_segment "Mask growing ...")
+		:when                   (Notify )
+		:to                     (mask_grow.G pop_mask_grow)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_image)
+		:when                   (Notify )
+		:to                     (mask_log.G pop_mask_log)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_image)
+		:when                   (Notify )
+		:to                     (file.G pop_load_image)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (mask_log.G menu_mask "Load ...")
+		:when                   (Notify )
+		:to                     (file.G pop_load_mask)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (mask_log.G menu_mask "New ...")
+		:when                   (Notify )
+		:to                     (file.G pop_new_mask)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (mask_log.G menu_mask "Save as ...")
+		:when                   (Notify )
+		:to                     (file.G pop_save_as)
+		:function_type          ExecuteCode
+		:arg_type               (:string)
+		:action                 ("xv_set(File_pop_save_as->pop_save_as,
+	XV_SHOW, TRUE,
+	NULL);
+")
+		)
+		(
+		:from                   (view.G menu_image "List ...")
+		:when                   (Notify )
+		:to                     (list.G pop_list)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_segment "Threshold ...")
+		:when                   (Notify )
+		:to                     (threshold.G pop_threshold)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_image)
+		:when                   (Notify )
+		:to                     (file.G pop_save_image)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G win set_mode "Register")
+		:when                   (Notify )
+		:to                     (paint.G win_paint)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Hide)
+		)
+		(
+		:from                   (view.G menu_masks "Load ...")
+		:when                   (Notify )
+		:to                     (file.G pop_load_mask)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_masks "New ...")
+		:when                   (Notify )
+		:to                     (file.G pop_new_mask)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_masks "Mask log ...")
+		:when                   (Notify )
+		:to                     (mask_log.G pop_mask_log)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_masks "Save as ...")
+		:when                   (Notify )
+		:to                     (file.G pop_save_as)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_image "Load ...")
+		:when                   (Notify )
+		:to                     (file.G pop_load_image)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+		(
+		:from                   (view.G menu_image "Save as ...")
+		:when                   (Notify )
+		:to                     (file.G pop_save_image)
+		:function_type          :user_defined
+		:arg_type               ()
+		:action                 (Show)
+		)
+	)
+	:root_window            nil
+)

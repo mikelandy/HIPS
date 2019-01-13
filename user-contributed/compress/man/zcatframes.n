@@ -1,0 +1,23 @@
+.TH ZCATFRAMES 1 "7/6/91" "Version 2" "HIPS Manual"
+.SH NAME
+zcatframes \- concatenate several image sequences (including compressed files)
+.SH SYNOPSIS
+.B zcatframes
+file1 file2 ...
+.SH DESCRIPTION 
+.I Zcatframes
+combines several sequences into one sequence, outputting all of the frames of
+the first input sequence, then those of the second, and so on.
+The input files must have the same number
+of image rows, image columns, color planes, and if a pyramid format, then the
+same number of pyramid levels.
+If a filename ends with a `.Z' extension, then it will first be
+`uncompressed'.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, double, complex, double complex, integer pyramid, float pyramid
+.SH "REGION-OF-INTEREST"
+The region-of-interest is that of the first input file specified.
+.SH "SEE ALSO"
+catframes(1), intercolor(1), subseq(1)
+.SH AUTHOR
+Pat Flynn

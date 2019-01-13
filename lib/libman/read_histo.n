@@ -1,0 +1,49 @@
+.TH READ_HISTO 3 "6/30/91" "Version 2" "HIPS Manual"
+.SH NAME
+read_histo \- read an image histogram
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+read_histo(histo,fr)
+fread_histo(fp,histo,fr,fname)
+hdr_to_histo(hd,histo);
+
+FILE *fp;
+struct hips_histo *histo;
+struct header *hd;
+int fr;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+.I read_histo
+and
+.I fread_histo
+read a single histogram into the histogram pointed to by the supplied histogram
+structure.
+.I read_histo
+is used for reading from the standard input.  The frame number and file name
+are supplied for more informative error messages.
+If an old style HIPS header was just read (as indicated by global variable
+.IR hips_oldhdr ),
+then an old-style histogram is read (the underflow and overflow bins are set
+to zero).
+.PP
+.I hdr_to_histo
+is used to copy the histogram parameters
+``numbin'', ``imagepixfmt'', ``binleft'' and ``binwidth''
+from the header parameters section to the histogram structure.
+It also resets the histogram parameter ``histodealloc'' so that the memory
+manager knows that know deallocatable memory is associated with this histogram
+structure as yet.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_MISSPAR - missing histogram parameters
+.br
+HE_READFRFILE - error during read
+.SH AUTHOR
+Michael Landy - 6/30/91

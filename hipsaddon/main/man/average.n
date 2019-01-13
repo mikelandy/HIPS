@@ -1,0 +1,32 @@
+.TH AVERAGE 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+average - average of sub-sequence of frames pixel-by-pixel
+.SH SYNOPSIS
+.B average
+[-f from] [-t to]
+.SH DESCRIPTION
+.I average
+averages images of a sub-sequence of the input sequence
+pixel-by-pixel
+without normalisation from frame
+.I from
+to frame
+.I to.
+.I from
+defaults to 0, and
+.I to
+the last frame of the input sequence.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH EXAMPLE
+average < input_seq > output_image
+.SH SEE ALSO
+catframes(1), pstrobe(1), repframe(1), strobe(1), subseq(1)
+.SH AUTHOR
+Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

@@ -1,0 +1,32 @@
+.TH TMAG 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+tmag \- scale a 3-D graph
+.SH SYNOPSIS
+.B tmag
+[-p t x [y [z]]]
+.SH DESCRIPTION 
+.I Tmag
+scales a 3D graph over time.
+.I T
+is the number of time units over which magnification
+is to be performed. The last frame of the input sequence
+is output as it is, but thereafter t frames are added,
+each magnified by the factor-arguments relative to the
+preceding one.
+Arguments
+.I y
+and
+.I z
+default to 1.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+gmag(1)
+.SH AUTHOR
+Yoav Cohen - 11/16/82
+.br
+HIPS 2 - msl - 7/24/91

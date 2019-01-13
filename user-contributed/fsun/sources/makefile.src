@@ -1,0 +1,17 @@
+#
+# makefile for user-contributed/fsun/sources
+#
+
+PGMS = fsuntovax.out fvaxtosun.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

@@ -1,0 +1,37 @@
+#
+# makefile for user-contributed/hipsview/sources
+#
+
+OBJS = hipsview.o hipsview_1.o toggle.o viewop.o viewmenu.o viewhelp.o \
+	  ditpic.o binpic.o magpic.o box_cursor.o vec_cursor.o \
+	  hist.o slice.o getvector.o readim_file.o
+
+OBJS2 = viewcolor.o
+
+OTHERLIBS = -lm -lsuntool -lsunwindow -lpixrect
+
+PGMS = hipsview.out viewcolor.out
+
+install:	$(PGMS)
+
+hipsview.out: $(OBJS)
+	$(LINKc) hipsview $(OBJS) $(LIBRARIES)
+	strip hipsview
+	mv hipsview $(DESTDIR)
+	@touch $@
+
+viewcolor.out: $(OBJS2)
+	$(LINKc) viewcolor $(OBJS2) $(LIBRARIES)
+	strip viewcolor
+	mv viewcolor $(DESTDIR)
+	@touch $@
+	
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

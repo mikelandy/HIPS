@@ -1,0 +1,222 @@
+.fz \s +4
+.Ls	2
+.\" @(#)powertool.1  1.M2 8/1/90 JIN;
+.TH POWERTOOL 1 "OCTOBER 5, 1991" LBL-HIPS
+.SH NAME
+powertool \- multiple function tool for HIPS image manipulation
+.SH SYNOPSIS
+.I powertool
+[-F -I[L] -S] [-H "rows columns [frames]"] [-F#]
+	[+#] [-a] [-c #] [-r #] [-f[#]] [-g] [-u] [-v] [-w]
+.nf
+	[-p "rows columns [frames]"] [-s "rows columns [frames]"]
+.fi
+	[-slid] [-x[x, X] #] [-o filename] [ < ]
+.I input_file
+.SH DESCRIPTION
+.I powertool
+is a very useful image manipulation tool. The input image can be one of the
+following types:
+.br
+HIPS, FITS, GIF, ICC, RLE, SUN-raster, PICT, PBM, PGM, PPM, and TIFF
+
+This tool can do all of following jobs alone or in combination.
+.ta 1i
+.nf
+<1>	Convert images of any supported types above to HIPS images.
+<2>	Combine multiple frame images to a single 2 dimensional image.
+<3>	Combine multiple frame images into different multiple frame
+	images with different or same frame, and with same or different
+	frame size.
+<4>	Enlarge frame(s) in x or y or both direction with same or
+	different factor.
+<5>	Input can be any image (with header) or raw data.
+<6>	Output can be either a HIPS image (with header) or raw image.
+<7>	Perform image translation.
+<8>	Extract a 2D or 3D subimage.
+<9>	print out histogram table or ploting data for analysis.
+.SH OPTIONS
+.TP
+.I -FI[L]S
+specify the pure image type (raw input) to be Floating point, Integer,
+InterLeave (RGB), or Short. The option must be used with the
+.I -H
+option. (Default = Byte : use \fB-H\fP option only)
+.TP
+.I -F#
+If a number follows
+.I -F
+flag right way,
+it forces ot input multi-frame non-HIPS image with the number frames.
+.TP
+.I -H
+This option implys that input is a pure image file without header.
+Following this switch, the number of rows must specified. The number of
+columns may either be given or defaults to the number of input rows.
+The frames is another option and defaults to 1 if not given. \fBIf more
+than one parameter is given, double quotation marks are required for these
+parameters. Note that on some system, a space is required between -H and its
+parameters. This rule also holds for\fP
+.I -p
+and
+.IR -s .
+.TP
+.I -a
+adjust for enlarge with image width is not a power of 2.
+.br
+or output gnuplot data when used with mhisto.
+.TP
+.I -c #
+column factor \- positive integer.
+.TP
+.I +\fBfactor
+This spatial scaling factor is for both row and column. The +#, -c and -r only
+effect the output but not the input.  For example,
+.br
+.B powertool
+-H "10 25 9" -s "30 75" +2
+.br
+will output a 60 x 150 x 1 image.
+.TP
+.I -f[#]
+filling the rest area if start position is not from 1 (-p used).
+If no # given, filling value is 1; The # must immediately follow the \fB-f\fP
+without space.
+.TP
+.I -g
+output gray-scale image. (default = input; color for raw input)
+.TP
+.I -o \fBfilename\fR
+This option tells powertool to output to a file instead of standard output.
+.TP
+.I -p rows columns [frames]
+position will be relocated and start at rows columns [frames].
+.TP
+.I -r #
+row factor \- positive integer.
+.TP
+.I -s rows columns [frames]
+This option specifies output frame size and frame number.
+The default frames=1 {output columns > input columns} or frames = input_frames.
+.TP
+.I -slid
+view messages in a line.
+.TP
+.I -u
+input is a UNIX FITS image.
+.TP
+.I -v
+verbose	messages.
+.TP
+.I -w
+take away all header information (strip header) and output a pure image.
+.TP
+.I -x[x, X] #
+offset \- relocate start position at offset (skip) from the beginning
+of an image file. If -x is used with
+.B -H option,
+it will skip # bytes at the beginning of each frame. The -xX only skip # bytes
+at the first frame. The # is in hexadecimal if -xx or -xX is given.
+This is a useful switch: see the examples below.
+
+.SH EXAMPLES
+.B NOTE:
+all names with xxx_yyy_zzz mean that the image has xxx rows,
+yyy columns and zzz frames.
+.TP
+.I Convert an image in supporting type to A HIPS image
+.B powertool image.any > image.hips
+.TP
+.I Generate a Pure Image (strip header)
+.B powertool -w image.x > image.y
+
+.I powertool
+will strip image.x of its header store the raw image data in image.y.
+.TP
+.I Build Image
+.B powertool
+-H "56 56 24" -s "112 112 6" image.y -o image.z
+
+.I powertool
+reads image.y as raw image data and treats it as 24 56x56 frames of 3D image
+data, and outputs 6 112x112 frames in file image.z.
+.TP
+.I Fix Damaged Image
+.B powertool
+-xX 7B -H "192 192 21" -F bad_header.image > good_header.image
+
+In this example,
+.I powertool
+takes away some garbage (123 bytes long = 7B in HEX) from bad_header.image and
+generates a workable floating point format new image \- good_header.image.
+.TP
+.I Extract 3D image
+.B powertool
+.nf
+-p "32 16 12" -s "192 192 80" Image_256_256_124 > Image_192_192_80
+.fi
+
+In this example,
+.I powertool
+extracts a central 3D image (32--224, 16--208, 12--80) from a
+256x256x124 3D image.
+Here,
+.I -p
+gives the starting position as row 32, column 16, and frame 12.
+.TP
+.I Split Image
+.B powertool
+-s "512 256 62"  Image_256_256_124 |
+.B powertool
+-p 256 -s "256 256 62" > EvenImage
+
+Here,
+.I powertool
+splits all even frames from image Image_256_256_124 and generates a new
+image: EvenImage. First,
+.I powertool
+spreads the image into 62 double size
+frames, each frame contains 2 old frames, then picks up row 256 column 1
+(defaulted by missing argument) frame, which is even frame, and builds a new
+image (split even frames). If the
+.I -p
+256 option not used, then
+.I powertool
+generates an image with all odd frames.
+
+.TP
+.I Use with mhisto
+mhisto Saturn | powertool | lpr
+
+build a histogram list table (not a graph) of Saturn.
+A text file can be modified by text edtior and used for
+.I histo_simulate to generate a certain spectrum.
+
+mhisto Saturn | powertool -a > Saturn.histo.gnu-data
+
+generate histogram data for gnuplot.
+.TP
+\fIseparate a color image to 3 single channel HIPS images\fP
+.nf
+# unix script file
+RGB=/tmp/$1.rgb
+red=$1-hr
+green=$1-hg
+blue=$1-hb
+irow=`headers $1 | sed -n -e "7 p" | awk '{print $3}'`
+icol=`headers $1 | sed -n -e "7 p" | awk '{print $5}'`
+toicc $1 > $RGB
+powertool -H "$irow $icol" $RGB > $red
+powertool -H "$irow $icol 2" -p "1 1 2" $RGB > $green
+powertool -H "$irow $icol 3" -p "1 1 3" $RGB > $blue
+rm -f	$RGB
+exit
+.fi
+This shell script file takes input from command line and output 3 single
+channel HIPS image files.
+
+.SH SEE ALSO
+append(n), ccs(1), color_ps(1), elastic(1), hexdump(n),
+magicprint(1), multi_mask(1), mhisto(1), 3dslice(1), 3dscale_geom(1)
+.SH AUTHOR
+Jin Guojun - 10/1/90

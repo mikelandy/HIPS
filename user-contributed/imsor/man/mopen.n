@@ -1,0 +1,32 @@
+.TH MERODE 1hips "OCTOBER 28, 1991" 
+.SH NAME
+merode, mdilate, mopen, mclose - perform gray level morphological 
+operations
+.SH SYNOPSIS
+.B merode
+[n] < iseq > oseq
+.br
+.B mdilate
+[n] < iseq > oseq
+.br
+.B mopen
+[n] < iseq > oseq
+.br
+.B mclose
+[n] < iseq > oseq
+.SH DESCRIPTION 
+The gray level morphological operations are performed using a square
+3x3 structuring element and thus corresponds to local minimum and
+local maximum for that neighborhood.
+.I n
+is the number of times the operation is performed.
+These operations works for both binary and gray level images.
+Input sequence must be in byte or float format.
+.SH SEE\ ALSO
+morpherode(1), morphdilate(1), mwtophat(1), mgradient(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

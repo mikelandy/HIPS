@@ -1,0 +1,85 @@
+.TH H_EXTEND 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_extend - image expander
+.SH SYNOPSIS
+.nf
+h_extend(hdi,hdo,boundary,wrapping)
+h_extend_b(hdi,hdo,boundary,wrapping)
+h_extend_f(hdi,hdo,boundary,wrapping)
+h_extend_d(hdi,hdo,boundary,wrapping)
+struct header   *hdi,*hdo;
+h_boolean         boundary,wrapping;
+
+h_extend_B(imagei,imageo,nr,nc,boundary,wrapping)
+h_extend_F(imagei,imageo,nr,nc,boundary,wrapping)
+h_extend_D(imagei,imageo,nr,nc,boundary,wrapping)
+byte    *imagei,*imageo;
+int     nr,nc;
+h_boolean boundary,wrapping;
+.fi
+.SH DESCRIPTION 
+.I h_extend
+doubles the size of the input image (specified by
+.I hdi
+or
+.IR imagei)
+by filling the extended area with 0, the boundary values of
+that image, or the opposite half image as if the image 
+is first extended by repeating itself and then wrapped 
+by half the image size (wrapping).
+.I h_extend
+stores the result in the output image (specified by
+.I hdo
+or
+.IR imageo).
+.I h_extend
+then calls
+.I h_extend_b
+if the pixel format is byte,
+.I h_extend_f
+if the pixel format is floating point or
+.I h_extend_d 
+if the pixel format is double.
+.I h_extend_b,
+.I h_extend_f
+or
+.I h_extend_d
+then respectively calls
+.I h_extend_B,
+.I h_extend_F
+or
+.I h_extend_D
+which are the low-level routines and do not require image headers.
+The output image has
+.I nc
+pixels per line, and
+.I nr
+lines.
+If
+.I boundary
+is TRUE, then the boundary values of the input image are 
+used to fill the extended area, otherwise 0 is used
+if
+.I wrapping
+is not TRUE.
+If
+.I wrapping
+is TRUE, then the wrapping is appplied to
+fill the extended area, otherwise 0 is used
+if
+.I boundary
+is not TRUE.
+
+It can be used in processings involving FFT.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, float, and double. 
+.SH "OUTPUT PIXEL FORMATS"
+byte, float, or double. 
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH SEE ALSO
+h_extract(1), h_fourtr(1)
+.SH AUTHOR
+Jin Zhengping - 25 July 1988 
+.br
+Rewritten by Jin Zhengping - 31 August 1991

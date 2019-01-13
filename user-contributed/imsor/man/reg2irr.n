@@ -1,0 +1,102 @@
+.TH REG2IRR 1 "20 August 1992" "Version 2" "HIPS Manual"
+.SH NAME
+reg2irr \- transform regular HIPS-image to HIPS-file of the IMSOR defined irregular format
+.SH SYNOPSIS
+.B reg2irr 
+.RB [ \-f
+.IR irr-file ]
+.RB [ \-g
+.BI x \ xmin 
+.I xmax
+|
+.BI y \ ymin
+.I ymax
+|
+.BI step \ dx
+.IR dy \ |
+.BI size \ cols
+.IR rows ] 
+.br
+.RB 	[ \-x
+.I xmin
+.IR xmax ]
+.RB [ \-y
+.I ymin
+.IR ymax ]
+.RB [ \-m
+.IR missing ]
+.br
+.RB 	[ \-n
+.IR neutral-value ]
+.RB [ \-t
+.IR tolerance ]
+.RB [ \-w4
+.IR reg-file ]
+.RB [ \-w8
+.IR reg-file ]
+.br
+	< HIPS-image  > irr-file 
+.SH DESCRIPTION 
+.I reg2irr
+creates a file of the IMSOR defined irregular format, see
+.IR asc2hips .
+Input is a regular 
+HIPS image and a set of irregular distributed points.
+The program
+assigns to each irregular point the value of the eucledean closest pixel.
+The irregular point-set may be given as a separate Irregular file (option 
+.BR \-f )
+or specified as a grid (option 
+.BR \-g ). 
+By default the output is a grid of
+same dimensions as the input grid.
+.sp 0.5
+The coordinates of the pixels of the input-grid are calculated from
+the extended parameter "Gridspec" if it is present.
+Otherwise the 
+grid-dimensions are [0;cols\-1],[0;rows\-1].
+The default limits may be
+changed by option
+.B \-x 
+and 
+.BR \-y .
+.sp 0.5
+The (x,y) coordinate-system is oriented so that the
+origin is positioned in the lower-left corner of the image 
+(row=Max_row, col=0), and the x-axis is horisontal. 
+.sp 0.5
+The output consists of a frame containing x-coordinates, a
+frame containing y-coordinates, followed by the feature frames. 
+.sp 0.5
+It is possible by option 
+.B \-t 
+to specifiy that only points within a certain
+euclidean distance from the closest pixel is assigned the corresponding
+image-value.
+Points lying outside this tolerance are given a neutral value 
+specified by option 
+.B \-n 
+(default \-1). 
+.sp 0.5
+The output grid may be modified from the input grid by option
+.BR \-g .
+The coordinate-limits are changed by parameter 
+.BR x \ and/or \ y
+, the point-intervals by parameter
+.B step
+and the number of columns/rows by parameter 
+.BR size .
+.sp 0.5
+The format of the output is default floats.
+This may be changed by
+option 
+.B \-w8 
+to double.
+Calculations are performed in double. 
+.SH SEE\ ALSO
+irr2reg(1), asc2hips(1)
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk

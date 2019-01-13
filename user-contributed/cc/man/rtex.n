@@ -1,0 +1,35 @@
+.TH RTEX 1HIPS "July 4, 1776"
+.SH NAME
+Rtex -- Substitute specified, semirandom micropatterns for individual
+pixels in an input frame to create a two-texture pattern.
+.SH SYNOPSIS
+.B rtex
+[-u] pattfile [-s seed] < inseq > outseq
+.SH DESCRIPTION 
+.I Pattfile
+is formatted as follows: line 1:
+.sp
+			i j k
+.sp
+for three integers, i, j, k.  There follow 2*i*j*k floating point fields,
+The first i*j*k of these post-first-line floats define one random texture
+micropattern.  The second i*j*k floats define another random micropattern.
+Each micropattern contains i lines and j cols and is obtained as follows:
+successive i*j bunches of floats (for each micropattern there are k of these)
+are taken as jointly independent micropattern subcomponents.  Each micropattern
+subcomponent is multiplied by a random variable that takes the value 1 or -1
+with equal probability.  Each micropattern is the sum of its k independent
+subpcomponents.
+.I Inseq
+is byte formatted.
+.I Outseq
+is produced by replacing each 0 in \fIinseq\fR by a random micropattern of
+the first type and each non-zero pixel
+by a random micropattern of the second type.
+The
+.I -u
+option displays a usage summary.
+.I Seed
+seeds the pseudorandom number generator.
+.SH AUTHOR
+Charlie Chubb - 5/24/89

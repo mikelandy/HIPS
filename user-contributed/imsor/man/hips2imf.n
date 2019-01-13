@@ -1,0 +1,18 @@
+.TH HIPS2IMF 1hips "OCTOBER 9, 1991" 
+.SH NAME
+hips2imf - converts an image from HIPS to ContextVision GOP-302 format
+.SH SYNOPSIS
+.B hips2imf
+< iseq > oseq
+.SH DESCRIPTION 
+.I hips2imf 
+converts an image from HIPS to ContextVision GOP-302 format.
+HIPS image must be in byte format.
+.SH SEE\ ALSO
+imf2hips(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

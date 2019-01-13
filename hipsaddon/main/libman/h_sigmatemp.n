@@ -1,0 +1,63 @@
+.TH H_SIGMATEMP 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_sigmatemp - image random noise estimator
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <math.h>
+#include <hipl_format.h>
+
+h_sigmatemp(hd1,hd2,pure,sigma)
+h_sigmatemp_b(hd1,hd2,pure,sigma)
+struct header   *hd1,*hd2;
+h_boolean         pure;
+float           *sigma;
+
+h_sigmatemp_B(image1,image2,nr,nc,ocols,pure,sigma)
+byte    *image1,*image2;
+int     nr,nc,ocols;
+h_boolean pure;
+float   *sigma;
+.fi
+.SH DESCRIPTION
+.I h_sigmatemp
+estimates the standard deviation of random noise of the input subimage pair
+(ROI, specified by
+.I hd1
+and
+.I hd2
+or
+.I image1
+and image2
+as pointers to the first pixels of the two subimages),
+and displays the estimate and stores it in
+.I sigma.
+.I h_sigmatemp
+then calls
+.I h_sigmatemp_b
+only if the image pixel format is byte.
+.I h_sigmatemp_b
+then calls
+.I h_sigmatemp_B
+which is the low-level routine and does not require image header.
+The subimage size is
+.I nr
+by
+.IR nc.
+.I ocols
+is the number of pixels in a line of the input image.
+.I pure
+being TRUE indicates that one of the images is "pure"
+without any noise while the other is corrupted with noise.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH SEE ALSO
+h_sigmaspat(1)
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 8/5/1985
+Peter Mowforth and Jin Zhengping - modified on 11/9/1986
+Rewritten by Jin Zhengping - 31 August 1991

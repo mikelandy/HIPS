@@ -1,0 +1,22 @@
+#
+# makefile for hipsaddon/main/man
+#
+
+MANPAGES = \
+	asl.n average.n cmat.n binatts.n cshift.n ellipse.n \
+	extend.n framing.n grey2disp.n greylevel.n \
+	hips2vit.n mandelbrot.n mark.n mean.n mls.n mpmatch.n nns.n \
+	padimage.n project.n rank.n rotate.n sasmooth.n saw.n \
+	seecontents.n sigmaspat.n sigmatemp.n sinegen.n smear.n \
+	snn.n translate.n unoise.n vacls.n 
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

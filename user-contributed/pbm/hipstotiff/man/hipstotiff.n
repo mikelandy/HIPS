@@ -1,0 +1,40 @@
+.TH HIPSTOTIFF 1HIPS "January 11, 2019"
+.SH NAME
+Hipstotiff - Convert HIPS images and sequences to TIFF format
+.SH SYNOPSIS
+.B hipstotiff
+[-o basefilename]
+.SH DESCRIPTION 
+.I Hipstotiff
+converts hips sequences to TIFF format. TIFF is a single-image
+format. Each image in the sequence is stored in a separate file
+(basefilename.1.tif, basefilename.2.tif, ..., where the base filename defaults
+to tiffoutfile). If there is only one frame, the ".1" is omitted. All pixel
+formats handled by TIFF format are handled appropriately, including RGB,
+but not files with 3 separate color bands. For multi-frame files, the
+numbering uses the same number of digits for all files (e.g., file.003.tif)
+allowing one to use ffmpeg to put the frames back together (e.g., "ffmpeg -f
+image2 -i basefilename.$02d.tif out.mpg" (where "02" changes to "01" for less
+than 10 frames and "03" for more than 99).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, signed byte, short, unsigned short, int, unsigned int, float, double,
+RGB
+.SH "REGION-OF-INTEREST"
+The entire image is used.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking.  Also used to
+initialize each frame when
+.I -c
+is specified.  Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.SH SEE\ ALSO
+.SH AUTHOR
+Michael Landy - 1/11/19

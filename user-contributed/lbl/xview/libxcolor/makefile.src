@@ -1,0 +1,33 @@
+#
+# makefile for user-contributed/lbl/xview/libxcolor
+#
+
+OBJECTS = xcolor.o
+
+LIBNAME = libxcolor.a
+
+default:	$(OBJECTS) $(LIBNAME)
+install:	$(OBJECTS) $(LIBNAME)
+
+.c.o:
+	$(COMPILEc) -I$(XVIEWHOME)/include $*.c
+	@-ld $(LDLIBFLAGS) $*.o
+	@mv a.out $*.o
+
+$(LIBNAME):	$(OBJECTS)
+	@rm -f $(LIBNAME)
+	ar cr $(LIBNAME) `$(LORDER) *.o | $(TSORT)`;
+	mv $(LIBNAME) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIBNAME)
+	@touch $(LIBNAME)
+
+clean:
+	rm -f $(OBJECTS) $(LIBNAME)
+clean-all:	clean_all
+
+pristine:
+	rm -f $(OBJECTS) $(LIBNAME) $(LIBDIR)/$(LIBNAME)
+
+man:
+
+doc:

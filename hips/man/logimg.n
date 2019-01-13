@@ -1,0 +1,42 @@
+.TH LOGIMG 1 "6/13/91" "Version 2" "HIPS Manual"
+.SH NAME
+logimg \- take the natural logarithm of an image
+.SH SYNOPSIS
+.B logimg
+[-o offset]
+.SH DESCRIPTION 
+.I Logimg
+computes the natural logarithm of each pixel.  The value of
+.IR offset ,
+which defaults to 1, is added to each pixel before the logarithm is taken.
+If that sum is less than or equal to zero, the output pixel is set to -999999.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float
+.SH "OUTPUT PIXEL FORMATS"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+exppix(1), powerpix(1), stretchpix(1), scale(1)
+.SH AUTHOR
+Mike Landy - 5/10/82
+.br
+Mike Landy - 5/17/85 - added float input
+.br
+Charles Carman - 12/11/87 - added short input and -a flag
+.br
+Hips 2 - msl - 6/13/91

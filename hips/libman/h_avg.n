@@ -1,0 +1,107 @@
+.TH H_AVG 3 "7/8/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_avg \- subroutines to compute a weighted average of two images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_avg(hdi1,hdi2,hdo,wt1,wt2)
+h_avg_b(hdi1,hdi2,hdo,wt1,wt2)
+h_avg_s(hdi1,hdi2,hdo,wt1,wt2)
+h_avg_i(hdi1,hdi2,hdo,wt1,wt2)
+h_avg_f(hdi1,hdi2,hdo,wt1,wt2)
+struct header *hdi1,*hdi2,*hdo;
+float wt1,wt2;
+
+h_avg_B(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo,wt1,wt2)
+byte *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+float wt1,wt2;
+
+h_avg_S(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo,wt1,wt2)
+short *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+float wt1,wt2;
+
+h_avg_I(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo,wt1,wt2)
+int *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+float wt1,wt2;
+
+h_avg_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo,wt1,wt2)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+float wt1,wt2;
+.fi
+.SH DESCRIPTION 
+These routines compute the weighted average of two input subimages (specified by
+.I hdi1
+and
+.IR hdi2 ,
+or by
+.I imagei1
+and
+.IR imagei2 ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_avg
+calls
+.IR h_avg_b ,
+.IR h_avg_s ,
+.I h_avg_i
+or
+.I h_avg_f
+depending upon whether the pixel format is byte, short, integer or float.
+.IR h_avg_B ,
+.IR h_avg_S ,
+.I h_avg_I
+and
+.I h_avg_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+The supplied values of
+.I wt1
+and
+.I wt2
+are relative weights, and need not sum to one.  If they sum to zero, however,
+then the relative weights are ignored and the weights are both set to
+one-half.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_add(3)
+.SH AUTHOR
+Michael Landy - 7/8/91

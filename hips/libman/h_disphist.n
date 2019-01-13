@@ -1,0 +1,73 @@
+.TH H_DISPHIST 3 "7/2/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_disphist \- display histograms as a bar graph
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_disphist(histo,hd,barwidth,barheight,maxcnt,borderw,borderg)
+h_disphist_b(histo,hd,barwidth,barheight,maxcnt,borderw,borderg)
+struct hips_histo *histo;
+struct header *hd;
+int barwidth,barheight,maxcnt,borderw,borderg;
+
+h_disphist_B(histo,nbins,image,nlpo,barwidth,barheight,maxcnt,borderw,borderg)
+int *histo,nbins,nlpo,barwidth,barheight,maxcnt,borderw,borderg;
+byte *image;
+.fi
+.SH DESCRIPTION 
+These routines take an input image histogram (specified by
+.IR histo ),
+and store a bargraph of the histogram in the output subimage
+(specified by
+.I hd
+or
+.IR image ).
+.I h_disphist
+calls
+.IR h_disphist_b
+as long as the pixel format is byte.
+.IR h_disphist_B
+is the low-level routine which doesn't require a histogram structure or
+image header.  The output image has
+.I nlpo
+pixels per line.
+Each histogram bar is
+.I barwidth
+pixels wide and
+.I barheight
+pixels tall.  The
+entire histogram has a border of width
+.I borderw
+and grey level
+.IR borderg ,
+and a stripe of the same width and greylevel separates the underflow and
+overflow bins from the main histogram.  The main histogram bars have greylevel
+.I hips_lchar
+on a background of
+.I hips_hchar .
+The underflow and overflow bars have a background of greylevel
+.I borderg
+so that they disappear into the background if empty.  The output image must
+have the appropriate size to
+accommodate the histogram:  barheight+2*borderw rows and
+(nbins+2)*barwidth+4*borderw columns.  Histogram counts are scaled so
+that a count of
+.I maxcnt
+corresponds to one full bar height.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+histogram input, byte output
+.SH "REGION-OF-INTEREST"
+The histogram is placed in the output image region-of-interest.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_histo(3), h_maxhisto(3)
+.SH AUTHOR
+Michael Landy - 12/15/82
+.br
+HIPS 2 - msl - 7/2/91
+.br
+added borderw/borderg - msl - 1/20/92

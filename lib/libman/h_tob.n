@@ -1,0 +1,53 @@
+.TH H_TOB 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_tob \- conversions to byte pixel format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_tob(hdi,hdo)
+h_mptob(hdi,hdo)
+h_lptob(hdi,hdo)
+h_stob(hdi,hdo)
+h_itob(hdi,hdo)
+h_ftob(hdi,hdo)
+struct header *hdi,*hdo;
+.fi
+.SH DESCRIPTION 
+These routines convert from a variety of pixel formats to byte format.  The
+entire image pointed to by
+.I hdi
+is converted to byte pixel format and stored in the image pointed to by
+.I hdo
+(any region-of-interest information is ignored).  The routine
+.I h_tob
+checks the pixel format of the input image and calls the appropriate
+individual routines
+.IR h_mptob ,
+.IR h_lptob ,
+.IR h_stob ,
+.IR h_itob
+or
+.IR h_ftob
+according to whether it is MSBF, LSBF, short, integer or float.
+.I h_mptob
+and
+.I h_lptob
+set pixels corresponding to 0 bits to the value of
+.IR hips_lchar ,
+and pixels corresponding to 1 bits to the value of
+.IR hips_hchar .
+All real values are rounded.  All values are clipped to lie between 0 and 255.
+The number of clipped pixels is recorded in HIPS global variables
+.I hips_lclip
+(for negative values) and
+.I hips_hclip
+(for positive values).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_toc(3), h_tod(3), h_todc(3), h_tof(3), h_toi(3), etc.
+.SH AUTHOR
+Michael Landy - 1/4/91

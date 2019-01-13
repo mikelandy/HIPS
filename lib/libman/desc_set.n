@@ -1,0 +1,107 @@
+.TH DESC_SET 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+desc_set \- routines to manipulate the sequence description
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+desc_set(hd,s)
+desc_append(hd,s)
+struct header *hd;
+char *s;
+
+desc_set2(hd,argformat,fmtstring,sprintfargs...)
+desc_append2(hd,argformat,fmtstring,sprintfargs...)
+struct header *hd;
+int argformat;
+char *formatstring;
+various-types sprintfargs;
+
+desc_indentadd(hd,s)
+struct header *hd;
+char *s;
+.fi
+.SH DESCRIPTION 
+These routines are used to modify the sequence description of the standard
+HIPS sequence header.
+.I desc_set
+sets the sequence description to point to the supplied string.  It does not
+give the header the right to deallocate this string.
+.I desc_append
+appends the supplied string to the end of the current sequence description.
+.sp
+.IR Desc_set2 ,
+.I desc_append2
+and
+.I desc_indentadd
+are used by programs (such as frame arithmetic
+programs) which combine two or more HIPS
+sequences, and allow the user to keep a complete record in the output sequence
+description of the descriptions of all of the input sequences.  The standard
+usage is to create a sequence description consisting of each input description
+(indented by four blanks), preceded by an identifying line.
+.I Desc_set2
+is called first, and sets the initial description by using supplied
+.I fmtstring
+and
+.IR sprintfargs .
+The sequence of arguments must match that required by the format string, and
+the sequence of argument types must be specified as
+.IR argformat .
+The possible values of
+.I argformat
+are listed in hipl_format.h, and at last count included HEP_N, HEP_D, HEP_S,
+HEP_SD, HEP_DS, HEP_SS, HEP_SDD, HEP_SDS, HEP_SSS, HEP_DDDD, HEP_SDDDDS,
+according to whether the successive sprintf arguments are strings (`S') or
+integers (`D').
+This yields the first identification line for one of the input sequences.
+Then,
+.I desc_indentadd
+is called to append the indented version of that input sequence's description.
+For all other input sequences, the same operations are performed using
+.I desc_append2
+instead of
+.IR desc_set2 .
+An example sequence of calls, taken from
+.IR addseq (1)
+follows.
+.sp
+.in 1i
+.ta .5i 1i 1.5i 2i 2.5i
+.nf
+char *savedesc;
+struct header1 hdfp,hdp;
+int savesize;
+
+savedesc = hdp.seq_desc;
+savesize = hdp.sizedesc;
+if (hdfp.sizedesc > 1) {
+	desc_set2(&hdp,HEP_SS,
+		"****%s: stored sequence, file: %s****\\n",
+		Progname,filename1);
+	desc_indentadd(&hdp,hdfp.seq_desc);
+	if (savesize > 1) {
+		desc_append2(&hdp,HEP_SS,
+		    "****%s: input sequence, file: %s****\\n",
+		    Progname,filename2);
+		desc_indentadd(&hdp,savedesc);
+	}
+}
+else if (hdp.sizedesc > 1) {
+	desc_set2(&hdp,HEP_SS,
+		"****%s: input sequence, file: %s****\\n",
+		Progname,filename2);
+	desc_indentadd(&hdp,savedesc);
+}
+.fi
+.in -1i
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_BADFMT - unknown argument format code
+.SH "SEE ALSO"
+write_header(3)
+.SH AUTHOR
+Michael Landy - 1/3/91

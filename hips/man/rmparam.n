@@ -1,0 +1,22 @@
+.TH RMPARAM 1 "5/25/93" "Version 2" "HIPS Manual"
+.SH NAME
+rmparam \- remove parameters from a HIPS image header
+.SH SYNOPSIS
+.B rmparam
+-n name1 [name2 ... name6] < iseq > oseq
+.SH DESCRIPTION 
+.I Rmparam
+is used to remove parameters from a HIPS image header.  Each
+parameter named in the command line is removed from the input image
+sequence parameters list.  If any parameter is not found, a warning is
+issued.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+All formats
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+addparam(1)
+.SH AUTHOR
+Mike Landy - 5/25/93

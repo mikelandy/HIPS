@@ -1,0 +1,46 @@
+#!/bin/sh
+
+#
+# Shell script to build cursor library from ./cursors directory. The
+# default cursor is given by the parameter.
+#
+
+fname=create_cursor_list.c
+n=`ls ./cursors | awk 'END {print NR}'`
+
+cnames=$1" "`ls ./cursors | awk '{if ($1 != "'$1'") print}'`
+
+if [ $n -eq 0 ]
+then
+  echo "error: no cursors!!"; exit 1
+fi
+
+echo "#include <X11/Intrinsic.h>" >$fname
+echo "#include <X11/cursorfont.h>" >>$fname
+echo "#include <xdisp.h>" >>$fname
+
+cat ./cursors/* >>$fname
+
+echo "char *cursor_names[$n+1] = {" >>$fname
+for i in $cnames
+do
+  echo '"'$i'"', >>$fname
+done
+echo '"'standard'"};' >>$fname
+
+echo "int ncursors=$n+1;" >>$fname
+echo "Cursor cursor_list[$n+1];" >>$fname
+echo "Cursor create_cursor();" >>$fname
+echo "extern Cursor current_cursor;" >>$fname
+echo "void create_cursor_list() {int j = 0;" >>$fname
+
+for i in $cnames
+do
+  echo "cursor_list[j++] = create_cursor("$i"_bits,"$i"_width,"$i"_height,"$i"_x_hot,"$i"_y_hot,"$i"_mask_bits,"$i"_mask_width,"$i"_mask_height);" >>$fname
+done
+
+echo "cursor_list[j++] = OlGetStandardCursor(draw);" >>$fname
+
+echo "current_cursor = cursor_list[0];" >>$fname 
+
+echo "}" >>$fname

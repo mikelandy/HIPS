@@ -1,0 +1,72 @@
+#
+# makefile for user-contributed/lbl/xview/genial
+#
+
+DIRS = func ui loginfo
+PGMS = genial.out loginfo.out
+
+
+FUNCDIR= func
+UIDIR= ui
+LOGINFO=loginfo
+
+LDFLAGS2 = -L$(XVIEWHOME)/lib
+# -L../guidexv
+LIBRARIES2 = $(LIBRARIES) -llbl -lguidexvlbl -lxcolor
+# -lguidexv
+#CFLAGS += -Bstatic
+
+default:	$(PGMS)
+install:	$(PGMS)
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+	rm -f genial genial.out
+	cd $(UIDIR); make clean
+	cd $(FUNCDIR); make clean
+	cd $(LOGINFO); make clean
+
+loginfo.out:
+	cd $(LOGINFO); make ;
+
+genial.out:
+	(cd $(FUNCDIR); make ;)
+	(cd $(UIDIR); make ;)
+	$(CC) -D$(ORIG) -D$(BITORDER) \
+		$(CFLAGS) $(CPPFLAGS) $(FLOAT) $(TARGET_ARCH) $(FASTCOPY) \
+		-o genial $(FUNCDIR)/*.o $(UIDIR)/*.o \
+		 $(LDFLAGS2) $(LIBRARIES2) $(LIBXVIEW)
+	mv genial $(DESTDIR)
+#	-cp genial.info $(HELPDIR)
+	@touch $@
+
+
+depend:
+	makedepend -I./include $(UIDIR)/*.c $(FUNCDIR)/*.c
+
+tar:	doit
+	tar cvf genial.tar README genial.info \
+			func/*.c func/makefile.src \
+			ui/*.c ui/*.icon ui/makefile.src \
+			include/*.h \
+			man/genial.n \
+			loginfo/*.c loginfo/makefile.src \
+			lib/xcolor.c lib/c_array.c lib/Makefile \
+			gfm/*.c gfm/*.h gfm/*.pr gfm/*.info gfm/Makefile \
+		Configure config.sun4 makefile.hdr makefile.src makefile.tlr 
+	compress genial.tar
+
+clean:
+	rm -f genial genial.out
+	cd $(UIDIR); make clean
+	cd $(FUNCDIR); make clean
+	cd $(LOGINFO); make clean
+clean-all:	clean_all
+	cd $(UIDIR); make clean-all
+	cd $(FUNCDIR); make clean-all
+	cd $(LOGINFO); make clean-all
+
+FRC:

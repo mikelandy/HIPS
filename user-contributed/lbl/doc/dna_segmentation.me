@@ -1,0 +1,548 @@
+.\" to print: iroff -me file
+.de sZ
+.nr pp 12
+.nr tp 12
+.nr sp 12
+.nr fp 12
+.sz 12
+..
+.de sY
+.nr pp 10
+.nr tp 10
+.nr sp 10
+.nr fp 10
+.sz 10
+..
+.sZ
+.if n .po 3
+.\".if n .pl 999
+.if n .ll 70
+.if n .ad l
+.\".he '\f3DRAFT'DRAFT'DRAFT\f1'
+.\"
+.fo //\s-4-%-\ \ \ \ \ \ \ \*(td\s+4//      \" put page numb and date in footer
+.nr $r 12        \" set vertical spacing (in terms of some ratio) 
+.\" .so refer.me.new
+.ce 99
+.sz 16
+\s+2\f3Geometric Analysis of Video Microscopy Imaged\f1
+\s+2\f3DNA Molecules\f1
+.sp .2i
+.sZ
+.i
+.sp .5
+B. L. Tierney\u*\d
+W. E. Johnston\u*\d
+Information and Computing Sciences Division
+Imaging Technologies Group
+.sp .5
+M. F. Maestre\u**\d
+Cell and Molecular Biology Division
+.sp .5
+Lawrence Berkeley Laboratory
+Berkeley, CA, 94720
+.r
+.(f
+.sz 10
+USMail address: Lawrence
+Berkeley Laboratory, Berkeley, CA 94720.
+\u*\dMail Stop 50B-3238, \u**\dMail Stop 70A-3307,
+Berkeley Laboratory, Berkeley, CA 94720.
+Internet email addresses are:
+wejohnston@lbl.gov, bltierney@lbl.gov, mfmaestre@lbl.gov.
+The work presented in this paper is supported by
+\u*\dthe U.S. Department of Energy under contract DE-AC03-76SF00098,
+by the LBL Human Genome Center, and by \u**\dNational Institutes of Health
+under grant AI08427.
+Any conclusions or opinions, or implied approval or disapproval of a company or
+product name are solely those of the authors and not necessarily those
+of The Regents of the University of California, the Lawrence Berkeley
+Laboratory, or the U.S. Department of Energy.
+Trademarks are acknowledged implicitly by the use of a company's name
+or product name.
+.sz 12
+.)f
+.sp
+.ce
+\f3ABSTRACT\f1
+.sY
+.pp
+We describe techniques that permit the
+visualization and analysis of sequences of images
+from video microscopy
+of DNA molecules in a micro-electrode chamber.
+The resulting images are enhanced and segmented to obtain identifiable
+images of single molecules. These single molecule images are then analyzed
+to obtain the geometric properties of the molecule. The result is a
+sequence of accurately timed, coordinate representations of single
+molecules undergoing various periodic and aperiodic motions that result
+from the applied electric field. These sequences of coordinates are
+then analyzed to get the kinematic behavior of individual molecules.
+.pp
+Accurate segmentation of the DNA molecules in the image is critical in determining
+the geometry of the molecules. This paper examines
+the steps for segmentation and geometric analysis. The techniques
+are quite general, and have been applied to other problems
+where the geometry of objects in low contrast 
+video image sequences must be extracted for analysis.
+.sZ
+.sp 2
+.sh 1 "Introduction"
+.pp
+While the techniques to be discussed here are quite general, we will consider them
+in the context of a specific experiment. Fluorescently stained DNA molecules
+(each on the order of 60 microns long) are placed in
+a micro-electrode chamber with a spatially distributed
+electrode network of microscopic dimensions.
+The electrode array is used to apply various configurations
+of electric fields to the molecule.
+These fields result in mechanical forces being
+applied to the molecules, which in turn cause movement, stretching,
+vibrations, etc.
+An image intensifier tube and CCD video camera are used in conjunction
+with an epi-fluorescence microscope to image the molecules.
+This video microscopy
+imaging is done in real time, with relevant time intervals on the order of
+1/30th second. Time sequences are captured by video recording, and
+the resulting video frames converted to digital images
+by the application of video animation hardware as described in a companion
+paper [1].
+The resulting sequence of digital images is subjected to image processing and
+analysis to obtain the geometry
+of DNA molecules from an image, from which
+the kinematic behavior of the molecules is determined.
+Analysis of the kinematic behavior can lead to
+direct determination of the elastic properties, and therefore
+bond strengths, in the molecule.  In the images shown in this paper
+the electromagnetic
+field is stretching the molecule, and the stretched DNA 
+appears to exhibit some of the harmonic motions of a taut string.
+We use the frame by frame
+geometry changes in the images of the molecules to measure 
+the period and frequency of the displacement waves traveling the length of
+the DNA molecule.
+.sp
+.sh 1 "Segmentation Method"
+.pp
+Accurate segmentation of the images of the DNA molecules is critical in determining
+the geometry of the molecules.
+This segmentation is non-trivial because the images
+are noisy, and the contrast between the DNA molecules
+and the background
+is low. Furthermore, the grey level intensity of a given
+molecule is not uniform, and molecules often overlay
+other molecules. The following method of segmentation, which
+involves image enhancement, thresholding, thinning and cleaning,
+was found to give semi-automatic techniques suitable
+for analyzing sequences of hundreds of images.
+Each step in the processes
+is explained below.
+.sp
+.sh 2 "Image Enhancement"
+.pp
+Starting with the original image (see Image 1), we
+first contrast
+enhance the image so that the molecules are better distinguished
+from the background. To do this we use the \f3mahe\f1 program, which is
+an implementation of Stephen Pizer's clipped
+adaptive histogram equalization algorithm [2] (see Image 2). 
+In histogram equalization, an image is transformed to have a 
+uniform gray level distribution.
+This has the effect of spreading the contrast based information across
+more gray levels, therefore making low-contrast features more visible.
+In adaptive histogram equalization, a histogram equalization
+mapping is applied to each pixel based on the pixels in
+a region centered at that pixel. In other words, 
+each pixel is mapped to an intensity proportional
+to its rank in the pixels surrounding it in a given window size.
+For these images, a window of 100 x 100 pixels was used. ``Clipped''
+refers to a method used to limit the number of pixels
+in any bucket of the histogram. This has the effect of limiting
+the effects of  noise  in  the  histogram equalization process.
+.pp
+Next we further enhance the image by applying a difference of 
+Gaussians operation (\f3dog\f1) (see Image 3). The difference of
+Gaussians [3] method is one method of implementing a ``Mexican hat''
+filter. This filter has the effect of suppressing the background near the
+edge of the molecules.
+.pp
+There are three arguments to this program, \f2esigma, masksize\f1, and \f2ratio\f1.
+\f2esigma\f1 is  the standard  deviation  of  the  ``excitatory'' Gaussian,
+\f2masksize\f1  is  the  spatial size  of  the Gaussian, and  \f2ratio\f1  is the
+ratio between the standard deviations of the inhibitory and
+excitatory  Gaussians. For these images, \f2esigma\f1 was set at 1.5, \f2masksize\f1
+to 20, and \f2ratio\f1 to 8.\  \f2esigma\f1 values greater than 1 cause a
+blurring of the images, which is useful for getting smoother images
+with \f3bthin\f1 (see below).\  \f2masksize\f1 was set to be slightly larger
+than the width of the DNA molecule, and a large \f2ratio\f1 value was used
+to give greater contrast between the molecules and the background,
+but many will still suffer from overlap with other molecules.
+.pp
+Next we do a histogram equalization of the image (\f3histoeq\f1) 
+(see Image 4). This is just a standard histogram 
+equalization [4], which is described above.
+The combination of the difference of Gaussians filter with histogram
+equalization leads to a image in which the DNA molecules are
+clearly separated from the background.
+.sp
+.sh 2 "Thresholding"
+.pp
+Now that we have an image in which the DNA molecules clearly stand
+out from the background, we can threshold the image to create
+a binary image ``mask''. In a binary image, each pixel has a value 
+of either 0 or 1 (actually 0 or 255 in a 1 byte per pixel format).
+We can use either a simple or variable threshold (\f3thresh\f1 or
+\f3var_thresh\f1) method to do the thresholding ( see Image 5).
+.pp
+In simple thresholding, all locations with a grey level value
+less than a given value are set to 0, and all other locations
+are set to 255 (see [5]). In variable thresholding, for each pixel we find the
+histogram of a N x N pixel window centered
+at that pixel, and include that pixel only if it's value is greater
+than the median of the histogram. Variable thresholding is
+much slower (it takes about 5 minutes for one 400 x 512 image on
+a Sun-4), but it can produce better segmentation, 
+especially on noisy images.
+.pp
+Next, since we know that the objects of interest are
+the largest objects in the image, we ``clean'' the small objects away.
+To accomplish this the \f3bclean\f1
+program counts the number of pixels in each object of
+the binary mask image, and removes all objects which are
+smaller than a given size (see Image 6).
+.pp
+At this point we have finished the first level of segmentation.
+However, it is not completely accurate because of the nature of the original
+images.  Since the molecules are in motion, they often cross, drift,
+break up, or in other ways interfere with the molecule that we
+are analyzing.
+(Note the bump along the lower edge of the long molecule
+near the center of Image 6). It is easy for the experimenter
+to see these segmentation flaws, but
+difficult to make a computer ``see'' them.
+.pp
+To solve this problem, we use \f3segal\f1, (SEGmentation AnaLyzer), 
+to interactively ``touch up'' the binary image.
+\f3segal\f1 is a X-window system\** based program for editing binary images.
+.(f
+\** Window systems like SunView, X, Gem, that of the Macintosh, etc.,
+are programs to manage the frame buffer of an interactive workstation.
+The window system creates, destroys, and generally manages the windows
+on the screen, each of which may be associated with
+a different program. The X system was developed at MIT, and is noteworthy
+for the fact that it is a distributed system, and runs on a wide
+variety of workstations. That is, the client, or
+application program, that requests a window and subsequently draws
+into it, may reside on a computer other than the workstation
+that the user interacts with.
+.)f
+This program has the ability to overlay the original gray-level
+image with a transparent version of the binary mask image to help the user determine
+where the
+mask should be cut away to best match the features of interest.
+The program also allows the user to select between various
+size and shape of paint/erase cursors, zoom magnifications, and so forth.
+Image 6 was converted to Image 7 by using \f3segal\f1
+to remove the protrusions that are artifacts of overlaid
+molecules. Figure 1 illustrates the user interface presented by the \f3segal\f1
+mask editor.
+.sp
+.sh 2 "Thinning"
+.pp
+The next step is to thin the objects in the image to a single pixel width line
+(see Image 8), which we do with the program \f3bthin\f1.
+To analyze the kinematic behavior of the molecules, it is
+best to represent the molecule as a line only one pixel wide, which
+follows the center of the molecule.
+(The initial attempt to use morphological dilate and contract operations
+to accomplish this were not satisfactory. This approach tended
+to produce a line that was off center, and had ``whiskers''.)
+The program
+\f3bthin\f1 finds the desired centerline.
+.pp
+The thin algorithm is the following:
+For every pixel that is part of
+an object, find the end points for horizontal and vertical
+lines contained in the object at that point. Use the center of the shorter line as
+the point in the thinned image ( see Figures 2 and 3 ). This is a
+very simple method which seems to work well. As an example,
+look at pixel (6,3) in Figure 2. The horizontal line through that
+point has a length of 5 pixels, and the vertical line 3 pixels. Then
+taking the center of the shorter line, we select location (6,4)
+for the thinned image.
+.pp
+This algorithm is overly simplistic and leaves some artifacts,
+which are easily corrected using the programs \f3bclean\f1 and
+\f3fill_holes\f1. Single pixel wide bumps will often become
+disconnected, (location (7,6) in Figure 2, and location (3,2) in Figure 3),
+but are easily removed using \f3bclean\f1.
+The other problem is that holes of one or 
+two pixels wide often occur at bends in the objects, as demonstrated
+in Figure 3, location (9,3).
+This problem is corrected using the program \f3fill_holes\f1,
+which locates the end of lines, searches for nearby
+ends of lines, and connects the two endpoints if they are within a
+given distance of each other.
+Also, the thinned lines representing the molecules sometimes have small
+holes due to the uneveness of the intensity of the original
+image. This problem is also easily corrected using \f3fill_holes\f1
+( see Image 9 ).
+.pp
+The final step is a second ``cleaning'' of the image using \f3Bclean\f1,
+which yields our final image which contains only the molecule
+that we are analyzing (see Image 10).
+.pp
+Image 11 is an overlay of image 2 and image 10, and 
+provides verification that the geometric representation of the molecule
+is in fact a reasonable representation of the original object.
+.sp
+.sh 2 "Extract the Geometry"
+.pp
+At this point we are ready to extract the geometry of the DNA molecules
+in Image 10. To do this, we want to get a list of the (x,y)
+locations of each pixel in each object. This list
+of points can then be used as input to various programs
+to analyze the geometric harmonic properties properties of the DNA molecules.
+The program \f3printxyz\f1 outputs a list
+of the (x,y) locations of the pixels in each object.
+\f3printxyz\f1 does this by locating an object, then doing a flood fill 
+to find the coordinates of all points in that object, marking
+the points so that they will not be listed twice.
+.pp
+We have illustrated these techniques for a  single image, however in practice we
+are analyzing the motion of the DNA molecules in time, so the \f3printxyz\f1
+program also gives the third dimension (z), which in this case is time.
+By analyzing the coordinates of the molecules over time, the kinematic
+behavior can be obtained.
+Typical results (both from different data sets than that from which
+Images 1-11 were taken) are shown in Figures 4 and 5. In the data
+for Figure 4, a molecule
+was being pulled through a ``hook'' (like a rope being pulled through
+a pulley). Figure 4, itself, is the result of plotting the locations of the
+molecule over a dozen, or so, time steps. The shorting of one side
+and lengthening of the other is clearly apparent.
+The ``pulley'' is eliminated during the image analysis phase,
+hence the apparent disconnection at
+the right hand end. The ``staircasing'' is due to the inherent
+resolution of the image. The scale shows coordinates in pixel units,
+and is small enough that the effects of individual pixel resolution
+units are clearly visible.
+.pp
+In Figure 5, a molecule is constrained at one end, and an electric field
+is applied.
+The thirty six
+subsequent
+frames are plotted with time as the third axis, and the x-y-t combination
+displayed as a surface.
+From the figure it can be seen that the impulse like force resulting from
+the application of the electric field gives rise to a set of clearly visible
+oscillations in several different modes (that is, both transverse
+and longitudinal to the long axis of the DNA molecule).
+.sp
+.sh 2 "Implementation"
+.pp
+All of the above algorithms are implemented as HIPS [6] programs and run 
+on a Sun-4 workstation. The programs \f3dog\f1, 
+\f3histoeq\f1, and \f3thresh\f1 
+are part of the HIPS image processing software package, 
+developed at New York University.
+\f3 mahe\f1 is from the University of North Carolina,
+Department of  Computer Science, and modified by us to handle HIPS images.
+All other programs were designed and coded as part of this project.
+Total processing time is about two minutes
+on a Sun-4 for one 200 x 300  pixel image. This does not include the time
+for editing the binary image using \f3segal\f1. The time for
+\f3segal\f1 depends on the amount of editing to be done, but for most
+images is only about 1-2 minutes.
+.pp
+All of these programs (except \f3segal\f1) are implemented
+as UNIX filters [7]. Thus, to use the filters, standard input and
+standard output are used for image input and output, respectively.
+For example:
+.sp
+.sz 10
+.ft C
+.fl
+.\".cs 1 22
+.nf
+.na
+.lg 0
+   Bclean -s 200 < in_image_file > out_image_file
+   dog 1.5 20 8.0 < in_file | scale_gray | thresh -t 180 > out_file
+.\".cs
+.fl
+.fi
+.ad b
+.ft R
+.sz 12
+.lg
+.fl
+Where ``<'' and ``>'' indicate i/o redirection to a disk file, and ``|''
+connects the output of one program to the input of the next (see [7]).
+.pp
+All of the steps involved can be combined into a Unix shell script [7]
+that appears as a single program to the user.
+For example
+.sz 10
+.fl
+.ft C
+.nf
+.na
+.lg 0
+   seg_dna video_image_1 seg_image_1
+.cs
+.fi
+.ad b
+.fl
+.ft R
+.sz 12
+.lg
+Would invoke
+the following simple script (called ``seg_dna'') to produce an image similar to Image 10.
+.sp
+.fl
+.ft C
+.sz 10
+.\".cs 1 22
+.nf
+.na
+.lg 0
+-----------------------------------------------------------
+#! /bin/csh
+# usage: seg_dna video_image processed_image
+# segment dna images
+set th1 = 200
+set inname = $argv[1]
+set outname = $inname.segment
+
+mahe -H -c 6.0 -W 100 100 < $inname | scale_gray > temp1
+dog 1.5 20 8.0 <  temp1 | scale_gray | histoeq > temp2
+rm -f temp1
+thresh -t  $th1 < temp2 | Bclean -s 400 >  temp1
+bthin < temp1 | fill_holes -e -s 5 | Bclean -s 300 > $outname
+
+rm -f temp1 temp2
+echo " segmentation done. "
+-----------------------------------------------------------
+.fl
+.ft R
+.fi
+.ad b
+.lg
+.sp
+.pp
+This script does not include \f3segal\f1, so in practice one would
+need two separate scripts, using \f3segal\f1 before running \f3bthin\f1.
+\f3scale_gray\f1 is needed to scale the integer output of \f3mahe\f1
+and the floating point output of \f3dog\f1 back to bytes.
+.sp 2
+.sh 1 "Conclusions"
+.pp
+This work illustrates a method for segmenting and extracting the geometry of 
+video imaged DNA molecules. As is often the case in image processing,
+there certainly are other combinations of image filters that will give
+similar results. The analysis that needs to be accomplished for these
+images is an example of a case where a completely automatic
+method would be difficult, but an interactive step, such as
+the \f3segal\f1 mask editor, allows for easily incorporating
+the knowledge of the experimenter to perform such tasks as removing segmentation
+flaws (e.g. the bump in image 6).
+These techniques and programs have been successfully used to segment and extract
+geometry for several experiments involving low contrast video images.
+.sp 2
+.ce
+\f3References\f1
+.fl
+.nr pp 11
+.nr tp 11
+.nr sp 11
+.nr fp 10
+.sz 11
+.sp
+.\"
+.\" types of reference forms: 1: journal-artical 2: book,
+.\"               3: article in book 4:tech-report
+.]<
+.]-
+.ds [F [1]
+.ds [A W. E. Johnston
+.as [A ", D. Robertson
+.as [A ",and B. Tierney
+.ds [T Acquisition of Digital Images from Video Tape
+.ds [J (this proceedings)
+.nr [T 0
+.nr [A 0
+.nr [O 0
+.][ 1 journal-article
+.]-
+.ds [F [2]
+.ds [A S.M. Pizer
+.as [A ", et al.
+.ds [T Adaptive Histogram Equalization and Its Variations
+.ds [J Computer Vision, Graphics, and Image processing
+.ds [V 39
+.ds [D 1987
+.nr [T 0
+.nr [A 0
+.nr [O 0
+.][ 1 journal-article
+.]-
+.ds [F [3]
+.ds [A D. Marr
+.as [A ", E. Hildreth
+.ds [T Theory of Edge Detection
+.ds [J Proceedings of the Royal Society of London
+.ds [V B 207
+.ds [D 1980
+.nr [T 0
+.nr [A 0
+.nr [O 0
+.][ 1 journal-article
+.]-
+.ds [F [4]
+.ds [A M. James
+.ds [T Pattern Recognition
+.ds [I John Wiley & Sons
+.ds [D 1988
+.nr [T 0
+.nr [A 0
+.nr [O 0
+.][ 2 book
+.]-
+.ds [F [5]
+.ds [A P.K. Sahoo
+.as [A ", S. Soltani
+.as [A ", A.K.C. Wong
+.ds [T A Survey of Thresholding Techniques
+.ds [J Computer Vision, Graphics, and Image Processing
+.ds [V 41
+.ds [D 1988
+.nr [T 0
+.nr [A 0
+.nr [O 0
+.][ 1 journal-article
+.]-
+.ds [F [6]
+.ds [A M.S. Landy
+.as [A ", Y. Cohen
+.as [A ", G. Sperling
+.ds [T HIPS: A Unix-based Image Processing System
+.ds [J Computer Vision, Graphics, and Image processing
+.ds [V 25
+.ds [D 1984
+.ds [O For more information contact Mike Landy, P.O. Box 373, Prince Street Station, New York, NY  10012-0007
+.nr [T 0
+.nr [A 0
+.nr [O 0
+.][ 1 journal-article
+.]-
+.ds [F [7]
+.ds [A H. McGilton, R. Morgan
+.ds [T Introducing the UNIX System
+.ds [I McGraw-Hill
+.ds [D 1983
+.nr [T 0
+.nr [A 0
+.nr [O 0
+.][ 2 book
+.]-

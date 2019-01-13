@@ -1,0 +1,108 @@
+.TH H_IENLARGE3 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_ienlarge3 \- subroutines to enlarge image sequences by trilinear interpolation
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_ienlarge3(hdi1,hdi2,hdo,xf,yf,tf,t)
+h_ienlarge3_b(hdi1,hdi2,hdo,xf,yf,tf,t)
+h_ienlarge3_i(hdi1,hdi2,hdo,xf,yf,tf,t)
+h_ienlarge3_f(hdi1,hdi2,hdo,xf,yf,tf,t)
+h_ienlarge3_c(hdi1,hdi2,hdo,xf,yf,tf,t)
+struct header *hdi1,*hdi2,*hdo;
+int xf,yf,tf,t;
+
+h_ienlarge3_B(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo,xf,yf,tf,t)
+byte *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo,xf,yf,tf,t;
+
+h_ienlarge3_I(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo,xf,yf,tf,t)
+int *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo,xf,yf,tf,t;
+
+h_ienlarge3_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo,xf,yf,tf,t)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo,xf,yf,tf,t;
+
+h_ienlarge3_C(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo,xf,yf,tf,t)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo,xf,yf,tf,t;
+.fi
+.SH DESCRIPTION 
+Are used to enlarge an input sequence in space and time using trilinear pixel
+interpolation.
+The routines take two successive input subimages (specified by
+.I hdi1
+and
+.I hdi2
+or
+.I imagei1
+and
+.IR imagei2 ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_ienlarge3
+calls
+.IR h_ienlarge3_b ,
+.IR h_ienlarge3_i ,
+.I h_ienlarge3_f
+or
+.I h_ienlarge3_c
+depending upon whether the pixel format is byte, integer, float or complex.
+.IR h_ienlarge3_B ,
+.IR h_ienlarge3_I ,
+.I h_ienlarge3_F
+and
+.I h_ienlarge3_C
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  The input image is magnified by a factor of
+.I xf
+horizontally and
+.I yf
+vertically.
+The output image will be interpolated as the
+.IR t 'th
+image of an enlargement in time by a factor of
+.IR tf
+leading from
+the first to the second input image (such that the 0'th image is the same as
+h_ienlarge of the first input image, and the tf+1'st image is the same as
+h_ienlarge of the second input image).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, integer, float, complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_enlarge(3), h_ienlarge(3), h_reduce(3)
+.SH AUTHOR
+Michael Landy - 1/12/91

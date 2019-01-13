@@ -1,0 +1,37 @@
+.TH EXTEND 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+extend - image expander
+.SH SYNOPSIS
+.B extend
+[-b | -w]
+.SH DESCRIPTION 
+.I extend
+doubles the size of each image in the input sequence by
+filling the extended area with 0, the boundary values of
+that image, or the opposite half image as if the image 
+is first extended by repeating itself and then wrapped 
+by half the image size.
+.I -b
+is a flag specifying that boundary values are 
+used to fill the extended area, otherwise 0 is used
+if -w is not set.
+.I -w
+a flag specifying that wrapping is applied to
+fill the extended area, otherwise 0 is used
+if -b is not set.
+.sp
+It can be used in processings involving FFT.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, float, and double. 
+.SH "OUTPUT PIXEL FORMATS"
+byte, float, or double. 
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH EXAMPLE
+extend <input_file | fourtr |lowpass |inv.fourtr |extract >output_file
+.SH SEE ALSO
+extract(1), fourtr(1)
+.SH AUTHOR
+Jin Zhengping - 25 July 1988 
+.br
+Rewritten by Jin Zhengping - 31 August 1991

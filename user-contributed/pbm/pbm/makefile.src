@@ -1,0 +1,61 @@
+#
+# makefile for user-contributed/pbm/pbm
+#
+
+LIBNAME =	libpbm.a
+
+OBJECTS =	libpbm1.o libpbm2.o libpbm3.o libpbm4.o libpbm5.o
+
+PGMS =		atktopbm.out brushtopbm.out cmuwmtopbm.out g3topbm.out \
+		icontopbm.out gemtopbm.out macptopbm.out mgrtopbm.out \
+		pbmlife.out pbmmake.out pbmmask.out pbmreduce.out \
+		pbmtext.out pbmto10x.out pbmtoascii.out pbmtoatk.out \
+		pbmtobbnbg.out pbmtocmuwm.out pbmtoepson.out pbmtog3.out \
+		pbmtogem.out pbmtogo.out pbmtoicon.out pbmtolj.out \
+		pbmtomacp.out \
+		pbmtomgr.out pbmtopi3.out pbmtoplot.out pbmtoptx.out \
+		pbmtox10bm.out pbmtoxbm.out pbmtoybm.out pbmtozinc.out \
+		pbmupc.out pi3topbm.out xbmtopbm.out \
+		ybmtopbm.out
+
+MANPAGES =	atktopbm.1 brushtopbm.1 cmuwmtopbm.1 g3topbm.1 \
+		icontopbm.1 gemtopbm.1 macptopbm.1 mgrtopbm.1 \
+		pbmlife.1 pbmmake.1 pbmmask.1 pbmreduce.1 \
+		pbmtext.1 pbmto10x.1 pbmtoascii.1 pbmtoatk.1 \
+		pbmtobbnbg.1 pbmtocmuwm.1 pbmtoepson.1  pbmtog3.1 \
+		pbmtogem.1 pbmtogo.1 pbmtoicon.1 pbmtolj.1 pbmtomacp.1 \
+		pbmtomgr.1 pbmtopi3.1 pbmtoplot.1 pbmtoptx.1 \
+		pbmtox10bm.1 pbmtoxbm.1 pbmtoybm.1 pbmtozinc.1 \
+		pbmupc.1 pi3topbm.1 xbmtopbm.1 \
+		ybmtopbm.1 libpbm.3 pbm.5
+
+CPPFLAGSL = -I..
+COMPILEc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+	$(CPPFLAGS) $(CPPFLAGSL) $(TARGET_ARCH) $(FASTCOPY) $(FLOAT) -c
+LINKc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+	$(CPPFLAGS) $(CPPFLAGSL) $(FLOAT) $(TARGET_ARCH) $(FASTCOPY) -o
+
+OTHERLIBS = $(LIBNAME)
+
+.c.o:
+	$(COMPILEc) $*.c
+	@-ld -s -r $*.o
+	@mv a.out $*.o
+
+$(LIBNAME):	$(OBJECTS)
+	@rm -f $(LIBNAME)
+	ar cr $(LIBNAME) `$(LORDER) $(OBJECTS) | $(TSORT)`;
+	$(RANLIB) $(LIBNAME)
+
+install:	$(LIBNAME) $(PGMS) man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

@@ -1,0 +1,49 @@
+.TH LINESEGS 1 "1 May 1990" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+linesegs \- creates straight line segments from a thinned binary image
+.SH SYNOPSIS
+.B linesegs
+[-l N][-s R][-f[F] fname] < inseq > outseq
+.SH DESCRIPTION
+.I linesegs takes a binary HIPS image that consists of thin lines,
+and combines the pixels into straight line segments with at least a minimum
+length of `N'. The output
+is an image showing the straight line segments, and an ASCII file
+of endpoints and/or line lengths and angles.
+.PP
+This program expects the input image to be thinned, with no gaps
+in the lines greater than one pixel in size. To insure that the input image
+is correct, I suggest doing the following filter before using
+this program:
+     bthin < in_image | bclean2 | fill_holes -e > out_image
+.PP
+There are two arguments which control the way in which the pixels
+are aggregated to a straight line segment. In the first part of the
+algorithm, lines are located in the image, and followed, counting the
+number of pixels it finds. At every N pixels (the -l argument), the 
+location is added to a list of endpoints. After the entire line
+has been followed,
+a second pass is made, checking the slope of adjacent lines. If the
+difference in slopes between the two line segments is less than
+R (the -s argument), the lines are combined into one line segment.
+.SH OPTIONS
+.TP
+[-l N]
+minimum line segment size N ( default = 10)
+.TP
+[-s R]
+combine lines if difference in slope < R (default = 1.5)
+.TP
+[-f line file name]
+create file with angles and lengths of lines.
+this file can be used as input to programs such as Gnuplot.
+.TP
+[-F line file name]
+file with headers and line endpoint locations.
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH SEE ALSO
+bclean2(1), bthin(1), fill_holes(1)
+.SH BUGS
+Report to Brian Tierney.

@@ -1,0 +1,78 @@
+.TH HEADFIELD 1 "Februaray 18 1993" "Version 2" "HIPS Manual" 
+.SH NAME
+changehdr \- change value of header-field.
+.SH SYNOPSIS
+.B changehdr 
+.RB [ \-or 
+.RB | \-oc 
+.RB | \-r 
+.RB | \-c 
+.RB | \-f 
+.RB | \-p 
+.RB | \-on 
+.RB | \-od 
+.RB | \-sn 
+.RB | \-sd 
+.RB | \-sh 
+.RB | \-e
+.I flag 
+]  
+.I value
+.br
+.RI < \ header  
+.RI > \ header 
+.br
+.SH DESCRIPTION
+.I changehdr 
+changes the fields of a header. The input is a header, and
+output is the modified header. A field is changed by setting the relevant
+switch and specifiying the new value:
+.IR value .
+.SH OPTIONS
+.TP
+.B \-on 
+originator of sequence.
+.TP
+.B \-od 
+originate sequence date.
+.TP
+.B \-sn 
+sequence name.
+.TP
+.B \-or
+number of rows.
+.TP
+.B \-oc 
+number of coloumns 
+.TP
+.B \-r 
+number of rows in region of interest.
+.TP
+.B \-c 
+number of coloumns in region of interest.
+.TP
+.B \-f 
+number of frames.
+.TP
+.B \-p 
+pixel-format code.
+.TP
+.B \-sd 
+sequence description.
+.TP
+.B \-sh 
+sequence history 
+.TP
+.BI \-e \ flag 
+value of extended parameter
+.I flag
+which is a single value of byte-format. 
+.TP
+.B \-?
+options 
+
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk 

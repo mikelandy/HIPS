@@ -1,0 +1,25 @@
+
+This directory includes a series of device drivers for an ITI IP-512 series
+of boards attached to a Sun.  It was developed at the Weizmann Institute in
+Israel by Leah Mory Rauch (leah@wisdom.weizmann.ac.il or
+leah%wisdom.weizmann.ac.il@cunyvm.cuny.edu).
+
+They use this software on a Sun with two ITI board-sets: /dev/ipfb1 has an
+AP-512 and one FB-512. /dev/ipfb0 has an ALU, HP, AP, and 3 FB's; 2 FB's are
+connected to make a 16-bit frame buffer.  To install the system device driver,
+they added the following lines to the configuration file:
+
+device          ipfb0 at mbio ? csr 0x1000 priority 3 # imaging ip512
+device          ipfb1 at mbio ? csr 0x2000 priority 3 # imaging ip512
+
+This assumes that you are familiar with the way Sun handles drivers and with
+the IP-512 line.
+
+This directory contains all files which handle the IP-512 family.
+ipfb.c is the device driver; it includes ipfbreg.h which should be copied
+to /usr/include/sundev.  They installed it on a Sun-2.
+If used, they need to be copied into /usr/sys/sundev, etc., and made part of
+the system as described in SUN's documentation.
+The rest of the filters should be compiled as the makefile suggests.  You will
+need to edit the makefile to reflect your local configuration (e.g., where you
+stow the binaries).

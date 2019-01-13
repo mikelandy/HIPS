@@ -1,0 +1,30 @@
+.TH ISOLATE 1hips "February 1993"
+.SH NAME
+isolate - coefficient erosion on binary images without deleting features
+completely. 
+
+.SH SYNOPSIS
+.B isolate
+[-c coeff] [-t times] [-m masksize] < iseq > oseq
+.br
+.B isolate
+[-flip coeff1 coeff2] [-t times] [-m masksize] < iseq > oseq
+.SH DESCRIPTION
+.I isolate 
+performs a coefficient erosion on a binary image. The options
+are described in the manual page for the
+.I cberode
+program. An object is never allowed to disappear
+completely. The program checks if an object would be removed by
+the next erosion. If so, the object is replaced by a pixel at it's
+centre of gravity. Isolated pixels are not removed by the program.
+
+
+.SH SEE\ ALSO
+cberode, cbdilate, and grow.
+
+.SH REFERENCES
+John C. Russ, The Image Processing Handbook, CRC Press, 1992.
+
+.SH AUTHOR
+Written by Michael Grunkin, IMSOR, DTH - 15.2.93

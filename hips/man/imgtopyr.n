@@ -1,0 +1,53 @@
+.TH IMGTOPYR 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+imgtopyr \- compute a Laplacian or Gaussian pyramid
+.SH SYNOPSIS
+.B imgtopyr
+[-f filter] [-g] [-l toplev] [-r rtype]
+.SH DESCRIPTION 
+.I Imgtopyr
+computes a Gaussian or Laplacian pyramid from a single image.
+The default is to compute a Laplacian pyramid, but a Gaussian pyramid may
+be requested by using the
+.I -g
+switch.  The default filters for reduction
+and expansion are the Gaussian-like set proposed by Burt
+(.05/.25/.4/.25/.05), but any symmetric filter with an odd number of taps
+may be specified using the
+.I -f
+switch.  Finally, the default is to build
+a complete pyramid (up to a level where at least one dimension is of
+length one).  The user may specify the index of the top level with the
+.I -l
+switch (the bottom level has index zero).  The
+.I -r
+switch is used to
+specify the reflection mode at the borders (the default is even reflection).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+int, float
+.SH "OUTPUT PIXEL FORMATS"
+integer pyramid, float pyramid
+.SH "REGION-OF-INTEREST"
+The entire image is converted to pyramid form.  The region-of-interest is left
+unchanged.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+pyrdisplay(1), pyrexpand(1), pyrextract(1), pyrmerge(1),
+pyrreduce(1), pyrtoimg(1),
+.SH AUTHOR
+Mike Landy - 3/4/89
+.br
+Hips 2 - msl - 1/14/91

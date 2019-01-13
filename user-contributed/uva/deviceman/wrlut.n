@@ -1,0 +1,17 @@
+.TH WRLUT 1BIPS "January 2, 1986"
+.SH NAME
+wrlut - to write an LUT data file to the ITEC boards or the LEX-90. 
+.SH SYNOPSIS
+.B wrlut
+< lutfile
+.SH DESCRIPTION
+.I wrlut 
+.nf
+	-  the "normal" set of LUT's is stored in the file
+		/usr/files/lut/stdlut.hipl and are displayed using the
+		command 'ds' (see the command summary for 'ds').
+.fi
+.SH SEE\ ALSO
+ds(1BIPS), lutmake(1BIPS), rdlut(1BIPS)
+.SH AUTHOR
+Chuck Carman - 11/18/85

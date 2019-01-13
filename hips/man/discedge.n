@@ -1,0 +1,62 @@
+.TH DISCEDGE 1 "8/8/91" "Version 2" "HIPS Manual"
+.SH NAME
+discedge \- a discrete domain regional edge detector
+.SH SYNOPSIS
+.B discedge
+[-s size] [-c varcrit]
+.SH DESCRIPTION 
+.I Discedge
+applies a variant of an edge fitting algorithm of Shaw.
+.I Size
+is the length of a side of the nonoverlapping domains in which
+the algorithm operates, and 
+.I varcrit
+is the threshold on the variance
+in the normalized region (normalized by mean only) below which no
+edge is sought in that region.
+.I Size
+defaults to 7 and
+.I varcrit
+to 0.
+This program is an implementation of the discrete domain regional operator
+described by G. B. Shaw (Computer Graphics and Image Processing, Volume 9,
+1979, pp. 135-149.
+The algorithm outlined therein is sketchy and contains errors, which
+hopefully are corrected here.  Also, the article does not clarify what to do
+with edges which appear to travel along a border of the region (the algorithm
+purports to be symmetric with respect to horizontal and vertical edges, but
+isn't really).  In this implementation, the first pixels on the light
+side of a light/dark edge are marked, and when the light/dark boundary
+travels along the boundary of the region, only the ``middlemost'' pixel is
+marked, since otherwise horizontal edges will all include little ``tails'' at
+an edge of each region.  Lastly, note that any excess after multiples of
+size in rows and columns is not edge detected.  The output image is integer
+(not byte), and gives the score for the edge to each edgel in a given region.
+The computations are done with integer arithmetic with all pixels scaled by
+size*size in order that the normalization by the mean can be exact.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "OUTPUT PIXEL FORMATS"
+integer
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+abdou(1), discedge2(1), dog(1), fmask(1), mask(1)
+.SH AUTHOR
+Mike Landy 6/1/82
+.br
+HIPS 2 - msl - 8/8/91

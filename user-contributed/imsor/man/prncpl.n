@@ -1,0 +1,45 @@
+.TH PRNCPL 1hips "January 15, 1991"
+.SH NAME
+prncpl - estimate principal components of a multi-frame image
+.SH SYNOPSIS
+.B prncpl
+[-v [verbose]] [-c] [-t context_image] 
+.br
+.SH DESCRIPTION 
+.I Prncpl
+estimates the principal components of a multi-frame image. All the
+pixels in the input are considered to be multivariate observations of
+dimension nframes, where nframes is the number of frames in the input. 
+The output is the
+principal component images in order of decreasing eigenvalues: 
+The first frame corresponds to 
+the largest eigenvalue, the second frame to the second largest eigenvalue,
+etc.
+
+Both input and output are in float format.
+
+.I -v [verbose]
+sets the information level
+
+.I -c
+Use the correlation matrix (scaled) instead of the 
+covariance matrix (default).
+
+.I -t context_image
+The principal components are only estimated on areas with a value 
+different from 0 in the context_image. The context image is in byte format.
+
+.SH BUGS
+The eigenvectors of the covariance (or correlation)
+matrix is estimated as a part of 
+.B prncpl.
+This is done in a 'home made' subroutine which is 
+.I fairly
+debugged (which means that it has given the correct results so far). 
+Instead of this subroutine it is suggested that you use one of the 
+subroutines supplied with the IMSL or the eispack libraries. This,
+however, requeres a small change in the source code.
+.SH AUTHOR
+Carsten Kruse Olsson, IMSOR, Technical University of Denmark,
+e-mail: cko@vip.imsor.dth.dk
+

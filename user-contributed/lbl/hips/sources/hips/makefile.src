@@ -1,0 +1,26 @@
+#
+# makefile for user-contributed/lbl/hips/sources/hips
+#
+
+PGMS = \
+	addmask.out applylut.out autocollage.out autoextract.out bclean2.out \
+	bdwindow.out bin_mask.out bthin.out checkers2.out clip.out \
+	disphist_short.out fill_holes.out getobj.out grate.out \
+	gray_wedge.out hfant.out hfant_sh.out \
+	histoeq2.out hstat.out linesegs.out make_mask.out \
+	mls_short.out printxyz.out scale_gray.out
+
+OTHERLIBS = -llbl -lhipslbl -lm
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

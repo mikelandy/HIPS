@@ -1,0 +1,29 @@
+.TH SEEHEADER 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+seeheader \- print the header of a frame sequence
+.SH SYNOPSIS
+.B seeheader
+[-a] [-p]
+.SH DESCRIPTION 
+.I Seeheader
+allows the user to examine the sequence header.
+By default, at most the first five values of extended parameter arrays are
+printed.  The
+.I -a
+switch specifies that entire arrays should be output.
+The 
+.I -p
+option allows seeheader to be used in a pipe, sending the
+original sequence to the standard output, and the text output to stderr.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+All formats.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+adddesc(1), genheader(1), grabheader(1), stripheader(1)
+.SH AUTHOR
+Michael Landy - 2/4/82
+.br
+HIPS 2 - msl - 1/6/91

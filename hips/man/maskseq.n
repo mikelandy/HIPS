@@ -1,0 +1,190 @@
+.TH MASKSEQ 1 "8/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+maskseq \- convert a mask set into a HIPS sequence
+.SH SYNOPSIS
+.B maskseq
+[-f filter-number | -m filter-file] >oseq
+.SH DESCRIPTION 
+.I Maskseq
+converts a mask description (for use by
+.IR mask (1))
+into a HIPS sequence.  The
+.I -f
+option specifies a filter from a system library (normally kept in subdirectory
+`masks' of the directory containing the HIPS binaries, although this may be
+changed during HIPS installation).
+The following are the built-in filters as of this writing (the functions will
+be described further below):
+.sp
+.ta 3i 5i
+filter number	mask type	function
+.sp
+.nf
+.ta .5i 3i 5i
+	1	3-level (3x3)	maxabs
+	2	3-level (5x5)	maxabs
+	3	3-level (7x7)	maxabs
+	4	3-level (9x9)	maxabs
+	5	5-level (3x3)	maxabs
+	6	Prewitt (3x3)	mean-square
+	7	Prewitt (3x3)	sumabs
+	8	Prewitt (5x5)	mean-square
+	9	Prewitt (5x5)	sumabs
+	10	Prewitt (7x7)	mean-square
+	11	Prewitt (7x7)	sumabs
+	12	Prewitt (9x9)	mean-square
+	13	Prewitt (9x9)	sumabs
+	14	Roberts (2x2)	mean-square
+	15	Roberts (2x2)	sumabs
+	16	Sobel (3x3)	mean-square
+	17	Sobel (3x3)	sumabs
+	18	compass (3x3)	max
+	19	Kirsch (3x3)	max
+	20	pyramid (5x5)	maxabs
+	21	pyramid (7x7)	maxabs
+	22	pyramid (9x9)	maxabs
+	23	4x4 mean-square	mean-square
+	24	Laplacian - a	Identity
+	25	Laplacian - b	Identity
+	26	Laplacian - c	Identity
+	27	Laplacian - d	Identity
+	28	Kasvand-Lapl	Identity
+	29	Kasvand-line	max-floor
+	30	Eberlein	max-abs-sub-floor
+	31	Extended Laplacian-c (5x5)	Identity
+	32	Two channel Laplacian	Product of Floors
+	33	x/y Gradients	sumabs
+	34	x/y/l/r Gradients	sumabs
+	100	4x4 smoother	normalize
+	101	5x5 smoother	normalize
+	102	4x4 smoother	normalize
+	103	3x3 smoother	normalize
+	104	2x2 smoother	normalize
+	105	4x4 smoother	normalize
+	106	4x4 normalizer	normalized mask output
+	107	5x5 normalizer	normalized mask output
+	161	Sobel (3x3)	orientation
+	165	Sobel (5x5)	orientation
+	200	1x2 x differentiation	identity
+	201	2x1 y differentiation	identity
+	202	1x3 x 2nd differentiation	identity
+	203	3x1 y 2nd differentiation	identity
+	261	Extended Laplacian-c 5x5	Identity
+	...	etc. (see masks directory)
+.fi
+.sp
+.PP
+The default filter is number 1.  The definition for each of these filters
+is to be found in file mask\fIn\fR, where
+.I n
+is the filter number, and this file is to be found in the
+.I masks
+directory, which is set at HIPS installation time.
+.PP
+The
+.I -m
+switch allows a new filter to be supplied by the user.
+A convolution mask set consists of 1 or more masks
+(arrays of floats or ints), each with associated size and row and column
+offsets (to denote which mask pixel is centered on the image pixel before
+cross-correlating, and where mask rows and columns are counted from zero).
+It is important to note that
+.I mask
+cross-correlates with the
+masks rather than convolves. In other words, the rows and columns are not
+first reflected.  For the usual mirror symmetric masks this poses no
+complications).
+.PP
+The format of the filter definition file is as follows:
+.sp
+.nf
+.ta 1i 2i
+	"filter name"
+	number-of-masks function-number mask-format
+
+	mask-1-rows mask-1-cols mask-1-rowoffset mask-1-coloffset
+	mask-1-values
+		.
+		.
+		.
+	mask-(number-of-masks)-rows cols rowoffset coloffset
+	mask-(number-of-masks)-values
+.fi
+.sp
+.PP
+.I mask-format
+is either 2 (i.e. PFINT, for integer mask values) or 3 (i.e.
+PFFLOAT, for floating point mask values), resulting in an integer or floating
+point output sequence, respectively.
+.I mask-rows
+and
+.I mask-cols
+give the side lengths of the rectangular mask.
+.I mask-rowoffset
+and
+.I mask-coloffset
+identify the pixel which overlaps a given
+image position to produce the mask value corresponding to that image
+position.  Note that the earlier mask values are applied to earlier image
+values.  Thus, the interpretation of the mask orientation depends on the
+definition of ULORIG (the HIPS installation flag which specifies whether
+images have an upper-left or lower-left origin).  If ULORIG is defined
+(images have their origin at
+the upper-left), then the first mask row is topmost relative to the image.
+Otherwise, the last mask row is topmost relative to the image.  Mask
+values are given as a sequence of integers or floats in column-fastest
+order.
+.PP
+Mask sets can include one or more masks.  The mask program applies a
+function to the set of mask output values which results in the single
+pixel value placed in a given position in the output image.  The second
+line of the mask definition identifies which function is to be used,
+chosen from:
+.sp
+.TP 1i
+1
+MASKFUN_MAXABS - the maximum absolute value of all mask outputs
+.TP
+2
+MASKFUN_MEANSQ - the square root of the sum of the squares of all masks
+.TP
+3
+MASKFUN_SUMABS - the sum of the absolute value of all mask outputs
+.TP
+4
+MASKFUN_MAX - the maximum mask output
+.TP
+5
+MASKFUN_MAXFLR - the maximum mask output, floored at zero
+.TP
+6
+MASKFUN_MXASFLR - the larger of |mask-1| and |mask-2|, minus |mask-3|, floored
+at zero
+.TP
+7
+MASKFUN_MUL - the product of the mask outputs, each floored at zero
+.TP
+8
+MASKFUN_NORM - the first mask output normalized by the sum of the mask entries
+.TP
+9
+MASKFUN_DIFF - the value of the pixel minus the normalized mask output
+.TP
+10
+MASKFUN_ORIENT - compute orientation: 360*atan(mask1/mask2)/2*PI
+.TP
+11
+MASKFUN_IDENT - the value of the first mask output (simple convolution,
+well... cross-correlation)
+.SH "OUTPUT PIXEL FORMATS"
+integer or float
+.SH "REGION-OF-INTEREST"
+The output region-of-interest is cleared.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+mask(1)
+.SH AUTHOR
+Hips 2 - msl - 8/10/91

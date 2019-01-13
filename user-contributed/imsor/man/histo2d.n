@@ -1,0 +1,96 @@
+.TH 2DHISTO 1 "january 21, 1993" "Version 2" "HIPS Manual"
+.SH NAME
+histo2d \- 2-D Histogram of combinations on 2 images with several classes
+.SH SYNOPSIS
+.B histo2d 
+.br
+ [\-f first_frame second_frame] 
+.br
+ [\-T filename]
+.br
+ [\-c cut_value]
+.br
+ [\-z]
+.br
+ [\-e]
+.br
+ [\-comic]
+.br
+ [\-nomem]
+ < input.seq > output.seq
+.br
+.SH DESCRIPTION
+.I histo2d
+generates a 2D histogram using two frames. The input format must be BYTE.
+The input sequence must consist of at least two frames.
+If there is more than two and the -f option isn't used, all combinations of
+two frames wil be made. If a trainingset is specified,
+all combinations between the classes and frames will be made. 
+When the 2D histograms has been generated its a good idea to use comicstrip
+to make a presentation of the histograms. The numers of combinations is given
+by (frames)!/(2!*(frames-2)!), which should be given to comicstrip
+as the -s option parameter. 
+.SH OPTIONS
+.TP
+.B \-f first_frame second_frame
+Makes 2D-histogram with the first_frame and second_frame, integers telling 
+which frames to use. Is used when it's only one combination out of several
+combinations there's interesting.
+
+.TP
+.B \-T filename
+Name of file, containing trainingset. If no traningset is specified, the
+histogram of the entire image will be generated, see -e option.
+
+.TP
+.B \-c cut_value
+If cut_value = zero, the histograms will be scatter-plots, every pixel in
+histogram greater than zero will be 255. The cut_value specifies where to
+cut, all pixels below or equal will be zero and all others will be 255. 
+
+.TP
+.B \-e
+If chosen, a 2D-histogram will be generated of the entire image, as the first
+histogram in every combination of frames.
+
+.TP
+.B \-z
+If chosen, a 2D-histogram will be generated of the area in trainingsset, which
+is not connected to any classes. If -e is specified it will be the second
+histogram, and if not it will be the first.
+
+.TP
+.B \-comic
+If 
+.I chosen
+, the 2D-histograms will be generated in a way so they can be used by
+comicstrip by using the command:
+
+ ... | comicstrip -s (number of combinations) | rotate90 | ...
+
+In the output, the columns will be the combinations of frames
+{starting with 1,2; 1,3; ... ;1,N;
+2,3; 2,4; ... 2,N; going to ; (N-2),(N-1);(N-2),N;(N-1),N },
+and the row will be the 
+classes etc. (0,0) is in the lower left corner of each histogram after the rotation.
+
+If
+.I not chosen
+ the combinations simply will start with 1,2; 1,3; ... ;1,N; 2,3; 2,4; ... ;2,N; going to ; (N-2),(N-1);(N-2),N;(N-1),N
+ The lower left coner is (0,0)
+
+.TP
+.B \-nomem
+If chosen the program won't use the memory for storage of all the frames, but
+instead it will fetch the two actual frames from file, this slows the proces,
+but the numbers of frames is only limeted by disksize.
+Unfortunately it's only possible to use this 
+option if the input is from a file, and not the pipe. But if only one
+combination of frames is needed then, by using the -f option, it's still
+possible to use the pipe.
+
+.SH AUTHOR
+.nf
+Bent Foss Pedersen / Rasmus Larsen
+Technical University of Denmark
+email rl@imsor.dth.dk

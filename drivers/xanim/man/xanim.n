@@ -1,0 +1,371 @@
+.TH XANIM 1 "September 5, 1991"
+.SH NAME
+xanim - HIPS image animator and browser based on XView
+.SH SYNOPSIS
+.ta 1i
+.B xanim
+[-64 | -256] [-r | -i | -s] [-a]
+.br
+	[-c | -w] [-p] [-f from-frame [to-frame]]
+.br
+	[-d width height] [imagefile]
+.SH DESCRIPTION 
+.I xanim
+is an interactive tool built using XView and Xlib, which can be used to view HIPS and HIPS-2 images.
+Those images which contain more than one frame can be viewed in sequence.
+.I xanim
+also supports the interactive manipulation of the size, contrast and
+brightness of an image, and the extraction of a portion of an image.
+Changes to images can be saved in the HIPS-2 format.
+
+.I xanim 
+expects one filename as an argument.  If there is no filename
+supplied, it will read the image from stdin. All standard X parameters are
+also handled.
+
+It is possible to request xanim to use 6 bit or 8 bit colours, which results
+in a 64 or 256 grayscale ramp respectively.
+
+.TP 1.3i
+.I -64
+Specifies 64 grey values to be used.  xanim will try to use the default
+display colour-map, but if this is not possible as the defualt colour-map is
+already full (perhaps due to a colour background), a new colour-map will be
+created for the xanim window.  If a new colour-map is created, the image
+will only be correct when the cursor is over an xanim window.  
+
+.B Warning:
+Due  to the
+information lost converting to a 6-bit image and matching colours to the
+default colour-map, it is not possible to save images when xanim is started
+with the -64 option.
+
+.TP 1.3i
+.I -256
+xanim displays images using an 8-bit grayscale ramp. This means that the colours
+used by the control panels may be over-ridden, and the control panel will be
+black (or very dark). The allocation of control panel colours can be
+controlled using the following mutually exclusive flags:
+
+.TP 1.3i
+.I -r
+The six colours used by the control panels will be re-instated in the
+colour map.  Images that use
+these entries (usually entries 0-6) will be displayed with invalid
+colour. This is the default option.
+
+.TP 1.3i
+.I -s
+The image will be processed so that pixel
+values which correspond to control panel colours will be replaced by the nearest
+available grey value.  This option will result in the image being slower
+to load and and involves changing  some of the values in the image. However,
+those images which use the control panel enteries will look better.
+If the image is enlarged by interpolation, then pixel values which
+correspond to the control panel colours (typically 0-6) may be
+introduced.
+
+.TP 1.3i
+.I -i
+The control panel colours are ignored, so the image will be
+displayed correctly.  The control panels will not be displayed properly
+while the mouse is over the image, and vice-versa.  This means that
+adjustments made to the image, such as changing the brightness and
+contrast, will not be apparent until the mouse is moved over the image.
+
+.TP 1.3i
+.I -a
+If the image contains more than one frame, and the -a flag is set, xanim
+will automatically animate the sequence of frames on starting.
+.TP 1.3i
+.I -c
+The control panel will be displayed, allowing for animation etc. This is
+the default.
+
+.TP 1.3i
+.I -w
+The control panel will not be displayed.  The only functionality available
+will be default window commands in the menu for the window frame, and
+interactive resizing.
+The benefit of this option
+is that it allows a clean, clutter free image for screendumps etc.
+A mouse click over the canvas will display the
+control panel.  It can be removed again using the option in the "View"
+menu.
+
+.TP 1.3i
+.I -p
+Thie flag specifies that the default resizing alrgorithm should be
+.I interpolation
+rather than
+.I replication.
+This is slower, but produces better results.  
+
+.TP 1.3i
+.I -f from_frame [to_frame]
+This option defines the range of frames to be read from the image. If the
+last_frame is not specified, it will default to the last frame in the
+image.
+If the image contains 
+.I N
+frames, the range of frames you can select is 0 to N-1.
+If an invalid range is specified, a message will be
+displayed, and the nearest possible valid range will be used.
+
+.TP 1.3i
+.I -d width height
+If the -d option is set, xnaim will resize all frames in the image to the
+given width and height (in pixels).  If the value 0 is passed for the width
+(or height), the width (or height) will not be changed.  Reszing the image
+from the command line does not enable the Revert option, so the image
+cannot be reverted to its normal size.  The 
+.I replication
+algorithm will be used for the resize, unless the 
+.I -p 
+option is set, in which case the
+.I interpolation algorithm will be used.
+
+.SH PIXEL FORMATS HANDLED DIRECTLY
+The Byte format is used internally.  Other formats are converted to Byte if
+possible, and converted back when saved.
+
+
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+
+.SH WINDOW CONTROLS
+
+The main window consists of a control panel and a canvas for displaying the
+image.  The control panel has three menu buttons and a
+.IR Quit 
+button. The menu buttons are activated using the right mouse button.
+The Quit button will exit the application, asking first for confirmation
+if there are unsaved changes. Many of the controls are displayed in command
+windows.  These command windows can be hidden at any time by selecting the
+.IR Hide
+button.
+
+.B File Menu
+
+The File menu contains several options for
+loading and saving images.  
+.IR Load... 
+displays a command window which prompts for the name of the file containing
+the image to be loaded.  Once the filename has been specified, entering
+.IR Return
+or selecting the
+.IR "Load Image"
+button will read in the file. 
+It is possible to specify a range of frames to be read in from the image.
+There are two radio buttons to define the frames read from the image.  BY
+defauly the "All" button will be selected, and all frames will be read
+in.  If the "Range" button is selected, the textfields for specifying the
+range of frames to be selected will be enabled.
+If an image has 
+.I N
+frames, the range from which you can select frames is 0 to N-1.
+If an invalid range is specified, the nearest valid range will be selected.
+
+
+The 
+.IR Save 
+option is only enabled when the current image has been changed.  It will
+save the current image to the original file it was loaded from, unless the
+file was read from stdin, in which case a filename must be specified (see
+.IR "Save As ..."
+below).
+
+The 
+.IR "Save As ..."
+option will display a command window, prompting for the name of a file.  The
+filename defaults to the name of the current file, but this can be edited.
+If the original image was read from the 
+.IR stdin
+the filename defaults to
+.IR stdout,
+unless an image has already been written to the stdout this session, in
+which case a different filename must be specified.
+xanim will prevent images being saved to the stdout more
+than once per session.
+When 
+.IR Return
+is entered or the
+.IR "Save Image"
+button is selected, the image will be saved to the indicated file.
+
+The 
+.IR "Save Frame ..."
+option is similar to
+.IR "Save As ..."
+except it saves only the current frame, creating a single frame image.
+
+The
+.IR Revert 
+option is is enabled when the image has been changed in some way and, when
+selected, will revert to the last saved image (which does not include
+images saved using the 
+.IR Save Frame..
+option).
+
+.B View Menu
+
+The 
+.I View
+menu contains options for viewing more information about the current image.
+.IR "View Header ..."
+displays a window containing the header details for the current
+image.  The 
+.IR Animate 
+option is only enabled when there is more than one frame in the
+current image.  It displays a command window with controls for viewing 
+sequences of frames.  
+The animation control panel contains buttons for
+running through the sequence of images continuously (
+.IR Run
+), going through them once (
+.IR "Run Once"
+), and stopping the animation at any time (
+.IR Stop
+). The
+.IR "Step Size" 
+determines which frames in the sequence are displayed. A step-size of one
+will show every frame, 2 will show every second frame etc. 
+.IR Step 
+will advance the sequence by Step Size frames.  The 
+.IR "Step Size"
+can be changed by
+typing a new value in the textfield and entering 
+.IR Return
+, or using the arrow
+buttons to increment or decrement the step value.
+
+The 
+.IR "Frame Number"
+slider indicates which frame is currently being displayed.  The
+slider can be dragged to change the current frame.  The 
+.IR Direction 
+choice
+buttons are used to select the direction in which to sequence through the
+frames.
+The
+choices are forwards, backwards or palindromic (forwards then backwards).
+The speed slider determines how fast to sequence through the frames. There are
+two modes: 
+.IR Frames/Sec 
+(Fast)  where the slider indicates how many frames are
+displayed per second, and
+.IR Secs/Frame 
+(Slow) where the slider indicates how many seconds are taken to display each
+frame.
+Speed indications are approximate. 
+All sliders can be set explicitly by entering the required value in the
+associated textfield and entering Return.
+
+
+The 
+.I Hide Control Panel
+option in the "View" menu will remove the display panel from view.  The
+only optiions available when the control panel is hidden is interactive
+resizing using the resize corners, and choosing options from the window
+frame menu.  Clicking any mouse button over the image will restore the
+control panel.
+
+.B Edit Menu
+
+The 
+.IR Edit 
+menu provides ways of manipulating the image.  Each of these
+will result in the image being changed in some way.  The original
+(or last saved) version of the image can be restored using the 
+.IR Revert 
+command from the 
+.IR File
+menu.
+The 
+.IR Adjust 
+option displays a popup window with controls for adjusting the
+image.
+The 
+.IR Brightness
+and 
+.IR Contrast
+sliders manipulate the grayscale values used to
+display the image.  When the image is saved, the pixel values will be
+updated to reflect the contrast and brightness selected.
+
+If the main window is resized using the resize corners, the image
+is resized accordingly.  Additionally, the new size for the window can
+entered directly into the 
+.IR Width
+and
+.IR Height 
+textfields, and the window resized by selecting the
+.IR Resize
+button.
+There are two algorithms available for resizing
+the image, which can be selected using the 
+.IR "Resize Algorithm"
+choice buttons. Resizing
+by 
+.IR Replication 
+is the faster of the two, but results in a poorer image,
+whereas resizing by 
+.IR Interpolation 
+(which uses the HIPS stretch_image
+filter), is slower but produces a better result.
+
+The 
+.IR Extract 
+option in the
+.IR Adjust
+menu allows you to interactively select an areas of the image to be
+displayed.
+This area will be extracted and displayed instead of the
+original image. The area to be extracted is defined by pressing the left
+mouse button at the position of the top left corner of the required area,
+and dragging the mouse (with the mouse button still down) to the bottom
+left corner of the required area, and releasing the mouse button.
+The area selected will then be extracted.  This action can be cancelled at any
+time by clicking on the middle mouse button.
+
+.B Mouse Buttons
+
+When not in extract mode, only the Right mouse button has any
+functionality.  Clicking the right mouse button whilst the cursor is
+anywhere over the image will display a message indicating the
+x,y co-ordinates of the point selected in the image and the pixel value at
+that point.  If the mouse is dragged with the right mouse button down, the
+values of each point the mouse is dragged over will be displayed.  Also if
+the mouse button is held down while a sequence is being animated, the
+values will be update accordingly.
+
+.SH SEE ALSO
+sunanim(1)
+
+.SH BUGS/LIMITATIONS
+
+If you suspend xanim (using ^Z) and then click the mouse over the suspended
+program, it can hang the server.  It is then necessary to kill the xanim
+process remotely.
+
+Does not handle regions of interest.
+
+Works only on displays capable of PseudoColor with 8 planes.
+
+Only uses grayscale ramp colour-maps.
+
+The problem of how to handle control panel colours with 256 levels of gray
+has not be sorted satisfactorily.
+
+There are some inconsistencies with different window managers, i.e. using
+olwm a BadColor error will sometimes be reported when quiting.  This does
+not occur under other window managers.  Also, in window managers other than
+olwm, the icon for xanim is "invisible".
+
+.SH AUTHOR
+Written by Cathy Waite,  The Turing Institute, 9/91.

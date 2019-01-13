@@ -1,0 +1,60 @@
+We cannot provide a copy of the Matrox VIP-1024 device driver due to our
+license agreement with CMU. A copy of the driver may be obtained from the
+party below.
+
+/***********************************************************************\
+* 									*
+* File: vip.c		Version: 6		Date: 11/06/87		*
+* 									*
+* 	This is the device driver for the VIP-1024, a VME bus frame	*
+* buffer and digitizer, built by Matrox Electronic Systems, Ltd. The	*
+* driver was written by Mike Blackwell at The Robotics Institute of	*
+* Carnegie-Mellon University, and is designed to run under Sun		*
+* Microsystems Unix version 3.0.					*
+* 									*
+* 	The VIP-1024 driver software is distributed under (at least)	*
+* the following conditions:						*
+* 								        *
+* 1).	The recipient shall refrain from disclosing the software,       *
+* 	in any form, to third parties without prior written	        *
+* 	authorization from Carnegie-Mellon University.  The	        *
+* 	recipient shall have the right to use and copy the	        *
+* 	software on, or in connection with the operation of, any        *
+* 	computer system owned or operated by it.  In addition,	        *
+* 	the recipient shall have the right to modify or merge	        *
+* 	the software to form updated works.			        *
+* 								        *
+* 2).	If the recipient receives a request from any third party        *
+* 	to furnish all or a portion of the software to any third        *
+* 	party,  it will refer such a request to Carnegie-Mellon	        *
+* 	University.						        *
+* 								        *
+* 3).	Carnegie-Mellon University shall not be held liable for any     *
+* 	damages resulting from the use or misuse of the software        *
+* 	provided by it.  Furthermore, Carnegie-Mellon University        *
+* 	remains without obligation to assist in its installation        *
+* 	or maintenance.						        *
+* 								        *
+* 4).	The recipient agrees to acknowledge Carnegie-Mellon	        *
+* 	University in appropriate citations appearing in public	        *
+* 	literature when reference is made to the software provided      *
+* 	above.							        *
+* 								        *
+* 5).	If the recipient develops any enhancements to the software      *
+* 	which materially improves its operation, the recipient	        *
+* 	agrees to make such enhancements available to Carnegie-	        *
+* 	Mellon University without charge, provided Carnegie-	        *
+* 	Mellon University agrees in writing to receive such	        *
+* 	enhancements in confidence, if requested to do so.	        *
+* 								        *
+* 6).	This header comment must remain attached to the source	        *
+* 	code of the provided software.				        *
+* 								        *
+* 								        *
+* 	Bug reports and suggestions can be mailed to Mike Blackwell	*
+* by electronic mail addressed to: "mkb@rover.ri.cmu.edu".  As		*
+* mentioned in condition 3 above, the author is not obligated	        *
+* to fix any such bugs, or even to acknowledge receipt of the	        *
+* bug report.							        *
+* 								        *
+\***********************************************************************/

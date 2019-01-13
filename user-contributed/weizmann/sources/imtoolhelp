@@ -1,0 +1,26 @@
+At any stage,  clicking the RIGHT mouse button will display the relevant menu.
+Defining a rectangle for VALUE, HISTOGRAM, ZOOM, and SAVE,
+and origin for REFRESH  is done by clicking the MIDDLE mouse button.
+IF the definition is skipped, by clicking the RIGHT mouse button immediately,
+the default rectangle or origin is holding.
+
+After choosing VALUE, HISTOGRAM, ZOOM, or SAVE:
+The first click of MIDDLE mouse button defines the upper left corner
+of the  rectangle.
+The second click of MIDDLE mouse button defines the lower right corner
+of the  rectangle.
+Following MIDDLE mouse button clicks will change the lower right corner.
+Illegal locations are ignored.
+To change the upper left corner click RIGHT mouse button and choose REDEFINE.
+
+The default rectangle is the last defined subregion, or the full screen if
+none was defined yet.
+If there is a defined subregion it will be displayed on the screen.
+
+After choosing  REFRESH:
+click the MIDDLE mouse button to designate the origin of the picture on the
+screen.
+Following MIDDLE mouse button clicks will define a new origin.
+
+The default origin is (0,0) for REFRESHing from a user's file, or the place
+from which it was SAVED for REFRESHing from the internal BUFFER.

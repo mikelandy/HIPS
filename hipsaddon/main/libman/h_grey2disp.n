@@ -1,0 +1,77 @@
+.TH H_GREY2DISP 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_grey2disp - random-dot stereogramme generator
+.SH SYNOPSIS
+.nf
+
+#include <hipl_format.h>
+#include <math.h>
+
+h_grey2disp(hdi,hdo1,hdo2,cnt,ldisp,hdisp,threshold)
+h_grey2disp_b(hdi,hdo1,hdo2,cnt,ldisp,hdisp,threshold)
+struct header   *hdi,*hdo1,*hdo2;
+int             ldisp,hdisp;
+h_boolean         cnt,threshold;
+
+h_grey2disp_B(imagei,imageo1,imageo2,nr,nc,cnt,ldisp,hdisp,threshold)
+byte            *imagei,*imageo1,*imageo2;
+int             nr,nc;
+int             ldisp,hdisp;
+h_boolean         cnt,threshold;
+.fi
+.SH DESCRIPTION
+.I h_grey2disp
+generates a random-dot stereogramme (specified by
+.I hdo1
+and
+.I hdo2
+or
+.I imageo1
+and
+.I imageo2)
+given a disparity image (specified by
+.I hdi
+or
+.I imagei)
+relating to the left stereo half. 
+The input image should be gray level coded with darker pixels
+representing small disparities and lighter pixels representing
+larger disparities. 
+The maximum gray level allowed (255) will be read as the maximum disparity and
+the minimum gray level allowed (0) will be read as the minimum disparity. 
+Intensities in between will be given appropriately graded disparities.
+Uses gray level interpolation.
+.I h_grey2disp
+then calls
+.I h_grey2disp_b
+only if the input image pixel format is byte.
+.I h_grey2disp_b
+then calls
+.I h_grey2disp_B
+which is the low-level routine and does not require image header.
+The input and output images have
+.I nc
+pixels per line, and
+.I nr
+lines.
+If
+.I cnt
+is TRUE, disparity accuracy at pixel level is required (corresponds to
+the original module "grey2disp". Otherwise disparity accuracy at sub-pixel
+level is required. (corresponds to the original module "grey2dispcnt").
+.I ldisp,hdisp
+are the disparity range for interpreting the disparity image. 
+If
+.I threshold
+is TRUE, then ehe generated stereogramme is thresholded,
+otherwise it is not.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is transformed.
+.SH AUTHOR
+Linda Gillespie - August 1987
+.br
+Rewritten by Jin Zhengping - 31 August 1991

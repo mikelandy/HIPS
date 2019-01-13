@@ -1,0 +1,103 @@
+.TH H_SEPCONV 3 "7/17/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_sepconv \- 2D separable convolution
+.SH SYNOPSIS
+.nf
+.ta 2i
+#include <hipl_format.h>
+
+.ta 1i
+h_sepconv(hdi,hdt,hdo,maskh,nmaskh,offseth,maskv,nmaskv,offsetv)
+struct header *hdi,*hdt,*hdo;
+int-or-float *maskh,*maskv;
+int nmaskh,offseth,nmaskv,offsetv;
+
+h_sepconv_i(hdi,hdt,hdo,maskh,nmaskh,offseth,maskv,nmaskv,offsetv)
+struct header *hdi,*hdt,*hdo;
+int *maskh,*maskv;
+int nmaskh,offseth,nmaskv,offsetv;
+
+h_sepconv_f(hdi,hdt,hdo,maskh,nmaskh,offseth,maskv,nmaskv,offsetv)
+struct header *hdi,*hdt,*hdo;
+float *maskh,*maskv;
+int nmaskh,offseth,nmaskv,offsetv;
+.fi
+.SH DESCRIPTION 
+These routines perform a 2-dimensional separable convolution on an input
+subimage (specified by
+.IR hdi )
+by first performing a 1-dimensional horizontal convolution using
+.I maskh
+and storing the result of that function in a temporary subimage (specified by
+.IR hdt ),
+and then performing a 1-dimensional vertical convolution on that temporary
+image using
+.I maskv
+and storing the final result in the output subimage (specified by
+.IR hdo ).
+.I h_sepconv
+calls
+.I h_sepconv_i
+or
+.I h_sepconv_f
+depending on whether the input image pixel format is integer or float.
+.I maskh
+and
+.I maskv
+are pointers to the mask elements, and should point to floating point values
+for a floating point image and integer values for an integer image.
+.I nmaskh
+and
+.I nmaskv
+are the numbers of mask elements.
+It is important to note that
+.I h_sepconv
+cross-correlates with the mask rather than
+convolves. In other words, the rows and columns are not first reflected.
+For the usual mirror symmetric masks this poses no complications.
+.I Offseth
+and
+.I Offsetv
+designates the pixel of the masks which overlays a given input image pixel
+in order to compute the cross-correlation corresponding to the
+corresponding output image pixel.  The cross-correlation extends the edges
+of the subimage whenever the mask extends beyond the subimage edges.
+.PP
+Note that the earlier mask values are applied to earlier image
+values.  Thus, the interpretation of the vertical mask orientation depends on
+the definition of ULORIG (a HIPS installation flag which indicates the
+orientation of the image coordinate system).  If ULORIG is defined (images have
+their origin at
+the upper-left), then the first mask element is topmost relative to the
+image.  Otherwise, the last mask element is topmost relative to the image.
+Otherwise stated, a ULORIG coordinate system applies to masks as well as to
+images.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+integer, float
+.SH "OUTPUT PIXEL FORMAT"
+same as input
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place in the sense that
+.I hdi
+can be the same as
+.IR hdo ,
+although
+.I hdt
+must be a separate image.  Typically
+.I hdt
+is a temporary image and is allocated only to the size of the input image
+region-of-interest.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_hconvolve(3), h_vconvolve(3)
+.SH AUTHOR
+Based on HIPS-1 dog: Yoav Cohen - 12/12/82
+.br
+HIPS-2 - msl - 7/16/91

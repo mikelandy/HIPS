@@ -1,0 +1,48 @@
+#
+# makefile for user-contributed/lbl/xview/segal
+#
+
+PGMS = segal.out
+
+CPPFLAGS2 = -I$(XVIEWHOME)/include 
+#CFLAGS += -Bstatic
+LDFLAGS2 = -L$(XVIEWHOME)/lib
+OTHERLIBS = -lm -llbl
+
+LINTFLAGS  = -h -target=$(MACHINE)
+
+OBJECTS = \
+	segal.o pixedit.o zoom.o view.o orig_view.o blend.o cursor.o \
+	load_save.o stats.o mask.o filter.o image_reg.o pack.o \
+	display_control.o frame_control.o surf_fit.o \
+	mask_control.o mask_log.o threshold.o \
+	scrollbars.o c_array.o bp.o image_reg_ui.o \
+	bp_ui.o display_control_ui.o frame_control_ui.o filter_ui.o \
+	load_save_ui.o mask_control_ui.o mask_log_ui.o orig_view_ui.o \
+	pixedit_ui.o segal_ui.o surf_fit_ui.o threshold_ui.o view_ui.o
+
+.c.o:
+	$(COMPILEc) $< $(CPPFLAGS2)
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+segal.out:	$(OBJECTS)
+	$(LINKc) $* $(OBJECTS) $(LIBRARIES) $(LDFLAGS2) $(LIBXVIEW)
+	mv $* $(DESTDIR)
+	@touch $@
+
+FRC:
+
+lint:
+	lint $(LINTFLAGS) $(SOURCESc)
+
+#%_ui.c + %_ui.h + %_stubs.c + %.info: %.G
+#	$(GUIDEHOME)/bin/gxv $*

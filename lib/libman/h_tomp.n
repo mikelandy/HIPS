@@ -1,0 +1,40 @@
+.TH H_TOMP 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_tomp \- conversions to most-significant-bit first bit-packed pixel format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_tomp(hdi,hdo)
+h_btomp(hdi,hdo)
+h_itomp(hdi,hdo)
+struct header *hdi,*hdo;
+.fi
+.SH DESCRIPTION 
+These routines convert from a variety of pixel formats to most-significant-bit
+first bit-packed format.  The entire image pointed to by
+.I hdi
+is converted to MSBF pixel format and stored in the image pointed to by
+.IR hdo .
+Any region-of-interest information is ignored.  However, bit-packed images may
+only have a region-of-interest whose left edge lies on a byte boundary (a
+column which is a multiple of eight).  If this is not the case, then a warning
+is produced and the region-of-interest is reset to be the entire image.
+The routine
+.I h_tomp
+checks the pixel format of the input image and calls the appropriate
+individual routines
+.I h_btomp
+or
+.IR h_itomp
+according to whether it is byte or integer.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_ROI8C - region-of-interest cleared
+.SH "SEE ALSO"
+h_toc(3), h_tod(3), h_todc(3), h_tof(3), h_toi(3), etc.
+.SH AUTHOR
+Michael Landy - 1/4/91

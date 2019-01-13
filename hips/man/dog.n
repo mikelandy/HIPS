@@ -1,0 +1,74 @@
+.TH DOG 1 "7/17/91" "Version 2" "HIPS Manual"
+.SH NAME
+dog \- filter an image by applying difference of Gaussians mask
+.SH SYNOPSIS
+.B dog
+[-w esigma [masksize [ratio]]] [-p precision] [-i] [-m] [-g] <iseq >oseq
+.SH DESCRIPTION 
+.I Dog
+convolves an image with a difference of Gaussians mask by performing
+two separable convolutions in x and y with a 1-dimensional Gaussian
+mask.
+.I Esigma
+is the
+standard deviation of the excitatory Gaussian (in pixels), and defaults to
+one.
+.I Masksize
+is the size of the mask used for the convolution (and defaults to 7).
+.I Ratio
+is the ratio between the standard deviations of the excitatory and
+inhibitory Gaussians (and defaults to 1.6).  If
+.I ratio
+is identically zero, then only the excitatory Gaussian is applied.
+.PP
+The Gaussian mask is computed by computing the values of the continuous
+1D Gaussian function at equally spaced points, and averaging the values
+that fall within the region covered by each pixel.  The number of points
+that contribute to each mask value's average is specified using
+.IR -p ,
+and defaults to 1 (thus, the midpoint of the interval's Gaussian value is
+used).  By default, dog operates on floating point images and produces
+floating point output.  With
+.IR -i ,
+dog operates on integer images, uses
+an approximate integer Gaussian mask (multiplying the floating point 1D mask
+values by 1000), and produces integer output.  If
+.I -m
+is specified, the 1D Gaussians are printed and the program exits.
+If
+.I -g
+is specified, no input is read.  Instead,
+the program generates an image of a single pixel impulse, and
+convolves with that.  The image has rows and columns of a size that is
+a power of 2 and sufficient to hold the entire impulse response.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+int (with
+.IR -i ),
+float (otherwise)
+.SH "OUTPUT PIXEL FORMATS"
+same as input
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+extremum(1), mask(1), median(1)
+.SH AUTHOR
+Yoav Cohen - 12/12/82
+.br
+Hips 2 - msl - 7/16/91

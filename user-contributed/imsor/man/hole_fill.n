@@ -1,0 +1,26 @@
+.TH COBJECTS 1hips "February 1993"
+.SH NAME
+hole_fill - Filling out small "holes" in binary objects. 
+
+.SH SYNOPSIS
+.B cobjects
+[-ls size] [-le excentricity] < iseq > oseq
+.br
+.SH DESCRIPTION
+.I cobjects
+is labelling binary objects. A pixel is defined as belonging to an object
+if it is white (=1), and (8-)connected to zero or more other objects.
+It is important to note that white pixels must have the value one (1)
+and not 255.
+All connected pixels, forming an object is assigned a label in the 
+interval 0-255. If an object is smaller than specified by
+.I -ls
+it is removed. Thus this is a way of cleaning "noisy" binary images.
+The default size is zero - i.e. all objects are labelled and included
+in the output.
+
+.SH SEE\ ALSO
+cberode, cbdilate, cobjects, isolate, grow, hole_fill.
+
+.SH AUTHOR
+Written by Michael Grunkin, IMSOR, DTH - 15.2.93

@@ -1,0 +1,54 @@
+.TH REDUCE 1 "6/29/91" "Version 2" "HIPS Manual"
+.SH NAME
+reduce \- reduce a sequence by pixel averaging
+.SH SYNOPSIS
+.B reduce
+[-h hfactor] [-v vfactor] [-t tfactor]
+.br
+.B reduce
+[-s [spacefactor]] [-t tfactor]
+.SH DESCRIPTION 
+.I Reduce
+reduces the input sequence by pixel averaging.
+.I Reduce
+reduces the input sequence
+vertically by 
+.IR vfactor ,
+horizontally by 
+.I hfactor
+and temporally by 
+.IR tfactor .
+The spatial factors default to 1, and 
+.I tfactor
+defaults to 1.
+In the second calling sequence form, the user specifies 
+.IR spacefactor ,
+which is applied in both spatial dimensions, and defaults to 2.
+If no space factors are specified, ``-s 2'' is the default.
+If the number of rows, columns, or frames is not divisible by the relevant
+factor, it is reduced to the highest number which is divisible by that
+factor.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, complex
+.SH "REGION-OF-INTEREST"
+The entire image is reduced.  The output image region-of-interest is the
+reduced portion of the input image region-of-interest.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+enlarge(1)
+.SH AUTHOR
+Rewritten by Michael Landy - 11/5/87
+.br
+HIPS 2 - msl - 6/29/91

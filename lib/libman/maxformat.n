@@ -1,0 +1,52 @@
+.TH MAXFORMAT 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+maxformat \- routines to choose the pixel format for combining multiple images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+maxformat(pfmt1,pfmt2,typeslist,fname1,fname2)
+hformatlevel(pfmt)
+int pfmt,pfmt1,pfmt2,*typeslist;
+Filename fname1,fname2;
+.fi
+.SH DESCRIPTION 
+.I maxformat
+is used to choose the appropriate pixel format for combining
+multiple images.  It is supplied with a pair of pixel formats, the list of
+types which can be directly handled by subsequent processing, and the names of
+the files from which the images were read.  The routine attempts to do the
+least amount of conversion possible with the least amount of loss of
+information it can.  The typical use when combining more than two images is to
+call
+.I maxformat
+first with the first two images' pixel formats, then to call it with the value
+returned by the first call to
+.I maxformat
+and the pixel format of the third image, and so on.
+It is assumed by
+.I maxformat
+that the caller typically wants to deal with 1-color formats (byte, float,
+etc.).  Input formats which are 3-color (RGB, BGRZ, etc.) are treated as if
+they were byte format as far as determining the common format in which to
+process the images, although if both input images are in the same 3-color
+format (e.g. both are RGB), then they are allowed to remain in that format if
+that is consistent with
+.IR typeslist .
+.PP
+.I hformatlevel
+is a low-level routine used by
+.IR maxformat .
+It returns a `format level' corresponding to the given pixel format, which is
+an integer which is highest for double complex, and lowest for bit-packed
+formats.  It returns HIPS_ERROR (without actually calling
+.IR perr )
+if it is not given a raster-based pixel format.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTFILE - can't handle this pixel format
+.SH "SEE ALSO"
+conversion(3)
+.SH AUTHOR
+Michael Landy - 1/14/91

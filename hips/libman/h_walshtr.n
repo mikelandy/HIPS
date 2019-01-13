@@ -1,0 +1,84 @@
+.TH H_WALSHTR 3 "8/11/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_walshtr \- subroutines to compute a Walsh transform
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_walshtr(hd)
+h_walshtr_i(hd)
+h_walshtr_f(hd)
+struct header *hd;
+
+h_walshtr_I(image,nr,nc)
+int *image;
+int nr,nc;
+
+h_walshtr_F(image,nr,nc)
+float *image;
+int nr,nc;
+
+h_fwt_i(vec,loglen)
+int *vec,loglen;
+
+h_fwt_f(vec,loglen)
+float *vec;
+int loglen;
+.fi
+.SH DESCRIPTION 
+These routines take an input image (specified by
+.I hd
+or
+.IR image ),
+compute a Walsh transform, and store the result in that image.
+.I h_walshtr
+calls
+.I h_walshtr_i
+or
+.I h_walshtr_f
+depending upon whether the pixel format is integer or float.
+.I h_walshtr_I
+and
+.I h_walshtr_F
+are the low-level routines which don't require an image header.  The image
+size is
+.I nr
+by
+.IR nc ,
+and both dimensions must be powers of 2.
+.PP
+Low-level routines are also provided to perform the
+fast Walsh transform.
+.I h_fwt_i
+and
+.I h_fwt_f
+perform a 1-dimensional fwt, where
+.I loglen
+is the log (to the base 2) of the length of the array.
+The algorithm is
+adapted from that provided by Gonzalez & Wintz (page 95).
+.I h_fwt_i will not overflow as long as
+.I loglen
+plus the number of bits per pixel is less than 32.
+.PP
+All of these routines omit the final division by the number of entries in the
+array.  This can be performed afterward using
+.IR h_divscale (3).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+integer, float
+.SH "REGION-OF-INTEREST"
+The region-of-interest is ignored.  The entire image is transformed.
+.SH "IN-PLACE PROCESSING"
+The image is always processed in place.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_POW2 - image dimensions not a power of 2
+.SH "SEE ALSO"
+h_divscale(3), h_fft2(3), h_flipquad(3), h_fourtr(3), h_seqord(3)
+.SH AUTHOR
+Yoav Cohen - 2/18/82
+.br
+HIPS 2 - msl - 8/11/91

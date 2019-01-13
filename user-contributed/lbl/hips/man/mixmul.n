@@ -1,0 +1,34 @@
+.TH MIXMUL 1 "DECEMBER 15, 1990" LBL-HIPS
+.\" @(#)mix_multiply.1  1.10 90/08/28 JIN;
+.SH NAME
+mixmul \- multiply each frame in a sequence by the corresponding frame of
+another sequence pixel by pixel
+.SH SYNOPSIS
+.B mixmul
+file < multiplied_file
+.SH DESCRIPTION
+.I Mixmul
+multiplies each frame in a sequence by the corresponding frame of another
+sequence pixel by pixel. If the file consists of
+less frames, then the last frame is multiplied by later frames in the
+input sequence, otherwise corresponding frames are used.
+The following combinations of image formats are supported:
+
+.sp
+.ta 1i 3i
+.nf
+File sequence	Standard input sequence
+
+any non pyramid format combinations
+
+integer pyramid	integer pyramid
+float pyramid	float pyramid
+.fi
+.SH NOTE
+See ccs.n for input image types.
+.br
+The output is a HIPS image.
+.SH "SEE ALSO"
+mixadd(1), diffseq(1), divseq(1)
+.SH AUTHOR
+Jin Guojun - Dec. 15, 1990

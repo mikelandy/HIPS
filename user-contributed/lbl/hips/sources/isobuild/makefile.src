@@ -1,0 +1,36 @@
+#
+# makefile for user-contributed/lbl/hips/sources/isobuild
+#
+
+PGMS = isobuild.out
+
+OBJECTS = main.o misc.o iso_march.o iso_divide.o file_io.o segment.o \
+	block.o normal.o server.o filter.o
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+isobuild.out:	$(OBJECTS)
+	$(LINKc) isobuild $(OBJECTS) $(LIBRARIES)
+	mv isobuild $(DESTDIR)
+	@touch $@
+
+FRC:
+
+main.o: main.c isobuild.h
+misc.o: misc.c isobuild.h
+iso_march.o:    iso_march.c isobuild.h cell_table.h
+iso_divide.o:   iso_divide.c isobuild.h
+block.o:        block.c isobuild.h
+normal.o:       normal.c isobuild.h
+segment.o:      segment.c isobuild.h
+file_io.o:      file_io.c isobuild.h
+server.o:       server.c isobuild.h server.h

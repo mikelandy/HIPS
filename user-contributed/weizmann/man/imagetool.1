@@ -1,0 +1,270 @@
+.TH IMAGETOOL 1HIPS "November, 1987"
+
+.SH NAME
+imagetool - interactive tool for image processing, using the mouse and
+the IP-512
+
+.SH SYNOPSIS
+.B imagetool
+[device_number]
+
+.I  device_number
+is either 0 for /dev/ipfb0c or 1 for /dev/ipfb1c.
+
+.SH DESCRIPTION
+.I imagetool
+is an interactive tool for image processing. It puts a cursor that
+follows the mouse on the image monitor, and helps the user define
+rectangular part of that image, and process it.
+.I imagetool
+can be invoked only from
+.I suntools.
+It opens a window of 512x512 pixels, at the upper left corner of the
+SUN console. The location of the cursor within this window, is
+translated to the cursor location on the monitor.  At the moment, this
+window can not be recovered after being hidden by other windows, and
+can not be moved. Therefore, it is advised to move the window from
+which you want to call
+.I imagetool,
+e.g. the
+.I shell-tool
+window, to the right half of the console.
+.I imagetool
+processes images by using the filters in /horef/image/bin.  Thus the
+image file it uses must be in the
+.I HIPL format. It opens
+parallel processes that use the IP-512 device simultaneously. That is
+why it opens /dev/ipfb in the share mode (/dev/ipfb0c or /dev/ipfb1c).
+
+.SH HOW TO USE IMAGETOOL:
+.I imagetool
+uses
+.I suntools,
+therefore it must be used from within
+.I suntools.
+When the
+.I imagetool
+window appears, entering it with the mouse cursor will cause another
+cursor to appear on the image monitor. Generally, while inside this
+window, clicking the RIGHT mouse button will display the relevant menu.
+Also choosing a menu entry is done by clicking the RIGHT mouse button.
+If the menu disappears after the first click, hold the RIGHT mouse
+button depressed, and release it when the wanted menu entry is  black.
+Some operations require input from the
+.I shell-tool
+window. When this is the case, a message will appear in the
+.I shell-tool
+window. One must move the cursor to that window in order to submit this
+input, and move it back to the
+.I imagetool
+window when no more input is expected. It is recommwended to look at
+the
+.I shell-tool
+window for other messages too. Some operations take longer than
+others.  The user can know that
+.I imagetool
+is ready again if the the cursor in the image monitor reflects the
+movement of the mouse.  The functions
+.I VALUE,
+.I HISTOGRAM,
+.I ZOOM
+and
+.I SAVE
+can operate on a rectangular part of the picture. After choosing one of
+them, the last defined rectangle is displayed on the screen (unless it
+is the whole screen), and the cursor looks like an upper-left corner.
+The first click of MIDDLE mouse button defines the upper left corner of
+the new rectangle. As a result, the cursor changes, and looks like a
+lower right corner.The next click of the MIDDLE mouse button defines
+the lower right corner of the  rectangle.  Following MIDDLE mouse
+button clicks will change the lower right corner.  Clicks at illegal
+locations, i.e. locations which are higher and/or more to the left than
+the upper left corner already chosen, are ignored.  The smallest
+rectangle allowed is of 3x3 pixels. The borders of any defined
+rectangle must be at least 2 pixels off the borders of the picture.  If
+the user wishes to use the current default rectangle, he can skip the
+above process by clicking the RIGHT mouse button immediately. The
+default rectangle is the last defined one, or the full screen if none
+was defined yet.  After a rectangle is defined, clicking the RIGHT
+mouse button will display a
+.I secondary menu- region :
+.TP
+.IR
+.I rectangle -
+execute command on the last defined rectangle.
+.TP
+.IR
+.I full screen -
+execute command on the whole screen (the rectangle is not changed).
+.TP
+.IR
+.I redefine -
+clear screen, and allow a definition of a new rectangle.
+.TP
+.IR
+.I exit -
+do not execute. Go back to
+.I imagetool
+window and click again to get the
+.I imagetool
+menu.
+
+.SH
+.I IMAGETOOL Menu entries:
+.br
+.I VALUE
+prints in the
+.I shell-tool
+window a table of the coordinates and values of the pixels of the
+rectangle, and gives an option to change the value of any pixel on the
+screen. The maximum size of the table is 10x10.  If the dimensions of
+the rectangle are bigger then 10x10, the pixels that are displayed are
+taken from it's upper left corner. Choosing the rectangle is explaind
+above.
+
+.br
+.I HISTOGRAM
+makes a histogram of the pixels of the rectangle. The histogram is
+displayed in the
+.I imagetool
+window. Choosing the rectangle is explaind above
+
+.br
+.I ZOOM
+enlarges the chosen rectangle, and places it at the center of the
+screen. After choosing the rectangle as explaind above, a menu of
+.I factors:
+2, 4, 8 or other,  appears. If the user chooses "other", he will have
+to input a factor of his own in the
+.I shell-tool
+window, not before moving the mouse cursor to that window.  If the
+enlarged picture is bigger then the screen, the center section of it is
+displayed. In these cases the process takes longer, and sometimes
+problems of memory allocation occur. If so, massages are given.
+
+.br
+.I PHOTO
+is for taking a picture and saving it in a file. At the same time, a
+histogram of the picture currently seen, is displayed in the
+.I imagetool
+window repeatedly.  This takes a lot of memory which sometimes cannot
+be allocated; if so, only the histograms are effected and a massage is
+given.
+.I PHOTO
+also makes the current rectangle to be the whole screen.
+
+.br
+.I REFRESH
+refreshes the screen, or a part of it, from the internal buffer or from
+an image file. The internal buffer holds either the last rectangle of
+the picture that was
+.I SAVEd
+in it before, or the picture that was on the screen when
+.I imagetool
+was invoked.  After choosing
+.I REFRESH,
+click the MIDDLE mouse button to designate the location on the screen
+where you want the origin of the picture to be .  Following MIDDLE
+mouse button clicks will define another location.  You can skip this
+process if you want the default location.The
+.I default location
+is (0,0) for
+.I REFRESHing
+from a user's file, or the place from which it was
+.I SAVEd
+for
+.I REFRESHing
+from the internal buffer.  Following click on the RIGHT mouse button
+will display a
+.I secondary menu- desmenu:
+.TP
+.IR
+.I default org -
+execute with default location.
+.TP
+.IR
+.I defined org -
+execute with the newly defined location. This option cannot be chosen
+if no definition was done.
+.TP
+.IR
+.I exit -
+do not execute. Go back to
+.I imagetool
+window.
+.SH
+.br
+Another
+.I secondary menu- source
+will be displayed once a location is chosen, providing:
+.TP
+.IR
+.I buffer -
+refresh from internal buffer.
+.TP
+.IR
+.I image/pictures -
+refresh from pictures directory. A list of the files in this directory
+/horef/image/pictures will be printed. Enter the file name only.
+.TP
+.IR
+.I other -
+refresh from any image file. Enter full name of the file.
+
+.SH
+.I SAVE
+saves a rectangle in the internal buffer or in a file. Choosing the
+rectangle is explaind above. Following that, another
+.I secondary menu - target
+will appear:
+.TP
+.IR
+.I buffer -
+save in the internal buffer.
+.TP
+.IR
+.I image/pictures -
+ save in /horef/image/pictures directory. Enter the file name only.
+.TP
+.IR
+.I other -
+save in another directory. Enter full file name, including directory.
+.br
+.SH
+.I CLEAR WIN
+clears the histogram from the
+.I imagetool
+window.
+
+.I SHELL
+executes
+.I one
+shell command given in the
+.I shell-tool
+window, and returns control to
+.I imagetool.
+
+.br
+.I HELP
+prints in the
+.I shell-tool
+window some useful operating instructions for
+.I imagetool.
+
+.br
+.I QUIT
+clears the screen from the cursor, closes the open windows and device,
+and terminates
+.I imagetool.
+
+.SH DEFAULTS:
+device_number = 0
+
+.SH AUTHOR
+Gal Hasson - Oct. 1987
+.br
+Modified: Leah Mory - Nov. 1987
+
+.SH SEE ALSO:
+rframe(1HIPL), wframe(1HIPL), rbuffer(1HIPL), enlarge(1HIPL),
+histotool(1HIPL)

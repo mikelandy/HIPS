@@ -1,0 +1,201 @@
+.TH CALCWARP 1 "8/12/91" "Version 2" "HIPS Manual"
+.SH NAME
+calcwarp \- generate and execute a program which warps an image
+.SH SYNOPSIS
+.B calcwarp
+[-o objectname] [-w warpcodefile | -W warpcode] [-d]
+.br
+.ta 1i
+	[-i "init-statements" | -I initfilename]
+.br
+	[-A n arg1 ... argn] [-s nr [nc]] <iseq >oseq
+.SH DESCRIPTION 
+.I Calcwarp
+takes C statements from the argument list (with
+.IR -W )
+or from an input file (with
+.IR -w )
+and inserts them into a ``skeleton'' of a program that
+manipulates byte-formatted sequences. The resulting program is compiled and
+the object code is then placed in the user's directory. The name of the
+object file can be specified by the user (option
+.IR -o ).
+The ``skeleton'' program
+performs a general image warp to the input image.  The output image size
+may be specified (using
+.IR -s ),
+and defaults to the size of the input region of interest (\c
+.I cols
+defaults to
+.IR rows ).
+For each output pixel, the user-specified code is executed to determine the
+input image location from which that value should be derived.  The
+coordinate system for both the input and output images has x and y ranging
+from 0 (lower left pixel) to 1 (upper right pixel).  The code can be 
+specified in the command line (\c
+.IR -W )
+or in a file (\c
+.IR -w ).
+Values in the output
+image are bilinearly interpolated between neighboring values in the input
+image.  If the input image location is outside the input image, then a
+background value is used (set by the standard switch
+.IR -UL ,
+the default is 0).  The
+.I -A
+switch allows the user to specify arguments in the command line accessible to
+the user-supplied code.  The
+arguments in the command line accessible to the user-supplied code.  The
+.I -d
+switch (debug) prints out the compilation command before executing it,
+and leaves the source code in the user's directory.  Otherwise, the code is
+stored in a temporary directory (set at HIPS installation time), and only
+preserved if compilation errors occur.  Finally, the user may optionally
+(using
+.I -i
+or
+.IR -I )
+specify code which is executed once per image frame in advance of the loop
+over image pixels.
+.PP
+The user can refer to the following pre-defined variables:
+.TP 1.5i
+ox,oy
+current output pixel coordinates
+.TP
+x,y
+corresponding input coordinates
+.TP
+nr,nc
+number of rows and columns in an input frame
+.TP
+nor,noc
+number of rows and columns in an output frame
+.TP
+nf,ncol
+number of color frames and color planes
+.TP
+f,col,r,c
+the current frame, color plane, row and column (starting from 0)
+.TP
+ndepth,depth
+the number of depth planes and current depth plane
+.TP
+picin[i][j]
+the current input frame
+.TP
+picout[i][j]
+the current output frame
+.TP
+nargs
+the number of command-line arguments
+.TP
+args
+the command-line arguments
+.TP
+first
+a global variable initialized to 1
+.PP
+All of the above variables, except for x, y, ox, oy, picin, picout, and
+args are of type `int'.  x, y, ox, and oy are of type `float'.
+Picin[i][j] and picout[i][j] are of type byte (which is unsigned char). args
+is of type `char **'.  In addition to the above variables there are 5 `int'
+variables (i1-i5) and 5 `double' variables (d1-d5) which can be freely used
+by the user.  Additional variables can of course be defined by the user
+within a block.  The following useful constants are also predefined:
+.TP 1.5i
+H_E
+e (base of the natural logarithms)
+.TP
+H_LOG2E
+Log to the base 2 of e
+.TP
+H_LOG10E
+Log to the base 10 of e
+.TP
+H_LN2
+Natural logarithm of 2
+.TP
+H_LN10
+Natural logarithm of 10
+.TP
+H_PI
+pi
+.TP
+H_2PI
+2*pi
+.TP
+H_PI_2
+pi/2
+.TP
+H_PI_4
+pi/4
+.TP
+H_ONE_PI
+1/pi
+.TP
+H_TWO_PI
+2/pi
+.TP
+H_TWO_SQRTPI
+2/sqrt(pi)
+.TP
+H_180_PI
+180/pi (radians to degrees)
+.TP
+H_SQRT2
+sqrt(2)
+.TP
+H_SQRT1_2
+sqrt(1/2)
+.TP
+H_SQRT3OVER2
+sqrt(3/2)
+.PP 
+All legal C statements are permitted; in addition all the ``math''
+functions can be called.
+The user can specify as many statements as desired, but bear in mind
+that these statements are inserted into the busiest loop...
+.PP
+The program reports on the ``stderr'' device when compilation is done;
+it then ``consumes'' the input sequence.
+Afterward, the compiled program remains intact in the user's directory
+for future use (under the name calcpix.local if the option
+.I -o
+was not specified).
+.PP
+The program is not intended to serve as a tool for generating system 
+programs, because the object code is usually a bit slower than a
+program which is specially tailored for a particular computation.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is warped, the output region of interest is reset
+to be the entire image.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+calccomb(1), calcpix(1), cylindrate(1), fcalccomb(1), fcalcpix(1)
+.SH AUTHOR
+Michael Landy - 12/30/88
+.br
+Hips 2 - msl - 8/12/91
+.br
+Added -i/-I - msl - 1/7/93
+.br
+Added depths - msl - 3/7/94

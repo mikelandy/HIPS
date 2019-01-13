@@ -1,0 +1,101 @@
+.TH H_HCONVOLVE 3 "7/17/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_hconvolve \- 1D horizontal convolution
+.SH SYNOPSIS
+.nf
+.ta 2i
+#include <hipl_format.h>
+
+.ta 1i
+h_hconvolve(hdi,hdo,mask,nmask,offset)
+struct header *hdi,*hdo;
+int-or-float *mask;
+int nmask,offset;
+
+h_hconvolve_i(hdi,hdo,mask,nmask,offset)
+struct header *hdi,*hdo;
+int *mask,nmask,offset;
+
+h_hconvolve_f(hdi,hdo,mask,nmask,offset)
+struct header *hdi,*hdo;
+float *mask;
+int nmask,offset;
+
+h_hconvolve_I(imagei,imageo,nr,nc,nlpi,nlpo,mask,nmask,offset)
+int *imagei,*imageo,nr,nc,nlpi,nlpo,*mask,nmask,offset;
+
+h_hconvolve_F(imagei,imageo,nr,nc,nlpi,nlpo,mask,nmask,offset)
+float *imagei,*imageo,*mask;
+int nr,nc,nlpi,nlpo,nmask,offset;
+.fi
+.SH DESCRIPTION 
+These routines perform a 1-dimensional horizontal convolution on an input
+subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result of that function in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_hconvolve
+calls
+.I h_hconvolve_i
+or
+.I h_hconvolve_f
+depending on whether the input image pixel format is integer or float.
+.I h_hconvolve_I
+and
+.I h_hconvolve_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.I mask
+is a pointer to the mask elements, and should point to floating point values
+for a floating point image and integer values for an integer image.
+.I nmask
+is the number of mask elements.
+It is important to note that
+.I h_hconvolve
+cross-correlates with the mask rather than
+convolves. In other words, the rows and columns are not first reflected.
+For the usual mirror symmetric masks this poses no complications.
+.I Offset
+designates the pixel of the mask which overlays a given input image pixel
+in order to compute the cross-correlation corresponding to the
+corresponding output image pixel.  The cross-correlation extends the edges
+of the subimage whenever the mask extends beyond the subimage edges.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+integer, float
+.SH "OUTPUT PIXEL FORMAT"
+same as input
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_sepconv(3), h_vconvolve(3)
+.SH AUTHOR
+Based on HIPS-1 dog: Yoav Cohen - 12/12/82
+.br
+HIPS-2 - msl - 7/16/91

@@ -1,0 +1,91 @@
+.TH H_ADDGABOR 3 "8/11/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_addgabor \- subroutines to add a Gabor function to an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_addgabor(hdi,hdo,xm,ym,xf,yf,xs,ys,phase,amplitude)
+h_addgabor_f(hdi,hdo,xm,ym,xf,yf,xs,ys,phase,amplitude)
+struct header *hdi,*hdo;
+float xm,ym,xf,yf,xs,ys,phase,amplitude;
+
+h_addgabor_F(imagei,imageo,nr,nc,nlpi,nlpo,xm,ym,xf,yf,xs,ys,phase,amplitude)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+float xm,ym,xf,yf,xs,ys,phase,amplitude;
+.fi
+.SH DESCRIPTION 
+These routines add a Gabor function (the product of a sinusoid and a Gaussian)
+to an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_addgabor
+calls
+.I h_addgabor_f
+as long as the pixel format is float.
+.I h_addgabor_F
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  The other arguments are as follows:
+.TP 1i
+.I xm
+horizontal mean pixel position
+.TP
+.I ym
+vertical mean pixel position
+.TP
+.I xf
+horizontal frequency in cycles per frame width
+.TP
+.I yf
+vertical frequency in cycles per frame height
+.TP
+.I xs
+horizontal standard deviation in pixels
+.TP
+.I ys
+vertical standard deviation in pixels
+.TP
+.I phase
+degrees of phase angle (0 = cosine phase at the mean,
+-90 = sine phase at the mean)
+.TP
+.I amplitude
+a multiplier (peak value if in cosine phase), this also
+allows the calling program to factor in the effects of a temporal Gaussian
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_addcos(3)
+.SH AUTHOR
+Michael Landy - 8/11/91

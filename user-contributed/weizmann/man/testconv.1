@@ -1,0 +1,43 @@
+.TH TESTCONV 1HIPS "April, 1987"
+
+.SH NAME
+testconv - conversational program to perform a convolution on an image
+using the ALU-512.
+
+.SH SYNOPSIS
+.B testconv
+[-d device] [-I source_frame_buffer] [-T target_frame_buffer]
+
+.SH DESCRIPTION
+.I Testconv
+is a conversational version of convolve. It gives the user the option
+to change the input source, handle the filter and make some other
+decisions interactively.  In general, after an 8-bits pixels image is
+in the
+.I source_frame_buffer
+,  it filters the image by applying a convolution mask, using the
+ALU-512. The 16-bits output of the convolution is stored in a 16-bits
+.I target_frame_buffer
+;
+.I Device
+must be one which has an ALU-512 and at least two frame buffers, one of
+which must be a 16-bits frame buffer. Thus do not choose /dev/ipfb1. It
+is also recommended to use the device exclusively while executing a
+convolution. That is why you had better use /dev/ipfb0a.  In order to
+understand the logic of the program, read the manual for convolve
+first, and try testconv out.
+
+.SH DEFAULTS
+.I -I
+defaults to 0.
+.I -T
+default to 3.
+.I -d
+defaults to /dev/ipfb0a.
+
+.SH SEE\ ALSO
+mask(1HIPS), fmask(1HIPS), convolve(1HIPS)
+
+.SH AUTHOR
+Leah Mory - April, 1987
+

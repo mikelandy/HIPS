@@ -1,0 +1,104 @@
+.TH H_CONVOLVE 3 "8/11/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_convolve \- subroutines to perform a true 3D convolution on two images
+.SH SYNOPSIS
+.nf
+.ta 1i
+#include <hipl_format.h>
+
+h_convolve(hdi,hdk,hdo,firsti,firstk,numf)
+h_convolve_i(hdi,hdk,hdo,firsti,firstk,numf)
+h_convolve_f(hdi,hdk,hdo,firsti,firstk,numf)
+struct header *hdi,*hdk,*hdo;
+int firsti,firstk,numf;
+
+h_convolve_I(imagei,imagek,imageo,nri,nci,tnri,nlpi,nrk,nck,tnrk,nlpk,nfrk,
+	nlpo,firsti,firstk,numf)
+int *imagei,*imagek,*imageo;
+int nri,nci,tnri,nlpi,nrk,nck,tnrk,nlpk,nfrk,nlpo,firsti,firstk,numf;
+
+h_convolve_F(imagei,imagek,imageo,nri,nci,tnri,nlpi,nrk,nck,tnrk,nlpk,nfrk,
+	nlpo,firsti,firstk,numf)
+float *imagei,*imagek,*imageo;
+int nri,nci,tnri,nlpi,nrk,nck,tnrk,nlpk,nfrk,nlpo,firsti,firstk,numf;
+.fi
+.SH DESCRIPTION 
+These routines compute one frame of a 3D convolution of two input subimage
+sequences (the input image, specified by
+.I hdi
+or
+.IR imagei ,
+and the kernel image, specified by
+.I hdk
+or
+.IR imagek ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_convolve
+calls
+.I h_convolve_i
+or
+.I h_convolve_f
+depending upon whether the pixel format is integer or float.
+.I h_convolve_I
+and
+.I h_convolve_F
+are the low-level routines which don't require an image header.  The input
+subimage size is
+.I nri
+by
+.I nci
+within a total image size of
+.I tnri
+by
+.IR nlpi .
+The kernel subimage size is
+.I nrk
+by
+.I nck
+within a total image sie of
+.I tnrk
+by
+.IR nlpk .
+The kernel sequence is
+.I nfrk
+frames long.
+The output image has
+.I nlpo
+pixels per line.
+.PP
+The second header is for the `kernel' sequence.  The buffer allocated for
+that sequence is assumed to be large enough to contain the entire sequence
+(one frame after another beginning with the first frame), and all relevant
+frames must be present.
+The first header is for the `input' sequence.  The buffer allocated for
+that image contains only those frames which will be required for this
+frame's computation (and hence the buffer length is assumed to hold only
+the number of frames in the `kernel' sequence.  The calling program reads
+these as if into a circular queue, so the user specifies which frame in the
+buffer corresponds to the first frame to use, the number to convolve, and
+the first one in the `kernel' buffer to use.
+.PP
+Regions of interest are supported, but are
+a bad idea for space reasons.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+integer, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.I hdi
+and
+.IR hdk .
+.SH "IN-PLACE PROCESSING"
+The header and kernel may be the same image, but the output image must be
+separate.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_mask(3)
+.SH AUTHOR
+Michael Landy - 8/10/91

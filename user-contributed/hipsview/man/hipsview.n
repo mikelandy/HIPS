@@ -1,0 +1,367 @@
+.TH HIPSVIEW 1 "March 22, 1990"
+.SH NAME
+hipsview - HIPS image analysis tool for use under SunView
+.SH SYNOPSIS
+.B hipsview
+.SH DESCRIPTION 
+.I Hipsview
+is a general program for performing image analysis on a Sun workstation under
+SunView.  It allows the user to view an image, chart grey level plots along
+various slices through the image, print out grey levels, magnify a subimage,
+and compute statistics on the entire image or on slices through the image.
+The image may be enhanced using histogram equalization, or by thresholding.
+.PP
+The basic way that
+.I hipsview
+is used is to run the program from a shelltool window under SunView, running
+the program in the background (type `hipsview &'), so that the shelltool
+window is still available for running other commands.  The program opens a
+hipsview window with two panels.  The upper panel is used to view an image,
+and the lower panel is used for grey scale plots and histograms.  Most
+interactions with
+.I hipsview
+may be accomplished by using the mouse.  However, most menu choices may also
+be achieved from the keyboard as well (by typing while the
+.I hipsview
+window is active and receiving keyboard input).  When you type to the
+.I hipsview
+window, your keystrokes will be echoed in the parent shelltool window from
+which
+.I hipsview
+was run.  All messages from the program will be sent to that window as well,
+and all keyboard input from subsequent queries by the program, although typed
+to the
+.I hipsview
+window, are actually echoed to the parent shelltool window.
+.PP
+The program has a number of different modes in which it runs.  These modes may
+be selected using the mouse or the keyboard shortcuts.  A given mode affects a
+number of program behaviors:  the result of mouse buttons, the version of the
+image displayed, and the particular data that are saved in a disk file if the
+user issues a `write' command.  
+.PP
+.I hipsview
+may be used with several HIPS image types:  byte (unpacked), short, int, and
+float. Short, int and float image types are scaled to use the entire pixel
+range of the display. Byte images are not scaled.
+All statistics of the image printed as histograms or plots or lists of grey
+levels are referred to the original image values, even though a scaled byte
+version of the image is displayed.  Also, if a subimage is written to disk, it
+will be of the same type as the original image.  The program may be used with
+monochrome, greyscale, and color monitors.  On monochrome monitors, the image
+will be dithered by default, and on color and greyscale systems, the actual
+image intensities are used by default, but dithering may be requested by the
+user.
+.PP
+.I hipsview
+has no capability of using or manipulating color maps for use in enhancing the
+image using pseudocolor.  However, there is a companion program,
+.IR viewcolor ,
+which modifies the same color map segment, allowing the user to modify the
+color map which is used for the displayed image.  See the manual page for
+.I viewcolor
+for more details.
+.PP
+Certain aspects of the use of the mouse are constant across all modes.  The
+left mouse button is used for choosing.  In the image panel, a click or drag
+with the left mouse button chooses the position of a subimage box, an image
+slice, etc.  In the graph panel, a click of the middle mouse button is used to
+choose a grey level, a slice position, etc.  It leaves an image slice in the
+same position, but chooses a particular pixel along the slice to highlight.
+It prints values and averages of pixels in the appropriate mode.  It selects
+thresholds and draws a thresholded in image in the thresholding mode, and a
+magnified image in the magnification mode.  The combination of left and middle
+mouse buttons is used for rubberbanding the shape of an image selection
+(either an image box or an image vector, depending on the mode).  Clicking the
+righthand button while the middle button is already down toggles the cursor
+between the image and graph panels.  In other modes it toggles the image panel
+itself (between the original and the thresholded image, or between the
+original and the magnified image).  Finally, as usual the righthand button
+alone is used for menu selections.
+.PP
+Certain keyboard commands may be used in all modes.  The `.' key is used as a
+toggle, with the same meaning as the combination of middle and right mouse
+buttons.  The `/' key toggles between the image and the plot in the various
+slice modes.  The `,' key toggles the color of the cursor to enhance its
+visibility.
+.PP
+Next, we review all of the features of
+.IR hipsview .
+We do this in the order that these features are listed in the menus, and for
+each, we give the keystrokes which can be used as a shortcut to using the
+mouse and menu selection.  Note that many of the keyboard shortcuts must be
+terminated with a carriage return, and all must be typed to the
+.I hipsview
+window, even though the input is echoed in the parent shelltool window.
+Keyboard commands which require parameters are typed with a following
+`<space>' instead of a carriage return.  The carriage return is then used to
+terminate the input parameter list.
+Also, note that all menus have a `help' option which prints a brief summary of
+the commands available through that menu.
+.PP
+Slice Menu:
+.TP
+sx
+Set `slice x' mode.  In this mode, mouse clicks in the image panel set the
+position of a horizontal slice across the image and a distinguished pixel
+within that slice.  The left mouse button moves the slice and the
+distinguished pixel.  The middle mouse button changes the distinguished pixel
+only. The graph panel shows a grey level graph across the slice.
+Middle mouse clicks in the graph panel move the choice of distinguished pixel
+in the slice.
+The distinguished pixel location (x,y) and value are
+displayed.
+.TP
+sy
+Set `slice y' mode.  The same as above except for vertical slices through
+the image.
+.TP
+sv
+Set `slice vector' mode.  This allows the user to take a linear slice from any
+point to any other point in the image.  The left mouse button sets or changes
+the starting point of the vector.  The combination of left and middle button
+drags the endpoint of the vector.  In the graph panel and the image panel, the
+middle button changes the highlighted pixel.  Since the relationship between
+the axis of the graph and the vector is not obvious, the ability to toggle the
+cursor between the two panels is quite useful (using middle and right buttons,
+or `/').
+.TP
+a
+Print the statistics of the pixels in the current image box.  Note that the
+current `box' is not always highlighted in the image panel (unless you use
+`sa' mode, described below).  The upper-left corner of the box will have been
+set by the last position selected by the left mouse button.  The size of the
+box is selected by a variety of commands described below, and will be printed
+along with the statistics.
+.TP
+p
+Print the grey levels of the pixels in the current image box. Both scaled and
+unscaled pixel values are printed. Appended to the
+grey level values are a number of codes: L (minimum value), H (maximum value),
+c (clipped value), z (zone filled value), and > (the current cursor
+position).
+.TP
+H
+This selects the pixel in the current image box with the highest value.  If HL
+mode is on (see below), the box is moved to that pixel (allowing a rudimentary
+hill-climbing technique).
+.TP
+L
+This selects the pixel in the current image box with the lowest value.  If HL
+mode is on (see below), the box is moved to that pixel (allowing a rudimentary
+valley-descent technique).
+.TP
+s0
+This turns off HL mode.
+.TP
+s1
+This turns on HL mode.
+.PP
+File Menu:
+.TP
+l
+Load a new image file.  The user will be prompted for a file name.  `l"'
+reloads the previously loaded file.
+.TP
+sw
+Sets `show write' mode.  In this mode, the left and left+middle mouse buttons
+move and resize the image box.  Also, a `w' (write) command in this mode will
+write in HIPS format the subimage contained in the image box.
+.TP
+w
+Write data to a file.  The user is prompted for a file name.  The data written
+depends on the current mode:  sw - boxed image data in HIPS format; sx, sy, sv
+- sliced pixels; sp - print the boxed image data in Ascii; sa - image
+statistics on boxed pixels.  In other modes (sm, st, sh, etc.), this command
+is ignored.  The command `w"' will overwrite the previously written file.
+.TP
+q
+Quit.  Exit from the program.  The user is prompted for confirmation.
+.PP
+Set Show Mode Menu:
+.TP
+sa
+Set `Show Average' mode.  In this mode, middle mouse presses print statistics
+on the boxed pixels (identical to the command `a').  Left, and left-plus-middle
+presses move and resize the box.
+.TP
+sp
+Set `Show Print' mode.  In this mode, middle mouse presses print the values of
+the boxed pixels (identical to the command `p').  Left, and left-plus-middle
+presses move and resize the box.
+.TP
+sm
+Set `Show Magnify' mode.  The user is prompted for the amount of magnification
+in the width and height dimensions.  The boxed image pixels are displayed
+magnified in the image panel when the middle button is pressed. The `.'
+command toggles between the unmagnified and magnified views.  In the
+unmagnified view, the image box can be moved and resized.
+.TP
+st
+set `Show Histogram Thresholded' mode.  The user is presented with a histogram
+in the graph panel.  The middle button selects two thresholds by clicks on the
+displayed histogram.  Pixel values
+which fall between those two thresholds are displayed in white, and those
+outside the range are displayed as black.
+.PP
+Histogram Menu:
+.TP
+sh|shf
+Sets `histogram mode', and histograms will be computed using the entire image.
+Histogram bins may be selected with the middle mouse button to query their
+values.  This only affects the data from which histograms are computed, but
+not the form of the histogram described below.
+.TP
+shw
+Sets `histogram mode', and histograms will be computed using the image box.
+Histogram bins may be selected with the middle mouse button to query their
+values.  This only affects the data from which histograms are computed, but
+not the form of the histogram described below.
+.TP
+h
+Sets `histogram mode', and sets the form of the histogram plot to `standard'.
+.TP
+hi
+Sets `histogram mode', and sets the form of the histogram plot to `integrated'.
+The plot is of a cumulative histogram.
+.TP
+he
+Sets `histogram mode', and sets the form of the histogram plot to `equalized'.
+Thus, the image will be that after histogram equalization has been applied.
+.PP
+Draw Image Menu:
+.TP
+d
+Draw normal/raw image.  This replaces the image panel with the original image
+(not histogram equalized, magnified, or thresholded).  This command is often
+useful to reset the image when leaving another `show mode' (such as
+thresholded or magnified).
+.TP
+de
+Draw histogram equalized image (using ``hi'' cumulative histogram data).
+.TP
+dm
+Draw magnified image.  The user will be queried for the width and height
+magnification factors.  Note, when entered from the keyboard, type `dm<space>'
+rather than `dm<carriage-return>'.
+.TP
+Draw thresholded image.  The user will be queried for the low and high
+thresholds.  Note, when entered from the keyboard, type `dt<space>'
+rather than `dt<carriage-return>'.
+.PP
+Reset Menu:
+.TP
+rd
+Redisplay the entire window.
+.TP
+ri
+ReInitialize hipsview (the image window is set to 512X512).
+.TP
+rs
+Resize the window to fit the current raw image.
+.TP
+rw
+Set the window canvas to a new size and resize the window to fit.  The user is
+prompted for the new width and height.
+.PP
+Render Menu:
+.TP
+I
+Interchange the foreground and background colors (the colormap entries for
+values 0 and 255).
+.TP
+i 
+Load the color lookup table with an inverted grayscale ramp.
+.TP
+D0
+Turn off dithering (the default for color and grayscale monitors).
+.TP
+D1
+Turn on dithering (the monochrome monitor default).
+.TP
+D2
+Turn on dither invert mode (the effects will not be visible unless the image
+is redrawn, e.g., with the `d' command).
+.PP
+Show&Set Params Menu:
+.TP
+u
+Set the image box size.  The user is prompted for the image box width and
+height.  The second argument is optional.
+.TP
+v
+Set the image box height.  The user is prompted for the image box height.
+.TP
+x
+Set upper left coordinates of the image box and slice distinguished pixel.
+The user is prompted for the x and y coordinates of the pixel location.  The
+second argument is optional.
+.TP
+y
+Set upper left image box y coordinate alone.
+.TP
+du
+Set vector length.  The user is prompted for the length of the vector
+displayed in sv mode (delta-x and delta-y from the starting point to the
+ending point of the vector).  The second argument is optional.
+.TP
+dv
+Set vector length delta-y alone.
+.TP
+c
+Set the image clip and scale points.  The user is queried for the low and high
+clip points. Clips short, int and float images pixel values to lie in this
+range. Type `r<CR>' (in response to the query) to disable clipping.  Any
+subimage written using the `w' command will also be clipped.
+.TP
+z
+Set the image pixel fill zone.  The user is queried for the low and high
+points and the fill value.  Pixels within this range are changed to the fill
+value.  Type `r<CR>' (in response to the query) to disable filling.  Any
+subimage written using the `w' command will also be zone filled.
+.TP
+s
+Print the status of the
+.I hipsview
+session.  This includes the cursor position, the width and height of the three
+types of image boxes (pa - image statistics; p - pixel values; and w - the box
+used for writing an image in HIPS format).  The endpoints and difference
+vector for the current vector slice, the origin, size and magnification
+amounts for the magnification box, the range of the raw image pixels, the clip
+and fill parameters, the current file name and image size and format.  It
+gives the current state of the various
+.I hipsview
+images.  This includes the state of the `base' image (B followed by
+n = normal, or e = histogram equalized, and an appended `.m' = magnified), the
+histogram mode (H followed by f = full image, or w = windowed image box), the
+current picture type (C followed by n = normal, e = histogram equalized, m =
+magnified, or t = thresholded), and the current `Show mode' (S followed by a =
+average, h = histogram, m = magnified pixels, p = print pixels, t =
+thresholded pixels, w = write the raw boxed pixels in HIPS format, x = x
+slice, y = y slice, v = vector slice).
+.TP
+%
+Change the printf format used to print boxed pixels.  The user will be queried
+for the new format.
+.TP
+>
+Print current working directory and change directory.  The user is queried for
+the new directory.
+.TP
+!
+Execute a system command.
+.PP
+Help Menu (access to additional help information)
+.PP
+Sun Menu (the usual Sun main menu)
+.PP
+There are two additional commands not available via the menus.  The `?'
+command provides access to additional help information (the user is prompted for
+a number from 1 to 4 for the four help paragraphs).  The `C' command is no
+longer available (it used to load colormaps from Sun raster format images).
+The `w' command with argument `view.help' writes the entire help file to the
+current working directory.
+.SH SEE\ ALSO
+viewcolor(1)
+.SH AUTHOR
+Walt Kropfl

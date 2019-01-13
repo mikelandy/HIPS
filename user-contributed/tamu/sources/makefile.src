@@ -1,0 +1,17 @@
+#
+# makefile for user-contributed/tamu/sources
+#
+
+PGMS = txtur.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

@@ -1,0 +1,14 @@
+#
+# makefile for directory user-contributed/sheffield/xdisp/doc
+#
+
+install:
+
+clean:
+
+man:
+
+doc:
+	lpr xdisp.ps
+
+pristine:

@@ -1,0 +1,20 @@
+#
+# makefile for directory lbl/jpeg
+#
+
+# Subdirectories that get made
+
+DIRS = libsrc lib comp man
+
+# default action just makes src dirs
+
+all: install
+
+clean clean-all install pristine man doc: doit
+	@for d in $(DIRS) ; do \
+		( cd $$d ; echo make $@ on $(HERE)$$d ; make $(MFLAGS) $@ ) ; \
+	done
+	@if [ "$@" = "clean-all" ];	then	\
+		rm -f Makefile;	else	true;	fi
+
+doit:

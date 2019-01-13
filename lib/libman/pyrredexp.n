@@ -1,0 +1,59 @@
+.TH PYRREDEXP 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+pyrredexp \- pyramid routines for the reduce and expand operations
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+freduce(fpyr,botlev,toplev,rf,rtype)
+fexpand(fpyr,botlev,toplev,ef,mode,rtype)
+ireduce(ipyr,botlev,toplev,rf,rtype)
+iexpand(ipyr,botlev,toplev,ef,mode,rtype)
+FPYR fpyr;
+IPYR ipyr;
+FILTER rf,ef;
+int botlev,toplev,rtype,mode;
+.fi
+.SH DESCRIPTION 
+These routines perform the pyramid reduce and expand operation on the supplied
+image pyramid, across the supplied range of levels, using the supplied filter.
+For expand operations, the type of expansion is controlled by
+.IR mode .
+If
+.I mode
+is greater than zero, then the operation is expand-and-add to the
+lower pyramid level (as in reconstructing an image from a Laplacian pyramid).
+If
+.I mode
+is less than zero, then the operation is expand-and-subtract from the lower
+level (as in building a Laplacian pyramid).
+Finally, if
+.I mode
+is equal to zero, then the operation is a simple expand, producing a smoothed,
+more finely sampled image.  The routines
+perform a reflection at all image edges where the filter will extend beyond
+the image.
+.I rtype
+specifies the type of reflection (see
+.IR pyrreflect (3).
+Only symmetric kernels of odd size are handled.  Kernel symmetries are
+used since the filters are only stored with half of the taps specified.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FREE - can't free memory
+.br
+HE_REFL - unknown reflection type
+.SH "SEE ALSO"
+alloc_image(3)
+.SH AUTHOR
+The pyramid utilities are derived from code originally written by
+Raj Hingorani at SRI/David Sarnoff Research Institute.  The original
+Gaussian and Laplacian pyramid algorithms were designed by Peter Burt (also
+currently at SRI/DSRC).  See:  Computer Graphics and Image Processing,
+Volume 16, pp. 20-51, 1981, and IEEE Transactions on Communications,
+Volume COM-31, pp. 532-540, 1983.
+.sp
+modified for HIPS 2 - msl - 1/3/91

@@ -1,0 +1,27 @@
+#
+# makefile for user-contributed/lbl/hips/sources/vfft
+#
+
+PGMS = \
+	dcvtob.out inv-vfft.out pattern.out vfft.out vfftfilter.out vfftpass.out
+
+LIBRARIES = $(LDFLAGS) -lccs -ltiff $(LIBRARY) $(OTHERLIBS)
+CPPFLAGS2 = -I../../../include
+
+.c.out:
+	$(LINKc) $* $< $(LIBRARIES) $(CPPFLAGS2)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

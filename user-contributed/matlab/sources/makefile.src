@@ -1,0 +1,45 @@
+#
+# makefile for user-contributed/matlab/sources
+#
+
+PGMS =  dispm.out iphips.out hips2.out readhips.out writehips.out writehipsb.out
+LDFLAGS = -L$(LIBDIR)
+
+install:	$(PGMS)
+
+.c.out:
+	$(MEXPATH) -DMATMEX $(CPPFLAGS) -I$(MATINCLUDE) $< $(LIBRARIES)
+	mv $*.mex* $(MATLABDEST)
+	@touch $@
+
+hips2.out:
+	rm -f hips2.h
+	echo "#define DESTDIR	\"$(DESTDIR)\"" > hips2.h
+	$(MEXPATH) -DMATMEX $(CPPFLAGS) -I$(MATINCLUDE) hips2.c $(LIBRARIES)
+	mv $*.mex* $(MATLABDEST)
+	@touch $@
+
+dispm.out:
+	cp dispm.m $(MATLABDEST)
+	@touch $@
+
+iphips.out:
+	cp iphips.m $(MATLABDEST)
+	@touch $@
+
+clean:
+	rm -f *.mex* *.o *.out $(OTHERJUNK)
+
+man:
+
+doc:
+
+pristine:
+	rm -f *.mex* *.o *.out $(OTHERJUNK)
+	for pgm in $(PGMS); do \
+		dpgm=`basename $$pgm .out`; \
+		echo rm -f $(MATLABDEST)/$$dpgm.\* ; \
+		rm -f $(MATLABDEST)/$$dpgm.* ; \
+	done ;
+
+FRC:

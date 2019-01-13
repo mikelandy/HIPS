@@ -1,0 +1,20 @@
+.TH SCALESEQ 1HIPS "May 23, 1989"
+.SH NAME
+Scaleseq -- linearly scale a floating point sequence relative to the minimum
+and maximum values in the entire sequence.
+.SH SYNOPSIS
+.B scaleseq
+outmin outmax < inseq > outseq
+.SH DESCRIPTION 
+.I Scaleseq
+Reads all frames of inseq (writing frames out to a temporary file as it reads
+them) to obtain the maximum and minimum values of the entire sequence, then
+reads back in the temporary file and writes out a byte formatted, linearly
+scaled sequence whose minimum value is 
+.I outmin,
+and whose maximum value is
+.I outmax.
+.SH SEE\ ALSO
+scale(1HIPS),
+.SH AUTHOR
+Charlie Chubb - 11/7/85

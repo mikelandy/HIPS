@@ -1,0 +1,29 @@
+.TH HTOBGR 1 "5/21/93" "Version 2" "HIPS Manual"
+.SH NAME
+htobgr \- convert to BGR format
+.SH SYNOPSIS
+.B htobgr
+.SH DESCRIPTION 
+.I Htobgr
+converts from any pixel format to BGR color format.
+All values are clipped to lie between 0 and 255.
+.SH "REGION-OF-INTEREST"
+The entire image is converted.  The region-of-interest remains unchanged.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+bpack(1), htob(1), htoi(1), htolp(1), htomp(1), htorgbz(1), etc.
+.SH AUTHOR
+Mike Landy - 5/21/93

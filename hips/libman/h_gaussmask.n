@@ -1,0 +1,40 @@
+.TH H_GAUSSMASK 3 "7/17/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_gaussmask \- subroutine to compute a 1D Gaussian mask
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+double h_gaussmask(sigma,nmask,maskarr,precision)
+double sigma;
+float  *maskarr;
+int nmask,precision;
+.fi
+.SH DESCRIPTION 
+.I Gauss_mask
+creates a one-dimensional Gaussian mask of standard deviation
+.I sigma
+and stores the result in a mask consisting of
+.I nmask
+pixels.
+The values of the mask are scaled so that the mask pixels sum to one.  The
+function returns the multiplicative scale factor that was required to do that.
+The
+.I precision
+argument (a positive integer, set to one if not positive), determines
+how each entry of the mask is computed.  If precision equals
+one, each mask entry is computed by calculating the Gaussian function at
+the midpoint of the interval that each mask entry represents.  Otherwise,
+.I precision
+equally spaced
+points are computed and averaged to derive each array entry.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_SIGMA - standard deviation less than or equal to zero
+.SH "SEE ALSO"
+h_hconvolve(3), h_sepconv(3), h_vconvolve(3)
+.SH AUTHOR
+Yoav Cohen, 12/10/82
+.br
+HIPS 2 - Michael Landy - 7/16/91

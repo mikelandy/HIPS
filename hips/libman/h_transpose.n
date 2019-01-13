@@ -1,0 +1,79 @@
+.TH H_TRANSPOSE 3 "6/23/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_transpose \- subroutines to transpose an image about the main diagonal
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_transpose(hdi,hdo)
+h_transpose_b(hdi,hdo)
+h_transpose_i(hdi,hdo)
+h_transpose_f(hdi,hdo)
+struct header *hdi,*hdo;
+
+h_transpose_B(imagei,imageo,nr,nc,nlpi,nlpo)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+
+h_transpose_I(imagei,imageo,nr,nc,nlpi,nlpo)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+
+h_transpose_F(imagei,imageo,nr,nc,nlpi,nlpo)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines take a subimage of an input image (specified by
+.I hdi
+or
+.IR imagei ),
+reflect it about the main (upper-left to lower-right) diagonal and store the
+result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_transpose
+calls
+.IR h_transpose_b ,
+.I h_transpose_i
+or
+.I h_transpose_f
+depending upon whether the pixel format is byte, integer or float.
+.IR h_transpose_B ,
+.I h_transpose_I
+and
+.I h_transpose_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, integer, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_invert(3), h_reflect(3), h_rot180(3), h_rot90(3)
+.SH AUTHOR
+Michael Landy - 6/23/91

@@ -1,0 +1,19 @@
+#
+# makefile for directory hipsaddon/main/sources
+#
+
+# Subdirectories that get made
+
+# DIRS = singles binatts vacls
+DIRS = singles binatts vacls
+
+# default action just makes src dirs
+
+all: install
+
+clean install pristine man doc: doit
+	@for d in $(DIRS) ; do \
+		( cd $$d ; echo make $@ on $(HERE)$$d ; make $(MFLAGS) $@ ) ; \
+	done
+
+doit:

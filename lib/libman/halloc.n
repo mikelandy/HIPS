@@ -1,0 +1,46 @@
+.TH HALLOC 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+halloc \- memory allocation routines
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+byte *halloc(nelem,elsize)
+int nelem,elsize;
+
+byte *hmalloc(numbytes)
+hsize_t numbytes;
+
+char *memalloc(nelem,elsize)
+int nelem;
+hsize_t elsize;
+.fi
+.SH DESCRIPTION 
+.IR halloc ,
+.I hmalloc
+and
+.I memalloc
+are used to allocate memory, and each returns a pointer to the allocated
+memory (or an error indication if unable to allocate).
+.I halloc
+is equivalent to the standard UNIX routine
+.IR calloc (3),
+and thus zeroes the allocated memory area.
+.I hmalloc
+is equivalent to
+.IR malloc (3),
+and thus leaves the allocated memory contents in an unknown state.
+.I memalloc
+has the same arguments as
+.IR halloc ,
+but doesn't initialize the allocated memory.
+The allocated memory may be deallocated using the UNIX routine
+.IR free (3).
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.SH "SEE ALSO"
+alloc_image(3), alloc_imagez(3), free_image(3)
+.SH AUTHOR
+Michael Landy - 1/3/91

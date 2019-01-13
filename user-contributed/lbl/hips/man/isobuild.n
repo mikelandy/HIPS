@@ -1,0 +1,94 @@
+.TH ISOBUILD 1 "1 September 1991" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+isobuild \- creates an isosurface from a 3D HIPS data set.
+.SH SYNOPSIS
+.B isobuild
+[-i 3d_data.hips][-o outfile][-O N][-t NN][-p][-s N][-N][-v]
+.SH DESCRIPTION
+.I isobuild
+implements the Marching Cubes surface tiler described by
+Lorensen & Cline in the Siggraph 87 Conference Proceedings, as well as
+a version of their Dividing Cubes Algorithm.
+This program works on hips formatted images of type byte, short, int, or float.
+.SH OPTIONS
+The following options are available:
+.nf
+.na
+  -i file   HIPS file name (default = stdin)
+  -o file   output file name
+  -O N      output type (default = 0)
+             ( 0 = binary, 1 = ASCII, 2=byu, 3 = wavefront )
+  -t NN     surface threshold value (default = 50)
+  -p        output points, not triangles (Dividing Cubes) (default = triangles)
+  -s N      segmentation method   (default = 0)
+             ( 0 = thresholding, 1 = flood fill, 2 = flood with gradient )
+  -D        run as a server, if no file names, this is assumed
+  -m file   HIPS file to use as a segmentation mask
+
+ other options:
+  -v[V]     verbose mode(s)
+  -g        compute normals for gouraud shading. (default = no)
+  -F        smooth segmentation grid after threshold (default = no)
+  -P NN     server port number (default = 10000)
+  -b N      type of connectivity bridge: (default = 3)
+             ( 0 = none, 1 = 2D, 2 = 3D weak, 3 = 3D strong )
+  -f        pre-pass to compute min/max of data blocks (default = prepass)
+  -n        pre-compute all normals (default = no)
+  -N        fast, less accurate normals for dividing cubes (default = slow)
+  -d        check for duplicate triangle vertices (default = check)
+  -M file   write segmentation mask to HIPS file
+  -S NN NN NN starting x,y,z data grid location (default = 0,0,0)
+  -E NN NN NN ending x,y,z data grid location (default = xmax, ymax, zmax)
+
+---------------------------------------------------------------
+
+output file format:
+For large data files, all of the polygons may not fit in memory. 
+Therefore polygon output is written in "chunks".
+All values are in binary format
+
+header (4 integers):
+    more flag  : 0 = this is the last chunk, 1 = more chunks to follow
+    number of vertices
+    number of edges
+    normal flag  : vertex normals are included (for gouraud shading)
+
+vertex list (floats)
+    x,y,z
+    x,y,z
+    x,y,z
+    x,y,z
+    x,y,z
+    .
+    .
+    .
+
+normal list (floats), only if normal flag = 1
+    nx,ny,nz
+    nx,ny,nz
+    nx,ny,nz
+    nx,ny,nz
+    .
+    .
+    .
+
+edge list (int)
+The edge list values are indices into the vertex list, telling which
+vertices make up the corners of the triangles.
+All polygons are triangles, so every 3 values in the edge list
+describes one triangle.
+
+If number of edges = 0, then every 3 vertices in the edge list
+is a triangle.
+
+.sp
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH NOTES
+This program has many #defines which will cause the program to
+behave differently. See "isobuid.h" for more information.
+.SH BUGS
+Report to Brian Tierney.  (bltierney@lbl.gov)
+
+

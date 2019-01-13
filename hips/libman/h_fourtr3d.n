@@ -1,0 +1,63 @@
+.TH H_FOURTR3D 3 "7/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_fourtr3d \- subroutines to compute a 3D Fourier transform
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_fourtr3d(hd)
+h_fourtr3d_c(hd)
+struct header *hd;
+
+h_fourtr3d_C(image,nr,nc,nf)
+h_complex *image;
+int nr,nc,nf;
+.fi
+.SH DESCRIPTION 
+These routines take an image sequence (specified by
+.I hd
+or
+.IR image ),
+compute a 3-dimensional Fourier transform, and store the result in that
+sequence.  Unlike most HIPS programs, in this case the supplied image header
+is expected to point to a stored image which contains the entire image
+sequence rather than a single frame.  Also, unlike most HIPS programs, there
+is no provision for dealing with a region-of-interest.
+.I h_fourtr3d
+calls
+.I h_fourtr3d_c
+as long as the pixel format is complex.
+.I h_fourtr_C
+is the low-level routine which doesn't require an image header.  The sequence
+size is
+.I nf
+by
+.I nr
+by
+.IR nc ,
+and all dimensions must be powers of 2.
+.PP
+All of these routines omit the final division by the number of entries in the
+array.  This can be performed afterward using
+.IR h_divscale (3).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+complex
+.SH "REGION-OF-INTEREST"
+There is no provision for dealing with a region-of-interest.
+.SH "IN-PLACE PROCESSING"
+The image is always processed in place.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FFTI - strange index
+.br
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_POW2 - image dimensions not a power of 2
+.SH "SEE ALSO"
+h_divscale(3), h_fft2(3), h_flipquad(3), h_fourtr(3), h_invfourtr(3),
+h_invfourtr3d(3)
+.SH AUTHOR
+Michael Landy - 7/10/91

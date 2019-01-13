@@ -1,0 +1,56 @@
+.TH DCVTOB 1 "May 15, 1991" LBL-HIPS
+.\" @(#)double-complex-vfft to byte.1  1.10 91/5/15 JIN;
+.SH NAME
+dcvtob \- convert double complex vfft to complex, float and byte formats
+.SH SYNOPSIS
+.nf
+.ta 1i
+dcvtob	[-max_in #] [-C] [-F] [-fflip] [-flip] [-nonscale]
+	[-regular] [selfscale] [<] input [> output]
+.fi
+.SH DESCRIPTION
+.I dcvtob
+converts an image whose format is higher than floating point to a specified
+output format. The input types are in HIPS, FITS, and RLE, and the output is HIPS.
+If input is double, double complex, or float complex, the output can be either
+byte or float format. Also complex format can be converted to spectrum format
+(as in
+.IR flipquad (1)).
+If the input is in VFFT format, the output is a spectrum in float or byte
+format.  It can be converted without flipping quadrants by using the
+.I -r
+option, or to complex format by using
+.I -C
+option.
+.SH OPTION DESCRIPTION
+.TP
+.I -C
+convert VFFT to complex.
+.TP
+.I -F
+output float format. The default is byte output.
+.TP
+.I -div #
+scale factor for automatically scaling output value up.
+.TP
+.I -fflip
+do fast quadrant flip on regular complex format for viewing only.
+.TP
+.I -flip
+do regular quadrant flip on regular complex format.
+.TP
+.I -m #
+set maximum input threshold at #
+.TP
+.I -nonscale
+output nonscaled conversion.
+.TP
+.I -r
+output original picture, not flipped.
+.TP
+.I -s
+re-scale for each frame (regularly, use scale factor in the first frame).
+.SH "SEE ALSO"
+vfft(1), vpass(1), inv-vfft(1), tuner(1), 3dscale_geom(1)
+.SH AUTHOR
+Jin Guojun - 5/15/91

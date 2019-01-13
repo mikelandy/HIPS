@@ -1,0 +1,32 @@
+.TH GETMEAN 1HIPS "March 2, 1987"
+.SH NAME
+Getmean -- writes, as a character string, the mean value of a sequence to
+stdout
+.SH SYNOPSIS
+.B getmean
+[-u] [-i] [-f] < inseq
+.SH DESCRIPTION 
+.I Getmean
+writes to stdout the mean value (expressed as a char string) of inseq.
+No other characters are written.  This permits such shell script constructions
+as
+.sp
+	set mean=`getmean < seq`
+.sp
+The
+.I -i
+option makes getmean output a character string corresponding to
+an integer.  In this case, if \fIinseq\fR is floating point format,
+its mean value is rounded off to the nearest integer to produce the output.
+The
+.I -f
+option forces the output to be a character string corresponding to a floating
+point number.
+The
+.I -u
+option displays a usage summary.
+.SH SEE\ ALSO
+getmax(1HIPS),
+getmin(1HIPS),
+.SH AUTHOR
+Charlie Chubb - 3/2/87

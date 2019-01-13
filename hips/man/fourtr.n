@@ -1,0 +1,65 @@
+.TH FOURTR 1 "7/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+fourtr \- Fourier transform and spectrum
+.SH SYNOPSIS
+.B fourtr
+[-d] [-s] [-z] [-w] < iseq > oseq
+.SH DESCRIPTION 
+.I Fourtr
+computes a Fourier transform or spectrum of an image.
+The output is a Fourier transform by default, or a Fourier spectrum if
+.I -s
+is specified.  If
+.I -z
+is specified, the DC spectrum value is printed, and
+then set to zero (since if makes the rest of the spectrum hard to see).  The
+default output format depends on the input format and whether
+.I -s
+was specified.  By default, double and double complex images produce double
+complex transforms and double spectra, and all other formats produce
+complex transforms and float spectra.  If
+.I -d
+is specified, double
+complex transforms and double spectra will be produced for all input
+formats.  For spectra, the coefficients are shifted, so that the (0,0)
+coefficient is near the center of the output picture.  By default, the
+transform is computed on the ROI and only the ROI is output.  If
+.I -w
+is specified, the output image is the entire image with only the ROI replaced
+by its transform or spectrum.
+.PP
+The program does not require square input pictures, but the linear
+dimensions must both be powers of 2.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is transformed.  If
+.I -w
+is specified, the output is the input image with the ROI transformed.
+Otherwise, only the transformed ROI is output.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-RC [R | I | B]"
+Real-to-complex conversion: Set real part, imaginary part or both.
+Default: R.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+dog(1), fmask(1), fourtr3d(1), inv.fourtr(1), inv.fourtr3d(1), mask(1)
+.SH AUTHOR
+Yoav Cohen 5/14/82
+.br
+modified for non-square images - Michael Landy - 1/13/84
+.br
+added double precision - Michael Landy - 2/5/89
+.br
+removed small image limits - Michael Landy - 10/29/89
+.br
+HIPS 2 - msl - 7/10/91

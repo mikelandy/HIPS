@@ -1,0 +1,82 @@
+.TH H_AND 3 "7/5/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_and \- subroutines to compute the logical AND of two images
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_and(hdi1,hdi2,hdo)
+h_and_mp(hdi1,hdi2,hdo)
+h_and_lp(hdi1,hdi2,hdo)
+h_and_b(hdi1,hdi2,hdo)
+struct header *hdi1,*hdi2,*hdo;
+
+h_and_MP(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_and_LP(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+h_and_B(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+byte *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines logically and two input subimages (specified by
+.I hdi1
+and
+.IR hdi2 ,
+or by
+.I imagei1
+and
+.IR imagei2 ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_and
+calls
+.IR h_and_mp ,
+.I h_and_lp
+or
+.I h_and_b
+depending upon whether the pixel format is MSBF, LSBF or byte.
+.IR h_and_MP ,
+.I h_and_LP
+and
+.IR h_and_B
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+MSBF, LSBF, byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_or(3)
+.SH AUTHOR
+Michael Landy - 7/4/91

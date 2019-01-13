@@ -1,0 +1,18 @@
+.TH NORMALIZE 1HIPS "May 23, 1989"
+.SH NAME
+Normalize -- regulate the energy (sum of squared pixel values) in a sequence.
+.SH SYNOPSIS
+.B normalize
+[-u] root_mean_square inseq > outseq
+.SH DESCRIPTION 
+.I Normalize
+outputs a sequence whose pixel values are proportional to those of inseq, but
+such that the square root of the sum of outseq's squared pixel values is
+equal to
+.I root_mean_square.
+.I -u
+displays a usage summary.
+.SH SEE\ ALSO
+scale(1HIPS), scaleseq(1HIPS)
+.SH AUTHOR
+Charlie Chubb - 11/7/85

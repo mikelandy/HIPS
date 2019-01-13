@@ -1,0 +1,94 @@
+#
+# makefile for jpeg/jpeg-v6/lib
+#
+# This makefile is suitable for Unix-like systems with any C compilers.
+
+LIBNAME = libjpeg.a
+
+LOCAL_INC = -I. -I$(CCS_ROOT)/include
+LOCALCFLAGS = $(LOCAL_INC) $(JPEG_FLAGS) -DCCS_ECL -DHAVE_JPEG_FRAME_MARKER
+
+# In particular:
+#   Please turn on any extra-warning switches you have.
+#   For example, I normally use "-Wall" with gcc.
+#   Add -DBSD if on a pure BSD system (see jinclude.h).
+#   Add -DMEM_STATS to enable gathering of memory usage statistics.
+
+# Put here the object file name for the correct system-dependent memory
+# manager file.  For Unix this is usually jmemnobs.o, but you may need
+# to use jmemansi.o or jmemname.o if you have limited swap space.
+# (For now, just use jmemnobs.o, 'cause the other options ain't ready.)
+SYSDEPMEM= jmemnobs.o
+
+# source files: JPEG library proper
+LIBSOURCES= jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c \
+	jcinit.c jcmainct.c jcmarker.c jcmaster.c jcomapi.c jcparam.c \
+	jcphuff.c jcprepct.c jcsample.c jctrans.c jdapimin.c jdapistd.c \
+	jdatadst.c jdatasrc.c jdcoefct.c jdcolor.c jddctmgr.c jdhuff.c \
+	jdinput.c jdmainct.c jdmarker.c jdmaster.c jdmerge.c jdphuff.c \
+	jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c \
+	jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c \
+	jquant2.c jutils.c jmemmgr.c jmemansi.c jmemname.c jmemnobs.c \
+	jmemdos.c
+# source files: cjpeg/djpeg/jpegtran applications, also rdjpgcom/wrjpgcom
+APPSOURCES= cjpeg.c djpeg.c jpegtran.c cdjpeg.c rdcolmap.c rdswitch.c \
+	rdjpgcom.c wrjpgcom.c rdppm.c wrppm.c rdgif.c wrgif.c rdtarga.c \
+	wrtarga.c rdbmp.c wrbmp.c rdrle.c wrrle.c
+SOURCES= $(LIBSOURCES) $(APPSOURCES)
+# files included by source files
+INCLUDES= jchuff.h jdhuff.h jdct.h jerror.h jinclude.h jmemsys.h jmorecfg.h \
+	jpegint.h jpeglib.h jversion.h cdjpeg.h cderror.h
+# library object files common to compression and decompression
+COMOBJECTS= jcomapi.o jutils.o jerror.o jmemmgr.o $(SYSDEPMEM)
+# compression library object files
+CLIBOBJECTS= jcapimin.o jcapistd.o jctrans.o jcparam.o jdatadst.o jcinit.o \
+	jcmaster.o jcmarker.o jcmainct.o jcprepct.o jccoefct.o jccolor.o \
+	jcsample.o jchuff.o jcphuff.o jcdctmgr.o jfdctfst.o jfdctflt.o \
+	jfdctint.o
+# decompression library object files
+DLIBOBJECTS= jdapimin.o jdapistd.o jdtrans.o jdatasrc.o jdmaster.o \
+	jdinput.o jdmarker.o jdhuff.o jdphuff.o jdmainct.o jdcoefct.o \
+	jdpostct.o jddctmgr.o jidctfst.o jidctflt.o jidctint.o jidctred.o \
+	jdsample.o jdcolor.o jquant1.o jquant2.o jdmerge.o
+
+# object files for sample applications (excluding library files)
+COBJECTS= rdppm.o rdtarga.o rdbmp.o rdswitch.o jpeg_w.o
+DOBJECTS= wrppm.o wrtarga.o wrbmp.o rdcolmap.o jpeg_r.o
+#COBJECTS= cjpeg.o rdppm.o rdgif.o rdtarga.o rdrle.o rdbmp.o rdswitch.o cdjpeg.o
+#DOBJECTS= djpeg.o wrppm.o wrgif.o wrtarga.o wrrle.o wrbmp.o rdcolmap.o cdjpeg.o
+
+IO_OBJS = $(COBJECTS) $(DOBJECTS) errorini.o strmjpeg.o sdatadst.o cdjpeg.o
+# These objectfiles are included in libjpeg.a
+LIBOBJECTS= $(CLIBOBJECTS) $(DLIBOBJECTS) $(COMOBJECTS) $(IO_OBJS)
+ANSI_OBJ = $(LIBOBJECTS)
+
+default install: $(ANSI2KNR) $(LIBNAME)
+
+ANSI2KNR = cp	# make non-ANSI anyway
+include ansi-knr
+
+# libjpeg.a is useful if you are including the JPEG software in a larger
+# program; you'd include it in your link, rather than the individual modules.
+
+.c.o:
+	$(COMPILEc) $(LOCALCFLAGS) $*.c
+
+$(LIBNAME):     $(LIBOBJECTS)
+	@$(RM) -f $(LIBNAME) tmpansi.c
+	ar cr $(LIBNAME) `$(LORDER) $(LIBOBJECTS) | $(TSORT)`;
+	mv $(LIBNAME) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIBNAME)
+	@touch $(LIBNAME)
+
+$(INCLUDES):
+	cp -p $(INCLUDES) $(INCLUDE_DIR)
+
+clean:
+	$(RM) -f *.o $(LIBNAME)
+clean-all:	clean_all
+
+jconfig.h: jconfig.doc
+	echo You must prepare a system-dependent jconfig.h file.
+	echo Please read the installation directions in install.doc.
+	exit 1
+

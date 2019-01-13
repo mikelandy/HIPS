@@ -1,0 +1,159 @@
+/*	HEADER . DEF
+%
+%	HEADER convert for different images
+%
+%	main purpose is for convenient, as well convert HIPS to HIPS_2
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This software is copyright (C) by the Lawrence Berkeley Laboratory.
+Permission is granted to reproduce this software for non-commercial
+purposes provided that this notice is left intact.
+
+It is acknowledged that the U.S. Government has rights to this software
+under Contract DE-AC03-765F00098 between the U.S.  Department of Energy
+and the University of California.
+
+This software is provided as a professional and academic contribution
+for joint exchange. Thus, it is experimental, and is provided ``as is'',
+with no warranties of any kind whatsoever, no support, no promise of
+updates, or printed documentation. By using this software, you
+acknowledge that the Lawrence Berkeley Laboratory and Regents of the
+University of California shall have no liability with respect to the
+infringement of other copyrights by any part of this software.
+
+For further information about this notice, contact William Johnston,
+Bld. 50B, Rm. 2239, Lawrence Berkeley Laboratory, Berkeley, CA, 94720.
+(wejohnston@lbl.gov)
+
+For further information about this software, contact:
+	Jin Guojun
+	Bld. 50B, Rm. 2275, Lawrence Berkeley Laboratory, Berkeley, CA, 94720.
+	g_jin@lbl.gov
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% AUTHOR:	Jin Guojun - LBL	4/1/91
+*/
+
+#ifndef	HHH
+#define	HHH
+
+#if	defined	HIPS_IMAGE | defined HIPS_PUB
+
+#include "hipl_format.h"
+
+#else
+
+#define PFBYTE          0       /* Bytes interpreted as unsigned integers */
+#define PFSHORT         1       /* Short integers (2 bytes) */
+#define PFINT           2       /* Integers (4 bytes) */
+#define PFFLOAT         3       /* Float's (4 bytes)*/
+#define PFCOMPLEX       4       /* 2 Float's interpreted as (real,imaginary) */
+#define PFASCII         5       /* ASCII rep, with linefeeds after each row */
+#define PFDOUBLE        6       /* Double's (8 byte floats) */
+#define PFDBLCOM        7       /* Double complex's (2 Double's) */
+#define PFQUAD          10      /* quad-tree encoding (Mimaging) */
+#define PFQUAD1         11      /* quad-tree encoding */
+#define PFHIST          12      /* histogram of an image (using ints) */
+#define PFSPAN          13      /* spanning tree format */
+#define PLOT3D          24      /* plot-3d format */
+#define PFMSBF          30      /* packed, most-significant-bit first */
+#define PFLSBF          31      /* packed, least-significant-bit first */
+#define PFSBYTE         32      /* signed bytes */
+#define PFUSHORT        33      /* unsigned shorts */
+#define PFUINT          34      /* unsigned ints */
+#define PFRGB           35      /* RGBRGBRGB bytes */
+#define PFRGBZ          36      /* RGB0RGB0RGB0 bytes */
+#define PFINTPYR        50      /* integer pyramid */
+#define PFFLOATPYR      51      /* float pyramid */
+
+#endif
+
+#include "stdef.h"
+
+#if	defined	COMMON_TOOL | defined FITS_IMAGE
+#include "fits_def.h"
+#endif
+
+#define	stdin_fd	0
+#define	stdout_fd	1
+#define	stderr_fd	2
+
+
+#define	IFMT_BYTE	PFBYTE
+#define	IFMT_SHORT	PFSHORT
+#define	IFMT_LONG	PFINT
+#define	IFMT_FLOAT	PFFLOAT
+#define	IFMT_DOUBLE	PFDOUBLE
+#define	IFMT_ASCII	PFASCII
+#define	IFMT_COMPLEX	PFCOMPLEX
+#define	IFMT_DBLCOM	PFDBLCOM
+#define	IFMT_HIST	12
+#define	IFMT_MSBF	PFMSBF
+#define	IFMT_LONGPYR	PFINTPYR
+#define	IFMT_FLOATPYR	PFFLOATPYR
+#define	IFMT_SGF	IFMT_BYTE
+#define	IFMT_SCF	PFRGB -	2
+#define	IFMT_ILL	PFRGB -	1
+#define	IFMT_ILC	PFRGB
+#define	IFMT_ALPHA	PFRGBZ
+#define	IFMT_BITMAP	PFRGB +	2
+#define	IFMT_SEPLANE	PFRGB +	3
+
+#define	CFM_SGF		0	/*	Gray Scale - 256 gray levels	*/
+#define	CFM_SCF		1	/*	8-bit Color with ColorMAP	*/
+#define	CFM_ILL		2	/*	3 scan line 24-bit Color	*/
+#define	CFM_ILC		3	/*	InterLeaf Cell 24-bit Color	*/
+#define	CFM_ALPHA	4	/*	24-bit Color + Alpha channel	*/
+#define	CFM_BITMAP	5	/*	BitMap	1 bit 2 colors	*/
+#define	CFM_SEPLANE	6	/*	3 separate planes	*/
+
+#define	IFMT_VFFT3D	701
+#define	IFMT_VFFT2D	702
+#define	IFMT_DVFFT3D	703
+#define	IFMT_DVFFT2D	704
+#define	IFMT_VVFFT3D	705
+#define	IFMT_DVVFFT3D	706
+#define	IFMT_STREAM	710
+
+/***	Extension for more efficient	***/
+
+#ifndef	MType
+#define	PType	unsigned int
+#else
+#define	PType	unsigned MType
+#endif
+extern	PType	pread();
+
+#define	h_pstep()		pstepn(4);
+
+extern	struct	header	hhd;
+#define	frms	hhd.num_frame
+
+#if	defined OLD_HIPS && !defined HIPS2_HF
+
+#define H_init_header(hhd, name, frames, height, width, format, psize)	\
+	init_header(hhd, name, "", frames, "", height, width, psize<<3,0,format,"")
+#define H_write_header(hhd)      fwrite_header(stdout_fd, hhd)
+
+#define	H_update_header(hhd, ac, av)	update_header(hhd, ac, av)
+
+#else	/* HIPS2_HF	*/
+
+#define	clns	hhd.ocols
+#define	rws	hhd.orows
+#define	pxl_size(hhd)	hhd.sizepix
+#define	set_pxl_size(hhd, size)	hhd.sizepix = size
+#define	H_fread_header(fp, hhd)	fread_header(fp, hhd, "f")
+#define	H_read_header(hhd)	fread_header(stdin, hhd, "std_in")
+#define	H_write_header(hhd)	fwrite_header(stdout, hhd, "std_out")
+#define	H_fwrite_header(fp,hhd,name)	fwrite_header(fp, hhd, name)
+#define	H_add_seq_desc(hhd, str)	desc_append(hhd, str)
+#define	H_init_header(hhd, name, frames, height, width, format, psize)	\
+	init_header(hhd, name, "", frames, "", height, width, format, 1, "");
+#define	H_update_header(hhd, ac, av)	update_header(hhd, ac, av)
+
+#endif	OLD_HIPS
+
+#endif	/* HHH	*/

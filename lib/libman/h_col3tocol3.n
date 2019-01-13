@@ -1,0 +1,55 @@
+.TH H_COL3TOCOL3 3 "5/21/93" "Version 2" "HIPS Manual"
+.SH NAME
+h_col3tocol3 \- conversions between 3-color formats
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+.ta 3i
+h_torgb(hdi,hdo)	h_bgrtozrgb(hdi,hdo)
+h_torgbz(hdi,hdo)	h_bgrztozrgb(hdi,hdo)
+h_tozrgb(hdi,hdo)	h_zbgrtozrgb(hdi,hdo)
+h_tobgr(hdi,hdo)	h_rgbtobgr(hdi,hdo)
+h_tobgrz(hdi,hdo)	h_rgbztobgr(hdi,hdo)
+h_tozbgr(hdi,hdo)	h_zrgbtobgr(hdi,hdo)
+h_rgbztorgb(hdi,hdo)	h_bgrztobgr(hdi,hdo)
+h_zrgbtorgb(hdi,hdo)	h_zbgrtobgr(hdi,hdo)
+h_bgrtorgb(hdi,hdo)	h_rgbtobgrz(hdi,hdo)
+h_bgrztorgb(hdi,hdo)	h_rgbztobgrz(hdi,hdo)
+h_zbgrtorgb(hdi,hdo)	h_zrgbtobgrz(hdi,hdo)
+h_rgbtorgbz(hdi,hdo)	h_bgrtobgrz(hdi,hdo)
+h_zrgbtorgbz(hdi,hdo)	h_zbgrtobgrz(hdi,hdo)
+h_bgrtorgbz(hdi,hdo)	h_rgbtozbgr(hdi,hdo)
+h_bgrztorgbz(hdi,hdo)	h_rgbztozbgr(hdi,hdo)
+h_zbgrtorgbz(hdi,hdo)	h_zrgbtozbgr(hdi,hdo)
+h_rgbtozrgb(hdi,hdo)	h_bgrtozbgr(hdi,hdo)
+h_rgbztozrgb(hdi,hdo)	h_bgrztozbgr(hdi,hdo)
+struct header *hdi,*hdo;	struct header *hdi,*hdo;
+.fi
+.SH DESCRIPTION 
+These routines convert between the 3-color formats
+(RGB, RGBZ, ZRGB, BGR, BGRZ and ZBGR).  The
+entire image pointed to by
+.I hdi
+is converted to the requested format and stored in the image pointed to by
+.I hdo
+(any region-of-interest information is ignored).  The routines
+.IR h_torgb ,
+.IR h_torgbz ,
+.IR h_tozrgb ,
+.IR h_tobgr ,
+.I h_tobgrz
+and
+.I h_tozbgr
+check the pixel format of the input image and call the appropriate
+individual routines
+according to whether it is RGB, RGBZ, ZRGB, BGR, BGRZ or ZBGR.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_col1tocol3(3), h_col3tob(3), h_col3toi(3), h_rgb(3), h_toc(3), h_tod(3),
+h_todc(3), h_tof(3), h_toi(3), etc.
+.SH AUTHOR
+Michael Landy - 5/20/93

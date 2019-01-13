@@ -1,0 +1,33 @@
+.TH WRITE_ROI 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+write_roi \- write an image region-of-interest
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+write_roi(hd,fr)
+fwrite_roi(fp,hd,fr,fname)
+
+FILE *fp;
+struct header *hd;
+int fr;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+.I write_roi
+and
+.I fwrite_roi
+write the region-of-interest subimage of a single image frame pointed to by
+the supplied image header.
+.I write_roi
+is used for writing to the standard output.  The frame number and file name
+are supplied for more informative error messages.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_WRITEFRFILE - error during read
+.SH "SEE ALSO"
+write_image(3)
+.SH AUTHOR
+Michael Landy - 1/16/91

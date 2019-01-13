@@ -1,0 +1,123 @@
+.TH H_GRIDWARP 3 "6/3/93" "Version 2" "HIPS Manual"
+.SH NAME
+h_gridwarp \- image warp using a control grid
+.SH SYNOPSIS
+.nf
+.ta 2i
+#include <hipl_format.h>
+
+.ta 1i
+h_gridwarp(hdi,hdo,nx,ny,ogridx,ogridy,igridx,igridy)
+struct header *hdi,*hdo;
+int nx,ny;
+float *ogridx,*ogridy,*igridx,*igridy;
+
+h_gridwarp_b(hdi,hdo,nx,ny,ogridx,ogridy,igridx,igridy)
+struct header *hdi,*hdo;
+int nx,ny;
+float *ogridx,*ogridy,*igridx,*igridy;
+
+h_gridwarp_B(imagei,imageo,nri,nci,nlpi,nro,nco,nlpo,nx,ny,ogridx,ogridy,
+	igridx,igridy)
+byte *imagei,*imageo;
+int nri,nci,nlpi,nro,nco,nlpo,nx,ny;
+float *ogridx,*ogridy,*igridx,*igridy;
+.fi
+.SH DESCRIPTION 
+These routines warp an input image spatially based on a grid of control points.
+The input subimage (specified by
+.I hdi
+or
+.IR imagei )
+is warped and the result stored in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_gridwarp
+calls
+.I h_gridwarp_b
+if the input image pixel format is byte.
+.I h_gridwarp_B
+is the low-level routine which doesn't require an image header.  The input
+subimage size is
+.I nri
+by
+.I nci
+and the output subimage size is
+.I nro
+by
+.IR nco .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+The algorithm (based on the discussion in Castleman,
+.IR "Digital Image Processing" ,
+Prentice-Hall) is based on a pixel fill algorithm.  The control
+grid points are a rectangular grid in the output image, and the user
+specifies both this grid and the spatial locations of the points in the
+input image which map to these grid locations in the output image.  For
+each output image pixel, the program determines in which control grid
+rectangle the pixel lies.  Pixels lying outside any control grid rectangle
+utilize the mapping of the nearest control grid rectangle.  Then, it
+determines the corresponding input image pixel location by bilinearly
+interpolating between the four points corresponding to the four corners of
+the rectangle.  Finally, using the four nearest neighbors to that input
+pixel position, the output grey value is determined using bilinear
+interpolation.
+.PP
+The program assumes that pixels are points located on a rectangular grid.
+For a coordinate system it assumes that the first pixel in an image is
+located at position (0,0), and the last stored pixel in an image is
+located at position (1,1).  There are
+.I nx
+by
+.I ny
+control points in the grid.  The grid points are arranged rectangularly in the
+output image.
+.I ogridx
+specifies the x location of each of the
+.I nx
+output grid columns.
+.I ogridy
+specifies the y location of each of the
+.I ny
+output grid rows.
+.I igridx
+and
+.I igridy
+specify the input image locations corresponding to these output grid points.
+In other words, igridx[i*nx+j] and igridy[i*nx+j] specify the x and y locations
+of the input grid corresponding to the output image location ogridx[j],
+ogridy[i].
+.PP
+Pixels outside of the input image are treated as if their values are
+equal to hips_lchar.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "OUTPUT PIXEL FORMAT"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from both
+.I hdi
+and
+.IR hdo .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+calcwarp(1), h_affine(3)
+.SH AUTHOR
+Michael Landy - 5/28/93

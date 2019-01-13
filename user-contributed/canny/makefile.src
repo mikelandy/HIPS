@@ -1,0 +1,18 @@
+#
+# makefile for directory user-contributed/canny
+#
+
+# Subdirectories that get made
+
+DIRS = man sources
+
+# default action just makes src dirs
+
+all: install
+
+clean install pristine man doc: doit
+	@for d in $(DIRS) ; do \
+		( cd $$d ; echo make $@ on $(HERE)$$d ; make $(MFLAGS) $@ ) ; \
+	done
+
+doit:

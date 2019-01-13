@@ -1,0 +1,55 @@
+.TH H_GREYBAR 3 "8/16/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_greybar \- subroutines to fill an image with grey bars ramped in value
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_greybar(hd,width,low,step)
+h_greybar_b(hd,width,low,step)
+struct header *hd;
+int width;
+float low,step;
+
+h_greybar_B(image,nr,nc,nlp,width,low,step)
+byte *image;
+int nr,nc,nlp,width;
+float low,step;
+.fi
+.SH DESCRIPTION 
+These routines fill an input subimage
+(specified by
+.I hd
+or
+.IR image )
+with a series of vertical grey bars ramped in greylevel.
+.I h_greybar
+calls
+.I h_greybar_b
+as long as the pixel format is byte.
+.I h_greybar_B
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The image has
+.I nlp
+pixels per line.  The caller supplies the width of each bar in pixels, the
+greylevel of the leftmost bar, and the step in greylevel from each bar to the
+next.  The greylevel values are floating point numbers which are summed and
+rounded to provide the greylevel for each bar.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_setimage(3)
+.SH AUTHOR
+Michael Landy - 8/16/91

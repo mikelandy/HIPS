@@ -1,0 +1,116 @@
+.TH H_GNOISE 3 "8/6/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_gnoise \- subroutines to add Gaussian noise to an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_gnoise(hdi,hdo,sd,fastflag)
+h_gnoise_s(hdi,hdo,sd,fastflag)
+h_gnoise_f(hdi,hdo,sd,fastflag)
+struct header *hdi,*hdo;
+double sd;
+h_boolean fastflag;
+
+h_gnoise_S(imagei,imageo,nr,nc,nlpi,nlpo,sd,fastflag)
+short *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double sd;
+h_boolean fastflag;
+
+h_gnoise_F(imagei,imageo,nr,nc,nlpi,nlpo,sd,fastflag)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+double sd;
+h_boolean fastflag;
+
+double rand_gauss()
+
+srand_g(x)
+unsigned x;
+
+double rand_g()
+.fi
+.SH DESCRIPTION 
+These routines add normally distributed noise to an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_gnoise
+calls
+.I h_gnoise_s
+or
+.I h_gnoise_f
+depending upon whether the pixel format is short or float.
+.I h_gnoise_S
+and
+.I h_gnoise_F
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  The user specifies the standard deviation of the added noise
+and a flag to indicate whether to use the slower or faster Gaussian deviate
+generator.
+.PP
+There are two subroutines provided which compute pseudo-random Gaussian (in
+this case, standard normal, i.e. mean 0 and variance 1) deviates.  The first,
+.IR rand_gauss ,
+uses the method outlined in algorithm #267 of the ACM
+(based on the Box & Muller method for generating pairs
+of normal deviates).  It requires several calls to functions such as
+.IR sin ,
+.IR cos ,
+.I sqrt
+and
+.IR log ,
+and hence is rather slow.  It uses the pseudo-random number generator
+.IR rand (3),
+and hence its sequence may be initialized using
+.IR srand (3).
+The second,
+.IR rand_g ,
+simply sums twelve uniformly distributed pseudo-random numbers.  The result
+is approximately Gaussian (by the central limit theorem), although the
+approximation isn't all that wonderful.  However, it is generally much faster.
+It uses its own pseudo-random number generator whose sequence is initialized
+using
+.IR srand_g .
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+short, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_bnoise(3), h_noise(3), h_shuffleadd(3)
+.SH AUTHOR
+Yoav Cohen 3/15/82
+.br
+modified for float images: Mike Landy 10/19/83
+.br
+bug fixed for byte (short) images: Mike Landy 11/4/87
+.br
+HIPS 2 - msl - 8/5/91

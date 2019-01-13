@@ -1,0 +1,66 @@
+.TH PIXTO3D 1 "8/1/91" "Version 2" "HIPS Manual"
+.SH NAME
+pixto3d \- convert sequences in pixel-format to PLOT3D format
+.SH SYNOPSIS
+.B pixto3d
+[-v] [-f] [-z] [-s space] [-a amplitudescale] [-g]
+.SH DESCRIPTION 
+.I Pixto3d
+converts sequences in pixel format to PLOT3D format.
+The output frame is positioned so that its (cols/2,rows/2)
+pixel is on the (0,0,0) coordinate.
+.I rows
+and
+.I cols
+in the header are set to 512X512.
+By default, pixels with zero brightness are not represented, and all other
+pixels are represented as points of brightness 255 at position
+(col,row,brightness).
+The brightness may be set, as usual, with the standard switch
+.IR -UH .
+The 
+.I -v
+switch represents pixels as vectors from (col,row,0) to (col,row,brightness).
+The
+.I -f
+switch flattens the output to z=0. The
+.I -z
+switch cancels the suppression of the output of zero pixels.  The
+.I -s
+switch spaces the pixels apart by scale factor
+.I space .
+The
+.I -a
+switch scales the z values, dividing by
+.I amplitudescale .
+The 
+.I -g
+switch uses the pixel grey value as the brightness of the point or vector.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, float
+.SH "OUTPUT PIXEL FORMATS"
+Plot3d
+.SH "REGION-OF-INTEREST"
+Only the region of interest is converted.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+plot3topix(1)
+.SH AUTHOR
+Yoav Cohen - 2/16/82
+.br
+modified by msl (suggestions by Tom Riedl) - 7/20/85
+.br
+HIPS 2 - msl - 8/1/91

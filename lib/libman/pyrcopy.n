@@ -1,0 +1,37 @@
+.TH PYRCOPY 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+pyrcopy \- image to pyramid copy routines
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+copy_itoii(hd,img)
+struct header *hd;
+IIMAGE img;
+
+copy_ftoff(hd,img)
+struct header *hd;
+FIMAGE img;
+.fi
+.SH DESCRIPTION 
+These routines are used to copy from raster-based image formats (pointed to by
+a HIPS image header) into one level of an image pyramid.
+.I copy_itoii
+is used for integer images and pyramids, and
+.I copy_ftoff
+is used for floating point images and pyramids.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+None
+.SH "SEE ALSO"
+h_copy(3)
+.SH AUTHOR
+The pyramid utilities are derived from code originally written by
+Raj Hingorani at SRI/David Sarnoff Research Institute.  The original
+Gaussian and Laplacian pyramid algorithms were designed by Peter Burt (also
+currently at SRI/DSRC).  See:  Computer Graphics and Image Processing,
+Volume 16, pp. 20-51, 1981, and IEEE Transactions on Communications,
+Volume COM-31, pp. 532-540, 1983.
+.sp
+new HIPS 2 routine - msl - 1/14/91

@@ -1,0 +1,117 @@
+.TH MAINPEAK 1 "JAN. 28, 1990" LBL-HIPS
+.\" @(#)mainpeak.1  1.10 91/01/22 JIN;
+.SH NAME
+mainpeak \- find main object in an image file for different type of image.
+.SH SYNOPSIS
+.B meanpeak
+[-l #] [-u #] [-w #] [-L #] [-U #] [-n #] [-F] [-a] [-c] [-e]
+.br
+.ta 1i
+	[-gd #] [-M [#]] [-O #] [-p #] [-z] [<] input_image [> [-o]output_image]
+.SH DESCRIPTION
+.I mainpeak
+finds the main object(s) in an image and picks the largest one (by default).
+This object usually is the main body. By using different threshold values,
+bandwidth and object number,
+.I mainpeak
+can pick out different object for output or display.
+The three thresholds are the most useful parameters for finding the main object.
+The
+.IR -L ,
+.IR -U ,
+.I -n
+and
+.I -O
+options are used to detect different objects.
+The output format defaults to byte format. Specifying
+.I -F
+will output the format to be the same as the input.
+.SH OPTIONS
+.TP
+.I -F
+force output format same as the input.
+.TP
+.I -M [#]
+output object message. If no number # given, all messages will be printed onto
+screen, otherwise, only the first # pieces of information of objects are sent
+to the screen.
+.TP
+.I -p#
+maximum number of peaks which can be detected and held in memory for one frame.
+The default is 48 for byte; 192 for short and 768 for long. When the message
+.br
+	"There are more than xxx peaks in frame #"
+is given and picture is not satisfying, it means that you need more space to
+hold more objects. You can use the
+.I -p
+option to set more bins (# > xxx) to find
+more objects as long as the memory is available. However, if the output image
+is good enough, more bins (peaks) may be not necessary.
+.TP
+.I -L#
+To get #th Lower object (Shift to #th lower value object).
+.TP
+.I -U#
+To find #th Upper object.
+.TP
+.I -O#
+Offset for both ends.
+.TP
+.I -n#
+total objects from lower one.
+.TP
+.I -a
+automatically adjust main object position.
+.TP
+.I -c
+clip top value to 0 for nonbyte-formatted images.
+.TP
+.I -d #, -g #
+these two options set the bandwidth for adjusting.
+.TP
+.I -e
+extend the ranges for preprocessed or preenhanced image.
+.TP
+.I -l#
+set lower threshold value. The default is 5.
+.TP
+.I -m#
+set middle level threshold value. The object whose frequency is between middle
+threshold and upper threshold will be picked out.
+.TP
+.I -u#
+set the upper threshold value so that any objects which have a higher frequency
+value than this threshold will be omitted. (It is a lowpass filter.)
+.I -u
+is a very important option to avoid finding too many objects in the image that
+contains a lot of objects.
+.TP
+.I -w#
+hill foot width (bandwidth of spectrum). The default is 0 \- find widest one.
+A good value is > 256 for the main object. Smaller values can distinguish
+smaller objects.
+.TP
+.I -z
+count zeros value.
+.TP
+.I -o
+option is used for machines such as the PC which require binary output
+file modes.
+.SH EXAMPLES
+.nf
+meanpeak -u200 nov309run97_img.h | xhips
+
+meanpeak -e nov309run97_img.h | xhips
+
+meanpeak -M saturn | xhips
+
+.fi
+in the second example,
+.I -e
+is used instead of
+.I -u200
+for doing main body searching.
+.SH "SEE ALSO"
+elastic(1), mean_scale(1), spring(1)
+.SH AUTHOR
+Jin, Guojun - Jan. 22, 1991

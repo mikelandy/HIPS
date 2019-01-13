@@ -1,0 +1,122 @@
+.TH H_TRANSLATE 3 "7/9/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_translate \- subroutines to shift pixels by an integral amount
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_translate(hdi,hdo,shiftx,shifty,wrapflag)
+h_translate_b(hdi,hdo,shiftx,shifty,wrapflag)
+h_translate_s(hdi,hdo,shiftx,shifty,wrapflag)
+h_translate_i(hdi,hdo,shiftx,shifty,wrapflag)
+h_translate_f(hdi,hdo,shiftx,shifty,wrapflag)
+h_translate_d(hdi,hdo,shiftx,shifty,wrapflag)
+h_translate_c(hdi,hdo,shiftx,shifty,wrapflag)
+h_translate_dc(hdi,hdo,shiftx,shifty,wrapflag)
+struct header *hdi,*hdo;
+int shiftx,shifty;
+h_boolean wrapflag;
+
+h_translate_B(imagei,imageo,nr,nc,nlpi,nlpo,shiftx,shifty,wrapflag)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo,shiftx,shifty;
+h_boolean wrapflag;
+
+h_translate_S(imagei,imageo,nr,nc,nlpi,nlpo,shiftx,shifty,wrapflag)
+short *imagei,*imageo;
+int nr,nc,nlpi,nlpo,shiftx,shifty;
+h_boolean wrapflag;
+
+h_translate_I(imagei,imageo,nr,nc,nlpi,nlpo,shiftx,shifty,wrapflag)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo,shiftx,shifty;
+h_boolean wrapflag;
+
+h_translate_F(imagei,imageo,nr,nc,nlpi,nlpo,shiftx,shifty,wrapflag)
+h_translate_C(imagei,imageo,nr,nc,nlpi,nlpo,shiftx,shifty,wrapflag)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo,shiftx,shifty;
+h_boolean wrapflag;
+
+h_translate_D(imagei,imageo,nr,nc,nlpi,nlpo,shiftx,shifty,wrapflag)
+h_translate_DC(imagei,imageo,nr,nc,nlpi,nlpo,shiftx,shifty,wrapflag)
+double *imagei,*imageo;
+int nr,nc,nlpi,nlpo,shiftx,shifty;
+h_boolean wrapflag;
+.fi
+.SH DESCRIPTION 
+These routines translate the pixels in an input subimage (specified by
+.I hdi
+or
+.IR imagei )
+by an integral number of pixel positions,
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_translate
+calls
+.IR h_translate_b ,
+.IR h_translate_s ,
+.I h_translate_i ,
+.I h_translate_f ,
+.I h_translate_d ,
+.I h_translate_c
+or
+.I h_translate_dc
+depending on whether the pixel format is byte, short, integer float, double,
+complex or double complex.
+.IR h_translate_B ,
+.IR h_translate_S ,
+.I h_translate_I ,
+.I h_translate_F ,
+.I h_translate_D ,
+.I h_translate_C
+and
+.I h_translate_DC
+are the low-level routines which don't require an image header.  The input
+subimage size is
+.I nr
+by
+.IR nc ,
+and the input image has
+.I nlpi
+pixels per line.  The output subimage size is
+.I nor
+by
+.IR noc ,
+and the output image has
+.I nlpo
+pixels per line.
+If
+.I wrapflag
+is FALSE, then the image is simply shifted, and uncovered pixels are set to
+.IR hips_lchar .
+If
+.I wrapflag
+is TRUE, then the image is shifted and wrapped around, so that pixels which
+disappear off one subimage edge reappear at the opposite edge.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, double, complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi ,
+and is stretched to fit in the output region-of-interest.
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_affine(3)
+.SH AUTHOR
+Michael Landy - 7/8/91

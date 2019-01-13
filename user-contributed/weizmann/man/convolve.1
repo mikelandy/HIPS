@@ -1,0 +1,135 @@
+.TH CONVOLVE 1HIPS "January 15, 1987"
+
+.SH NAME
+convolve - perform a convolution on an image using the ALU-512.
+
+.SH SYNOPSIS
+.B convolve
+-f filter_number [-d device] [-l] [-x initialcol] [-y initialrow] [-I
+source_frame_buffer] [-T target_frame_buffer] [-M] [-L] [-C constant]
+[-S scaling] [-A] [-F maskmode]< in-frame > out-frame
+.br
+.sp
+.B convolve
+-m mask_descriptor_name  [-d device] [-l] [-x initialcol] [-y
+initialrow] [-I source_frame_buffer] [-T target_frame_buffer] [-M] [-L]
+[-C constant] [-S scaling] [-A] [-F maskmode] <in-frame > out-frame
+
+.SH DESCRIPTION
+.I Convolve
+transfers an 8-bits pixels image, from the standard input to the
+.I source_frame_buffer
+. Then, it filters the image by applying a convolution mask,
+using the ALU-512. The 16-bits output of the convolution is stored in a
+16-bits
+.I target_frame_buffer
+and copied to the standard output. Usually the high byte of the result
+is displayed. The low byte is displayed if, and only if, the \fI-l\fR
+option is set. The
+.I -f
+option specifies a filter from a system library (kept in
+/horef/image/masks).  The definition for each of these filters is to be
+found in
+.BI /horef/image/masks/mask n\c
+, where
+.I n
+is the
+.I filter number.
+The
+.I -m
+switch allows a new filter to be supplied by the user.  The format of
+the filter definition file may be either one of the following formats:
+.sp
+.nf
+"filter name" masksize 1 1 mask
+.sp
+.fi
+where the masksize is the length of a side of the mask (which must be
+square). "1" means that we apply only one mask, and the last "1" was
+chosen as an arbitrary function number. mask is given as a sequence of
+integers in column-fastest order. This format of the mask file is such
+in order to comply with the format for the commans mask and fmask, and
+a mask with this format is said to have mode=HIPL.
+.sp
+.nf
+"filter name" masksizex masksizey mask
+.sp
+.fi
+where masksizex is the number of columns of the mask, and masksizey is
+number of its rows. Mask can be non-square. Mask with this format is
+said to have mode=IP512.  When using the \fI-f\fR option, mode defaults
+to HIPL. When using the \fI-m\fR option, mode defaults to IP512. One
+can use \fI-F\fR followed by 1 or 2 in order to change it. HIPL is
+defined as 1; IP512 is defined as 2.
+.I x
+and
+.I y
+determine the origin of the source image. The result will be output
+from this point as well.
+.I Device
+must be one which has an ALU-512 and at least two frame buffers, one of
+which must be a 16-bits frame buffer. Thus do not choose /dev/ipfb1. It
+is also recommended to use the device exclusively while executing a
+convolution. That is why you had better use /dev/ipfb0a. If you want to
+run a sequence of convolutions without destroying the previous result,
+set the \fI-L\fR option.  Otherwise the \fItarget_frame_buffer\fR will
+be cleared before the operation begins. It either will be cleared to 0,
+or to the value of the \fI-C\fR argument (if used). This is very useful
+when you want to get rid of negative values in the result in order to
+have a meaningful display. The other argument which is important for
+the display is \fI-S\fR, followed by an integer which is less than 16.
+The resultant convolution will be left-shifted by this value.  This is
+done in order to get the 8 most significant bits of the result in the
+high byte of the \fItarget_frame_buffer\fR. In order to find out what
+values of \fI-C\fR and \fI-S\fR to choose for the best result, use the
+\fI-M\fR option first. Applying this option, the programm calculates
+the minimal and the maximal pixels in the result. If the minimum is
+negative, execute convolve againe, setting \fI-C\fR to the absolute
+value of the minimum. That will make all the pixels non-negative. From
+the maximum, printed out as hexadecimal, you can know how many unused
+bits are left on the left of the high byte. Set \fI-S\fR to that
+number.  No need to use \fI-M\fR any longer, as it slows down the
+program.  An alternative way to achieve the same result, is to use the
+option \fI-A\fR.  This option makes the program perform all the above
+steps automatically. It prints out the \fIconst\fR and \fIscale\fR
+values for future use.  Overflow is not taken care of.
+
+.SH DEFAULTS
+.I -I
+defaults to 0.
+.I -T
+default to 3.
+.I -d
+defaults to /dev/ipfb0a.
+.I x
+and
+.I y
+default to 0.
+.I -l
+is reset; high byte chosen.
+.I -L
+is reset; target frame buffer is cleared before operation begins.
+.I -M
+,
+.I -S
+and
+.I -C
+default to 0.
+.I -A
+is reset. No automatic action is taken.
+.I -F
+defaults to 1 (=HIPL) if \fI-f\fR is used. It defaults to 2 (=IP512) if
+\fI-m\fR is used.
+
+.SH SEE\ ALSO
+mask(1HIPS), fmask(1HIPS), testconv(1HIPS)
+
+.SH AUTHOR
+Hedva S.Hess - Sep. 1986
+.br
+Modified: Leah Mory - Nov. 1986
+.br
+Modified: Leah Mory - Dec. 1986
+.br
+Modified: Leah Mory - Jan.. 1987
+

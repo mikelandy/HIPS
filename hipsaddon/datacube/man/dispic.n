@@ -1,0 +1,34 @@
+.TH DISPIC 1 "September 12, 1991"
+.SH NAME
+dispic - Display an image via a Datacube DIGIMAx/FRAMESTORE system
+.SH SYNOPSIS
+.ta 1i
+.B dispic
+[-b background] [-o row col] [-d delay] < imagefile
+.br
+.SH DESCRIPTION 
+.I dispic
+displays an image sequence via a Datacube DIGIMAX/FRAMESTORE system.
+The 
+.I -b
+switch the colour (greylevel) of the background on which the image is
+displayed and defaults to 0, ie black.
+The image can be displayed at an arbitrary position using the
+.I -o
+switch which specifies the coordinate (row,col) of the top left corner of
+the image. This defaults to (0,0).
+A delay in seconds between the display of successive frames in a sequence
+can be given using
+.I -d
+switch. By default, there is no delay.
+Note that successive frames in a sequence are overlayed on top of each
+other.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH SEE ALSO
+livepic(1), grabpic(1).
+.SH AUTHOR
+David Wilson, The Turing Institute - September 1991.
+

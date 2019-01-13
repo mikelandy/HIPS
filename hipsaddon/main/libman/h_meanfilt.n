@@ -1,0 +1,63 @@
+.TH H_MEAN 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_meanfilt - mean filter
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_meanfilt(hdi,hdo,size)
+h_meanfilt_b(hdi,hdo,size)
+struct header   *hdi,*hdo;
+int             size;
+
+h_meanfilt_B(imagei,imageo,nr,nc,ocols,size)
+byte    *imagei,*imageo;
+int     nr,nc,ocols;
+int     size;
+.fi
+.SH DESCRIPTION
+.I h_meanfilt
+applies a mean filter to the input subimage
+(ROI, specified by
+.I hdi
+or
+.I imagei,
+a pointer to the first pixel of the subimage)
+to suppress random noise,
+and stores the result in the output subimage
+(specified by
+.I hdo
+or
+.I imageo,
+a pointer to the first pixel of the subimage).
+.I h_meanfilt
+then calls
+.I h_meanfilt_b
+only if the image pixel format is byte.
+.I h_meanfilt_b
+then calls
+.I h_meanfilt_B
+which is the low-level routine and does not require image header.
+The subimage size is
+.I nr
+by
+.IR nc.
+The input and output images have
+.I ocols
+pixels per line.
+.I size
+is the size of the window in which 
+.I h_meanfilt
+is performed.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH SEE ALSO
+h_asl(1), h_mask(1), h_median(1), h_mls(1), h_nns(1), h_sasmooth(1), h_snn(1)
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

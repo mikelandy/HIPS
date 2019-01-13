@@ -1,0 +1,57 @@
+
+Genial requires the following:
+
+The hips library: -lhips
+The X windows library: -lX11
+The xview libraries:  -lxview -lolgx 
+Local libraries: -lxcolor (in ./lib) -lguidexv (in ./gfm)
+
+This program has been tested under SunOS only!!!
+
+------------------------------------------
+To install genial do the following:
+
+1) cd lib, type 'make'
+
+2) cd gfm, type 'make'
+
+3) edit 'config.sun4 for your enviromnent. Most of the items in this
+file are from the standard HIPS distribution.  The main things for
+you to check are:
+DESTDIR, LIBDIR, INCLUDE_DIR, and XVIEWHOME
+
+4) Type 'Configure'
+
+5) Type 'make'
+
+=======================================================================
+/***********************************************************************/
+/*  COPYRIGHT NOTICE         *******************************************/
+/***********************************************************************/
+ 
+/*   This program is copyright (C) 1990, Regents  of  the
+University  of  California.   Anyone may reproduce this software,
+in whole or in part, provided that:
+(1)  Any copy  or  redistribution  must  show  the
+Regents  of  the  University of California, through its
+Lawrence Berkeley Laboratory, as the source,  and  must
+include this notice;
+(2)  Any use of this software must reference this  distribu-
+tion,  state that the software copyright is held by the
+Regents of the University of California, and  that  the
+software is used by their permission.
+It is acknowledged that the U.S. Government has  rights
+to this software under  Contract DE-AC03-765F00098 between the U.S.
+Department of Energy and the University of California.
+This software is provided as a professional  academic
+contribution for  joint exchange.  Thus it is experimental, is
+provided ``as is'', with no warranties of any kind  whatsoever,
+no  support,  promise  of updates, or printed documentation.
+Bug reports or fixes may be sent to the author, who may or may
+not act on them as he desires.
+*
+*   Author:  Brian L. Tierney
+*            Lawrence Berkeley Laboratory
+*            Imaging Technologies Group
+*            email: bltierney@lbl.gov
+*/

@@ -1,0 +1,25 @@
+#
+# makefile for directory sys
+#
+
+INCLUDES = fexterns.h hipl_format.h hips_basic.h hips_error.h \
+		hips_header.h hips_parser.h trig512.h
+
+install:	$(INCLUDES)
+	mkdir -p $(INCLUDE_DIR)
+	cp $(INCLUDES) $(INCLUDE_DIR)
+	@touch install
+
+clean:
+	rm -f install
+
+man:
+
+doc:
+
+pristine:
+	for i in $(INCLUDES) ; \
+	do \
+		rm -f $(INCLUDE_DIR)/$$i ; \
+	done
+	@rm -f install

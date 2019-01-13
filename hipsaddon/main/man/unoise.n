@@ -1,0 +1,27 @@
+.TH UNOISE 1 "31st August 1991" "Version 2" "HIPS Manual"
+.SH NAME
+unoise - image random noise generator
+.SH SYNOPSIS
+.B unoise
+[-s sdev]
+.SH DESCRIPTION 
+.I unoise
+adds random noise of uniform distribution to each image of the input sequence.
+.I sdev
+is the standard deviation and defaults to 1.0.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH EXAMPLE
+.in +3m
+unoise -d 20 < input_seq > output_seq
+.in -3m
+.SH SEE ALSO
+fgnoise(1), gnoise(1), noise(1)
+.SH AUTHOR
+Jin Zhengping - 9/11/86
+.br
+Rewritten by Jin Zhengping - 31 August 1991

@@ -1,0 +1,93 @@
+.TH H_SEQORD 3 "8/11/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_seqord \- subroutines to reorder a Walsh transform in sequency order
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_seqord(hdi,hdo)
+h_seqord_i(hdi,hdo)
+h_seqord_f(hdi,hdo)
+struct header *hdi,hdo;
+
+h_seqord_I(imagei,imageo,nr,nc,nlpi,nlpo)
+int *imagei,*imageo,nr,nc,nlpi,nlpo;
+
+h_seqord_F(imagei,imageo,nr,nc,nlpi,nlpo)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+
+h_invseqord(hdi,hdo)
+h_invseqord_i(hdi,hdo)
+h_invseqord_f(hdi,hdo)
+struct header *hdi,hdo;
+
+h_invseqord_I(imagei,imageo,nr,nc,nlpi,nlpo)
+int *imagei,*imageo,nr,nc,nlpi,nlpo;
+
+h_invseqord_F(imagei,imageo,nr,nc,nlpi,nlpo)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines reorder the elements of an input subimage (specified by
+.I hdi
+or
+.IR imagei )
+into sequency order (as in a Walsh transform),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_seqord
+calls
+.I h_seqord_i
+or
+.I h_seqord_f
+depending upon whether the pixel format is integer or float.
+.I h_seqord_I
+and
+.I h_seqord_F
+are the low-level routines which don't require an image header.
+.IR h_invseqord ,
+.IR h_invseqord_i ,
+.IR h_invseqord_f ,
+.I h_invseqord_I
+and
+.I h_invseqord_F
+are the analogous routines for undoing the sequency ordering.
+The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+integer, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_walshtr(3)
+.SH AUTHOR
+Yoav Cohen - 2/18/82
+.br
+HIPS 2 - msl - 8/11/91

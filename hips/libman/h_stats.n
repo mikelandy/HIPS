@@ -1,0 +1,88 @@
+.TH H_STATS 3 "7/5/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_stats \- subroutines to compute basic statistics on an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_stats(hd,stats,nzflag)
+h_stats_b(hd,stats,nzflag)
+h_stats_f(hd,stats,nzflag)
+struct header *hdi;
+struct hips_stats *stats;
+h_boolean nzflag;
+
+h_stats_B(image,nr,nc,nlp,rnelem,rmin,rmax,rsum,rssq,nzflag)
+byte *image,*rmin,*rmax;
+int nr,nc,nlp,*rnelem;
+double *rsum,*rssq;
+h_boolean nzflag;
+
+h_stats_F(image,nr,nc,nlp,rnelem,rmin,rmax,rsum,rssq,nzflag)
+float *image,*rmin,*rmax;
+int nr,nc,nlp,*rnelem;
+double *rsum,*rssq;
+h_boolean nzflag;
+.fi
+.SH DESCRIPTION 
+These routines compute basic statistics of the pixel values across an input
+subimage (specified by
+.I hd
+or
+.IR image ).
+The results are stored in the structure
+.I stats
+(for the generic routines), or in
+.IR rnelem ,
+.IR rmin ,
+.IR rmax ,
+.I rsum
+and
+.I rssq
+(for the low-level routines).
+.I h_stats
+calls
+.I h_stats_b
+or
+.IR h_stats_f
+depending upon whether the pixel format is byte or float.
+.IR h_stats_B
+and
+.IR h_stats_F ,
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The image has
+.I nlp
+pixels per line.  If
+.I nzflag
+is FALSE, then the statistics are computed over the entire subimage.
+If
+.I nzflag
+is TRUE, pixels with values identically zero are ignored in the calculations,
+and the returned statistics are set to zero if the entire
+subimage is zero. The low-level routines return the minimum, maximum, sum,
+sum of squares, and number of elements which contributed to these values.
+The high-level routines fill out a
+.I hips_stats
+structure, which also includes mean, variance and standard deviation.  The
+variance and standard deviation are computed as population (not sample)
+values.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_max(3), h_minmax(3)
+.SH AUTHOR
+Yoav Cohen 2/16/82
+.br
+HIPS 2 - msl - 7/5/91

@@ -1,0 +1,74 @@
+.TH H_PROJECT HIPS "31st August 1991" "Version 2" "HIPS Manual"
+.SH NAME
+h_project - image geometric transformer
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+#include <math.h>
+
+h_project(hdi,hdo,angle,distance,scale)
+h_project_b(hdi,hdo,angle,distance,scale)
+struct header   *hdi,*hdo;
+double          angle,distance,scale;
+
+h_project_B(imagei,imageo,nri,nci,nro,nco,angle,distance,scale)
+byte    *imagei,*imageo;
+int     nri,nci,nro,nco;
+double  angle,distance,scale;
+.fi
+.SH DESCRIPTION 
+.I h_project
+projects the input image (specified by
+.I hdi
+or
+.I imagei)
+onto a projecting plane,
+and stores the result in the output image (specified by
+.I hdo
+or
+.I imageo).
+.I h_project
+then calls
+.I h_project_b
+only if the input image pixel format is byte.
+.I h_project_b
+then calls
+.I h_project_B
+which is the low-level routine and does not require image header.
+The input image has
+.I nci
+pixels per line, and
+.I nri
+lines.
+The output image has
+.I nco
+pixels per line, and
+.I nro
+lines.
+The angle subtended by the image plane and the projecting plane is
+specified by
+.I angle
+in degree.
+Here, image plane is defined as the input image extended into infinity.
+Its horizontal axis is passing through the central point of the input image.
+The projecting plane is defined as a plane rotates about the horizontal axis of the image plane.
+.I distance
+specify the distance from
+perspective focus point to the centre of the input image.
+.I scale
+specify the scale by which the image is magnified.
+
+Note: any part of the projected image that lie outside the output
+image will be clipped.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH SEE ALSO
+h_enlarge(1), pictranspose(1), h_reflect(1), h_rotate(1), h_rotate90(1), h_rotate180(1), h_translatei(1)
+.SH AUTHOR
+Jin Zhengping - 13 March 1989
+.br
+Rewritten by Jin Zhengping - 31 August 1991

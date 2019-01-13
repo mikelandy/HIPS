@@ -1,0 +1,25 @@
+.TH HIPS2VIT 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+hips2vit - hips-to-vitok converter
+.SH SYNOPSIS
+.B hips2vit
+.SH DESCRIPTION 
+.I hips2vit
+converts a hips image into vitok format.
+
+The present version only handles one image at a time.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image gets transformed.
+.SH EXAMPLE
+.in +3m
+hips2vit < input_image > output_image
+.in -3m
+.sp
+.br
+will generate an image output_image same as input_image but in vitok format. 
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 25 July 1988
+.br
+Rewritten by Jin Zhengping - 31 August 1991

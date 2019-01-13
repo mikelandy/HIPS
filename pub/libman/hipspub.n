@@ -1,0 +1,366 @@
+.TH HIPSPUB 3 "9/30/92" "Version 2" "HIPS Manual"
+.SH NAME
+hipspub \- public-domain hips header routines
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipspub.h>
+
+hpub_rdhdr(format,rows,cols,frames,colors)
+hpub_rdhdrc(format,rows,cols,frames,colors,ncmap,r,g,b)
+hpub_rdhdrx(format,rows,cols,frames,colors,xpar)
+hpub_rdhdrxr(format,rows,cols,frames,colors,roir,roic,frow,fcol,xpar)
+hpub_frdhdr(fp,format,rows,cols,frames,colors)
+hpub_frdhdrc(fp,format,rows,cols,frames,colors,ncmap,r,g,b)
+hpub_frdhdrx(fp,format,rows,cols,frames,colors,xpar)
+hpub_frdhdrxr(fp,format,rows,cols,frames,colors,roir,roic,frow,fcol,xpar)
+
+FILE *fp;
+int *format,*rows,*cols,*frames,*colors,*ncmap,*roir,*roic,*frow,*fcol;
+unsigned char **r,**g,**b;
+struct hpub_xparlist *xpar;
+
+hpub_wrthdr(format,rows,cols,frames,colors)
+hpub_wrthdrc(format,rows,cols,frames,colors,ncmap,r,g,b)
+hpub_wrthdrx(format,rows,cols,frames,colors,xpar)
+hpub_wrthdrxr(format,rows,cols,frames,colors,roir,roic,frow,fcol,xpar)
+hpub_fwrthdr(fp,format,rows,cols,frames,colors)
+hpub_fwrthdrc(fp,format,rows,cols,frames,colors,ncmap,r,g,b)
+hpub_fwrthdrx(fp,format,rows,cols,frames,colors,xpar)
+hpub_fwrthdrxr(fp,format,rows,cols,frames,colors,roir,roic,frow,fcol,xpar)
+hpub_wrthdr1(format,rows,cols,frames)
+hpub_fwrthdr1(fp,format,rows,cols,frames)
+
+FILE *fp;
+int format,rows,cols,frames,colors,roir,roic,frow,fcol,ncmap;
+unsigned char *r,*g,*b;
+struct hpub_xparlist *xpar;
+
+hpub_initparams(xpar)
+hpub_setparamb(xpar,name,bvalue)
+hpub_setparamc(xpar,name,cvalue)
+hpub_setparams(xpar,name,svalue)
+hpub_setparami(xpar,name,ivalue)
+hpub_setparamf(xpar,name,fvalue)
+hpub_setparamb2(xpar,name,count,pbvalue)
+hpub_setparamc2(xpar,name,count,pcvalue)
+hpub_setparams2(xpar,name,count,psvalue)
+hpub_setparami2(xpar,name,count,pivalue)
+hpub_setparamf2(xpar,name,count,pfvalue)
+unsigned char hpub_getparamb(xpar,name)
+unsigned char hpub_getparamc(xpar,name)
+short hpub_getparams(xpar,name)
+int hpub_getparami(xpar,name)
+float hpub_getparamf(xpar,name)
+unsigned char *hpub_getparamb2(xpar,name,count)
+unsigned char *hpub_getparamc2(xpar,name,count)
+short *hpub_getparams2(xpar,name,count)
+int *hpub_getparami2(xpar,name,count)
+float *hpub_getparamf2(xpar,name,count)
+hpub_checkparam(xpar,name)
+hpub_clearparam(xpar,name)
+
+struct hpub_xparlist *xpar;
+char *name;
+unsigned char bvalue,*pbvalue,cvalue,*pcvalue;
+short svalue,*psvalue;
+int count,ivalue,*pivalue;
+float fvalue,*pfvalue;
+.fi
+.SH DESCRIPTION
+This library, loaded by specifying
+.I -lhipspub
+on a compilation command, is a public-domain set of routines for reading and
+writing HIPS image sequence headers.  These routines may only be used for
+raster-formatted images (sequences of rectangular images, all the same size).
+The user may read and write the pixel format (byte, int, float, etc.) and the
+sequence geometry (rows, columns, frames, colors), but most other HIPS header
+variables are ignored on read, and set to null default values on write.
+.PP
+.I hpub_rdhdr
+and
+.I hpub_frdhdr
+read HIPS image headers.
+.I hpub_rdhdr
+is used for reading from the standard input.  These routines can read both new
+(HIPS-2) and old (HIPS-1) format headers.
+The routines
+.I hpub_wrthdr
+and
+.I hpub_fwrthdr
+are used to write HIPS-2 format headers, and the routines
+.I hpub_wrthdr1
+and
+.I hpub_fwrthdr1
+are used to write HIPS-1 format headers.
+.I hpub_wrthdr
+and
+.I hpub_wrthdr1
+write to the standard output.  All routines use the standard error for error
+messages.  These routines all use the stdio package for reading and writing,
+and hence the images which follow the header should be read and written using
+.I fread
+and
+.IR fwrite .
+.PP
+The HIPS-2 header format also allows for an arbitrary list of
+.I "extended parameters"
+to be associated with an image sequence.  One standard extended parameter is a
+color map.  These public domain HIPS routines may be used to access this color
+map.  For reading, the routines
+.I hpub_rdhdrc
+and
+.I hpub_frdhdrc
+may be used.  The returned value of
+.I ncmap
+gives the number of lookup table entries, and is set to zero if there was no
+color map associated with the input sequence.  The pointers
+.IR r ,
+.I g
+and
+.I b
+are set to point to arrays containing the red, green and blue components of
+the lookup table respectively.  Note that standard HIPS lookup tables are only
+8 bits deep.  When the caller is through using these arrays, the memory area
+can be returned to the system with
+.IR free (2).
+For writing images with associated color maps, the relevant routines are
+.I hpub_wrthdrc
+and
+.IR hpub_fwrthdrc .
+.PP
+If the user wants the full flexibility of the HIPS
+.I "extended parameters"
+facility, then the routines used for reading the header are
+.I hpub_rdhdrx
+and
+.IR hpub_frdhdrx ,
+and the corresponding output routines are
+.I hpub_wrthdrx
+and
+.IR hpub_fwrthdrx .
+These routines are supplied by the user with a pointer to a structure
+called an
+.I hpub_xparlist
+which should be allocated by the user.  The user may then get, define,
+redefine and delete extended parameters (see below) before writing the header
+(which outputs header information
+.I and
+extended parameters).
+.PP
+As a basic
+example, the following routine can read and write an input HIPS image in
+any format:
+.sp
+.ta .5i 1i 1.5i 2i 2.5i 3i 3.5i
+.nf
+.sp
+	#include <stdio.h>
+
+	main()
+
+	{
+		int format,rows,cols,frames,colors,ncmap,i;
+		unsigned char *r,*g,*b;
+
+		hpub_rdhdrc(&format,&rows,&cols,&frames,&colors,&ncmap,&r,&g,&b);
+
+		fprintf(stderr,"f=%d r=%d c=%d fr=%d cl=%d ncmap=%d\n",
+			format,rows,cols,frames,colors,ncmap);
+
+		for (i=0;i<ncmap;i++)
+			fprintf(stderr,"\t%d\t%d %d %d\n",
+				i,(int) r[i],(int) g[i],(int) b[i]);
+		
+		hpub_wrthdrc(format,rows,cols,frames,colors,ncmap,r,g,b);
+
+		while ((i = getchar()) != EOF)
+			putchar(i);
+	}
+.fi
+.sp
+.PP
+This HIPS public domain library gives the user full access to the HIPS
+.I "extended parameters"
+facility.  Each
+image header has an associated list of parameters.  The number of parameters
+is unlimited.  Each parameter has an associated name for referring to that
+parameter (names are simply strings which can be read using a `%s' format code
+in
+.IR scanf (3s)).
+There are five types of parameters: Ascii, byte, short, integer and float,
+which are
+specified by the corresponding pixel format codes (PFASCII, PFBYTE, PFSHORT,
+PFINT and
+PFFLOAT).  Note that PFASCII is treated identically to PFBYTE in the routines
+described here.  The only difference is that in HIPS itself,
+byte parameters are printed as a series of decimal numbers (representing the
+binary value of each byte), and Ascii parameters are printed as a string.
+Each parameter can have one or more associated values, the number
+is specified by the
+.IR count .
+Finally, to set a parameter the user must supply the parameter value.  For
+parameters with a count of 1, the supplied value is simply the value of the
+parameter, and must have the appropriate type (unsigned char
+for either PFASCII or PFBYTE, short, int or float).
+For a count larger than 1, the parameter is an array, and the supplied value
+must be a pointer to the appropriate type (unsigned char *,
+short *, int * or float *).
+Note again that Ascii and byte are treated identically.  If the caller
+wants to set a parameter to have a null-terminated string as its value, then
+use format PFASCII with a count equal to the length of the string plus one.
+Single parameters are defined (for the first time) and redefined for
+single-valued byte, Ascii (character), short, int and float parameters using
+.IR hpub_setparamb ,
+.IR hpub_setparamc ,
+.IR hpub_setparams ,
+.I hpub_setparami
+and
+.IR hpub_setparamf ,
+respectively.  For parameters with more than one value (i.e. an array of
+values), use
+.IR hpub_setparamb2 ,
+.IR hpub_setparamc2 ,
+.IR hpub_setparams2 ,
+.I hpub_setparami2
+and
+.IR hpub_setparamf2 .
+If the parameter was already defined, its value is replaced; otherwise the
+parameter is added to the parameters list.
+Note that the format for the ``cmap'' parameter is a single byte-formatted
+array with the values of the 
+.I red
+colormap listed first (in their
+entirety), followed by the
+.I green
+array, and finally followed by the
+.I blue
+array; thus the
+.I count
+of this parameter is triple the number of lookup table entries.
+Also, note that the
+.I xpar
+structure must be initialized.  Normally, this is done by the routine which
+reads the header.  However, if you wish to write a routine which write a HIPS
+header from scratch including extended parameters, you must first call
+.I hpub_initparams
+prior to any calls to routines to set parameter values.
+.PP
+To retrieve the value of a single-valued parameter, the relevant routines are
+.IR hpub_getparamb ,
+.IR hpub_getparamc ,
+.IR hpub_getparams ,
+.I hpub_getparami
+and
+.IR hpub_getparamf .
+For multiple-valued parameters, the corresponding routines are
+.IR hpub_getparamb2 ,
+.IR hpub_getparamc2 ,
+.IR hpub_getparams2 ,
+.I hpub_getparami2
+and
+.IR hpub_getparamf2 .
+These routines exit with an error if the parameter is undefined, is of the
+wrong type, or has a count which is inappropriate for the calling routine
+(e.g. a count of 1 for a call to
+.I hpub_getparamb2
+or a count of 5 for a call to
+.IR hpub_getparami ).
+The routines return
+in
+.I count
+the actual count of parameters returned.
+Note that the returned pointer
+points to the header binary array in memory (not to a new copy of memory
+supplied to the user).  Thus, a second call to a
+.I hpub_getparam
+routine
+for that parameter will return precisely the same pointer, and if the user
+modifies any values, it will affect memory pointed to by anyone who requests
+this parameter.
+.PP
+.I hpub_clearparam
+is used to delete a parameter which is no longer needed.
+.I hpub_checkparam
+is used to check whether a parameter exists or not (a value of one is returned
+if the parameter exists, and zero otherwise).
+.PP
+HIPS-2 also has a facility for designating a rectangular
+.I "region of interest"
+(ROI) for an image sequence.  This subimage area (the same subimage for each
+image in the sequence) is specified by the number of ROI rows and columns and
+the index of the first row and column in the ROI.  The user may read an image
+header with its ROI specification by calling
+.I hpub_rdhdrxr
+or
+.IR hpub_frdhdrxr ,
+and write such a header by calling
+.I hpub_wrthdrxr
+or
+.IR hpub_fwrthdrxr .
+For each of these calls, the size of the ROI is specified (or returned) as
+.I roir
+and
+.I roic
+and the index of the first ROI pixel is specified as
+.I frow
+and
+.IR fcol .
+.PP
+The image format for the data which follows the header is as follows.  The
+image sequence consists of a sequence of one or more image frames, all of the
+same geometry.  The header variable
+.I frames
+is the total number of such frames.  For some uses, this sequence of frames is
+considered in batches, where each batch consists of one frame for each color
+(for example, time step 1 consists of a red frame, a green frame, and a blue
+frame).  The batch size is stored in header variable
+.I colors
+and thus the total number of batches (e.g. time steps) is
+.IR frames/colors .
+Each frame consists of a series of image rows, one after another.  The count of
+these is header variable
+.IR rows .
+The first row in a frame may be either the bottom-most or the top-most, and
+this fact may not be discerned from the image header (in HIPS itself, this
+is an installation parameter).  However, almost everyone chooses the latter
+option.
+Each row consists of a series of pixel values, in binary machine-dependent
+form, from leftmost to rightmost (the count is header variable
+.IR cols ).
+The header variable
+.I format
+gives the format of individual pixels from among:
+.sp
+.ta 1i 2i 3i
+.in 2i
+.nf
+PFBYTE	bytes interpreted as unsigned integers
+PFSBYTE	signed bytes
+PFSHORT	short integers (2 bytes)
+PFUSHORT	unsigned shorts
+PFINT	integers
+PFUINT	unsigned ints
+PFFLOAT	floats
+PFCOMPLEX 	2 floats interpreted as (real,imaginary)
+PFDOUBLE 	doubles
+PFDBLCOM 	double complex (2 doubles)
+PFASCII	ASCII representation, with linefeeds after each row
+PFMSBF	packed, most-significant-bit first
+PFLSBF	packed, least-significant-bit first
+PFRGB	RGBRGBRGB bytes
+PFRGBZ	RGB0RGB0RGB0 bytes
+.in -2i
+.fi
+.sp
+The last four types require a bit more explanation.  The packed types store 8
+successive 1-bit pixels in each byte.  The last byte in an image row is padded
+with 0's, so that each row begins with a new byte.  The PFRGB type has 3 bytes
+per pixel (one byte each of red, green and blue), and the PFRGBZ type has 4
+bytes per pixel (adding a zero byte after red, green and blue).
+.SH FILES
+/usr/local/lib/libhipspub.a
+.SH AUTHOR
+Michael Landy - 9/30/92
+.br
+Added extended parameters - Michael Landy - 1/10/96

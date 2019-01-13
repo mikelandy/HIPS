@@ -1,0 +1,124 @@
+.TH READ_HUTILS 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+read_hutils \- utility routines for reading image headers
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+#include <stdio.h>
+
+read_hdr_a(hd)
+fread_hdr_a(fp,hd,fname)
+read_hdr_cpf(hd,typelist)
+fread_hdr_cpf(fp,hd,typelist,fname)
+read_hdr_cpfa(hd,typelist)
+fread_hdr_cpfa(fp,hd,typelist,fname)
+fread_hdr_cpfac(fp,hd,typelist,fname,flagc,flaga)
+read_hdr_cc(hd,chd,mask)
+fread_hdr_cc(fp,hd,chd,mask,fname)
+read_hdr_cca(hd,chd,mask)
+fread_hdr_cca(fp,hd,chd,mask,fname)
+fread_hdr_ccac(fp,hd,chd,mask,fname,flaga)
+FILE *fp;
+struct header *hd,*chd;
+Filename fname;
+int *typelist,flagc,flaga,mask;
+.fi
+.SH DESCRIPTION 
+These routines read HIPS image headers and then perform other tasks and checks
+including image allocation (\c
+.IR read_hdr_a ,
+.IR fread_hdr_a ,
+.IR read_hdr_cpfa ,
+.IR fread_hdr_cpfa ,
+.IR read_hdr_cca ,
+and
+.IR fread_hdr_cca ),
+checking whether the pixel format is in a given list of types (\c
+.IR read_hdr_cpf ,
+.IR fread_hdr_cpf ,
+.IR read_hdr_cpfa ,
+and
+.IR fread_hdr_cpfa ),
+and checking whether the newly read image header is compatible with another
+image header (\c
+.IR read_hdr_cc ,
+.IR fread_hdr_cc ,
+.IR read_hdr_cca ,
+and
+.IR fread_hdr_cca ).
+For compatibility checking, the two headers are required to be identical in
+all respects specified by a compatibility mask (which may include CM_ROWS,
+CM_COLS, CM_OROWS, CM_OCOLS, CM_FRAMES, CM_FRAMESC, CM_FORMAT, CM_NUMCOLOR,
+CM_NUMCOLOR3, CM_DEPTH
+and/or CM_NUMLEV for checking identity of number of region-of-interest rows,
+region-of-interest columns, total number of rows, total number of columns,
+number of color frames and depths, number of frames only if numcolor or
+numdepth is greater than one,
+pixel format, number of color planes (where 3-color formats such as RGB are
+treated as having 1 color plane), number of color planes (where 3-color
+formats such as RGB are treated as having 3 planes), number of depth planes
+and number of pyramid levels (only checked
+if both images are pyramids), respectively).
+For CM_FRAMESC, 3-color frames (such as RGB format) are treated as if they had
+3 color planes per frame.
+.I fread_hdr_cpfac
+and
+.I fread_hdr_ccac
+are low-level routines into which these routines feed.  These routines
+allocate the header if
+.I flaga
+is nonzero, and check the pixel format if
+.I flagc
+is nonzero.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_ALLOCSUBR - can't allocate memory
+.br
+HE_C_COL - number of columns are incompatible
+.br
+HE_C_DEPTH - number of depths are incompatible
+.br
+HE_C_DPTHC - number of depths are incompatible and number of colors or depths != 1
+.br
+HE_C_FMT - pixel formats are incompatible
+.br
+HE_C_FRM - number of frames are incompatible
+.br
+HE_C_FRMC - number of frames are incompatible and number of colors or depths != 1
+.br
+HE_C_NCL - number of color planes are incompatible
+.br
+HE_C_NLV - number of pyramid levels are incompatible
+.br
+HE_C_OCOL - total number of columns are incompatible
+.br
+HE_C_OROW - total number of rows are incompatible
+.br
+HE_C_ROW - number of rows are incompatible
+.br
+HE_FMTFILE - can't handle this pixel format
+.br
+HE_HDRREAD - error reading header
+.br
+HE_HDRBREAD - error reading binary information following header
+.br
+HE_HDRPREAD - error reading parameter information following header
+.br
+HE_HDRPTYPE - unknown parameter type
+.br
+HE_HDRXOV - binary parameter overflow (pointers screwed up)
+.br
+HE_MISSPAR - missing parameter (toplev not found for image pyramid)
+.br
+HE_PCOUNT - supplied count doesn't match that of `depth'
+.br
+HE_ROI8F - illegal region-of-interest for bit-packed image (not a multiple of 8)
+.br
+HE_XINC - header binary parameter inconsistency (pointers screwed up)
+.SH "SEE ALSO"
+fread_oldhdr(3)
+.SH AUTHOR
+Michael Landy - 1/4/91

@@ -1,0 +1,114 @@
+.TH H_REDUCE 3 "6/29/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_reduce \- subroutines to reduce an image by pixel summing
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+h_reduce(hdi,hdo,xf,yf)
+h_reduce_bi(hdi,hdo,xf,yf)
+h_reduce_s(hdi,hdo,xf,yf)
+h_reduce_i(hdi,hdo,xf,yf)
+h_reduce_f(hdi,hdo,xf,yf)
+h_reduce_c(hdi,hdo,xf,yf)
+struct header *hdi,*hdo;
+int xf,yf;
+
+h_reduce_BI(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+byte *imagei;
+int *imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+
+h_reduce_S(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+short *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+
+h_reduce_I(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+
+h_reduce_F(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+h_reduce_C(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+.fi
+.SH DESCRIPTION 
+These routines reduce an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo )
+by pixel summing.
+.I h_reduce
+calls
+.IR h_reduce_bi ,
+.IR h_reduce_s ,
+.IR h_reduce_i ,
+.I h_reduce_f
+or
+.I h_reduce_c
+depending upon whether the pixel format is byte (with integer output), short,
+integer, float or complex.
+.IR h_reduce_BI ,
+.IR h_reduce_S ,
+.IR h_reduce_I ,
+.I h_reduce_F
+and
+.I h_reduce_C
+are the low-level routines which don't require an image header.  The input
+subimage size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  The pixels in each input rectangle with
+.I xf
+columns and
+.I yf
+rows are summed and added to one output pixel.  The input image (or
+region-of-interest must have precisely
+.I xf
+as many columns and
+.I yf
+as many rows as the output image.  Note that the output image is not cleared.
+Instead, input pixels are simply added to the output pixels.  This allows
+multiple frames to be summed.  A typical sequence (see
+.I reduce (1))
+is to clear the output with
+.IR h_setimage (3),
+reduce a sequence of frames with
+.IR h_reduce (3)
+and finally to rescale using
+.IR h_divscale (3).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte (with integer output), short, integer, float, complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_FMTSUBR2 - can't handle this pixel format combination
+.SH "SEE ALSO"
+h_enlarge(3), h_ienlarge(3), h_ienlarge3(3)
+.SH AUTHOR
+Rewritten by Michael Landy - 11/5/87
+.br
+Michael Landy - 6/29/91

@@ -1,0 +1,34 @@
+.TH VFFT 1 "May 15, 1991" LBL-HIPS
+.\" @(#)virtual-very fourier transform .1  1.10 91/5/15 JIN;
+.SH NAME
+vfft \- virtual-very fast fourier transform
+.SH SYNOPSIS
+.nf
+vfft [-V] [-D2] [-double] [<] inputimage [> [-o]VFFT_file]
+.SH DESCRIPTION
+VFFT (Virtual-Very Fast Fourier Transform) is specially designed to speed
+image processing in frequency domain. It is in different format from regular
+FFT (Fast Fourier transform). The VFFT is in 51% to 75% compressed format.
+It takes less storage room, and runs 8 to 10 times faster than FFT version.
+For VFFT to FFT conversion, use dcvtob program.
+.SH OPTIONS
+.TP
+.I -D2
+do a 2 dimensional Fourier transform. The default is 3-dimensional VFFT.
+.TP
+.I -V
+do very fast Fourier transform in separated planes (real & imaginary).
+.TP
+.I -d
+output double VFFT. The default is float VFFT.
+.SH NOTE
+The input can be one of the following 6 type images:
+.br
+	HIPS, FITS, GIF, ICC, RLE, PNM, SUN-Raster, and TIFF
+.br
+The output is a HIPS image.
+Input can be any noncomplex format, double input can only output DVFFT.
+.SH "SEE ALSO"
+vfftpass(1), vfftfilter(1), inv-vfft(1), dcvtob(1), tuner(1)
+.SH AUTHOR
+Jin Guojun - 5/15/91

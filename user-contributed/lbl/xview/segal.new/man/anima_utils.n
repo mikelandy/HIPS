@@ -1,0 +1,43 @@
+.TH ANIMA_UTILS n "1992" "Scry Version 1.3" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+anima_utils \- combine, extract, genonemap, convert
+.SH SYNOPSIS
+.B combine
+.BI \-i " filename1 filename2"
+.BI \-o " combined"
+.sp
+.B extract
+.BI \-i " filename "
+.BI \-o " output"
+.BI \-e " start finish"
+.sp
+.B genonemap
+.BI \-i " filename "
+.BI \-o " output"
+.BI \-m " number"
+.sp
+.B convert
+.BI \-i " filename "
+.BI \-o " output"
+.SH DESCRIPTION
+\f3combine\f1 combines two Anima files and merges their footers.
+Combining two files with different spatial resolutions is not
+allowed.
+.sp
+\f3extract\f1 extracts frames from an Anima file, from frame
+number "start" to "finish", into an Anima file.
+.sp
+\f3genonemap\f1 generates one color map and .vff header for
+the intermediate format file produced by \f3Xserv\f1 or \f3svserv\f1.
+This is mandatory for viewing by \f3Xanima\f or \f3Xserv\f1.
+The \f3\-m\f1 option chooses
+the number of entries in the color map.
+\f3torus.tester\f1 is a sample intermediate-format file with a different
+color map for each frame.
+.sp
+\f3convert\f1 converts from a Scry version 1.2 Anima file
+to a Scry version 1.3 Anima file.
+.SH AUTHOR
+David Robertson
+.SH "SEE ALSO"
+.B anima_format(n)

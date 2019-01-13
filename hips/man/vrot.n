@@ -1,0 +1,38 @@
+.TH VROT 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+vrot \- rotate the 3-D coordinates system over time
+.SH SYNOPSIS
+.B vrot
+[-p from to [x [y [z]]]
+.SH DESCRIPTION 
+.I Vrot
+rotates the viewers coordinate frame over time.
+All the frames before frame 
+.I from
+are output as is.
+Starting at frame 
+.I from
+until frame 
+.I to
+the frames are rotated by a factor which is determined by the frame-number
+and the argument. All frames after frame 
+.I from
+are rotated by the factor that applies to frame 
+.IR to .
+Frame counting starts at zero.
+.I Y
+and
+.I z
+default to 1.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+grot(1)
+.SH AUTHOR
+Yoav Cohen - 11/16/82
+.br
+HIPS 2 - msl - 7/24/91

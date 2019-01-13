@@ -1,0 +1,77 @@
+.TH VFFTFILTER 1 "March 10, 1992" LBL-HIPS
+.\" @(#)circular filter for virtual-Fourier transform.1  1.10 91/5/15 JIN;
+.SH NAME
+vfftfilter \- circular low and high pass filter for VFFT
+.SH SYNOPSIS
+.nf
+.ta 1.5i
+vfftfilter	[-hi] [-base #] [-c] [-fe #] [-func #] [-F #] [-G] [-L]
+	[min #] [-r #] [-R #] [-v] [<] VFFT [> | -o] filtered-VFFT
+.SH DESCRIPTION
+.SH OPTIONS
+.TP
+.I -base #
+base value. [Default=0.0], the good maximum value is 2.0
+.TP
+.I -c
+convex curve. Default is concave curve.
+.TP
+.I -hi
+high-pass filter. Default is low-pass.
+.TP
+.I -fe #
+elastic scale factor
+.TP
+.I -func #
+.nf
+filter functions:
+default:	elastic
+1		ideal
+2		exponential
+3		butterworth
+4		right tri-angle
+5		user defined standard table
+6 table_name	user defined table (ascii format)
+7 table_name	user defined table (binary format)
+
+	Format of user defined table (ascii):
+
+	(1st int) table_length	0.8 1 0.5 0.1 0 0.7 ... (last #)
+
+	short format: if you want generate table like this
+
+	200 0.3 .5 .7 .9 .6 .4 .6 1.0 ... 1.0 (total 193 1.0s)
+
+	then short format is:	8 .3 .5 .7 .9 .6 .4 .6 1.0
+
+	The first element in the table is the highest frequency filter,
+	and the last element is the lowest frequency one.
+.fi
+.TP
+.I -F #
+number of Frames in sample [1 in 2D]. more F # is 3D.
+.TP
+.I -G
+generate gnu-plot data of curves only.
+.TP
+.I -L
+Linear filter.
+.TP
+.I -min #
+minimum value at bottom [default = 0.01].
+.TP
+.I -power #
+power number. The default is 2.
+.TP
+.I -r #
+radius [default = 0.333].
+.TP
+.I -R #
+radius factor. default is 1 (100%). Range 0.1 - 1.0
+.TP
+.I -v
+verbose
+.SH "SEE ALSO"
+vfft(1), vfftpass(1), inv-vfft(1), dcvtob(1), tuner(1)
+.SH AUTHOR
+Jin Guojun - 5/15/91

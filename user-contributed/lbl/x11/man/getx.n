@@ -1,0 +1,570 @@
+.TH GETX 1 "OCTOBER 15, 1993" LBL-HIPS
+.\" @(#)Elastic Tuner & Analyzer .1  ETA 4/1/91 JIN;
+.SH NAME
+.B getx
+\- integrated enhancement and analysis tool, as well extended X server (getxe),
+based on the elastic-tuning function and X window system.
+.SH SYNOPSIS
+.nf
+getx[e]	[-V] [-D] [-d display] [-= window-geometry] [-n levels] [-N max_imgs]
+	[-{iI} gamma] [-g gamma] [-v visualtype] [-a] [-bB] [cls [#]] [-f]
+	[j] [-m [speed]] [-M [max frames]] [-O] [-p] [-r] [-root [#]]
+	[-s] [-S] [-T] [files]
+.fi
+.SH DESCRIPTION
+This is a color version of tuner. The option -T brings the Elastic Tuner
+control panel. The -r sets the coordinate system to RLE standard. The 'c' key
+is used to close the control panel. Press 'q' key in an image window to close
+that image. Press 'q' key in the panel to quit the entire system.
+.TP 2
+Important note for this color version:
+When using the -T option, only some image have similar feature may use current
+color map.  If more than one images are input at the command line, only one
+image can be adjusted at a time.
+.br
+If input many images without the -T option, all images can share the color
+map with the first input image, unless the -p or -O option is used.
+
+.TP 12
+\fBMULTIPLE WINDOW HANDLING AND ICONIFY\fP
+
+When the cursor crosses or enters a image window, this image will become active
+and its name will be displayed onto the File Control Button message line and
+all panel settings change to this image. There is no clicking needed to make a
+window active. When many image windows are opened by tuner on a screen,
+iconifying may be necessary. Press the F3 key on an image window or click on
+the up-left corner of an image window to iconify that image. The same operation
+on its icon will deiconify the image.
+
+Important note:
+.br
+	Crossing the icon with the cursor will not activate its image window
+since the icon is not an active window, so, use the icon to keep images
+inactive when many images are open.
+
+.TP 12
+\fBCOORDINATE AND PIXEL VALUES\fP
+Move the cursor into an image window and click the left mouse button:
+the position coordinate and pixel value will be displayed on either upper or
+lower side of the image. The first two numbers are X (columns) and Y (rows)
+coordinates. After the coordinates, there is an equal sign "=" followed by the
+original pixel and enhanced pixel values in a pair of square brackets.
+
+.SH Extended X Server
+As an extended X server, getxe can start with nothing on command line.
+It will pop a log to show the extended server runing on the background.
+Users can use "sendto" command to send an image and options to getxe on a
+certain machine, or use netest, ttcp, or any other networking tool to send
+images to getxe. The default port # is 1900 or 1991, which is shown in the log
+and given at starting time, for TCP; and 1920 for RTP. If getxe is compiled
+with FREE_PORT_CHIOSE directive, then -P option can be used for changing port
+number.
+
+.SH OPTIONS
+.TP
+.BI \-= " window_geometry"
+Specify the geometry of the window in which the image will be
+displayed.  This is useful mostly for giving the location of the
+window, as the size of the window will be at least as large as the
+size of the image.
+.TP
+.B \-a
+"As is", suppress dithering.
+.TP
+.B \-b
+This flag forces
+.I getx
+to produce a gray scale (black-and-white) dithered image instead
+of a color image.
+Color input will be transformed to black and white via the
+.I NTSC Y
+transform.  On a low-color-resolution display (a display with only 4
+bits, for example), this will produce a much smoother looking image
+than color dithering.  It may be used in conjunction with
+.B \-n
+to produce an image with a specified number of gray levels.
+.TP
+.B \-B
+This flag forces
+.I getx
+to display the image as a bitonal black/white bitmap image.  This is the
+only mode available on monochrome (non-gray-scale) displays (and is the
+default).  Black pixels will be displayed using the
+.IR BlackPixel (3X)
+value and white with the
+.IR WhitePixel (3X)
+value (Note that these may not be black and
+white on certain displays, or when they have been modified by the user.)
+.TP
+.B \-cls [#]
+clear Root window with different pattern [#].  For Extended X Server (EXS),
+it will be shutdown by \fIsendto \fBhostname\fP .-cls #\fP when pattern # is 4
+or greater.
+.TP
+.B \-f
+"foreground running."  Normally,
+.I getx
+will fork itself after putting the image on the screen so that the
+parent process may return the shell, leaving an "invisible" child to
+keep the image refreshed.  If
+.B \-f
+is specified, getx will not exit to the shell until the image is removed.
+.TP
+.BI \-g " display_gamma"
+Specify the gamma of the
+.I X
+display monitor.  The default value is 1.0. The value 2.5 is suitable for most
+color TV monitors (this is the gamma value assumed by the NTSC video standard).
+.TP
+.BI \-i " image_gamma"
+Specify the gamma (contrast) of the image.  A low contrast image,
+suited for direct display without compensation on a high contrast
+monitor (as most monitors are) will have a gamma of less than one.
+The default image gamma is 1.0.  Image gamma may also be specified by
+a picture comment in the
+.I RLE (5)
+file of the form
+.BI image_gamma= gamma.
+The command line argument will override the value in the file if specified.
+The dithering process assumes that the incoming image has a gamma of
+1.0 (i.e., a 200 in the input represents an intensity twice that of
+a 100.)  If this is not the case, the input values must be adjusted
+before dithering.
+.TP
+.BI \-I " image_gamma"
+As an alternate method of specifying the image gamma, the number
+following
+.B \-I
+is the gamma of the display for which the image was originally
+computed (and is therefore 1.0 divided by the actual gamma of the
+image).  An image display gamma may also be specified by
+a picture comment in the
+.I RLE (5)
+file of the form
+.BI display_gamma= gamma.
+The command line argument will override the value in the file if specified.
+.TP
+.B \-j
+"non-Jump mode", when reading an image from the standard input, each scan line
+will be displayed as soon as it is read.  This allows a user to monitor the
+progress of an image generating program, usage is "tail \-f image.rle | getx -j").
+Notmally, images read directly from files are updated only after every 16 lines
+are read in order to improve the display speed.  This behavior can be changed
+for the standard input by specifying non-Jump mode.  If input is a HIPS scale
+gray image, this mode is always true.
+.TP
+\fB\-m\fP [ \fImaxframes/sec\fP ]
+"movie mode."  Optional argument is the maximum rate at which movies will play,
+in frames per second.
+.TP
+\fB\-M\fP [ \fImaxframe in memory\fP ]
+"maximum frames can reside in memory for playing move. If this option used with
+.BI -m ,
+it needs put after \fB-m\fP option.  If there is no further # given for this
+option, the default is 64 frames.  If this option is not used, the default is
+unlimited, upon memory availability.
+.TP
+.BI \-n " levels"
+Specify the number of gray or color levels to be used in the dithering
+process.  If this many levels are not available,
+.I getx
+will try successively fewer levels until it is able to allocate enough
+color map entries.
+.TP
+.I -root [#]
+display an image in Root window.  The # is the stay level.  When the level [#]
+is higher than 1, image will permanently stay in the root window until -cls
+signal arrive by either use getx -cls or sendto hostname .-cls (for EXS).
+If stay level [#] is less than 0, then only the initial image can reside in the
+root window.  Normally, the last image will stay in the root window, and the
+previous one will be displaced into a regular window.
+.TP
+.I -s #
+starting speed level. The default is level 1. Level 0 is the slowest level
+that uses more color-map entries for the control panel so that the control
+panel colors are fixed, but it takes time to generate the panel.
+Level 3 is the fastest level (not available for getx), but panel colors
+will change along with enhancement degree.
+.TP
+.B -O
+Out format is 3-channels and dithered.  Otherwise, output is the same as input.
+.TP
+.B -p
+perform no shared colormap. (allow color flushing)
+.TP
+.B \-S
+"Stingy mode".  Normally,
+.I getx
+allocates an X server pixmap for each image to speed up the window
+refresh.  If many images are displayed, the server may run out of
+memory to store these pixmaps (or its virtual memory size may get very
+large).  Stingy mode suppresses pixmap allocation (except in movie
+mode, where the pixmaps are necessary for reasonable performance).
+.TP
+.B -T
+using TUNER panel.
+.TP
+.BI \-t " title"
+The window name for an image window normally comes from the input file
+name or a
+.BI "image_title=" title
+comment in the RLE file.  The window name can be forced to a
+particular string with this option.
+.TP
+.B \-D
+"Debug mode".  The operations in the input
+.IR RLE (5)
+file will be printed as they are read.
+.TP
+.B \-v
+Verbose.  (But less so than with
+.B \-D.)
+.TP
+.BI \-v " visual_type"
+Specify X visual type to be used.  The value may be a string or a number.
+This number is assumed to be an integer
+between 0 and 5, denoting
+.B staticgray (0), grayscale (1),
+.B pseudocolor (2), staticcolor (3),
+.B truecolor (4),
+or
+.BR directcolor (5).
+The string must match one of these visual types
+(any capitalization is ignored).
+.TP
+.I -debug
+.I -verb
+display runtime messages.
+.SH OTHER VERSIONS
+.TP
+.I ftuner--Fast_Version for gray scale image:
+The Fast version for large image is called ftuner (fast tuner).
+This version takes all color map entries when no other image is being displayed,
+and no other application can share this color map with ftuner.  If there is
+another image displayed on the screen, the ftuner will create a new color map.
+.br
+This version is for fast analysis. Do not use it for enhancement while running
+it with other color image(s).
+.SH "Key actions"
+.TP 20
+q,Q,^C:
+Quit.
+.TP 20
+1,2,3,4,5,6,7,8,9:
+Set zoom factor.
+.TP 20
+Arrow keys:
+Move image (when zoomed).  Shifted moves faster.
+.SH "More Mouse/Key actions (movie mode)"
+.TP 20
+Mouse 1:
+Run movie forward.
+.TP 20
+Shift Mouse 1:
+Run movie continuously in current direction.
+.TP 20
+Mouse 2:
+Step movie one frame in current direction.
+.TP 20
+Shift Mouse 2:
+Set movie speed by moving mouse "up" and "down".  The speed chosen is displayed
+in the upper right corner of the window.
+.TP 20
+Mouse 3:
+Run movie backward.
+.TP 20
+space:
+Flip one frame in current direction.
+.TP 20
+b:
+"Bounce" image \- run it continuously forwards, then backwards, then
+forwards, ...
+.TP 20
+c,C:
+Run move continuously.  "c" runs it forward, "C" runs it backward.
+When the movie reaches the "end", it will immediately restart from the
+beginning.
+.LP
+All continuing movie action can be halted by pressing a key or mouse button.
+.TP
++:
+advances one frame for multiple frame sequence, such as HIPS or FITS images.
+.TP
+-:
+backs one frame only for single-header-and-multiple-frame images.
+
+.SH PANEL USAGE (FUNCTIONS)
+.TP
+.I Keys:
+Only a few keys are used in tuner system \- 'h', 'c', 'q' key and 's' key.
+keys are noncase-sensitive.
+.br
+The 'h' or 'H' key taggles the HELP information window.
+The 'c' or 'C' key close the image window (deleted) when the cursor is in
+that image window.
+.br
+The 'q' or 'Q' quit from the tuner system completely.
+.br
+The 's' key is used during movie action to stop the movies.
+.TP
+.I Mouse Buttons:
+(button alone)
+.br
+The left button (button 1) is the main control button. It controls all buttons,
+keys, and sliders on the control panel. When in an image or histogram window,
+press this button and move the mouse to query information about these images.
+In B&W, shows just intensity.
+.br
+The middle button (button 2) is the histogram toggle button (in control panel),
+or toggle between zoomed and unzoomed (in an image window).
+.br
+The right button (button 3) is for movie and information control. It only
+controls
+the frame buttons ``Prev'' and ``Next'' and turns movie on. To stop movies,
+hit the `s' key on the keyboard.
+.br
+When this button is clicked in the histogram window, it draws a vertical mark
+line. Move mouse to move this mark in the histogram window.
+
+When the cursor is in an image window (not an icon window), click button 3 and
+drag the mouse to crop a subimage which is a solid rectangle. As long as the
+rectangle is on an image window, any operation on that window applies only to
+the subimage, so, this is a way to save a subimage (which may be enhanced).
+To uncrop the subimage window, simply click this button once in that image
+window.
+
+.TP
+.I Control-Key used with Buttons
+CTRL-Button-1:	Pop an editor MENU in the control panel
+.br
+Move object in an image window
+.br
+CTRL-Button-2:	Pop a scaling MENU
+.br
+CTRL-Button-3:	Pop a file MENU.
+.br
+Shift button 1:	Increase zoom factor by 1, center on this pixel.
+.br
+Shift button 2:	Recenter on the cursor pixel.
+.br
+Shift button 3:	Decrease zoom factor by 1, center on this pixel.
+
+.TP
+.I Control Panel:
+1.
+The information line (area) is located at the bottom of the control panel.
+When any special events start, the "tuner" will print a message in this area
+and beep once. If it beeps continuously, it means something is wrong, and a
+message will be given on the information line.
+
+2. File button:
+This is used to load an image file in order to analyze, enhance, and save it.
+Whenever either the load or save button is clicked by mouse button 1, the
+system beeps and gives a message on the information line to tell you how to
+input the file name. The pressed file button will light up, and the input area
+is at the right side of the file control button. If there is an old file name
+in the input area, you can modify it by using the backspace key to erase or the
+tab key to continue to add more characters. Any other key will erase the old
+file name and start inputing of a new file name.
+
+If no more space is left, see replacement rule in option [-images #].
+
+3. Frame/Channel Control button:
+This button lets the user see the next frame or go back to the previous one.
+The current frame number is displayed on leftmost button in the button set.
+The Frame(second) button let you quickly jump to a special frame in the image.
+When the right mouse button is clicked on those buttons, the movie will start.
+In color version - getx, they control RGB channels. SYNC adjusts 3 channels
+in same time.
+
+4. Histogram Control button:
+The GRID and NEG buttons can add a grid to the histogram image or negate the
+histogram image whenever a colormap change is needed.
+Set and Scale buttons:
+Set \- sets linear scaling and histogram scaling to a fixed value. Every
+frame will use these same values. Scale \- uses log2 scale for the histogram
+window, but linear scale will be changed along with min & max values in each
+frame.
+.br
+Scale sets the linear scale for each frame and uses the histogram enlarge scale
+factor with frame own histogram maximum count, minimum and maximum gray level
+values across frames for analysis.
+
+5. HistoEq press button:
+This button sets the enhance mode for histogram equalization. If the ETA mode
+was in the linear mode, the HistoEq button will keep lighting up, and histogram
+equalization mode is maintained. It can be reset to ETA mode by pressing the
+refresh button, or ETA is changed to the other modes.
+
+6. Emphasis Control button:
+This is the main enhancement control button. It controls sliders above it.
+"fore" (emphasize foreground) and "back" (emphasize background) invoke the
+elastic histogram stetching algorithm. "linear" is the linear scaling.
+.bk
+The elastic algorithm will use the lower and higher thresholds which are set by
+linear scaling. For different frames, these thresholds can be fixed (set to a
+certain position) or variable (depend on min & max in that frame).
+
+7. Zero On-Off button:
+This controls whether or not to count zero's value for enhancement.
+
+8. RESET press button:
+This sets everything to the original state, but ETA control mode.
+
+9. Refresh press button:
+This button usually just refreshs the image, but it will clear histoeq mode to
+EAT mode.
+
+10. Quantizing button(14) / Fixed Panel Color button:
+This is used for tuner running with other color application windows which seize
+most color-map entrences. It will not change real data set but improves screen
+display.
+.br
+In COLOR version `getx', this button is the Fixed Panel Color control button.
+When ON, the panel color map is associated with the current display image window.
+When OFF, the panel color map is pointed to the latest active image window.
+This function can fix colors on the control panel since the panel has none of
+its own colors.
+
+11. DATA button:
+This button is always reset to Analysis (no update). The updating is done when
+the DATA button is pressed. No updating occurs when doing any adjustments.
+For color images, updating applies only to the sub-image, but is applied to the
+entire image whenever saving an image to a file.
+
+12. Clip slider:
+Left control bar is used to set how many top gray level values need to be
+clipped down.  For example, 6 means to clip 255 - 249 to the value which is set
+by the right control bar. The right sliding bar sets where the top values are
+clipped to. If left bar=0 or right bar=255, no clipping is done.
+
+13. Main Slider:
+There is a set of sliders at the same line and only one shows up based on
+which ETA control button is clicked. They are used to adjust different curves.
+
+14. Quantization slider:
+This is used when there are too few gray levels. It functions when the
+Quantizing button is on (10).
+
+.SH POP MENU
+.TP
+.I EDIT MENU
+.B INFO
+.br
+This is the same as press `h' key.
+
+.B cut
+.br
+cut the sub-image (cropped) from the destination window and save it to the
+editing buffer.
+
+.B copy
+.br
+copy the sub-image to the editing buffer for pasting.
+
+.B crop
+.br
+do cropping in a super-size image in which the mouse can't do it (getx can).
+
+.B delete
+.br
+delete a superimposed element. This can be done only in HIPS images in which
+sunperimposing elements are separated from an image body. In other types of
+images, superimposed elements are permenantly melted into the image body.
+
+.B draw
+.br
+draw line, rectangle, and arc in an image.  For button usages, see paint.
+When working on HIPS images, the draws are superimposed elements and can be
+moved or removed.  This is also true for annotation.
+
+.B paste
+.br
+paste a sub-image in editing buffer to a destination window.
+
+.B paint
+.br
+paint an image. A menu comes for set-up color and pencil thickness, then
+a message window tells how to paint, change colors, and quit from painting.
+Press the left button to paint (to type in annotate, and to draw in draw mode).
+Press the middle button to change features:
+colors; (fonts for typing; shapes & line thicknesses for drawing.)
+Press the right button to quit from editing.
+
+.B annotate
+.br
+annotate an image with text. Use the middle button to change color and fonts.
+CTRL-Y to finish typing, or ESC to abort typing.
+
+.B NOP
+.br
+NO OPERATION
+
+.TP
+.I SCALE MENU
+.B FITS Type
+.br
+The type of machine which FITS image is from.
+
+.B Change ETA Scale
+.br
+Change enhancemant slider (Tuner slider in the middle of the panel) range.
+
+.B Interpolation Level
+.br
+The default is 2. The maximum is 8. For detail, see elastic(1).
+
+.B R.G.B weight
+.br
+The default is 71, 150, 28 . Used for color to scale gray conversion.
+
+.B Background
+.br
+Set Background value for editing. The default is 0.
+
+.TP
+.I FILE MENU
+.B Empty Frame
+.br
+to generate a blank frame for editing (collage).
+
+.B Change DIR
+.br
+change current working for loading and saving images.
+
+.B Loading Frame
+.br
+Color version only. For reloading certain frame(s) in multiple frame image.
+
+.B map 1 to 3
+.br
+Press Yes button, convert 1-channel image (8-byte) to 3-channel image (24-byte)
+when loading new images.
+.br
+Press No button, no changes for input.
+
+.B Output TYPE
+.br
+The image type for saving. Availables are HIPS, RLE, RAS (SUN-RASter).
+The default is RLE.
+
+.B QUIT
+.br
+completely quit from the tuner system.
+
+.SH NOTE
+The input can be one of the following type images:
+
+	HIPS, FITS, GIF, ICC, JPEG, RLE, PICT, PNM, SUN-Raster, and TIFF
+.br
+The output can be HIPS, RLE, or SUN-Raster image.
+
+.SH BUGs
+.TP
+Report to author
+
+.SH SEE ALSO
+sendto(1), ccs(1), toany(1), elastic(1), mainpeak(1), segal(1), xhist(1),
+dcvtob(1), vfft(1), vfftpass(1), vfftfilter(1), inv-vfft(1)
+.SH AUTHOR
+Jin Guojun - LBL 4/1/91

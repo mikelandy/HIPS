@@ -1,0 +1,31 @@
+Functions to interface Datacube Software and HIPS
+=================================================
+These functions allow frames to be read from Datacube products and be stored as HIPS files, and HIPS files to be written to Datacube products for display.
+              Connections should be as follows	     			    
+               DIGI             FRM                                       
+               P3       ->      P3                                        
+     CAMERA -> P12                                                        
+     TV     <- P13                                                        
+               P7       <-      P7                                        
+               P10      ->      P10                                       
+
+MaxWare v.2.1
+-------------
+./max_hips_src /* Functions interfacing DIGIMAX and FRAMESTORE to HIPS */
+max_rframe.c max_wframe.c 
+ 
+
+Description
+===========
+Having followed the Datacube MaxWare V.2.1 installation proceedure as laid down in the documentation supplied, and already having the HIPS library installed as
+described in the release notes, these files are ready to be compiled and run.
+Modify the definitions of TOP, HOME and BIN in the Makefile to suit your file
+system: ie. if MaxWare lib files reside at /mnt/temp/fred/maxvideo/lib then 
+alter TOP to reflect this;  TOP = /mnt/temp/fred/maxvideo.
+Alter HOME to reflect the directory the source files reside in, and HIPSLIB to
+indicate where ./libhipl.a resides.
+
+Additional Note 
+===============
+max_rframe.cnew  max_wframe.cnew ; are quick versions of the above. Use them if your version of MaxWare is OK. 
+ 

@@ -1,0 +1,37 @@
+.TH HIPS2PCL 1hips "OCTOBER 9, 1991" 
+.SH NAME
+hips2pcl - converts a binary image for printing on an
+HP Laserjet printer.
+.SH SYNOPSIS
+.B hips2pcl
+[-1] [-2] [-3] [-4] < iseq > oseq
+.SH DESCRIPTION 
+.I hips2pcl 
+converts a binary image in byte format to
+a serie of pcl-commands for the HP Laserjet printer family.
+Both 1 and 8 bits per pixel is supported. A pixel with a 
+non-zero value is represented as a black dot on the paper.
+You should use the 
+.I neg
+command first if you want zero-valued pixels to be black.
+Options 
+.I [-1]
+, 
+.I [-2]
+, 
+.I [-3]
+and 
+.I [-4]
+sets the number of dots per pixel side.
+The output of hips2pcl can be piped directly to the 
+.I lp
+command. Remember to use the raw mode.
+
+.SH SEE\ ALSO
+lp(1), dither(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

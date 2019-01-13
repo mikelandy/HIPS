@@ -1,0 +1,18 @@
+**
+	List for use with SEGAL 3D - by Bryan Skene
+**
+** Name: mri.256.list **
+** Description: The big Brain **
+** Image Directory **
+/home/oliver/data2/users/skene/images
+** Image Filename **
+mri.256
+** Directory of all Masks **
+/home/oliver/data2/users/skene/images
+** Edit Mask **
+mri.256.mask
+** Other Masks (optional) **
+mri.256.mask.siggraph0
+
+
+

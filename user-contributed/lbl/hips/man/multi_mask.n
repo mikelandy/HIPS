@@ -1,0 +1,58 @@
+.fz \s +4
+.Ls	2
+.TH MULTI_MASK 1 "DECEMBER 10, 1990" LBL-HIPS
+.SH NAME
+multi_mask \- multiple-function binary mask
+.SH SYNOPSIS
+.B multi_mask
+[-mBit_Mask] [-xMask] [-BSFLIW] [-o^&o-x+] [-p] [-h] file_name
+.SH DESCRIPTION
+.I multi_mask
+applies 6 operations to the bit(s) of input images. They are:
++ plus, - minus, x multiply,
+^ exclusive or, o inclusive or, & and.
+The bit-string is from 1 to 32 bits long.
+.SH OPTIONS
+.TP
+.I -m
+provides the binary mask.  The user provides the low-order bits and the
+high-order bits are set to 1
+.br
+(e.g., -m10110 -B = -m11110110 -B; and
+.br
+-m010 -L = -m11111111111111111111111111111010 -L).
+.TP
+.I -x
+input mask in hexadecimal (e.g., -x5C = -m011100)
+.TP
+.I -BWSILF
+the mask will be applied in byte, short integer, integer, long integer or
+floating point.
+.TP
+.I -o
+operations. The default is the
+.I and
+operation.
+.TP
+.I -p
+output will be piped to another process or standard output. The default is a
+file which has input name + mask code extension.
+.TP
+.I -h
+This is the hips image, do not apply the filter to the header.
+.SH NOTE
+The input can be one of the following 7 type images:
+.br
+	HIPS, FITS, GIF, ICC, RLE, PNM, SUN-Raster, and TIFF
+.br
+The output is a HIPS image.
+.SH "SEE ALSO"
+3dmask(1), 3dog(1), bin_mask(1), hexdump(n), powertool(n)
+.SH EXAMPLE
+.nf
+multi_mask -m000 bird	-- apply "and" operation and mask 11111000 on bird
+
+multi_mask -x0 -o^ bird	-- do neg on image bird
+.fi
+.SH AUTHOR
+Jin Guojun - 10/10/90

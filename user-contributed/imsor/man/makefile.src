@@ -1,0 +1,34 @@
+#
+# makefile for user-contributed/imsor/man
+#
+
+MANPAGES = hips_imm.n \
+	   acf.n bil.n gauss.n grad.n taper.n \
+	   decorr.n pcdecorr.n ihsdecorr.n \
+	   rgb2ihs.n ihs2rgb.n linemeans.n \
+	   bigextract.n fmedian.n quantile.n cubic.n \
+	   asc2hips.n irr2reg.n reg2irr.n polyextract.n reduce_simp.n \
+	   scale_all.n equalpoints.n crossv.n changehdr.n headfield.n \
+	   standard.n \
+	   distmin.n \
+	   cbdilate.n cberode.n cobjects.n grow.n hole_fill.n isolate.n \
+	   deriche.n fhist.n framecut.n glcm.n histinfo.n histobe.n \
+	   hips2imf.n imf2hips.n hips2pcl.n hips2tga.n tga2hips.n bmp2hips.n \
+	   raw2hips.n \
+	   frarithmetic.n \
+	   fradd.n frsub.n frdif.n frmul.n frdiv.n frmin.n frmax.n \
+	   mdilate.n merode.n mgradient.n mopen.n mclose.n \
+	   mwtophat.n mbtophat.n \
+	   spinexch.n \
+	   patchwork.n prncpl.n subseq3.n subseq5.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

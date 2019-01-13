@@ -1,0 +1,248 @@
+.TH CLIENTLIB n "1992" "Scry Version 1.3" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+scry_send_image, scry_connect, scry_close,
+scry_save_anima, scry_set_max_color, scry_set_map,
+scry_set_corner, scry_v_flip\- routines for image
+compression, transmission, and recording
+.SH SYNOPSIS
+.nf
+.B #include <scry.h>
+.LP
+.B scry_send_image(rawimage,comp_option,height,width,depth)
+.B unsigned char *rawimage;
+.B int comp_option;
+.B int height;
+.B int width;
+.B int depth;
+.LP
+.B scry_connect(host,prognum)
+.B char \(**host;
+.B int prognum;
+.LP
+.B scry_close()
+.LP
+.B scry_set_max_color(max)
+.B int max;
+.LP
+.B scry_set_map(num,map)
+.B int num;
+.B unsigned char *map;
+.LP
+.B scry_set_corner(winx,winy)
+.B int winx;
+.B int winy;
+.LP
+.B scry_v_flip(rawimage,height,width,depth)
+.B unsigned char *rawimage;
+.B int height;
+.B int width;
+.B int depth;
+.LP
+.B scry_init_record(rec_option,total,movie_id)
+.B int rec_option;
+.B int total;
+.B char *movie_id;
+.LP
+.B scry_set_filename(filename,total)
+.B char *filename;
+.B int total;
+.LP
+.B scry_save_anima(rawimage,height,width,depth)
+.B unsigned char *rawimage;
+.B int height;
+.B int width;
+.B int depth;
+.fi
+.SH DESCRIPTION
+Routines to take a raw 1, 2, 3, or 4 byte format image,
+optionally compress it, and optionally transmit it to a
+server workstation via Sun RPC's for decompression and display.
+The \f3depth\f1 argument in the routines refers
+to the number of bytes per pixel.
+Three-byte images are assumed to be in RGB order; 4-byte images
+are assumed to be in ARGB order.
+It is assumed that the upper left hand corner of the image
+is (0,0), and the user will have to transform the image with
+\f3scry_v_flip\f1 if its lower left hand corner is (0,0).
+Programs using these calls for compression and/or
+transmission, are in \f2scry/samples\f1.
+The size of the images that can be handled depends on the amount
+of memory on the client, and on the spatial resolution of the server.
+If an image is larger than that of the server display, it is
+truncated to the server spatial resolution.  Automatic
+centering can be used, or \f3scry_set_corner\f1
+can be used to set truncation.  If the width or height of the image
+on the client is not divisible by 4, the image is truncated so that
+it is.
+.LP
+\f3scry_connect\f1 is called first to set up the connection
+to the server workstation.
+\f3host\f1 is the symbolic name of the server system, or its Internet address.
+(If the symbolic name is used, then an entry needs to be set in the system \f2/etc/hosts\f1 file
+to map this symbolic name into the Internet address of the
+server system.)
+.LP
+\f3prognum\f1 is an identifier for the
+particular instance of the server executing.
+In the case of the Scry X or Sunview server there can be
+several servers representing
+several different windows on a single Sun.
+\f3prognum\f1 should always be \f3PCPROGRAM\f1 for use with
+the PC server, which can run only one process at a time.
+.LP
+\f3scry_close\f1 is called at the end of a session to
+close Scry and terminate the connection with the server workstation
+if a connection was opened.
+.LP
+\f3scry_send_image\f1 transmits the software frame buffer, optionally
+compressing it first, to the server workstation.  If the depth or size
+of the server display is less than the image to be transmitted, the
+image is truncated to that depth and size.
+.LP
+\f3comp_option\f1 sets the compression type.  The particular
+compression is chosen by |'ing (in C)
+the options \f3CCC\f1, \f3QUANTIZE\f1, and/or
+\f3LEMPEL_ZIV\f1.  \f3CCC\f1 chooses CCC compression and run-length encoding,
+\f3QUANTIZE\f1 chooses Paul Raveling's IMG 1.3 color quantization algorithm,
+\f3LEMPEL_ZIV\f1 chooses Lempel-Ziv compression.
+(The availability of the original IMG 1.3 code is described in the \f2README\f1
+in this directory.)
+For example, to use CCC compression and then LEMPEL_ZIV compression:
+\f3CCC | LEMPEL_ZIV\f1.
+Use \f3NONE\f1 by itself if no compression is desired.
+.LP
+The following compression options are legal:
+.br
+(1)  NONE
+.br
+(2)  CCC
+.br
+(3)  CCC | LEMPEL_ZIV
+.br
+(4)  QUANTIZE (ignored for 8-bit images)
+.br
+(5)  QUANTIZE | LEMPEL_ZIV (LEMPEL_ZIV only for 8-bit images)
+.LP
+If \f3MESSAGES\f1 is \f3DEFINE\f1'd, the total compression achieved
+is printed after completion.  Note that it if the image was truncated,
+the compression ratio is only for the portion of the image remaining.
+.LP
+\f3scry_set_max_color\f1 sets the maximum number of color table
+entries.  The largest that can be set is 256.  The default is 221, which
+can be changed before compiling Scry by changing the
+constant \f3S_MAX_COL_DISPLAY\f1 in \f2scry/include/scry_limits.h\f1.
+See \f3svanima(n)\f1 and \f3Xanima(n)\f1
+for more on the use of color with 8-bit displays.
+.LP
+\f3scry_set_map\f1 is used to set the color map when the image
+has already been converted into indices into a color map,
+as in an 8-bit Sun rasterfile.  The number of entries
+overrides that set with scry_set_max_color.
+.LP
+\f3scry_set_corner\f1 is only useful if it is known that the
+image is larger than the server display.  It sets the upper
+left hand corner of the image that will be transmitted.  The
+lower right corner is determined by the height and width of
+the server display.  If \f3scry_set_corner\f1 is not called,
+the appropriately-sized center portion of the image is
+transmitted.
+.LP
+\f3scry_v_flip\f1 flips a raw image around an x axis in its center.
+.LP
+\f3scry_init_record\f1 is used to initialize the video
+recorder associated with a PC server workstation.
+\f3rec_option\f1 sets the recording mode.  If \f3rec_option\f1
+is \f3PREVIEW\f1 the images are displayed on the PC server workstation
+but not recorded.
+If the PC is equipped with a Panasonic videodisk, \f3rec_option\f1
+and \f3total\f1 have the following effects.
+If \f3rec_option\f1 is a positive number, frames are recorded
+starting at the frame on videotape or videodisk identified by that
+number.
+If \f3rec_option\f1 is \f3AUTOSEEK\f1, the
+videodisk seeks to the first unrecorded group of frames
+large enough to hold \f3total\f1 frames.
+If the PC is equipped with a Sony videodisk, the videodisk seeks
+to the first unrecorded frame for all non-preview cases.
+\f3movie_id\f1 contains up to 80 characters of description of
+the movie to be made.
+It will be saved in the file \f2\\movie\\movie.log\f1 on the PC server
+workstation.  This file must be
+created before using the server.  The user id of the person
+using the client, the date, and
+the locations of the frames recorded on videotape or
+videodisk will be written into \f2movie.log\f1 along with
+\f3movie_id\f1.
+.LP
+\f3scry_set_filename\f1 sets \f3filename\f1, which is the name
+that the Anima file will be saved under if \f3scry_send_image\f1
+or \f3scry_save_anima\f1 is called.  The images are saved
+locally with \f3scry_save_anima\f1, and on the server with
+\f3scry_send_image\f1.  \f3total\f1 frames will be saved.
+All images are saved with the \f3CCC\f1 compression format. 
+If another compression option has been chosen, it will be ignored.
+If, during transmission or compression of a sequence of
+images, more than one file name is chosen, Scry assumes the first
+file is completed, and starts a new Anima file.
+.LP
+\f3scry_save_anima\f1 compresses and stores a raw image in Anima
+format under the file name set with \f3scry_set_filename\f1.
+If it is called more than once, all images are saved in the same
+file.  If the image is 8-bit, the color map should be saved
+by \f3scry_set_map\f1 before calling \f3scry_save_anima\f1.
+\f3scry_close\f1 should be called after the image(s) have been
+saved.
+\f3depth\f1 is the depth of the image in bytes.
+.SH FILES
+Contained in \f2scry/client\f1:
+.HP 1.3i
+.TP
+.IB Makefile
+makes library \f2scry/libs/libclient\f1.a.
+.TP
+.IB cccalg .c
+CCC compression and run-length encoding
+.TP
+.IB compress .c
+compression setup
+.TP
+.IB control .c
+controls communication with the Scry server
+.TP
+.IB convis .c
+make the image to transmit the same size and format as the
+target server
+.TP
+.IB lzw .c
+Lempel-Ziv compression
+.TP
+.IB record .c
+controls recording
+.TP
+.IB send .c
+image transmission
+.TP
+.IB quantiz .c
+modified IMG 1.3 color quantization algorithm
+from Paul Raveling
+.TP
+.IB imglib .h
+IMG 1.3 include file for quantiz.c
+.SH AUTHORS
+David Robertson, Nicole Texier, James Huang, and Bill Johnston
+.SH WARNINGS
+Scry cannot deal with 2-byte format images on the Cray.
+.LP
+If the compression option chosen is quantization combined with Lempel-Ziv,
+the PC server essentially cannot decompress the image
+(the image would have to be not bigger than 32K bytes).
+.LP
+Do not attempt to save, in the same Anima file, images of
+different widths and/or heights.  It will make \f3Xanima\f1
+and \f3svanima\f1 die on the first frame that is of a different
+size.
+.LP
+If a Sony videodisk is used that has unrecorded areas separated
+by recorded areas, recording will probably fail.
+.SH "SEE ALSO"
+.B scry(n), scry_client(n), pcserv(n), Xserv(n), svserv(n)

@@ -1,0 +1,29 @@
+.TH HIPS2IMP 1 "August  1989"
+.SH NAME
+hips2imP \- convert from HIPS to Impress format for Imagen printers
+.SH SYNOPSIS
+.B hips2imP
+.SH DESCRIPTION 
+.I Hips2imP
+prints a hips image on an imagen printer using imPress code.
+First, a set of (up to 64) graylevel glyphs are downloaded
+to the Imagen imPress printer and given a font name. Assuming
+that the image (input) arriving at the stdin is of 0..255 graylevels,
+each pixel is rounded to  0..63 levels, and translated to one of the
+64 characters in this font. 
+.PP
+Since each glyph is of 8 x 8 dots, the largest size of the image
+is governed by several factors:
+.sp
+D = Dots Per Inch resolution of the printer.
+.br
+g = (2,4,8)  ==>  (0..3, 0..15, 0..63) gray levels. 
+.br
+H = Height,  W = Width of the paper in inches.
+.br
+N = min (H, W) * D /g 
+.PP
+Correspondingly, the imagen printer's floating origin needs to be
+chosen as well.
+This is a quick and dirty implementation.  Variable size input has
+not been implemented yet.

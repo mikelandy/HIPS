@@ -1,0 +1,19 @@
+#
+# makefile for user-contributed/uva/sources
+#
+
+PGMS = 2dhist.out 3dhist.out avefilt.out aveseq.out divseq2.out \
+		lutexpmake.out lutmake.out lutmap.out map.out pixshift.out \
+		shrink.out stdseq.out varseq.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

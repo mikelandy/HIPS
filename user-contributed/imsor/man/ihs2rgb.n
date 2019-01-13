@@ -1,0 +1,33 @@
+.TH  IHS2RGB 1 "11 March 1992" "Version 2" "HIPS Manual"
+.SH NAME
+ihs2rgb \- transform a 3-frame sequence from IHS to RGB
+.SH SYNOPSIS
+.B ihs2rgb
+.RB [ \-c ]
+.RB [ \-s ]
+.RB [ \-T ]
+.SH DESCRIPTION
+.I ihs2rgb
+transforms from IHS  (Intensity, Hue, Saturation) space to RGB
+(Red, Green, Blue) space. 
+If only 2 frames are supplied saturation will be set to maximum.
+As default hue is blue for small values and magenta for large values.
+if 
+.B \-c
+is used, a circular colourcoding is used, i.e blue represents both small
+and large values og hue.
+As default intensity independent saturation is used.
+.B \-s
+specifies intensity dependent saturation.
+If
+.B \-T
+the input is assumed to be in Taylor coordinates (LUV) instead of IHS.
+U measures blueness, and V measures greenness. LUV, thus being a
+lefthand coordinate system.
+The input sequence can be byte, short, int or float format.
+The output sequence is in float format and has values between 0 and 1.
+.SH AUTHOR
+.nf
+Rasmus Larsen  
+IMSOR, Technical University of Denmark
+e-mail: rl@imsor.dth.dk

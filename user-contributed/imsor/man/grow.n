@@ -1,0 +1,35 @@
+.TH GROW 1hips "February 1993"
+.SH NAME
+grow - coefficient dilation on byte images without merging features. 
+
+.SH SYNOPSIS
+.B grow
+[-c coeff] [-t times] [-m masksize] < iseq > oseq
+.br
+.B grow
+[-flip coeff1 coeff2] [-t times] [-m masksize] < iseq > oseq
+.SH DESCRIPTION
+.I grow 
+performs a dilation on a byte image. The options are described in
+the manualpage for the
+.I cbdilate
+program. Each feature (object) in the image is supposed to have a
+unique label in the interval 0-255. The labelling can be obtained
+using the
+.I cobjects
+program. The dilation is performed just as described for 
+.I cbdilate,
+but with the restrictions that only one element is dilated at a
+time and a black pixel can only change to the current label if
+all of it's (8-connected) neighbors are either the same label or
+black.
+
+
+.SH SEE\ ALSO
+cberode, cbdilate, cobjects and isolate.
+
+.SH REFERENCES
+John C. Russ, The Image Processing Handbook, CRC Press, 1992.
+
+.SH AUTHOR
+Written by Michael Grunkin, IMSOR, DTH - 15.2.93

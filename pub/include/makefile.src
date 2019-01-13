@@ -1,0 +1,23 @@
+#
+# makefile for directory pub/include
+#
+
+INCLUDES = hipspub.h
+
+install:	$(INCLUDES)
+	cp $(INCLUDES) $(INCLUDE_DIR)
+	@touch install
+
+clean:
+	rm -f install
+
+man:
+
+doc:
+
+pristine:
+	for i in $(INCLUDES) ; \
+	do \
+		rm -f $(INCLUDE_DIR)/$$i ; \
+	done
+	@rm -f install

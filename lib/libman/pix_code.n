@@ -1,0 +1,27 @@
+.TH PIX_CODE 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+pix_code \- generate a byte-formatted pixel area from a plot3d buffer
+.SH SYNOPSIS
+.nf
+pix_code(buf,nbytes,pic,rows,nlp)
+char *buf,*pic;
+int nbytes,rows,nlp;
+.fi
+.SH DESCRIPTION 
+This function extracts all of the plot3d elements from a frame buffer, and
+composes a byte-formatted subimage with all of those elements.
+It is assumed that all the coordinates in the plot3d frame are already
+in the range of the display area, and are incremented
+(by .5) so that truncation results in rounding.
+.I rows
+is the number of rows in the subimage.
+.I nlp
+is the number of pixels per line in the image.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_CODE - unknown plot3d code
+.SH AUTHOR
+Mike Landy - 10/19/83
+.br
+modified for HIPS 2 - msl - 1/3/91

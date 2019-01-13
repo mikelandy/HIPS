@@ -1,0 +1,93 @@
+.TH H_IENLARGE 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_ienlarge \- subroutines to enlarge an image by bilinear interpolation
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_ienlarge(hdi,hdo,xf,yf)
+h_ienlarge_b(hdi,hdo,xf,yf)
+h_ienlarge_i(hdi,hdo,xf,yf)
+h_ienlarge_f(hdi,hdo,xf,yf)
+h_ienlarge_c(hdi,hdo,xf,yf)
+struct header *hdi,*hdo;
+int xf,yf;
+
+h_ienlarge_B(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+
+h_ienlarge_I(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+
+h_ienlarge_F(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+
+h_ienlarge_C(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+.fi
+.SH DESCRIPTION 
+These routines enlarge an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo )
+using bilinear pixel interpolation
+.I h_ienlarge
+calls
+.IR h_ienlarge_b ,
+.IR h_ienlarge_i ,
+.I h_ienlarge_f
+or
+.I h_ienlarge_c
+depending upon whether the pixel format is byte, integer, float or complex.
+.IR h_ienlarge_B ,
+.IR h_ienlarge_I ,
+.I h_ienlarge_F
+and
+.I h_ienlarge_C
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  The input image is magnified by a factor of
+.I xf
+horizontally and
+.I yf
+vertically.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, integer, float, complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_enlarge(3), h_ienlarge3(3), h_reduce(3)
+.SH AUTHOR
+Michael Landy - 1/12/91

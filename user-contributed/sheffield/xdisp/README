@@ -1,0 +1,68 @@
+xdisp is an X windows HIPS image display tool developed at Sheffield University,
+England, and donated to the user-contributed section of HIPS2. It features:
+
+	- resizable viewing window
+	- multiple frames
+	- choice of LUTs (including user defined)
+	- choice of cursor (including user defined)
+	- gamma control
+	- multiframe overlays in RGB/CMY colors
+	- pan and zoom
+	- X windows network working
+	- polygonal region definition (and naming)
+	- elementary statistics on polygonal areas
+	- handles most HIPS2 data types directly
+	- histogram/cdf display
+
+Hardware required: at least 8-bit color graphics workstation with
+OpenWindows system (include and library files). 24-bit color is OK, but
+the program will only run in 8-bit mode. Once built, it will run with a
+Motif window manager, as long as the OpenWindows and Xt libraries are
+available.
+
+Software required: OpenWindows, HIPS2 (include files + hips and hipsh
+libraries), cc or gcc compiler. The software has only been built on
+SunOS 4.1.x as yet - not ported to Solaris 2 (although it will run under
+Solaris 2 binary compatibility). A binary built under SunOS 4.1.3 is
+included in ./src for those who've taken the plunge to Solaris 2, and have
+binary compatibility.
+
+The files and directories in this release are:
+
+    sheffield                          # top level directory
+    sheffield/xdisp                    # xdisp stuff
+    sheffield/xdisp/README             # this file
+    sheffield/xdisp/COPYRIGHT          # copyright information
+    sheffield/xdisp/INSTALL            # installation instructions
+    sheffield/xdisp/src                # source files
+    sheffield/xdisp/doc                # man page and document
+    sheffield/xdisp/example            # polygon processing example files
+
+
+Intended enhancements are:
+
+        - upgrade to work in 24-bit color mode
+        - improved statistics
+        - extension of polygons to more general geometry (eg vectors, grids)
+        - port to Motif
+        - port to Solaris 2
+
+Bugs, queries, usability reports, enhancements etc can be mailed to me
+at:
+        I.Staniforth@sheffield.ac.uk
+
+This software was developed by us and for us, and this is its first exposure
+to the outside world, so please don't be too harsh in your judgement! It was
+developed to extract and analyse fields in multitemporal and multifrequency
+airborne/satellite pictures of the Earth, so expect it to be biased towards
+that application.
+
+Thanks for trying our software.
+
+
+Ian Staniforth
+School of Mathematics and Statistics
+Sheffield University
+Sheffield
+S3 7RH
+England

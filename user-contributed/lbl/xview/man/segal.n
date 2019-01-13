@@ -1,0 +1,243 @@
+.TH SEGAL 1 "1 May 1990" "LBL-HIPS"
+.SH NAME
+.B segal
+- (SEGmentation AnaLyzer): binary mask editor/builder/analyzer for HIPS images.
+.SH SYNOPSIS
+.B segal
+[-i image][-m mask] [-v] [-c NN]
+.SH DESCRIPTION
+.I segal
+is an X-windows  tool for interactively editing, creating, and analyzing
+binary mask images. In
+.I segal
+a mask is transparently laid over the original image, then using the
+mouse, one can "cut" or "fill" in the mask, exposing the image beneath.
+A new mask can be created by selecting the image threshold value.
+The user can select between various size paint/erase cursors, and 
+select various zoom magnifications, to aid in building the mask.
+The image must be of type byte, and it is best if the image is contrast
+enhanced using a program such as
+.I mahe
+or
+.I
+hstr.
+A mask can also be edited/created without an image overlay.
+.I segal
+also does statistical measurements on objects in the binary mask image.
+.SH OPTIONS
+.TP
+.B \-i image
+image file name (must have HIPS header)
+.TP
+.B \-m mask
+binary mask image file name (must have HIPS header)
+.TP
+.B \-v
+sets 
+.I segal
+to verbose mode, which prints several status/debugging messages
+along the way.
+.TP
+.B \-c NNN
+Sets the color (Hue) of the overlay blend. This number is an integer
+value for the hue (must be 0 to 360). Default value is 170 (dark green).
+.LP
+This program was coded using the xview toolkit, which follows Sun's
+Openwindows/ OPEN LOOK specifications. Therefore most of the standard
+xview windows arguments should work, as well as anything
+specified with OpenWindows.foo in your .Xdefaults file.
+In particular, use "OpenWindows.WindowColor:  colorname" in the .Xdefaults
+file to set the background color for the control panels.
+.TP
+Here are some standard xview options that may be useful:
+.TP
+.B \-display hostname:display
+Specify the name of the display to manage.  Overrides the DISPLAY
+environment variable, if any.
+.TP
+.B \-position x y
+Location of the
+.I segal
+control window.
+.TP
+.B \-foreground_color red green blue
+Sets text in the control windows to the color specified by (red, green, blue)
+.TP
+.B \-help
+List of all window control command arguments.
+.\"===============================================================
+.SH MAIN CONTROL WINDOW FUNCTIONS
+.TP 10
+.B Load Pop Up -
+Select either image/mask.
+Enter the image/mask directory.
+Enter the image/mask filename and either press return or push the Load button.
+.TP 10
+.B Create Pop Up -
+Enter the mask directory.
+Enter the mask filename to create and either press return or push the Create
+button.
+.TP 10
+.B Edit Window -
+Must have a region cropped to edit anything.  Do this by dragging out a
+rectangle in the main image window with the mouse and any button.  A zoomed
+version of the cropped region will appear in the Edit Window.  Next, select
+either Mask/Image for the Brush Mode.  This determines what will be edited
+by the Edit Window Paint Brush.  The Mask can be Painted or Erased with the
+brush.  The image brush is either Additive or Subtractive by a certain Amount
+that can be changed.
+.TP 15
+.B Other things that can be selected:
+Mask brush shape, Either brush size, and Zoom Magnification.
+The Original Button restores the image and the mask back to their original
+(loaded) states.  The Undo undoes the last edit of the brush.  Save is not
+currently working properly. (This, it turns out, doesn't affect the rest of
+Segal - the mask is automatically saved at various points).
+By holding down shift or control and a mouse button in the zoomed image, the
+pixel value at that location in the image is displayed in the main image window,
+the zoomed image window, and Segal's Main window.
+If the size of the zoomed window is larger than 500 in any direction, scroll
+bars appear to aid in keeping windows on the screen and accessible.
+.TP 10
+.B Frame Control Window -
+Only is active for multi-framed images.  When selected, the Frame Control
+Window pops up.  With the Current Frame Slider allows any of the frames to be
+displayed in the main image window.  By entering values in the Movie From and
+Movie To Text fields and then pressing the Start button, Segal can be made to
+display a series of frames.
+.TP 20
+.B Stack Loading: 
+This determines whether each time a frame is selected to be
+displayed Segal loads into a 3-d buffer enough frames above and below that
+frame to allow the application in 3-d of a gradient matrix in the growth
+process (see GROW under Mask Control Window).  This is optional because on some
+computers memory or i/o constraints could seriously hinder the operation of
+Segal, and for most images the precision of 3-d gradient matrix application is
+not critical.
+.TP 10
+.B Display Control -
+This window contains miscellaneous settings pertaining to the way Segal displays
+the image and the mask (or both).  The frequently used features of this window
+are found in appropriate other windows in Segal.
+.TP 20
+.B Display Image/Mask/Both Setting: 
+Choose one. (Also found in Mask Control Window)
+.TP 20
+.B Combination Method: 
+Determines how mask is displayed in the Display Both mode.
+Color Blend gives the translucent green mask and Overlay gives a solid white
+mask.
+.B Mask Model: 
+Please leave this on build or you will get confused!!!
+.B Original Check Box: 
+Check this box and a copy of the main image window will pop
+up.  This is useful when displaying in the Both mode.
+.B Image Contrast Slider: 
+The higher the slider, the higher the contrast of the
+main image.
+.B Opacity for Image Blend and Mask Blend Sliders: 
+Other good things to leave
+alone.
+.TP 10
+Mask Control Window -
+This is where the real power of Segal is evident: the semi-automatic creation
+of segmentation masks.  A simple Threshold can be obtained by pressing the
+Threshold Button.  The Threshold Window will pop up, displaying a histogram of
+the selected region or the whole image, depending on the Portion Setting (see
+below).  The Threshold Window offers a slider for both an upper and a lower
+threshold value.  When these sliders are set, a push on the Threshold Button
+in the Threshold Window will perform a simple threshold on the selected Portion
+of the image.  The mask is the result of the threshold.
+Other useful operations on a Portion of the image to create/delete a Portion
+of the mask are performed by selecting the Portion and then pushing the Fill,
+Clear, and Invert Buttons.
+The Polygon Mask Button is currently not working.
+.TP 15
+Growth Options:
+The Original and Undo Buttons are the same as on the Main Window and the Edit
+Window.
+The Stop Button stops the growth during the multi-frame growing (when From is
+selected as "Beginning Frame to Ending Frame").
+.B Portion: 
+specifies what to apply growing, thresholding, filling, clearing, and
+inverting to.
+From can be set to Seed Points this Frame, Beginning Frame to Ending Frame,
+This Frame to Previous Frame, and This Frame to Next Frame.  To see an
+explanation of these, see the tutorial.
+An explanation in simple English of the growth algorithm will simplify the
+meaning of each of the rest of the items in the Growth Options.  First, all the
+edges of the mask in the Portion are found.  Then, Segal attempts to grow the
+mask out in every direction, flood filling from the edge of the mask.  The
+growth is stunted by one of the following:
+.na
+.nf
+    Candidate point:
+       	is already a mask point.
+	has a gradient higher than the gradient slider.
+	has a value > upper threshold value.
+	has a value < lower threshold value.
+.fi
+.ad
+.TP 15
+.B Gradient: 
+When growing, specifies the highest gradient (as calculated by the
+particular gradient matrix selected) allowed for a candidate pixel to become
+part of the mask.
+.TP 15
+.B Matrix Type: 
+Simple Gradient, Sobel, Laplacian, Kasvand, etc.
+.TP 15
+.B Matrix Size: 
+The smaller the faster the growing; the larger the less image
+noise will affect the gradient.
+.TP 15
+.B Apply in: 
+Apply a 2-d matrix to the Current frame or (slower but more precise)
+apply a 3-d matrix to the stack of frames (stack loading from Frame Control
+must be "yes").
+.TP 15
+.B Upper and lower threshold values: 
+Set these to the highest and lowest pixel
+values to be included in the mask when growing.  Obtain the pixel values by
+dragging the mouse in either the main image window or the Edit Window while
+pressing the shift or control key.
+.TP 10
+.B HIPS Filter -
+Not working yet.
+
+.SH MOUSE BUTTON OPERATIONS
+Left, middle, and right mouse buttons all have the same effect.
+.SH ENVIRONMENT
+.B DISPLAY
+Specifies the screen for the program to be displayed at. To set, use
+setenv. For example: setenv DISPLAY unix:0.0  for your local machine.
+.SH TRADEMARKS
+.LP
+OPEN LOOK is a trademark of AT&T.
+.br
+The X Window system is  a  trademark  of  the  Massachusetts Institute
+of Technology.
+.br
+OpenWindows is a trademark of Sun Microsystems, Inc.
+
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH "SEE ALSO"
+segal_tutorial(1), mahe(1), hstr(1), xinit(1), openwin(1), addmask(1)
+.SH DIAGNOSTICS
+.pp
+This program currently prints most error messages to stderr (the window
+in which the program was started). If nothing happens when you think 
+something should be happening, check for an error message in that window.
+.SH BUGS
+.pp
+With large images, the image is sometimes only partially
+displayed when first bringing up
+the image window. The fix this, click the mouse in the button
+labeled 'image'.
+.pp
+The largest paint and erase cursors sometimes 'break up' when moving
+on the edit window. I believe this must be a xview toolkit bug.
+.pp
+Report all other bugs to Brian Tierney.
+

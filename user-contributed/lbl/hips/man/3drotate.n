@@ -1,0 +1,74 @@
+.TH 3DROTATE 1 "December. 20, 1990" LBL-HIPS
+.\" @(#)3drotate 1.1 12/20/90 JIN;
+.SH NAME
+3drotate \- 3D image slice and rotation for HIPS and FITS type images.
+.SH SYNOPSIS
+.B 3drotate
+[-l] [-t]] [-p
+.IR xyz ]
+[-a #] [-c#] [-r#] [-f#] [-n#]
+.SH DESCRIPTION
+.I 3drotate
+rotates a 3D image from an X-Y view to either a Y-Z or Z-X view for
+segmentation or display. The output is a HIPS image.
+.SH OPTIONS
+.TP
+.I -l
+(look from
+.IR left )
+specifies slicing vertically (Y-Z surface, face to X axis)
+.TP
+.I -t
+(look from
+.IR top ,
+the default) rotate to Z-X surface, face to Y axis.
+This option is similar to that of
+.IR 3drotate90 ,
+but it puts the upper-left corner in the
+lower-left corner. So rotation goes to top, rear(back), bottom and finally
+back to front. It can continiously work for all surfaces and is faster than
+.IR 3drotate90 .
+If maintaining the upper-left corner is required, use
+.I 3drotate90
+and
+.I 3drotate180
+to get each degree of rotation.
+.TP
+.I -p XYZ
+(Not yet available. For bytes format, use 3dslice) Compute a slice either
+diagonally or specifying
+XYZ gives the choice of a slice parallel to one of the axes, and
+.I -a
+#
+gives the angle which ranges from  -90 to +90 degrees.
+You can specify any angle; the program can convert it into this range.
+.TP
+.I -c #
+starting column for vertical slice
+.TP
+.I -r #
+starting row for horizontal slice
+.TP
+.I -f #
+starting frame for diagonal slice
+.TP
+.I -n #
+New image frames. If you have a 50x50x50 image and start at column 10 (-c 10)
+for a vertical slice, and specify -n 20. Then you get a 50x50x20 new image
+which includes the old image data from column 10 to 30.
+.SH COORDINATE
+The X axis is from left to right based on Y-Z surface. The Origin is
+upper-left corner.
+.br
+The Y axis is top down based on Z-X surface. The Origin is same as X.
+.br
+The Z axis is faceward (not toward to face).
+.SH EXAMPLES
+.B 3drotate
+-l check_3d | \fI3drotate\fP | xhips
+.br
+this does nothing.
+.SH SEE ALSO
+3dslice(1), 3drotate90(1), 3drotate180(1), powertool(1)
+.SH AUTHOR
+Jin Guojun - 11/15/90

@@ -1,0 +1,33 @@
+.TH MEAN 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+mean - mean filter
+.SH SYNOPSIS
+.B mean
+[-s size]
+.SH DESCRIPTION
+.I mean
+applies a mean filter to each image of the input sequence
+to suppress random noise.
+.I size
+is the size of the window in which 
+.I mean
+is performed and defaults to 3.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH EXAMPLE
+.in +3m
+mean < input_seq > output_seq
+.in -3m
+.sp
+.br
+will smooth every image in input_seq by a 3x3 window. 
+.SH SEE ALSO
+asl(1), mask(1), median(1), mls(1), nns(1), sasmooth(1), snn(1)
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

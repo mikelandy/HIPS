@@ -1,0 +1,187 @@
+Bool	structs.h	8
+Button_image	sun_funcs.c	/^#define Button_image(s) panel_button_image(io.pane/
+Calloc	macros.h	/^#define Calloc(a,b) (b *) calloc((unsigned)(a), si/
+Cfree	macros.h	/^#define Cfree(a,b,c) cfree((char *)(a), (unsigned)/
+Connect2D	macros.h	/^#define Connect2D(a,b,i) Draw2D(a,a,b,b,i)$/
+Cspline	spline.c	/^Cspline(x_1, y_1, x_2, y_2, x_3, y_3, x_4, y_4, t)/
+Draw2D	macros.h	/^#define Draw2D(a,b,c,d,i) doline2d(pairarr[a][0], /
+Enter	sun_menus.c	/^#define Enter(x) fprintf(stderr, "entering %s. ", /
+Fread	macros.h	/^#define Fread(a,b,c,d) fread((char *)(a), sizeof(b/
+Fwrite	macros.h	/^#define Fwrite(a,b,c,d) fwrite((char *)(a), sizeof/
+Leave	sun_menus.c	/^#define Leave(x) fprintf(stderr, "leaving %s. ", x/
+Log	structs.h	222
+MAX	macros.h	/^#define MAX(a,b) (((a) > (b)) ? (a) : (b))$/
+MIN	macros.h	/^#define MIN(a,b) (((a) < (b)) ? (a) : (b))$/
+Memcpy	macros.h	/^#define Memcpy(a,b,c) memcpy((char *)(a), (char *)/
+Mhipstool	hipstool.c	/^main(argc, argv)$/
+Point	structs.h	164
+Primit	structs.h	176
+Prinfo1	macros.h	/^#define Prinfo1(string)  strcpy(infotext[0], strin/
+Prinfo2	macros.h	/^#define Prinfo2(string) strcpy(infotext[1], string/
+Realloc	macros.h	/^#define Realloc(a,b,c) (c *) realloc((char *)(a), /
+Return	sun_menus.c	/^#define Return(x) return((caddr_t)(x))$/
+SCALE	macros.h	/^#define SCALE(x) (fabs(x) >= 1.0 ? 255 : (int)(255/
+Strdup	macros.h	/^#define Strdup(s) (char *) strdup((char *)(s))$/
+Update_cursor	macros.h	/^#define Update_cursor(a, b, g) sprintf(cursortext,/
+Update_gray	macros.h	/^#define Update_gray(left, gray0, right, gray1) spr/
+Update_info	macros.h	/^#define Update_info(string) strcpy(windowtext, str/
+Win_height	macros.h	/^#define Win_height(foo) (((foo)->height > MAX_WINY/
+Win_width	macros.h	/^#define Win_width(foo) (((foo)->width > MAX_WINX) /
+add_point	list.c	/^add_point(list, x, y)$/
+angle_comment	log_comment.c	/^angle_comment(usercomment)$/
+angle_eval	evals.c	/^angle_eval(command)$/
+angle_proc	sun_menus.c	/^angle_proc(menu, item)$/
+angle_setup	setups.c	/^angle_setup(command, value)$/
+base_event_proc	sun_events.c	/^base_event_proc(window, event, arg)$/
+batching	sun_primits.c	/^batching(winfo, status)$/
+box_eval	evals.c	/^box_eval(command)$/
+box_modify	modifys.c	/^box_modify(x, y, primit, idx)$/
+box_select	selects.c	/^box_select(x, y, primit, idx)$/
+box_setup	setups.c	/^box_setup(command, value)$/
+change_line_drawing_mode	metaprimits.c	/^change_line_drawing_mode(mode)$/
+changewindow	sun_primits.c	/^changewindow(winfo, dimx, dimy, label)$/
+chars_to_pixrect	sun_funcs.c	/^chars_to_pixrect(ptr, image, width, height, user_l/
+child_event_proc	sun_events.c	/^child_event_proc(window, event, arg)$/
+clear	panel.c	/^clear()$/
+colormap256	sun_primits.c	/^colormap256(winfo, arr, gee, bee)$/
+colormap_edit	edit.c	/^colormap_edit()$/
+comment_edit	edit.c	/^comment_edit()$/
+comment_to_xheader	xheader.c	/^comment_to_xheader(hips)$/
+copy	data.c	/^copy(va_alist)$/
+create_menus	sun_menus.c	/^create_menus()$/
+cycle_proc	panel.c	/^cycle_proc(item, value, event)	\/* SUNTOOLS *\/$/
+depth	list.c	/^depth(list)$/
+destroy	data.c	/^destroy(va_alist)$/
+dimension_generate	sun_menus.c	/^dimension_generate(dim, procedure)$/
+display_action	log_funcs.c	/^display_action(event, t, v)$/
+display_command	log_funcs.c	/^display_command(command, t)$/
+display_init	loadimage.c	/^display_init(which, frame)	\/* SUNTOOLS *\/$/
+display_logged_actions	log_funcs.c	/^display_logged_actions(mode, value)$/
+distance_comment	log_comment.c	/^distance_comment(usercomment)$/
+distance_eval	evals.c	/^distance_eval(command)$/
+distance_setup	setups.c	/^distance_setup(command, value)$/
+do_cross	metaprimits.c	/^do_cross(target, status)$/
+do_spline	spline.c	/^do_spline(points, closed, drawmode)$/
+do_zoom	zoom.c	/^do_zoom(x, y)$/
+doline2d	vector.c	/^doline2d(x_1, y_1, x_2, y_2, vals, mode, set)$/
+drawline	vector.c	/^drawline(x_1, y_1, x_2, y_2)$/
+drawtrace	vector.c	/^drawtrace(x_1, y_1, x_2, y_2)$/
+edit_proc	sun_menus.c	/^edit_proc(menu, item)$/
+edit_setup	setups.c	/^edit_setup(command, value)$/
+fit	vector.c	/^static void $/
+fit_line	vector.c	/^void $/
+flood_fill	histo.c	/^flood_fill(x, y, read_proc, arr)$/
+function_proc	sun_menus.c	/^function_proc(menu, item)$/
+get_and_set	vector.c	/^get_and_set(x, y, s)$/
+get_char_value	vector.c	/^get_char_value(x, y, s)$/
+get_long_value	vector.c	/^get_long_value(x, y, s)$/
+get_pix	sun_primits.c	/^get_pix(winfo, x, y)$/
+get_short_value	vector.c	/^get_short_value(x, y, s)$/
+getstring	sun_primits.c	/^getstring(item)$/
+graph	trace.c	/^graph(vals, x, y, align, maxv)$/
+histo	histo.c	/^histo(data, x, y, minv, maxv)$/
+histo_eval	histo.c	/^histo_eval(command)$/
+histo_event_proc	histo.c	/^histo_event_proc(window, event, arg)$/
+histo_proc	sun_menus.c	/^histo_proc(menu, item)$/
+histo_setup	histo.c	/^histo_setup(command, value)$/
+histo_win	histo.c	/^histo_win(va_alist)$/
+init_cursor	sun_primits.c	/^init_cursor(winfo)$/
+init_vars	hipstool.c	/^init_vars()$/
+input_proc	panel.c	/^input_proc(item, event) \/* SUNTOOLS *\/$/
+kill_zoom	zoom.c	/^kill_zoom()$/
+killwindow	sun_primits.c	/^killwindow(winfo)$/
+line	sun_primits.c	/^line(winfo, x_1, y_1, x_2, y_2, color)$/
+line_1_done	setups.c	/^line_1_done()$/
+line_2_done	setups.c	/^line_2_done()$/
+line_modify	modifys.c	/^line_modify(x, y, primit, idx)$/
+line_proc	sun_menus.c	/^line_proc(menu, item)$/
+line_select	selects.c	/^line_select(x, y, primit, idx)$/
+list_modify	modifys.c	/^list_modify(x, y, primit, idx)$/
+list_select	selects.c	/^list_select(x, y, primit, idx)$/
+load_chars	loadimage.c	/^load_chars(which, input)$/
+load_command	log_load.c	/^load_command(input)$/
+load_comment_file	loadimage.c	/^load_comment_file()$/
+load_hips_image	loadimage.c	/^load_hips_image()$/
+load_image	loadimage.c	/^load_image(which, frame, fd)$/
+load_ints	loadimage.c	/^load_ints(which, input)$/
+load_log	log_load.c	/^load_log(input)$/
+load_log_file	loadimage.c	/^load_log_file()$/
+load_primit	log_load.c	/^load_primit(input, prim)$/
+load_primit_list	log_load.c	/^load_primit_list(input, length, listp)$/
+load_proc	loadimage.c	/^load_proc(item, event)$/
+load_shorts	loadimage.c	/^load_shorts(which, input)$/
+log_current_action	log_funcs.c	/^log_current_action()$/
+log_edit	edit.c	/^log_edit()$/
+log_to_xheader	xheader.c	/^log_to_xheader(hips)$/
+longs_to_pixrect	sun_funcs.c	/^longs_to_pixrect(ptr, image, width, height, user_l/
+max_proc	panel.c	/^max_proc()			\/* SUNTOOLS *\/$/
+modify_search	modifys.c	/^modify_search(x, y, up, command)$/
+move_point	list.c	/^move_point(list, x, y)$/
+newindow	sun_primits.c	/^newindow(winfo, width, height, posx, posy, label)$/
+no_setup	setups.c	/^no_setup(command, value)$/
+page_proc	panel.c	/^page_proc(item)$/
+palloc	metaprimits.c	/^palloc(va_alist)$/
+parse_args	hipstool.c	/^parse_args(argc, argv)$/
+parse_proc	panel.c	/^parse_proc()$/
+pfree	metaprimits.c	/^pfree(primit)$/
+pixrefresh	sun_primits.c	/^pixrefresh(which)$/
+point_modify	modifys.c	/^point_modify(x, y, primit, idx)$/
+point_select	selects.c	/^point_select(x, y, primit, idx)$/
+primit_display_box	metaprimits.c	/^void $/
+primit_display_closed_spline	metaprimits.c	/^void $/
+primit_display_line	metaprimits.c	/^void $/
+primit_display_open_spline	metaprimits.c	/^void $/
+primit_display_point	metaprimits.c	/^void $/
+primit_display_polygon	metaprimits.c	/^void $/
+primit_display_text	metaprimits.c	/^void $/
+primit_proc	sun_menus.c	/^primit_proc(menu, item)$/
+put_pix	sun_primits.c	/^put_pix(winfo, x, y, color)$/
+putstring	sun_primits.c	/^putstring(item, value)$/
+quit_proc	panel.c	/^quit_proc()			\/* SUNTOOLS *\/$/
+refresh	sun_primits.c	/^refresh(winfo, command)$/
+reselect	log_funcs.c	/^reselect(primit)$/
+round	spline.c	/^#define round(q) ((int)((q) + .5))$/
+save_box_subimage	saveimage.c	/^save_box_subimage(output)$/
+save_command	log_save.c	/^save_command(command, output, end)$/
+save_comment_file	saveimage.c	/^save_comment_file(output)$/
+save_complete_image	saveimage.c	/^save_complete_image(output)$/
+save_histo_file	saveimage.c	/^save_histo_file(output)$/
+save_image	saveimage.c	/^save_image(partial, outfile, logp)$/
+save_log	log_save.c	/^save_log(output, end)$/
+save_log_file	saveimage.c	/^save_log_file(output)$/
+save_logged_image	saveimage.c	/^save_logged_image(output)$/
+save_overlaid_image	saveimage.c	/^save_overlaid_image(output)$/
+save_primit	log_save.c	/^save_primit(primit, output)$/
+save_primit_list	log_save.c	/^save_primit_list(primit, length, output)$/
+save_proc	saveimage.c	/^save_proc(item, event)$/
+save_trace_file	saveimage.c	/^save_trace_file(output)$/
+scrollset	sun_funcs.c	/^scrollset(winfo, vert, horiz)$/
+select_search	selects.c	/^select_search(x, y, up, command)$/
+set_char_value	vector.c	/^set_char_value(x, y, s)$/
+set_long_value	vector.c	/^set_long_value(x, y, s)$/
+set_short_value	vector.c	/^set_short_value(x, y, s)$/
+shorts_to_pixrect	sun_funcs.c	/^shorts_to_pixrect(ptr, image, width, height, user_/
+spline	spline.c	/^spline(k, n, v, t)$/
+straight_comment	log_comment.c	/^straight_comment(usercomment)$/
+text	sun_primits.c	/^text(winfo, x, y, string, color)$/
+text_modify	modifys.c	/^text_modify(x, y, primit, idx)$/
+text_select	selects.c	/^text_select(x, y, primit, idx)$/
+toggle_proc	panel.c	/^toggle_proc()			\/* SUNTOOLS *\/$/
+trace_eval	trace.c	/^trace_eval(command)$/
+trace_event_proc	trace.c	/^trace_event_proc(window, event, arg)$/
+trace_proc	sun_menus.c	/^trace_proc(menu, item)$/
+trace_setup	trace.c	/^trace_setup(command, value)$/
+trace_win	trace.c	/^trace_win(va_alist)$/
+undoline2d	vector.c	/^undoline2d(vals)$/
+update_frame_label	sun_funcs.c	/^update_frame_label(which)	\/* SUNTOOLS *\/$/
+update_load_menu	loadimage.c	/^update_load_menu()		\/* SUNTOOLS *\/$/
+update_save_menu	saveimage.c	/^update_save_menu()		\/* SUNTOOLS *\/$/
+wakeup	sun_menus.c	/^wakeup(menu, item)$/
+warp_action	log_funcs.c	/^warp_action(num, quality, status)$/
+window_environment_init	sun_funcs.c	/^window_environment_init(argc, argv)$/
+wipe	sun_primits.c	/^wipe(winfo, color)$/
+writeline	vector.c	/^writeline(x_1, y_1, x_2, y_2)$/
+xheader_to_comment	xheader.c	/^xheader_to_comment(hips)$/
+xheader_to_log	xheader.c	/^xheader_to_log(hips)$/
+zap_proc	loadimage.c	/^zap_proc()$/
+zoom_event_proc	zoom.c	/^zoom_event_proc(window, event, arg)$/

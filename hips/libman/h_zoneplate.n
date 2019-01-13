@@ -1,0 +1,63 @@
+.TH H_ZONEPLATE 3 "7/5/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_zoneplate \- subroutines to fill an image with a zoneplate image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_zoneplate(hd,freq,sinphase)
+h_zoneplate_f(hd,freq,sinphase)
+struct header *hd;
+double freq;
+h_boolean sinphase;
+
+h_zoneplate_F(image,nr,nc,nlp,freq,sinphase)
+float *image;
+int nr,nc,nlp;
+double freq;
+h_boolean sinphase;
+.fi
+.SH DESCRIPTION 
+These routines fill an input subimage
+(specified by
+.I hd
+or
+.IR image )
+with a sinusoidal zoneplate image.
+.I h_zoneplate
+calls
+.IR h_zoneplate_f ,
+as long as the pixel format is float.
+.I h_zoneplate_F
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The image has
+.I nlp
+pixels per line.
+The image consists of a series of
+concentric sinusoidal modulations where the local spatial frequency
+increases linearly from the center of the subimage to the edges.  The center
+of the image may be in either sin phase (if
+.I sinphase
+is TRUE), or cosine phase (otherwise).  The
+local spatial frequency at the edges of the image is specified in
+cycles per image width.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_checkers(3)
+.SH AUTHOR
+Michael Landy - 4/89/89
+.br
+HIPS 2 - Michael Landy - 7/5/91

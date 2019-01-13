@@ -1,0 +1,130 @@
+.TH CANNY 1 "April 6, 1989"
+.SH NAME
+canny - perform one pass of the Canny Edge detector (PRIP).
+.SH SYNOPSIS
+.B canny
+[sigma [masksize [lfrac [hfrac]]]] [-OPTIONS]  [< infile] [> outfile]
+.SH DESCRIPTION 
+The canny edge detector program requires BYTE, FLOAT, or INTEGER hips
+input data and produces a BYTE hips output file.  The -m, -x and -y
+options produce INTEGER hips output files and the -d option outputs
+hips FLOAT format data (real values).  IMPORTANT:  The output edges
+are 8 connected BY DEFAULT.  Type "-e" for the original 'thicker' edges
+- also note that the "-e" option saves some computation so it
+will run slightly faster.
+.sp 1
+.I Canny
+applies the canny edge detector (one pass only - no combination via
+image synthesis of
+different sigmas & masksizes) to an image and returns the resulting edge
+map in outfile.  The parameters are as follows:  
+.sp 1
+.I sigma 
+(default 1) a
+real number that determines how wide of an edge can be found.  Larger values
+of sigma will tend to find edges that are more widely spaced.  NOTE:  If
+you use different values for sigma and masksize the ratio
+(sigma:masksize) should be at LEAST 1:8 so that the high frequency
+characteristics of the filter do not take over.
+.sp 1
+.I masksize 
+(default 9) must be an odd integer that specifies the size of the gx and
+gy 1D gausian masks.
+.sp 1
+.I lfrac and hfrac
+(0.5 and
+0.9 respectively) determine the lower and upper thresholds used in
+finding edges.  
+.sp 1
+Note: In the following discussion on lfrac and hrac values
+MAX_MAGNITUDE is the largest magnitude value of
+all pixels in the magnitude image map.
+Basically, an edge must contain at least one pixel with
+a magnitude value greater than hfrac*MAX_MAGNITUDE.  Any
+pixel that is somehow 8 connected to another qualified edge pixel that
+has a magnitude value > lfrac*MAX_MAGNITUDE also qualifies
+as an edge pixel.  This means that an edge needs at least one high
+magnitude pixel with other pixels of magnitude greater than
+lfrac*MAX_MAGNITUDE connected to it.
+Edge pixels are represented by a value of 255 and
+non-edges are represented by 0's.  
+.PP
+Note:  To print the resulting edge
+map out with the image, printimage, or pr-image programs remember to
+use the flags
+"i0".
+The "i" (inverse) and 0 (print 0's as black after inversing) options
+are necessary to get the standard black pixel edge map.  Note: Do not
+be a toner waster and forget to use the inverse option.  Not only do
+white edge on black background edge images waste toner - but the
+contrast and the general
+effect is lost.  If you use either the image or printimage
+programs and get a blank page of output - either no edge pixels were
+found (check the result-image data) or you forgot to specify the 0
+option to make sure that 0's are printed as black.
+.sp 1
+.I -p
+turns on the Print mode so that the actual parameter values used and
+progression statements are printed out.
+.sp 1
+.I -e
+turns off the automatic 8 connected edge thinning that is called up by
+default to produce 'thin' edges.
+.I -h
+help mode - types out a short one screen help message on how to use the
+program.
+.sp 1
+.I -c
+if -i is specified, causes checking of input to be in the
+range [-1000 to 1000].
+.sp 1
+.I -d{direction_filename}
+to specify that you wish to have the edge direction array written to the
+filename specified immediately after the d flag (values range -180.0 to
+180.0).  Note:  The direction is calculated using the ATAN2(gy,gx) call
+and illegal cases of gy=0 and gx=0 are set to 0.0 to avoid "Not a
+Number" errors.  (gx,gy are the x and y gradient values for a given
+pixel location.)
+Output file is hips FLOAT (real) format.
+.sp 1
+.I -m{magnitude_filename}
+to specify that you wish to have the magnitude array written to the
+filename specified immediately after the m flag.  Note: Magnitude values
+can vary from 0 to 32767 - you may wish to scale the data using the hips
+scale command before printing the results.
+Output file is hips INTEGER format.
+.sp 1
+.I -x{x_filename}
+to specify that you wish to have the x gradient array stored to the file
+x_filename.  Note: Magnitude values
+can vary from 0 to 32767 - you may wish to scale the data using the hips
+scale command before printing the results.
+Output file is hips INTEGER format.
+.sp 1
+.I -y{y_filename}
+to specify that you wish to have the y gradient array stored to the file
+x_filename.  Note: Magnitude values
+can vary from 0 to 32767 - you may wish to scale the data using the hips
+scale command before printing the results.
+Output file is hips INTEGER format.
+.SH EXAMPLE
+.sp 1
+	canny 2.0 17 -mphone.mag <phone.hips >phone.canny.hips
+.sp 1
+would cause the input image phone.hips to be processed with SIGMA=2.0,
+MASKSIZE=17, and write out the MAGNITUDE ARRAY to phone.mag and the
+canny edge results to phone.canny.hips
+.SH FILES
+/usr/local/prip/bin/canny - The executable binary program image.
+.sp 1
+/usr/local/prip/source/hips/canny - Directory containing all the canny
+source files and Makefile for creating and installing the program.
+Note: this is a 'local' hips routine - not received from the
+distribution tape - that's why its under /usr/local/prip.
+.SH SEE\ ALSO
+mask(1HIPS), fmask(1HIPS) dog(1HIPS)
+.SH AUTHOR
+Bulk of code courtiously supplied by U of Michigan  Debugged and
+modified for hips formats and extra data output files.
+.sp 1
+Modified to a user friendly? hips filter format by Joe Miller M.S.U. March 1989.

@@ -1,0 +1,30 @@
+.TH GPOLY 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+gpoly \- generate a 2-D polygon
+.SH SYNOPSIS
+.B gpoly
+[-n nedges]
+.SH DESCRIPTION 
+.I Gpoly
+generates a PLOT3D polygon.
+If a file is redirected, the polygon is added to the last frame.
+The polygon is generated so that its center is at (0,0,0)
+and its radius is 1.0.
+If 
+.IR nedges =0
+(default) an empty frame is generated.
+1 yields a point at (0,0,0).
+2 yields a horizontal line.
+3 yields a triangle. etc. etc.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+gcube(1)
+.SH AUTHOR
+Yoav Cohen - 11/15/82
+.br
+HIPS 2 - msl - 7/24/91

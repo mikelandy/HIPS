@@ -1,0 +1,31 @@
+.TH LUTEXPMAKE 1BIPS "Oct 23, 1987"
+.SH NAME
+lutexpmake - to define an exponential LUT based on a color file.
+.SH SYNOPSIS
+.B lutexpmake
+<filename> [\-exp] > lutfile
+.SH DESCRIPTION 
+.I Lutexpmake
+permits the user to define an LUT using a color definition file
+with the following specifications:
+.nf
+	-  the available colors (now 10 with maximum of 20) are 
+		defined in the file /usr/files/lut/lutmake.map
+	-  the filename is assumed to be in the current directory 
+	-  the format of the color file is the following:
+		+  the first line must be a comment line
+		+  all following lines contain, in the following order:
+		   beginning value, ending value, color code
+		+  see /usr/files/lut/colormap for example of discrete
+		   color transformation
+.fi 
+The values computed between the beginning and ending value are not linear,
+as with
+.I lutmake
+, but fit an exponential with exponent specified by [\-exp], which
+defaults to 2.0.
+The resulting file is writen in HIPL format on the standard output.
+.SH SEE\ ALSO
+lutmake(1BIPS), ds(1BIPS), rdlut(1BIPS), wrlut(1BIPS) 
+.SH AUTHOR
+Charles Carman

@@ -1,0 +1,23 @@
+#
+# makefile for hipsaddon/main/sources/singles
+#
+
+PGMS = \
+	asl.out average.out cmat.out cshift.out ellipse.out extend.out \
+	framing.out grey2disp.out greylevel.out \
+	hips2vit.out mandelbrot.out mark.out mean.out mls.out mpmatch.out \
+	nns.out padimage.out project.out rank.out rotate.out \
+	sasmooth.out saw.out seecontents.out sigmaspat.out sigmatemp.out \
+	sinegen.out smear.out snn.out translate.out unoise.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

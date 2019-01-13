@@ -1,0 +1,35 @@
+.TH SPINEXCH 1hips "September 10, 1992" 
+.SH NAME
+spinexch - Simulate binary Markov random fields using the Metropolis
+spin-exchange algorithm
+algorithm
+.SH SYNOPSIS
+.B spinexch
+[-b beta] [-f nf] [-n niter] [-s size] [-1 frac1] >oseq
+.SH DESCRIPTION 
+.I Spinexch
+applies the Metropolis spin-exchange algorithm for simulating
+binary Markov random fields.
+It runs
+.I niter
+iterations with parameter
+.I beta
+on a 
+.I size
+x
+.I size
+grid.
+A total of
+.I nf
+frames are generated.
+The desired fraction of 1-pixels is selected with
+.I frac1
+.
+Defaults: size=128, niter=100, nf=1,
+beta=3.0, frac1=0.5 .
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

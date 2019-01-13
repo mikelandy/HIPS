@@ -1,0 +1,117 @@
+.TH H_HALFTONE 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_halftone \- halftones using the Floyd-Steinberg algorithm
+.SH SYNOPSIS
+.nf
+.ta 2i
+#include <hipl_format.h>
+
+h_halftone(hdi,hdo)
+h_halftone2(hdi,hdo,lower,upper,rflag,alpha,beta,gamma,delta)
+h_halftone_b(hdi,hdo,lower,upper,rflag,alpha,beta,gamma,delta)
+h_halftone_B(imagei,imageo,nr,nc,nlpi,nlpo,lower,upper,rflag,alpha,beta,
+	gamma,delta)
+
+struct header *hdi,*hdo;
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo,lower,upper,alpha,beta,gamma,delta;
+h_boolean rflag;
+.fi
+.SH DESCRIPTION 
+These routines compute a halftone of an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_halftone
+calls
+.I h_halftone2
+with a default set of arguments (\c
+.IR lower =0,
+.IR upper =255,
+.IR rflag =FALSE,
+.IR alpha =7,
+.IR beta =3,
+.IR gamma =5,
+and
+.IR delta =1).
+.I h_halftone2
+then calls
+.I h_halftone_b
+as long as the pixel format is byte.
+.I h_halftone_B
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.PP
+.I Halftone
+converts an 8-bit sequence to a bi-level sequence using the
+Floyd-Steinberg error diffusion algorithm.  The values for cleared and set
+pixels are taken from
+.I hips_lchar
+and
+.IR hips_hchar .
+In the input image, the values below
+.I lower
+are treated as black, and above
+.I upper
+are treated as white.  The effective range is thus from
+.I lower
+to
+.IR upper .
+The algorithm is based on diffusing the error to adjacent
+pixels created when a pixel is changed to 0 or 255 (despite the fact that 0
+and 255 are not necessarily used).  The algorithm proceeds across each row
+from left to right, one row at a time.  The error is parceled out to four
+neighbors: `right', `below-left', `below', and `below-right', using
+relative weights of the error
+.IR alpha ,
+.IR beta ,
+.IR gamma ,
+and
+.IR delta ,
+respectively.  They are non-negative integers which must sum to 16.  Finally,
+the process
+may be randomly dithered (if switch
+.I rflag
+is TRUE), which uses a random threshold for
+each pixel chosen uniformly across the pixel range.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_RNG - invalid pixel value range
+.SH "SEE ALSO"
+h_btolp(3), h_btomp(3)
+.SH AUTHOR
+Mike Landy - 7/28/87 (based on code by Lou Salkind and Jim Bergen)
+.br
+HIPS 2 - msl - 1/8/91

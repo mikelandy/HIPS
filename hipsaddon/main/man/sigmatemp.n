@@ -1,0 +1,43 @@
+.TH SIGMATEMP 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+sigmatemp - image random noise estimator
+.SH SYNOPSIS
+.B sigmatemp
+[-p] [-s]
+.SH DESCRIPTION
+.I sigmatemp
+estimates the standard deviation of random noise of each
+image of the input sequence base on each successive image pair.
+The estimates are displayed.
+.I -p
+is for the pipeline application.
+If set, the input sequence is copied into the output sequence
+and the estimates are put in the extended parameter section of the header as well.
+.I -s
+enables to deal with the situation where one image is "pure"
+without any noise while the other is corrupted with noise. In this case
+the number of frames must be 2. Any frames after the first two will
+either be ignored or passed through if
+.I -p
+is set.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH EXAMPLE
+.in +3m
+sigmatemp -p < input_seq > output_seq
+.in -3m
+.sp
+.br
+will estimate the standard deviation of noise of every image of input_seq
+and put the estimates in the header of output_seq,
+input_seq copied into output_seq.
+.SH SEE ALSO
+sigmaspat(1)
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 8/5/1985
+Peter Mowforth and Jin Zhengping - modified on 11/9/1986
+Rewritten by Jin Zhengping - 31 August 1991

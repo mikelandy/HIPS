@@ -1,0 +1,62 @@
+.TH WRITE_HEADER 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+write_header \- write an image header
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+write_headeru(hd,argc,argv)
+write_headeru2(hd,hdp,argc,argv,flag)
+write_headerun(hd,argc,argv)
+write_header(hd)
+fwrite_header(fp,hd,fname)
+struct header *hd,*hdp;
+int argc;
+h_boolean flag;
+char **argv;
+FILE *fp;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+These routines are used to write image headers.
+.I write_headeru
+first updates the history using
+.IR update_header .
+.I write_headerun
+first updates the history using
+.IR update_headeru .
+.I write_headeru2
+either updates and writes
+.I hdp
+if
+.I flag
+is FALSE, and otherwise updates and writes
+.IR hd .
+All of these routines except
+.I fwrite_header
+write to the standard output.
+.PP
+The last Ascii bit of the header (which gives the size of the binary area in
+bytes) is padded with blanks in order to make the whole thing come out to a
+multiple of four bytes.  Also, each part of the binary area (i.e. each
+parameter array) is padded with nulls to come out to a multiple of four bytes
+as well.  Thus, if a package needs to read an entire HIPS image sequence,
+including the header, into memory, all binary parameter arrays and the
+subsequent image will be guaranteed to be fullword aligned.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_HDRBWRT - error writing binary area
+.br
+HE_HDRPWRT - error writing parameters
+.br
+HE_HDRWRT - error writing header
+.br
+HE_HDWPTYPE - unknown parameter type
+.SH AUTHOR
+Michael Landy - 2/1/82
+.br
+modified to use read/write - 4/26/82
+.br
+modified for HIPS 2 - 1/3/91

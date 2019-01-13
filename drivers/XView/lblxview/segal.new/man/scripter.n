@@ -1,0 +1,66 @@
+.TH SCRIPTER n "1992" "Scry Version 1.3" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+scripter \- reads script to remotely control recording of frames on video
+recorder.
+.SH SYNOPSIS
+.nf
+.LP
+.B scripter scriptfile [record_mode]
+.fi
+.SH DESCRIPTION
+\f3scripter\f1 reads the file \f3scriptfile\f1 and interprets
+lines in it as commands to control the recording of images
+in Anima file format onto a video recorder.
+.LP
+If \f3record_mode\f1 is not given, the images are displayed
+in the PC's frame buffer but not recorded.  If the PC is
+attached to a Panasonic recorder, \f3record_mode\f1 can either be the
+starting frame number on videodisk, or -1, which indicates that the
+start of the first big enough unrecorded block of frames will be
+seeked to.  If the PC is attached to a Sony recorder, any number besides
+"0" (preview mode) will result in seeking to the first available frame.
+.LP
+Valid commands in \f3scriptfile\f1 are as follows:
+.LP
+\f2connect\f1 "server"  establishes the connection with the movie animation
+server "server".  "server" is an Internet address or symbolic name.
+.LP
+\f2get\f1 "file" gets the Anima-format file containing compressed
+images to be recorded.  \f2get\f1 can be used more than once to
+read more than one sequence, as in Anima files containing titles and
+Anima files containing images.
+.LP
+\f2search\f1 "framenum" searches to the given frame number
+in the Anima file.
+.LP
+\f2blank\f1 blanks the movie animation server's frame buffer.
+.LP
+\f2playto\f1 "framenum mode videorate" records frames sequentially from the
+current frame up to frame number "framenum".  The current frame
+is either the result of \f2search\f1 or the last frame of a
+preceding \f2playto\f1.
+The value of "framenum" may be less than the frame number of the current
+frame.  In this case, frames are recorded in descending (rather than
+ascending) order.
+"mode" and "videorate" will be used in the next revision of Scry.
+.LP
+As \f3scripter\f1 is executing any comments (a line starting with "#")
+are printed out as they are arrived at, and when "playto" is encountered
+the frames to be displayed are printed out.
+.LP
+The following is a sample script file:
+.sp
+.nf
+.na
+connect adv-pc-1.lbl.gov 300000
+get movies/heart.iff
+search 0
+playto 100 slow 3
+get movies/newskull.iff
+search 100
+playto 0 slow 3
+.fi
+.ad
+.sp
+.SH AUTHOR
+David Robertson

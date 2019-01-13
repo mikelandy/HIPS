@@ -1,0 +1,135 @@
+.TH H_CSINEGEN 3 "18 January 1992" "Version 1" "HIPS Manual"
+.SH NAME
+.B h_csinegen 
+\- subroutines to generate an image containing full cycles
+of sinuosoids of different frequency and amplitude.
+.SH SYNOPSIS
+.nf
+#include <math.h>
+#include <hipl_format.h>
+
+h_csinegen (sinusoid_hdr, base_frequency, num_freq_divisions, freq_scale, num_cycles,
+	       base_amplitude, num_amp_divisions, amp_scale, phase, pad_window)
+
+h_csinegen_f (sinusoid_hdr, base_frequency, num_freq_divisions, freq_scale, num_cycles,
+	         base_amplitude, num_amp_divisions, amp_scale, phase, pad_window)
+
+h_csinegen_d (sinusoid_hdr, base_frequency, num_freq_divisions, freq_scale, num_cycles,
+	         base_amplitude, num_amp_divisions, amp_scale, phase, pad_window)
+
+struct  header  *sinusoid_hdr;
+float   base_frequency;
+int     num_freq_divisions;
+float   freq_scale;
+int     num_cycles;
+float   base_amplitude;
+int     num_amp_divisions;
+float   amp_scale;
+float   phase;
+int     pad_window;
+
+h_csinegen_F (sinusoid_image, rows, cols, base_frequency, num_freq_divisions, freq_scale,
+		 num_cycles, base_amplitude, num_amp_divisions, amp_scale, phase, pad_window)
+
+float   *sinusoid_image;
+int     rows;
+int     cols;
+float   base_frequency;
+int     num_freq_divisions;
+float   freq_scale;
+int     num_cycles;
+float   base_amplitude;
+int     num_amp_divisions;
+float   amp_scale;
+float   phase;
+int     pad_window;
+
+h_csinegen_D (sinusoid_image, rows, cols, base_frequency, num_freq_divisions, freq_scale,
+		 num_cycles, base_amplitude, num_amp_divisions, amp_scale, phase, pad_window)
+
+double  *sinusoid_image;
+int     rows;
+int     cols;
+float   base_frequency;
+int     num_freq_divisions;
+float   freq_scale;
+int     num_cycles;
+float   base_amplitude;
+int     num_amp_divisions;
+float   amp_scale;
+float   phase;
+int     pad_window;
+
+
+.fi
+.SH DESCRIPTION 
+These routines generate a sine-wave image containing  an integral number
+of full cycles of sine-waves of different frequency and amplitude.
+Each row contains cycles of sine-waves at different frequencies but at a
+single amplitude.
+Each column represents a slice through sine-waves at a single frequency
+but at different amplitudes.
+Thes size of the image to be generated must be defined in the image
+header
+.I sinusoid_hdr.
+The generated image is output to
+.I sinusoid_hdr.
+.I h_csinegen
+calls
+.IR h_csinegen_f,
+or
+.I h_csinegen_d
+depending on whether the pixel format of the generated sinusoid image
+is to be float or double respectively. 
+.IR h_csinegen_F
+and
+.I h_csinegen_D
+are the low-level routines which don't require an image header.
+.sp
+The generated image contains an integral number,
+.I num_cycles,
+of full cycles of each different frequency level.
+The image contains sine waves at
+.I num_freq_divisions
+different frequency levels.
+The lowest frequency is given by
+.I base_frequency
+in radians/pixel and each successive frequency level is
+.I freq_scale
+multiplied by the previous frequency level.
+Similarly, the image contains 
+.I num_amp_divisions
+different amplitude levels, starting from
+.I base_amplitude,
+where each amplitude level is
+.I amp_scale
+multiplied by the pevious amplitude.
+The phase of the sine waves is given by 
+.I phase
+in radians.
+.sp
+The image will contain a boundary region of width
+.I pad_window.
+This pad boundary is built by adding
+.I pad_window
+full cycles of the lowest and highest frequency sine waves at the left
+and right of the image, and by adding
+.I pad_window
+rows of the lowest and highest amplitude settings at the top and bottom
+of the image.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float, double
+.SH "REGION-OF-INTEREST"
+These routines generate new images and consequently do not handle
+regions of interest.
+.SH "IN-PLACE PROCESSING"
+The sinusoid image which is generated is placed in
+.I sinusoid_hdr.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_rsinegen(3)
+.SH AUTHOR
+David Wilson, The Turing Institute, 18 January 1992

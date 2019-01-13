@@ -1,0 +1,25 @@
+.TH CUT_FRAME 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+cutframe \- cut a plot3d frame by a rectangular mask
+.SH SYNOPSIS
+.nf
+cut_frame(inbuf,nbytes,outbuf,limit,x0,y0,xn,yn)
+char *inbuf , *outbuf;
+double	x0,y0,xn,yn;
+.fi
+.SH DESCRIPTION 
+This routine is used to window a plot3d frame with a rectangular mask.
+Only the points that overlap the mask are saved in the output frame.
+The number of bytes in the new frame are returned
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_CUT1 - 1 intersection
+.br
+HE_CUTI - intersections not between
+.br
+HE_CODE - unknown plot3d code
+.SH AUTHOR
+Yoav Cohen 11/11/82
+.br
+modified for HIPS 2 - msl - 1/3/91

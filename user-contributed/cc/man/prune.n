@@ -1,0 +1,37 @@
+.TH PRUNE 1HIPS "March 2, 1987"
+.SH NAME
+Prune -- Clip a specified proportion of extreme values so that the average
+of the maximum and minimum values of the resultant sequence is equal to a
+specified value.
+.SH SYNOPSIS
+.B prune
+[-u] min max mean proportion < inseq > outseq
+.SH DESCRIPTION 
+.I Prune
+clips a specified proportion of all the values in
+.I inseq.
+The relative numbers of high and low values clipped are chosen so that
+the average of the maximum and minimum values of the clipped sequence
+is equal to
+.I mean.
+.I Min
+is the (previously obtained) minimum value of inseq.
+.I Max
+is the (previously obtained) maximum value of inseq.
+If 
+.I proportion
+is too small to allow 
+.I prune
+to balance
+.I mean
+between the new maximum and new minimum, then \fIprune\fR
+reports the minimum number of values it needs to clip to satisfy this
+condition, and goes ahead and clips them.
+The
+.I -u
+option displays a usage summary.
+.SH SEE\ ALSO
+getmin(1HIPS),
+getmax(1HIPS)
+.SH AUTHOR
+Charlie Chubb - 3/2/87

@@ -1,0 +1,13 @@
+.TH PIXSHIFT 1BIPS "January 2, 1986"
+.SH NAME
+pixshift - shift an image vertically and/or horizontally by a 
+variable number of pixels. 
+.SH SYNOPSIS
+.B pixshift
+[horiz] [vert] < inseq > outseq 
+.SH DESCRIPTION 
+.I Pixshift 
+displaces an image by a specified number of
+pixels in the vertical and/or horizontal direction.  
+.SH AUTHOR
+Charles Carman - 06/02/86

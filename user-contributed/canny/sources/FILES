@@ -1,0 +1,97 @@
+File:/usr/local/prip/source/hips/canny/FILES    Joseph M. Miller   May 11, 1989
+
+Purpose: This file contains a description of every file in this directory.
+ Anyone placing a file in this directory must document the file in this
+ FILE or it will be removed.
+
+-------------- Start of extended 'standard' disclaimer ------------------------
+
+*** COPYRIGHT NOTICE:  This software was created at Michigan State University
+   in the PRIP (Pattern Recognition and Image Processing) lab by Joe Miller
+   in the first half of 1989.   The software has been made public and can
+   be copied freely AS LONG AS NO MONETARY/BUSINESS gain is made from the
+   software.  In addition all copies of this software must include this
+   COPYRIGHT NOTICE.
+
+	Although reasonable care, documentation, and debugging standards were
+   attempted during the creation of this software package --- NO WARRANTY 
+   EXISTS.  No warranty is extended or even remotely implied with this software.
+   As usual we ARE NOT liable for any damages either physical, mental,
+   spiritual, psychological, etc. that may occur from use, application or 
+   miss-use of this software.
+
+	In addition, Michigan State University, the PRIP lab, and Joe Miller
+   in particular offer no formal software support of any kind.  You may
+   report problems/errors/modifications to manager@cpsvax.cps.msu.edu and
+   tell them to forward it to the PRIP lab Manager - but we do not guarantee
+   any help.
+
+-------------- End of extended standard disclaimer --------------------------
+
+Documentary List of all the files in /usr/local/prip/source/hips/canny
+
+FILES - This documentary file.
+
+Makefile - Makefile for compiling, installing, cleaning, and testing of
+Makefile:  the canny program.
+
+README - File in PRIP README format describing the Canny edge detector
+README:   program in more detail and giving testing/compilation hints.
+
+canny.c - Main canny program that calls the main canny routine (hips part).
+canny.c: Contains main().
+
+canny.man - Manual page (for man) that describes canny and its options.
+
+canny_top_level.c - Canny subroutines canny() which is the original high
+canny_top_level.c: routine that starts the canny process, magnitude()
+canny_top_level.c: that takes 2 images and produces the magnitude (gx & gy)
+canny_top_level.c: non_max_supp() which uses the magnitude image and the
+canny_top_level.c: two gradient images to produce the non_maximal suppression
+canny_top_level.c: of an image.
+
+canny_top_level.h - Canny header file of definitions used in compilation.
+
+gauss.c - Canny subroutines correlate_image() - convolves an image with
+gauss.c: a filter along 1 direction (x or y), make_gaussian_mask(),
+gauss.c: gauss_filter(), copy_image().
+
+general.c - Canny subroutines of general usefulness.  E.g. min(), max(),
+general.c: nearestint(), nearestshort(), order(), fporder(), fpclip()
+general.c: where the functions are self explanatory ? (fp = floating point)
+
+hipl_format.h - Used by the thin.c (modified canny thin program) to define
+hipl_format.h: a few variable types etc.
+
+hthresh.c - Canny subroutines clear_borders() - sets the edge pixels of
+hthresh.c: a char array to zero, follow_edges() - recursive routine for 
+hthresh.c: following edges above the lower threshold, find_edges() - finds seed
+hthresh.c: edge points above the higher threshold and then calls 
+hthresh.c: follow_edges(), cleanup() - sets remaining edges to non-edges.
+
+image_utils.c - Canny subroutines crop_image() - crops an image into a
+image_utils.c: smaller sub image and returns a pointer to it,
+image_utils.c: histogram() - produces a 0-255 histogram of the gray
+image_utils.c: levels in an image, get_histogram_threshold() finds the
+image_utils.c: threshold level above which a certain percentage of the
+image_utils.c: image pixels lie.
+
+original.thin.c - For what its worth the original hips thin.c program
+original.thin.c: program is kept here.  That way if a bug fix is later
+original.thin.c: reported for the regular hips thin.c program you could
+original.thin.c: perhaps figure out what to fix in our 'thin.c' version.
+
+phone.canny - Canny test results data file (compared by the Makefile
+phone.canny:   test option to a new canny versions data output for
+phone.canny:   consistency. 
+
+phone.hips - original phone image data file.  Used by the Makefile test
+phone.hips:    option to see if modifications to canny affected the 
+phone.hips:    resulting output. 
+
+thin.c - Canny calls the thin(edgemap,h,w) subroutine to perform 4
+thin.c: connected thinning by default unless the user supplies the -e
+thin.c: option.  This program was hacked by a PRIP lab user Deb Trytten
+thin.c: changes are quickly documented in the header of thin.c.
+thin.c: If you're really interested do a "diff" on this file and the
+thin.c: original hips "thin.c" program called original.thin.c.

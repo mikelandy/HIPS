@@ -1,0 +1,25 @@
+.TH LOGTBL 1 "30 January 1991" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+.B logtbl 
+- builds a table of values corresponding to logarithms of gray-levels in the
+image.
+.SH SYNOPSIS
+.B logtbl 
+[-a] < inseq > tbl_name 
+.SH DESCRIPTION
+.I logtbl 
+Only byte and short formatted images are acceptable.  The result is left as a
+table of floating point mappings.  Use mapapply to filter the image through
+this mapping.
+.SH OPTIONS
+[-a]   specify results of log(old_gray_value + 1) to avoid log(0) = -1.0.
+.SH AUTHOR
+Bryan Skene, LBL        email: skene@lbl.gov
+.SH SEE ALSO
+powertbl(1), mapapply(1), stretchtbl(1)
+.SH DIAGNOSTICS
+.PP
+Only byte or short formatted images can be processed.
+.SH BUGS
+Report to Bryan Skene.

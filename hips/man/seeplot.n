@@ -1,0 +1,19 @@
+.TH SEEPLOT 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+seeplot \- examine the ASCII code of a PLOT3D vector plot
+.SH SYNOPSIS
+.B seeplot
+.SH DESCRIPTION 
+.I Seeplot
+allows the user to examine the internal content of a PLOT3D vector plot,
+by printing it in readable Ascii form.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH AUTHOR
+Yoav Cohen - 11/16/82
+.br
+HIPS 2 - msl - 7/24/91

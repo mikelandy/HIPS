@@ -1,0 +1,9 @@
+Couldn't think where else to put 'label'. To compile this
+you will need the file '/usr/include/vfont.h', and a copy of the
+Berkeley fonts (/usr/lib/vfont).
+
+cc -o label label.c -lhips -DULORIG
+
+		or
+
+cc -o label label.c -lhips -DLLORIG

@@ -1,0 +1,49 @@
+.TH H_TOC 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_toc \- conversions to complex pixel format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_toc(hdi,hdo)
+h_itoc(hdi,hdo)
+h_ftoc(hdi,hdo)
+h_dtoc(hdi,hdo)
+h_dctoc(hdi,hdo)
+struct header *hdi,*hdo;
+.fi
+.SH DESCRIPTION 
+These routines convert from a variety of pixel formats to complex format.  The
+entire image pointed to by
+.I hdi
+is converted to complex pixel format and stored in the image pointed to by
+.I hdo
+(any region-of-interest information is ignored).  The routine
+.I h_toc
+checks the pixel format of the input image and calls the appropriate
+individual routines
+.IR h_itoc ,
+.IR h_ftoc ,
+.IR h_dtoc ,
+or
+.IR h_dctoc
+according to whether it is integer, float, double or double complex.
+.IR h_itoc ,
+.IR h_ftoc ,
+and
+.I h_dtoc
+set either the real part (with imaginary set to zero), the imaginary part
+(with the real part set to zero) or both parts (set equal to the real input)
+according to whether
+.I hips_rtocplx
+is set to CPLX_RVI0, CPLX_R0IV or CPX_RVIV.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_RTOCTP - unknown real-to-complex conversion type
+.SH "SEE ALSO"
+h_tob(3), h_tod(3), h_todc(3), h_tof(3), h_toi(3), etc.
+.SH AUTHOR
+Michael Landy - 1/4/91

@@ -1,0 +1,43 @@
+.TH EQUALPOINTS 1 "October 10 1991" "Version 2" "HIPS Manual"
+.SH NAME
+equalpoints \- exclude coincident points in IMSOR defined irregular format file
+.SH SYNOPSIS
+.B equalpoints 
+.RB [ x \ | \ y \ | \ x,y
+.RB | \ xy ] 
+.RB [ -p ]
+.RB < input-seq
+.br
+.SH DESCRIPTION
+.I equalpoints 
+finds all occurrences of points with same x- and/or y- coordinates and excludes
+these from the output. Input is a file of the IMSOR defined irregular format,
+see
+.IR asc2hips .
+By default points with equal x and y coordinate are searched.
+By setting switch
+.B x 
+points with equal x-coordinates are searched.
+By setting switch 
+.B y
+points with equal y-coordinates are searched.
+By setting switch
+.B x,y
+points with equal x or y coordinates are searched. 
+By setting switch
+.B xy
+points with equal x and y coordinate are searched (default action).
+.sp 0.5
+Information about occurrences of coinciding points is written to a log-file:
+.BR equal.out .
+If switch 
+.B -p
+is specified data is written to output. Only the first appearence of 
+points with coinciding coordinates is included in the output.
+.SH SEE\ ALSO
+asc2hips(1)
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk 

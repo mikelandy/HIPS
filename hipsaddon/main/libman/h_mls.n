@@ -1,0 +1,71 @@
+.TH H_MLS "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+h_mls - maximum-likelihood-smoothing filter
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_mls(hdi,hdo,perc,size,ssize)
+h_mls_b(hdi,hdo,perc,size,ssize)
+struct header   *hdi,*hdo;
+int             perc,size,ssize;
+
+h_mls_B(imagei,imageo,nr,nc,ocols,perc,size,ssize)
+byte    *imagei,*imageo;
+int     nr,nc,ocols;
+int     perc,size,ssize;
+.fi
+.SH DESCRIPTION
+.I h_mls
+applies a maximum-likelihood-smoothing filter to the input subimage
+(ROI, specified by
+.I hdi
+or
+.I imagei,
+a pointer to the first pixel of the subimage)
+to suppress random noise,
+and stores the result in the output subimage
+(specified by
+.I hdo
+or
+.I imageo,
+a pointer to the first pixel of the subimage).
+.I h_mls
+then calls
+.I h_mls_b
+only if the image pixel format is byte.
+.I h_mls_b
+then calls
+.I h_mls_B
+which is the low-level routine and does not require image header.
+The subimage size is
+.I nr
+by
+.IR nc.
+The input and output images have
+.I ocols
+pixels per line.
+.I perc
+is the percentage (x 100) of the nearest neighbours
+in the original window which have the closest grey levels to that
+of the central pixel.
+.I size
+is the width of the window in which mls filtering is performed.
+.I ssize
+is the width of smaller windows withing the original window,
+one of them containing the greatest concentration of the nearest neighbours.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH REFERENCES
+S.L. Hurt and A. Rosenfeld, "Noise reduction in three-dimensional digital 
+images", Pattern Recognition, Vol. 17, No. 4, pp. 407-421, 1984.
+.SH SEE ALSO
+h_asl(1), h_mask(1), h_meanfilt(1), h_median(1), h_nns(1), h_sasmooth(1), h_snn(1)
+.SH "AUTHOR"
+Peter Mowforth and Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

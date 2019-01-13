@@ -1,0 +1,42 @@
+
+This directory includes HIPS support for the Matrox VIP-1024 frame boards.  It
+was written at UCLA, and requires a device driver written at Carnegie-Mellon.
+The README files in sys/device-driver describe how to get a copy of the device
+driver.  This software was provided by Edmond Mesrobian at the UCLA Machine
+Perception lab (edmond@cs.ucla.edu).
+
+Here is some info on the Matrox VIP-1024.
+
+VIP-1024A is a real-time video frame-grabber for the VMEbus and is configured
+as a VME slave module.
+
+Display specs:
+	- 1024x1024x8-bit frame grabber
+	- 512x512(Eurpoean)/480(US) display and grab resolution
+	- 4 display image areas stored
+
+Bus:
+	- Double-height VME-bus
+	- A32 or A24 (address space), D16 slave (data)
+
+Special Functions:
+
+	- Continuous grab or snapshot mode
+	- Software switching between four video sources (three external, 
+	  one internal feedback)
+	- Input and output LUTS
+	- Video bus through P2 connector for expansion and to gen-lock multiple
+	  boards together for true RGB input
+
+Video Sync:
+
+	- Software switch between video sync rates RS-170, RS-330, and 
+	  European CCIR.
+
+
+Address:
+	Matrox Electronic Systems Ltd.
+	1055 St. Regis Blvd.
+	Dorval, Quebec H9P2T4, Canada
+
+	(514) 685-2630

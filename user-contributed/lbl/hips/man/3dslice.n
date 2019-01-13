@@ -1,0 +1,81 @@
+.\" @(#)3dslice 1.01 10/30/90 JIN;
+.TH 3DSLICE 1 "December. 20, 1990" LBL-HIPS
+.SH NAME
+3dslice - 3D image slice
+.SH SYNOPSIS
+.B 3dslice
+[-d
+.I dhv
+[-p
+.IR xyz ]]
+[-a #] [-n #] [-c#] [-r#] [-f#]
+.SH DESCRIPTION
+.I 3dslice
+slices a 3D image to form a 2D or sub-3D image for displaying and looking at
+the inside of one of HIPS and FITS type images. The output is a HIPS image.
+.SH OPTIONS
+.TP
+-d
+Direction to cut.
+.B -dh
+is the default which slices horizontally (Z-X surface).
+.B -dv
+specifies slicing vertically (Y-Z surface).
+.B -dd
+does slicing diagonally and becomes the default if
+.I -p
+is specified.
+.TP
+-p[x, y, z]
+giving a choice to which axis the slice is parallel (for diagonally slicing)
+.TP
+-a
+# gives the angle for a diagonal slice which ranges from -90 to +90 degrees.
+You can specify any angle, the program can convert it into this range.
+.TP
+.I -c
+starting column for vertical and diagonal slices.
+.TP
+.I -r
+starting row for horizontal ane diagonal slices.
+.TP
+.I -f
+starting frame for diagonal slices.
+.TP
+.I -n
+New image frames. If you have a 50x50x50 image and start at column 10 for a
+vertical slice, and specify
+.I -n
+20, then you get a 50x50x20 output image which
+includes old images from column 10 to 30.
+.fi
+.SH COORDINATES
+The X axis is from left to right based on Y-Z surface. The Origin is
+upper-left corner.
+.br
+The Y axis is top down based on Z-X surface. The Origin is same as X.
+.br
+The Z axis faces away from front (not toward to face). 0 degree starts on
+X axis.
+.nf
+.ta .5i
+The result of slicing is always from bottom to top.
+We explain by the following example:
+	parallel Y axis slicing [-py]. coordinate is (x, y, z)
+	(0, 0, 0 - 0, 1, 0) corner by using +angle -f options.
+	(1, 0, 0 - 1, 1, 0) corner by using -angle -c options.
+	(1, 0, 1 - 1, 1, 1) using +angle & -c options.
+	(0, 0, 1 - 0, 1, 1) using -angle & -f options.
+	For 1 & 3, the view-line is 1,0,1 - 1,1,1.
+	For 2 & 4, the view-line is 1,0,0 - 1,1,0.
+.fi
+.SH ANGLE
+The positive angle is that any angle is between two axes, and negative angle is
+that any angle not between two axes.
+.SH EXAMPLES
+.B 3dslice
+-px -a 30 -r 20 check_3d | xhips
+.SH SEE ALSO
+3drotate(1), 3drotate90(1), 3drotate180(1), powertool(1)
+.SH AUTHOR
+Jin Guojun - 11/15/90

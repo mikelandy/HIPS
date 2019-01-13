@@ -1,0 +1,20 @@
+.TH ACF 1 "11 januar, 1993" "Version 2" "HIPS Manual"
+.SH NAME
+acf \- autocovariance function
+.SH SYNOPSIS
+.B acf
+.RB [ \-r ]
+.SH DESCRIPTION
+.I acf
+calculates the autocovariance function of an image sequence.
+if 
+.B \-r
+is specified the autocorrelation function is calculated.
+The numbers of rows and columns must be powers of two.
+.SH SEE ALSO
+fourtr(1)
+.SH AUTHOR
+.nf
+Rasmus Larsen 
+IMSOR, Technical University of Denmark
+e-mail: rl@imsor.dth.dk

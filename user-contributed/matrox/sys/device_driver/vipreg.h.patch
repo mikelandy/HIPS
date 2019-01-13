@@ -1,0 +1,7 @@
+302a303,308
+> 
+> /* IOCTLs added by Edmond Mesrobian UCLA MPL 3/1/88 */
+> 
+> #define VIPBIOCGETCONTFRAMEGRAB		_IOR(M, 70, int)
+> #define VIPXIOCRESETREGISTERS		_IOW(M, 71, int)
+> 

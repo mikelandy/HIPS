@@ -1,0 +1,36 @@
+#
+# makefile for user-contributed/lbl/lib
+#
+
+OBJECTS = \
+	gcc.o gcc_ui.o gcm.o gdd.o gfm.o gfm_load_dir.o gfm_stubs.o \
+	gfm_ui.o group.o group_data.o gutil.o
+
+LOCALINC = -I$(XVIEWHOME)/include -I.
+LIBNAME = libguidexvlbl.a
+
+default:	$(OBJECTS) $(LIBNAME)
+install:	$(OBJECTS) $(LIBNAME)
+
+.c.o:
+	$(COMPILEc) $(LOCALINC) $*.c
+	@-ld $(LDLIBFLAGS) $*.o
+	@mv a.out $*.o
+
+$(LIBNAME):	$(OBJECTS)
+	@rm -f $(LIBNAME)
+	ar cr $(LIBNAME) `$(LORDER) *.o | $(TSORT)`;
+	mv $(LIBNAME) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIBNAME)
+	@touch $(LIBNAME)
+
+clean:
+	rm -f $(OBJECTS) $(LIBNAME)
+clean-all:	clean_all
+
+pristine:
+	rm -f $(OBJECTS) $(LIBNAME) $(LIBDIR)/$(LIBNAME)
+
+man:
+
+doc:

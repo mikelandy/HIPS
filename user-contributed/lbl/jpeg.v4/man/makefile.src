@@ -1,0 +1,17 @@
+#
+# makefile for jpeg/man
+#
+
+MANPAGES = cjpeg.1 djpeg.1
+
+install: man-pgm
+
+clean:
+	rm -f *.o $(LIBNAME) ansi2knr core tmpansi.* testout.*
+clean-all:	clean_all
+
+man:
+#	cp -p $(MANPAGES) $(MANDIR)
+	$(MANPRINT) $(MANPAGES)
+
+doc:

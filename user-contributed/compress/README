@@ -1,0 +1,40 @@
+The program in this directory was donated by Patrick Flynn, a graduate student
+at Michigan State University.  It is an extension of the program `catframes'
+which allows the user to keep image files in compressed format (using the UNIX
+`compress' command).  It automatically uncompresses any files with an
+extension of `Z', which is the extension given to files by `compress'.  The
+program is compiled as follows:
+
+	cc -o zcatframes zcatframes.c -lhips
+	
+and is used in the same manner as catframes (you might consider simply
+installing it as `catframes'.  The following are the notes on the program from
+Pat Flynn (flynn@pixel.cps.msu.edu).
+
+____________________________________________________________________________
+
+I recently had the need to use a catframes-like program where the
+input files are compressed by the UNIX compress utility.  Rather than
+roll my own, I decided to modify catframes in an upwardly-compatible
+manner.  I am appending the source code for the modified version.
+
+I made the following modifications to `catframes.c` to get it working.
+
+1. I have a little 'myfopen' routine which looks at a filename, and
+   if it ends with ".Z", opens a pipe to a zcat process, which we can read
+   the uncompressed image from.  If the name doesn't end with a .Z, it
+   opens the normal file for reading.
+
+2. a 'myfclose' routine closes the file or pipe, as appropriate.  The global
+   variable 'pipemode' is used to decide whether the current file is a
+   pipe or not.
+
+3. read(2)'s on pipes can return prematurely, without having read all of the
+   zcat's output.  I changed the read calls to fread(), using the file
+   pointer returned by myfopen.
+
+It works identically to catframes and might be a useful
+program to have, especially when disk space is limited and you don't
+mind the performance hit of the extra zcat processes.
+
+Pat Flynn

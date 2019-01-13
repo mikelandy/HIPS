@@ -1,0 +1,19 @@
+#
+# makefile for user-contributed/lbl/hips/sources/lut
+#
+
+PGMS = \
+	logtbl.out mapapply.out powertbl.out scaletbl.out stretchtbl.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

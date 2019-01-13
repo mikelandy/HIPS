@@ -1,0 +1,271 @@
+TOPDIR = /home/itg2/local/HIPS2/hips2
+CONFIG = config.sun4
+HERE = user-contributed/lbl/hips/sources/tools/
+CCS_ROOT = /home/itg2/local/HIPS2/hips2/user-contributed/lbl
+
+# Sun 4 configuration file.
+# The file "makefile.hdr" contains code common to all makefiles.  It
+# should not be necessary to edit that file.
+
+# DRIVERDIRS = Iris NeXT SunView X XView ctool sunanim xvanim xanim datacube adage
+DRIVERDIRS = SunView X XView ctool sunanim xvanim xanim
+# CONTRIBDIRS = canny cc compress fsun imsor label lbl matlab surrey tamu usl uva verdth
+CONTRIBDIRS = canny cc compress fsun imsor label lbl surrey tamu usl uva
+# MATINCLUDE = /usr/local/matlab/extern/include 
+MATINCLUDE = /usr/local/matlab/extern/include 
+# MATLABDEST = /usr/local/bin/matlab
+MATLABDEST = /usr/local/bin/matlab
+# SUNVDIRS = hipstool hipsview lblsun sunv
+SUNVDIRS = hipstool hipsview lblsun sunv
+# HTDIRS = sunos3.4 ****or**** sunos4.0
+HTDIRS = sunos4.0
+# XDIRS = lblx11 imsorx11 xhips
+XDIRS = lblx11 imsorx11 xhips
+# XVDIRS = lblxview xvhips
+XVDIRS = lblxview xvhips
+DESTROOT = /home/itg1/src/HIPS2/sun4.test
+# DESTDIR = /usr/hips
+DESTDIR = $(DESTROOT)/bin
+# LIBDIR = /usr/local/lib
+LIBDIR = $(DESTROOT)/lib
+# INCLUDE_DIR = /usr/include
+INCLUDE_DIR = $(DESTROOT)/include
+# MANDIR = /usr/man/mann
+MANDIR = $(DESTROOT)/man/mann
+MANEXT = n
+# LIBMANDIR = /usr/man/mann
+LIBMANDIR = $(DESTROOT)/man/mann
+LIBMANEXT = n
+TMPDIR = /tmp
+MASKDIR = $(DESTDIR)/masks
+MASK3DIR = $(DESTDIR)/3dmasks
+LIB = hips
+HLIB = hipsh
+HALIB = hipsa
+
+FLOAT = 
+TARGET_ARCH = 
+FASTCOPY = 
+
+CPPFLAGS = -I$(INCLUDE_DIR) -DSTREAM_IMAGE -DSTREAM_IMAGE_LIB
+#CPPFLAGS = -I$(INCLUDE_DIR)
+LIBRARYH = -l$(HLIB) -l$(LIB)
+LIBRARY = -l$(HALIB) -l$(HLIB) -l$(LIB)
+LIBRARY1 = -l$(HLIB)
+LIBRARY2 = -l$(LIB)
+HALIBRARY = -l$(HALIB)
+LIBNAME = lib$(LIB).a
+HLIBNAME = lib$(HLIB).a
+HALIBNAME = lib$(HALIB).a
+OTHERLIBS = -lm
+OTHERLIB2 = -ljpeg -lscs1 -lccs -lhips
+LDFLAGS = -L$(LIBDIR)
+CFLAGS = -g
+
+ORIG = ULORIG
+BITORDER = MSBFVERSION
+
+MANPRINT = psroff -Pps -man
+MEPRINT = psroff -Pps -me
+TBL = tbl
+EQN = eqn
+LORDER = lorder
+TSORT = tsort
+RANLIB = ranlib
+XVIEWHOME = /usr/openwin
+LIBXVIEW = -lxview -lolgx -lX11
+XINCLUDE = /usr/include
+XLIB = /usr/lib
+D3HOME =
+
+# Stuff you like to have removed from directories to "make clean"
+OTHERJUNK = core *~ #* *BAK
+################ Beginning of makefile.hdr ################
+# Stuff that goes at the beginning of all the makefiles, but is not
+# configuration parameters, should be in this file.  It is included
+# after the configuration file, and before makefile.src.
+
+DIRS =
+PGMS =
+
+SHELL = /bin/sh
+
+COMPILEc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+	$(CPPFLAGS) $(TARGET_ARCH) $(FASTCOPY) $(FLOAT) -c
+LINKc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+	$(CPPFLAGS) $(FLOAT) $(TARGET_ARCH) $(FASTCOPY) -o
+LIBRARIES = $(LDFLAGS) $(LIBRARY) $(OTHERLIBS) $(OTHERLIB2)
+
+.SUFFIXES:	.out
+
+.c.o:
+	$(COMPILEc) $<
+
+.c.out:
+	$(LINKc) $* $< $(LIBRARIES)
+	mv $* $(DESTDIR)
+	@touch $@
+################ End of makefile.hdr ################
+#
+# makefile for user-contributed/lbl/hips/sources/tools
+#
+
+PGMS =	append.out hexdump.out histo_simulate.out mdisphist.out \
+	magicprint.out mem-test.out
+
+PGM3 =	mainpeak.out mean_scale.out mhisto.out mixadd.out mixmul.out
+
+PGM5 =	elastic.out frame.out \
+	multi_mask.out powertool.out rotate90n.out
+
+PGMC = to_stream.out to_jfif.out
+
+# PSDIR set in config file
+PSFLAGS = "-DLDLIB=\"$(LIBDIR)/magicprint.pro\""
+MFONT = \"NewCenturySchlbk-Bold\"
+FontFlag = -DMFont=$(MFONT)
+
+LOCAL_INC = $(CCS_ROOT)/include
+PUBLICLIB = -lccs -ltiff -lrle $(LIBRARY) $(OTHERLIBS) $(OTHERLIB2) $(CPPFLAGS2)
+LIBRARIE1 = $(LDFLAGS) -lscs1 $(PUBLICLIB)
+LIBRARIE2 = $(LDFLAGS) -lscs2 $(PUBLICLIB)
+LIBRARIE3 = $(LDFLAGS) -lscs3 $(PUBLICLIB)
+LIBRARIE5 = $(LDFLAGS) -lscs5 $(PUBLICLIB) -ljpeg
+LIBRARIEC = $(LDFLAGS) -ljpeg -lscs1 $(PUBLICLIB)
+CPPFLAGS2 = $(CPPFLAGS) -I$(LOCAL_INC) -DHIPS_IMAGE -DCOMMON_TOOL
+MASKLOC = -DMY_LIB=\"$(MASK3DIR)/mask\"
+
+.c.out:
+	$(LINKc) $* $< $(LIBRARIE2)
+	mv $* $(DESTDIR)
+	@touch $@
+
+install:	$(PGMS)	$(PGM3) $(PGM5) $(PGMC)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+
+# Routines which require special parameters
+
+$(PGMC):
+	$(LINKc) $* $< $(LIBRARIEC) 
+	mv $* $(DESTDIR)
+	@touch $@
+
+$(PGM3):
+	$(LINKc) $* $< $(LIBRARIE3)
+	mv $* $(DESTDIR)
+	@touch $@
+
+$(PGM5):
+	$(LINKc) $* $< $(LIBRARIE5)
+	mv $* $(DESTDIR)
+	@touch $@
+
+mdisphist.out:	mdisphist.c
+	cc -O -o mdisphist mdisphist.c $(LIBRARIE2)
+	mv $* $(DESTDIR)
+	@touch $@
+
+# it is very important to test print magin for setting MGPOffset (0.04 - 0.6).
+magicprint.out: magicprint.c
+	$(LINKc) $* $< $(PSFLAGS) $(FontFlag) -DMGPOffset=0.2 $(LIBRARIE5)
+	mv $* $(DESTDIR)
+	cp magicprint.pro $(LIBDIR)
+	chmod 664 $(LIBDIR)/magicprint.pro
+	@touch $@
+
+FRC:
+################ Beginning of makefile.tlr ################
+# Stuff that goes at the end of all the makefiles, but is not
+# configuration parameters should be in this file.  It is included
+# after makefile.src.
+
+#config reads the configuration file and munches the appropriate make files
+config: doit
+	${TOPDIR}/Configure "${CONFIG}" "${DEPTH}" "${HERE}" "${MFLAGS}"
+
+config-subdirs: doit
+	@-if test 'x$(DIRS)' != x ; then eval \
+	    'for d in $(DIRS) ; do \
+		    ( cd $$d ; \
+		      echo Configuring ${HERE}$$d ; \
+		      ${TOPDIR}/Configure "${CONFIG}" "${TOPDIR}" \
+				"${HERE}$$d/" "${MFLAGS}" ) \
+	    done' ; \
+	else \
+	    true ; \
+	fi
+
+doit:
+
+
+# Clean up installed stuff and binaries
+# pristine-pgm target invoked by pristine target in dirs that make programs
+# 
+pristine-pgm: clean-pgm
+	@-if test 'x$(PGMS)' != x ; then eval \
+		'for pgm in $(PGMS); do \
+			dpgm=`basename $$pgm .out`; \
+			echo rm -f $(DESTDIR)/$$dpgm ; \
+			rm -f $(DESTDIR)/$$dpgm ; \
+		done' ; \
+	else \
+	    true ; \
+	fi
+
+# Clean up binaries on program directories.
+clean-pgm:
+	-rm -f $(PGMS) *.out install* *.o $(OTHERJUNK) man-pgm libman-pgm
+clean_all:
+	-rm -f $(PGMS) *.out install* *.o $(OTHERJUNK) *-pgm *.a Makefile
+
+# Install program manual pages
+man-pgm: $(MANPAGES)
+	@-if test ! -r $(MANDIR) ; then mkdir $(MANDIR) ; fi
+	chmod u+w $(MANPAGES)
+	for i in $(MANPAGES) ; \
+	do \
+		cp $$i $(MANDIR)/`basename $$i .n`.$(MANEXT) ; \
+	done
+	chmod u-w $(MANPAGES)
+	touch man-pgm
+
+# Install library manual pages
+libman-pgm: $(MANPAGES)
+	@-if test ! -r $(MANDIR) ; then mkdir $(MANDIR) ; fi
+	chmod u+w $(MANPAGES)
+	for i in $(MANPAGES) ; \
+	do \
+		cp $$i $(LIBMANDIR)/`basename $$i .n`.$(LIBMANEXT) ; \
+	done
+	chmod u-w $(MANPAGES)
+	touch libman-pgm
+
+# Uninstall program manual pages
+pristineman-pgm:
+	for i in $(MANPAGES) ; \
+	do \
+		rm -f $(MANDIR)/`basename $$i .n`.$(MANEXT) ; \
+	done
+	rm -f man-pgm
+
+# Uninstall library manual pages
+pristinelibman-pgm:
+	for i in $(MANPAGES) ; \
+	do \
+		rm -f $(LIBMANDIR)/`basename $$i .n`.$(LIBMANEXT) ; \
+	done
+	rm -f libman-pgm
+
+makefile:: makefile.src
+	${DEPTH}Configure "${CONFIG}" "${DEPTH}" "${HERE}" "${MFLAGS}"
+
+################ End of makefile.tlr ################

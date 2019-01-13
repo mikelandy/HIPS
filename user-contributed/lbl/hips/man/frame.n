@@ -1,0 +1,25 @@
+.TH FRAME 1 "DECEMBER 5, 1991" LBL-HIPS
+.\" @(#)frame.1  1.10 90/12/1 JIN;
+.SH NAME
+frame \- add a frame to an image
+.SH SYNOPSIS
+.nf
+.ta 1i
+.B frame
+	[-f rows [ columns ]] [-v #] input
+.fi
+.SH DESCRIPTION
+.I frame
+adds a frame to input image.  If no argument specified,
+.I frame
+first make image to a square one. If the image is a square, then frame adds
+5% width borders on each side of the image, and output a HIPS image. Also,
+the columns is pitched to module of 16 or 8, depended on the default.
+The input can be
+.br
+HIPS, FITS, GIF, ICC, JPEG, PICT, PNM, RLE, SUN-raster, and TIFF
+
+.SH "SEE ALSO"
+toany(1), color_ps(1), powertool(1)
+.SH AUTHOR
+Jin Guojun - 12/10/90

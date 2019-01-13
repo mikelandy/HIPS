@@ -1,0 +1,48 @@
+Wframe is an image display routine that can be used to extract a rectangular
+portion of an image.  This should be executed from inside a gfxtool.
+
+Input is specified by a file name on the command line, or standard input.
+Compressed files are accepted. [both filename and filename.Z are allowed if
+the file is compressed.]
+
+The image will be reduced to fit in the window used.  A menu is displayed in
+the text portion of the gfxtool.
+
+The menu interaction with the mouse keys is given below.
+
+	menu 1:	L - give pixel value
+		M - specify a box corner -> menu2
+		R - quit
+	menu 2:	L, M, R - second box corner -> menu3
+	menu 3:	L - quit
+		M - create a new box -> menu1
+		R - extract image from outlined box to filename.extract
+	then quit
+
+_________________________________
+
+greyrectx.c: Greyrectx is an image display routine that can print out the
+coordinates of an arbitrary rectangle in the image.
+
+Input is specified by a file name on the command line, or standard input.
+Compressed files are not accepted.
+
+The image will be reduced to fit in the window used.  A menu is displayed in
+the text portion of the gfxtool.
+
+The menu interaction with the mouse keys is given below.
+
+	menu 1:	L - give pixel value
+		M - specify a box corner -> menu2
+		R - quit with confirm
+	menu 2:	L, M, R - second box corner -> menu3
+	menu 3:	L - set code [City,State,Zipcode]
+		M - create a new box -> menu1
+		R - output box coordinates and code to stdout -> menu1
+
+__________________________________
+
+Both programs can be compiled with:
+
+cc -o wframe wframe.c -I/usr/include/local -lhips -lsuntool -lcore -lsunwindow
+	-lpixrect -lm

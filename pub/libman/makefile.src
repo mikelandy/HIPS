@@ -1,0 +1,16 @@
+#
+# makefile for pub/libman
+#
+
+MANPAGES = hipspub.n
+
+install:	libman-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristinelibman-pgm

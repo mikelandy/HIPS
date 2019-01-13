@@ -1,0 +1,121 @@
+.TH H_MAX 3 "6/15/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_max \- subroutines to compute the maximum of an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_max(hd,maxval,nzflag)
+h_max_b(hd,maxval,nzflag)
+h_max_sb(hd,maxval,nzflag)
+h_max_s(hd,maxval,nzflag)
+h_max_us(hd,maxval,nzflag)
+h_max_i(hd,maxval,nzflag)
+h_max_ui(hd,maxval,nzflag)
+h_max_f(hd,maxval,nzflag)
+h_max_d(hd,maxval,nzflag)
+struct header *hdi;
+Pixelval *maxval;
+h_boolean nzflag;
+
+byte h_max_B(image,nr,nc,nlp,nzflag)
+byte *image;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+sbyte h_max_SB(image,nr,nc,nlp,nzflag)
+sbyte *image;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+short h_max_S(image,nr,nc,nlp,nzflag)
+short *image;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_ushort h_max_US(image,nr,nc,nlp,nzflag)
+h_ushort *image;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+int h_max_I(image,nr,nc,nlp,nzflag)
+int *image;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+h_uint h_max_UI(image,nr,nc,nlp,nzflag)
+h_uint *image;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+float h_max_F(image,nr,nc,nlp,nzflag)
+float *image;
+int nr,nc,nlp;
+h_boolean nzflag;
+
+double h_max_D(image,nr,nc,nlp,nzflag)
+double *image;
+int nr,nc,nlp;
+h_boolean nzflag;
+.fi
+.SH DESCRIPTION 
+These routines compute the maximum pixel value across an input subimage
+(specified by
+.I hd
+or
+.IR image ).
+The result is stored in 
+.I maxval
+(for the generic routines), or is the return value (for the low-level
+routines).
+.I h_max
+calls
+.IR h_max_b ,
+.IR h_max_sb ,
+.IR h_max_s ,
+.IR h_max_us ,
+.IR h_max_i ,
+.IR h_max_ui ,
+.IR h_max_f
+or
+.IR h_max_d
+depending upon whether the pixel format is byte, signed byte, short, unsigned
+short, integer, unsigned integer, float or double.
+.IR h_max_B ,
+.IR h_max_SB ,
+.IR h_max_S ,
+.IR h_max_US ,
+.IR h_max_I ,
+.IR h_max_UI ,
+.IR h_max_F
+and
+.I h_max_D
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The image has
+.I nlp
+pixels per line.
+If
+.I nzflag
+is FALSE, then the maximum is computed over the entire subimage.  If
+.I nzflag
+is TRUE, pixels with values identically zero are ignored in the calculation,
+and the returned maximum is set to zero only if the entire subimage is zero.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, signed byte, short, unsigned short, integer, unsigned integer, float,
+double
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_minmax(3)
+.SH AUTHOR
+Michael Landy - 6/13/91

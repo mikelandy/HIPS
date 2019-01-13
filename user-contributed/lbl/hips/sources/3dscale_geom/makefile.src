@@ -1,0 +1,32 @@
+#
+# makefile for user-contributed/lbl/hips/sources/3dscale_geom
+#
+
+PGMS = 3dscale_geom.out
+OBJECTS = scaleg_main.o scale_g.o scanline.o filt.o hips.o hips_pic.o \
+		pic.o window.o
+
+LIBRARIES = $(LDFLAGS) -lscs5 -lccs $(LIBRARY2) -lrle -ltiff $(OTHERLIBS) \
+	$(OTHERLIB2) -ljpeg -lpanel # xwd_r
+CPPFLAGS2 = -I$(CCS_ROOT)/include -DHIPS_IMAGE
+
+.c.o:
+	$(COMPILEc) $< $(CPPFLAGS2)
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+3dscale_geom.out:	$(OBJECTS)
+	$(LINKc) 3dscale_geom $(OBJECTS) $(LIBRARIES)
+	mv 3dscale_geom $(DESTDIR)
+	@touch $@
+
+FRC:

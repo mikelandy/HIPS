@@ -1,0 +1,93 @@
+.TH DISTMIN 1 "5/10/92" "Version 2" "HIPS Manual"
+.SH NAME
+distmin \- calculates global distances in binary images - DISTANCE
+TRANSFORMATION.
+.SH SYNOPSIS
+.B distmin 
+[-h | -c [d4<real> [d8<real>]] | -e [dh<real> [dv<real>]]] < iseq > oseq
+.SH DESCRIPTION
+The input is one (or more) binary image(s), where the pixel
+value '0' indicates a figur pixel (OBJECT) and pixel values
+different from zero is a non-figur pixel (BACKGROUND). The output
+is one (or more) image(s) indicating the shortest distance from
+a background pixel to a figur, i.e. DISTANCE TRANSFORMATION.
+.SH OPTIONS
+.TP
+.B -h
+indicates 6-neighbourhood based on a 
+.I Hexagon
+grid, i.e. every
+pixel have six neighbours with mutual unit distance of one. The
+output is integer format.
+.TP
+.B -c
+.I d4
+:<horizontal/vertical unit distance>
+.I d8
+:<diagonal unit distance>.
+By default
+.I d4
+and
+.I d8
+are set to respectively 1 and
+1.3507 due to Gunilla Borgefors (see REFERENCES below).
+Calculates the 
+.I Chamfer
+distance transformation chart based on a 8-neighbourhood.
+To calculate the 4-neighbourhood distance chart set d4 and d8
+to respectively 1 and MAX, were MAX is a integer greater than
+the diagonal of the image, e.g. 10000.
+The output is float format.
+.TP
+.B -e
+calculates the signed 
+.I Euclidean 
+distance. This is the most
+accurate distance transformation.
+.I dh
+and
+.I dv
+are respectively the
+horizontal and vertical unit distance between neighbour pixels. By
+default they are set to -1. The output is complex (Re,Im),
+and must be postprocessed by e.g. htof(1hips).
+.SH REGION-OF-INTEREST
+This version does not support region-of-interest.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH EXAMPLE
+If the input is a 5x5 frame with a single centered feature
+element '0' and '-c 2 3' are specified the output
+will be:
+
+.ce
+6 5 4 5 6
+.ce
+5 3 2 3 5
+.ce
+4 2 0 2 4
+.ce
+5 3 2 3 5
+.ce
+6 5 4 5 6
+.SH REFERENCES
+.TP
+[1]
+Gunilla Borgefors, "Distance Transformations in Arbitrary
+Dimensions.", Computer Vision, Graphics, and Image Processing,
+Vol. 27, pp. 321-345, 1984.
+.TP 
+[2]
+Qin-Zhong Ye, "The Signed Euclidean Distance Transform and 
+Its Applications", Int. Conf. on Pattern Recognition, Rome, Italy,
+pp. 495-499, 1988.
+.SH AUTHOR
+Ulrik P. V. Skands, 1991.
+.br
+HIPS 2 - upvs - 5/10/92
+.br
+IMSOR, Technical University of Denmark
+.br
+e-mail: us@vip.imsor.dth.dk

@@ -1,0 +1,7 @@
+
+This directory contains a general image analysis tool for viewing and making
+measurements upon HIPS images on a Sun console under SunView.  It was written
+by Walt Kropfl, and converted for use with HIPS images by Michael Landy.
+Hopefully, we will eventually convert it for use under X (e.g., XView) as
+well.  The two manual pages in this directory should provide adequate
+documentation.

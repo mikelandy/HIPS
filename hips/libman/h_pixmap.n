@@ -1,0 +1,66 @@
+.TH H_PIXMAP 3 "8/7/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_pixmap \- subroutines to apply a pixel mapping table
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_pixmap(hdi,hdo,map)
+h_pixmap_b(hdi,hdo,map)
+struct header *hdi,*hdo;
+byte *map;
+
+h_pixmap_B(imagei,imageo,nr,nc,nlpi,nlpo,map)
+byte *imagei,*imageo,*map;
+int nr,nc,nlpi,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines apply a fixed pixel mapping to an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_pixmap
+calls
+.I h_pixmap_b
+as long as the pixel format is byte.
+.IR h_pixmap_B ,
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  A pixel with value
+.I val
+is changed to have value
+.IR map[val] .
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_histoeq(3)
+.SH AUTHOR
+Michael Landy - 8/7/91

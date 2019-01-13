@@ -1,0 +1,25 @@
+.TH BIN_MASK 1 "1 October 1990" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+bin_mask \- apply a bitmask to each pixel of an image
+.SH SYNOPSIS
+.B bin_mask
+[-m mask] < inseq > outseq
+.SH DESCRIPTION
+.I Bin_mask 
+sets the bits of each pixel in the input image
+by ANDing them with the input mask.  The input sequence must
+be byte or short format.  The output sequence is the same as
+the input.
+
+The input mask is specified with the option m.  The -m option
+calls for a string of 1's and 0's.  If -m is not set then the
+default is '100,' setting the lower two bits of each pixel in
+the image to zero.
+
+Setting high order bits to 0 (e.g. -m 00111111) is almost sure
+to require renormalizing the image with, for example, scale_gray
+for it to be visible on a screen.
+
+.SH OPTIONS
+-m %s string of 1's and 0's defining the mask (default = '100')

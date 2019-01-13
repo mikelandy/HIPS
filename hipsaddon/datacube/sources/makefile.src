@@ -1,0 +1,47 @@
+#
+# makefile for hipsaddon/datacube/sources
+#
+
+PGMS = livepic.out grabpic.out dispic.out
+
+D3LIBDIR = $(D3HOME)/lib
+D3INCDIR = $(D3HOME)/include
+D3LIBS = $(D3LIBDIR)/dgilib.a \
+	 $(D3LIBDIR)/fsilib.a \
+	 $(D3LIBDIR)/mvlib.a
+
+D3HEADERS = datacube_lib.h
+D3OBJECTS = datacube_lib.o
+
+.c.o:
+	$(COMPILEc) $< -I$(D3INCDIR)
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+livepic.out:	livepic.o $(D3OBJECTS) $(D3HEADERS)
+	$(LINKc) $* livepic.o $(D3OBJECTS) $(D3LIBS) $(LIBRARIES)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+grabpic.out:	grabpic.o $(D3OBJECTS) $(D3HEADERS)
+	$(LINKc) $* grabpic.o $(D3OBJECTS) $(D3LIBS) $(LIBRARIES)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+dispic.out:	dispic.o $(D3OBJECTS) $(D3HEADERS)
+	$(LINKc) $* dispic.o $(D3OBJECTS) $(D3LIBS) $(LIBRARIES)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+FRC:

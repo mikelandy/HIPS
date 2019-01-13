@@ -1,0 +1,57 @@
+#
+# makefile for lib/sources
+#
+
+OBJECTS = \
+	add_header.o addplot.o alloc_histo.o alloc_image.o cmapio.o \
+	conversion.o cut_frame.o desc_set.o dup_header.o formatheader.o \
+	fread_oldhdr.o free_header.o futils.o getplot.o h_col1tocol3.o \
+	h_col3tob.o h_col3tocol3.o h_col3toi.o h_rgb.o h_tob.o \
+	h_toc.o h_tod.o h_todc.o h_tof.o h_toi.o h_tolp.o h_tomp.o \
+	h_tos.o h_tosb.o h_toui.o h_tous.o halloc.o herrs.o \
+	hformatname.o hips_extrns.o hdepth.o hsizepix.o htypes.o init_header.o \
+	mask_util.o maxformat.o pa_defaults.o pa_externs.o pa_main.o \
+	pa_parser.o pa_tables.o pa_types.o pa_usage.o perr.o pix_code.o \
+	pyralloc.o pyrcopy.o pyrfiltio.o pyrio.o pyrnumpix.o \
+	pyrredexp.o pyrreflect.o read_frame.o read_header.o \
+	read_histo.o read_hutils.o read_image.o read_roi.o setformat.o \
+	setroi.o setsize.o strsave.o trans_frame.o type_is_col3.o update_hdr.o \
+	view_frame.o write_frame.o write_header.o write_histo.o \
+	write_image.o write_roi.o wsubs.o xparam.o
+
+# TestTime.c
+
+MASKFLAGS = -DMSKLIB=\"$(MASKDIR)\"
+
+.c.o:
+	$(COMPILEc) $*.c
+#	@-ld $(LDLIBFLAGS) $*.o
+#	@mv a.out $*.o
+
+libhips.a:	$(OBJECTS)
+	@rm -f libhips.a
+	ar cr libhips.a `$(LORDER) *.o | $(TSORT)`;
+	mv libhips.a $(LIBDIR)/$(LIBNAME)
+	$(RANLIB) $(LIBDIR)/$(LIBNAME)
+	@touch libhips.a
+
+perr.o:	herrs.o
+
+install:	libhips.a
+
+clean:
+	rm -f $(OBJECTS) libhips.a
+
+pristine:
+	rm -f $(OBJECTS) libhips.a $(LIBDIR)/$(LIBNAME)
+
+man:
+
+doc:
+
+# Routines which require special parameters
+
+mask_util.o:
+	$(COMPILEc) $*.c $(MASKFLAGS)
+#	@-ld -x -r $*.o
+#	@mv a.out $*.o

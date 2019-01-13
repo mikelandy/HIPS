@@ -1,0 +1,128 @@
+.TH MOVIE 1HIPS "January 2, 1984"
+.SH NAME
+movie - transfer images to the Grinnell or Adage in real time
+.SH SYNOPSIS
+.B movie
+[startrow [startcol]] [-number][-r][-c][-p][-b][-u][-a][-ln][-S]
+.br
+.ti 1.5i
+[-o r g b][-z r g b][-g r g b]
+.br
+.B movie
+[startrow [startcol [twinstartrow [twinstartcol]]]]
+.br
+.ti 1.5i
+[-number][-r][-c][-p][-b][-u][-a][-ln][-S] -tfilename
+.br
+.ti 1.5i
+[-o r g b][-z r g b][-g r g b]
+.br
+.B portmovie
+[startrow [startcol]] [-number][-r][-c][-p][-b][-u][-a][-ln][-S][-tfilename]
+.br
+.ti 1.5i
+[-o r g b][-z r g b][-g r g b]
+.br
+.B bpsmovie
+[startrow [startcol]] [-number][-r][-c[nnn]][-p][-b][-a][-ln or -lcfile][-tfilename]
+.br
+.ti 1.5i
+[-o r g b][-z r g b][-g r g b][-v][-Vnnn][-Hnnn][-C mapfile]
+.SH DESCRIPTION 
+.I Movie
+outputs byte formatted sequences to the Adage.
+.I Portmovie
+is identical except that the entire sequence is first stored in Adage
+memory, and then the visible is changed using the Adage viewport.
+.I Bpsmovie
+is identical except that the BPS is used to run a process which runs the
+movie, thus presenting precisely what is desired and ensuring that all
+registers are changed during the vertical retrace interval.
+The sequence is output repeatedly (unless option
+.I -number
+is specified).
+The output is centered on the screen unless otherwise specified.
+All switch options must follow any centering options.
+The switch options may be specified in any order, and include:
+.TP 1.5i
+.B \-number
+Finite display, sequence is output 
+.I number
+times.
+.TP
+.B \-r
+Start the Betamax just prior to outputting.
+.TP
+.BI \-c [nnn]
+Output a cue spot before running the movie.  The optional
+.I nnn
+gives the number of sync pulses the cue spot is shown, and the number of sync
+pulses of blank frame following it.
+.TP
+.B \-p
+Repeat the first frames for 1 second.
+.TP
+.B \-b
+Add a blank frame at the end.
+.TP
+.B \-u
+Unsync, cancel the sync feature.
+.TP
+.B \-a
+\'All\' is shorthand for -s -d -r -p -b.
+.TP
+.BI \-l n
+Time lapse, givens the number of sync pulses (or 60ths of a sec)
+per frame.  This defaults to 2, i.e. 30 fps.
+.TP
+.BI \-l cfile
+This form of time lapse allows the user to control precisely the order and
+timing of a sequence of frames.  The file ``cfile'' contains the necessary
+information to describe the presentation.  It consists of the number of
+presented frames, followed by a line for each presented frame consisting of
+the frame number (from the input HIPS sequence) to be presented and the number
+of sync pulses (60ths of a second) duration for that presentation.
+.TP
+.B \-S
+Step the movie frame by frame (use 'x' to exit,
+and 'b' for backwards step).
+.TP
+.BI \-t Twinfile
+Twin movies run interlaced, side by side.
+.TP
+.BI \-o " r g b"
+Set the color map for pixels which are one to the specified values (only
+operative for binary movies).
+.TP
+.BI \-z " r g b"
+Same for zero pixels.
+.TP
+.BI \-g " r g b"
+Same for background pixels.
+.TP
+.BI \-C " mapfile"
+Reads a new color map for grey scale movies.  The map file consists of 256
+lines of three hex values, which apply to each of the red, green, and blue
+channels.  Since we have 10-bit lookup tables, these values should each have
+no more than 10 bits.
+.TP
+.B \-v
+Use standard 30Hz interlaced video output.
+.TP
+.BI \-V nnn
+Zoom in the vertical direction by a factor of nnn.
+.TP
+.BI \-H nnn
+Zoom in the horizontal direction by a factor of nnn.
+.SH SEE\ ALSO
+movie(1HIPS), wframe(1HIPS)
+.SH AUTHOR
+Yoav Cohen - 4/14/82
+.br
+modified 4/26/82
+.br
+modified 5/6/82
+.br
+Mike Landy - 7/27/82 - added -rcpba.
+.br
+modified 9/2/82 - added synchronization and -u

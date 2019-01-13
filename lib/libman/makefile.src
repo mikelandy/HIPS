@@ -1,0 +1,29 @@
+#
+# makefile for lib/libman
+#
+
+MANPAGES = \
+	add_header.n addplot.n alloc_histo.n alloc_image.n cmapio.n \
+	conversion.n cut_frame.n desc_set.n dup_header.n formatheader.n \
+	fread_oldhdr.n free_header.n futils.n getplot.n h_col1tocol3.n \
+	h_col3tob.n h_col3tocol3.n h_col3toi.n h_rgb.n h_tob.n \
+	h_toc.n h_tod.n h_todc.n h_tof.n h_toi.n h_tolp.n h_tomp.n \
+	h_tos.n h_tosb.n h_toui.n h_tous.n halloc.n hdepth.n hformatname.n \
+	hsizepix.n init_header.n mask_util.n maxformat.n parseargs.n \
+	perr.n pix_code.n pyralloc.n pyrcopy.n pyrfiltio.n pyrio.n \
+	pyrnumpix.n pyrredexp.n pyrreflect.n read_frame.n read_header.n \
+	read_histo.n read_hutils.n read_image.n read_roi.n setformat.n \
+	setroi.n setsize.n strsave.n trans_frame.n type_is_col3.n update_hdr.n \
+	view_frame.n write_frame.n write_header.n write_histo.n \
+	write_image.n write_roi.n wsubs.n xparam.n
+
+install:	libman-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristinelibman-pgm

@@ -1,0 +1,66 @@
+.fz \s +4
+.Ls	2
+.TH APPEND Usage "October 10, 1991"
+
+.SH NAME
+.I append
+- merge files, or merge file and string input from console.
+
+.SH SYNOPSIS
+
+.B append
+output_seq <
+.I input_file
+.br
+.B append
+outfile -r repeat -s string
+.br
+.B append
+outfile -f source_file [-t title]
+.br
+.B append
+outfile [-r #] { < | -i } input
+.br
+.B append
+-h
+
+.SH DESCRIPTION
+.br
+Append offer a widely used files combination ability. It can merge many files
+together, and also it can combine file(s) and console input together. append
+simply merges files. Further more, it is able to insert a title string between
+merged files.
+
+.SH Warning:
+\fib	DO NOT EVER and NEVER
+use output redirction ">" for output. It will distory original file.
+
+
+.SH SEE ALSO:
+
+	hexdump(n), powertool(n)
+
+.SH Example:
+.I append
+mynew < page1
+.br
+create new file called "mynew" which is a copy of page1
+
+.I append
+mynew < page2
+.br
+which adds page2 to end of mynew
+
+.I append
+mynew -f image1 -t "There is image now"
+.br
+add image1 to mynew file also place title "There is image now" at begining
+of image1 -- between page2 and image1.
+
+.I append
+mynew -r 10 -s "012345"
+.br
+add 012345012345012345012345012345012345012345012345 string to mynew.
+
+.SH AUTHOR
+Jin Guojun - 10/10/90

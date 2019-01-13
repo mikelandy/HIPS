@@ -1,0 +1,136 @@
+.TH XPARAM 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+xparam \- extended parameter management
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+setparam(hd,name,fmt,count,value)
+setparamd(hd,name,fmt,count,value)
+clearparam(hd,name)
+struct extpar *findparam(hd,name)
+struct extpar *grepparam(hd,subname)
+mergeparam(hd1,hd2)
+struct header *hd,*hd1,*hd2;
+char *name,*subname;
+int fmt,count;
+various-formats value,valuepointer;
+
+getparam(hd,name,fmt,count,valuepointer)
+struct header *hd;
+char *name;
+int fmt,*count;
+various-formats value,valuepointer;
+.fi
+.SH DESCRIPTION 
+This collection of routines implements the header extended parameters.  Each
+image header has an associated list of parameters.  The number of parameters
+is unlimited.  Each parameter has an associated name for referring to that
+parameter (names are simply strings which can be read using a `%s' format code
+in
+.IR scanf (3s)).
+There are five types of parameters: Ascii, byte, short, integer and float,
+which are
+specified by the corresponding pixel format codes (PFASCII, PFBYTE, PFSHORT,
+PFINT and
+PFFLOAT).  Note that PFASCII is treated identically to PFBYTE in the routines
+described here.  The only difference is that
+.IR formatheader (3)
+will print a byte parameter as a series of decimal numbers (representing the
+binary value of each byte), and an Ascii parameter is printed as is, which
+assumes that the values are printable Ascii characters.
+Each parameter can have one or more associated values, the number
+is specified by the
+.IR count .
+Finally, to set a parameter the user must supply the parameter value.  For
+parameters with a count of 1, the supplied value is simply the value of the
+parameter, and must have the appropriate type (byte for either PFASCII or
+PFBYTE, short, int or float).
+For a count larger than 1, the parameter is an array, and the supplied value
+must be a pointer to the appropriate type (byte *, short *, int * or float
+*).  Note again that Ascii and byte are treated identically.  If the caller
+wants to set a parameter to have a null-terminated string as its value, then
+use format PFASCII with a count equal to the length of the string plus one.
+.I setparam
+is called if the memory for the supplied parameter array may not be freed
+if the header contents are deallocated for any reason; otherwise call
+.I setparamd
+(which also sets the
+.I dealloc
+variable for the parameter structure associated with this parameter).
+When a parameter is set, if this parameter was already associated with the
+header, then the value is replaced (and the old value memory is freed if both
+the header parameter deallocation flag and this parameter structure
+deallocation flag are set).  If this is a new parameter, then a new parameter
+structure is allocated for it.
+.PP
+.I getparam
+is used to query the value of a header parameter.  The last
+argument points to the location where the value is returned.  Thus, for a
+count of 1 it is of type byte *, short *, int * or float * (just as you would
+supply for
+.IR scanf (3s)).
+For a parameter array, the last argument is of type byte **, short **, int **
+or float **.  The caller supplies a pointer to a count as well.  This count
+should be set to 1 if the caller expects a count of 1 (and has supplied a
+pointer to a value as above), and should be set to a value greater than 1 if
+the caller expects an array (and has supplied a pointer to a pointer).  If
+there is a mismatch, this results in the HE_PCOUNT error.  The routine returns
+in
+.I count
+the actual count of parameters returned.  Also note that the returned pointer
+points to the header binary array in memory (not to a new copy of memory
+supplied to the user).  Thus, a second call to
+.I getparam
+for that parameter will return precisely the same pointer, and if the user
+modifies any values, it will affect memory pointed to by anyone who requests
+this parameter.
+.PP
+.I clearparam
+is used to delete a parameter which is no longer needed.
+.PP
+All of the above routines use
+.I findparam
+to search through the linked list of parameters associated with the supplied
+header for the parameter structure associated with the given parameter name.
+.I findparam
+returns the null pointer NULLPAR if the requested parameter is not found.
+An alternative interface is to use
+.I grepparam
+to search the linked list of parameters associated with the supplied header.
+.I Grepparam
+returns a pointer to the first parameter structure for a parameter with a name
+which includes the supplied string as a substring
+(much as with the UNIX command
+.IR grep ).
+.I Grepparam also returns the null pointer NULLPAR if no matching
+parameter is found.
+.PP
+.I mergeparam
+is used to combine the extended parameters from several input files.  The
+routine calls
+.I setparam
+to set each parameter defined in
+.I hd2
+so that it is defined in
+.I hd1
+as well.  If any parameters are defined in both, the definition in
+.I hd2
+will replace that in
+.IR hd1 .
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_HDPTYPE - unknown header parameter format
+.br
+HE_MISSPAR - parameter not found
+.br
+HE_PCOUNT - parameter count in header mismatches supplied count
+.br
+HE_PNAME - parameter name contains blanks or tabs
+.SH "SEE ALSO"
+read_header(3), write_header(3)
+.SH AUTHOR
+Michael Landy 1/4/91

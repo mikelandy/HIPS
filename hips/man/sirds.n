@@ -1,0 +1,62 @@
+.TH SIRDS 1 "8/12/93" "Version 2" "HIPS Manual"
+.SH NAME
+sirds \- create a single image random dot stereogram from a depth image
+.SH SYNOPSIS
+.B sirds
+[-s stripwidth] [-d] [-f [size]] <depthimage >stereogramimage
+.SH DESCRIPTION 
+.I Sirds
+creates a single image random dot stereogram (or SIRDS) from a depth map image.
+A SIRDS is like a normal stereogram except the left eye's and right eye's
+views are contained in a single image by using a vertical strip of random dots
+that (approximately) repeats.  Thus, by crossing or diverging your eyes by one
+strip width one can see the intended depth map.  There are various techniques
+for learning how to diverge or converge ones eyes to view stereograms.
+Techniques are discussed in \fIFoundations of Cyclopean Perception\fR by Bela
+Julesz (Chicago: University of Chicago Press, 1971) and in \fISeeing: Illusion,
+Brain and Mind\fR by John P. Frisby (New York: Oxford University Press, 1980).
+The input image describes the intended depth map, where a value of zero is in
+the fixation plane and greater values are closer to the observer.  Negative
+values are not allowed.  Also, the largest value should be less than the width
+of the strip.  The strip width is set using the
+.I -s
+switch and defaults to 20 pixels.
+The
+.I -f
+switch provides fixation spots above and below the image to use as aids to
+fixation (when you are properly converged or diverged you will see three spots
+rather than two or four), and the size of the fixation spots defaults to 10
+pixels.  The default is to create a stereogram for converged fixation
+(crossing your eyes more than normal), but a SIRDS for diverged fixation may
+be created using the
+.I -d
+switch.  In the convergent case
+an extra strip of zero disparity is generated at the left of the SIRDS.
+If the input image is in float format then output pixels are interpolated
+resulting in more continuous depth values.  However, this also results in
+a successive blurring of the image from left to right.  A byte input image
+results in visible discrete depth values.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, float
+.SH "OUTPUT PIXEL FORMATS"
+byte
+.SH "REGION-OF-INTEREST"
+The entire image is processed
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+cylindrate(1)
+.SH AUTHOR
+Mike Landy - 8/12/93

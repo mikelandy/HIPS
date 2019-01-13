@@ -1,0 +1,54 @@
+#
+#	makefile for user-contributed/lbl/hips/sources/cnvt
+#
+
+PGMS =	toicc.out totiff.out tovida.out to3dplot.out
+PGM5 =  color_ps.out headers.out torle.out
+PGML =	toraw_sep.out tohips.out
+
+PUBLICLIB = -lccs -ltiff -lrle $(LIBRARY2) $(OTHERLIBS) $(OTHERLIB2)
+LIBRARIES = $(LDFLAGS) -lscs4 $(PUBLICLIB)
+LIBRARIE5 = $(LDFLAGS) -lscs5 $(PUBLICLIB) -ljpeg -lpanel
+LOCALCFLAGS = $(CPPFLAGS) -I$(CCS_ROOT)/include -DCOMMON_TOOL
+
+install:	$(PGMS) $(PGM5) $(PGML)
+
+$(PGMS):
+	$(LINKc) $* $< $(LIBRARIES) $(LOCALCFLAGS)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+#	Routines which require special parameters
+
+$(PGM5):
+	$(LINKc) $* $< $(LIBRARIE5) $(LOCALCFLAGS)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+toraw_sep.out:
+	@echo "toicc -w" > $(DESTDIR)/toraw_sep
+	@chmod 775 $(DESTDIR)/toraw_sep
+	@touch $@
+
+tohips.out:
+	@if test ! -f $(DESTDIR)/tohips; then \
+		ln -s $(DESTDIR)/powertool $(DESTDIR)/tohips; \
+	else	if test ! -h $(DESTDIR)/tohips; then \
+		rm -f $(DESTDIR)/tohips; \
+		ln -s $(DESTDIR)/powertool $(DESTDIR)/tohips;	\
+		else	true;	fi; \
+	fi;
+	@touch $@
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

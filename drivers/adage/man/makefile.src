@@ -1,0 +1,16 @@
+#
+# makefile for drivers/adage/man
+#
+
+MANPAGES = movie.n rframe.n vaximgld.n wframe.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

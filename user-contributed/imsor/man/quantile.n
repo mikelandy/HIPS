@@ -1,0 +1,39 @@
+.TH QUANTILE 1 "1/9/93" "Version 2" "HIPS Manual"
+.SH NAME
+quantile \- apply a quantile filter to an image
+.SH SYNOPSIS
+.B quantile
+[-s size] [-q quantile]
+.SH DESCRIPTION 
+.I Quantile
+applies a quantile filter to an input image.
+The quantile filter is applied to a
+.I size
+by
+.I size
+window centered on each input pixel, where the edge pixels of the input
+subimage are replicated to fill out the window if necessary, and
+.I size
+defaults to 3. The
+.I quantile
+defaults to be 0.5, i.e. the median.
+The algorithm does not return proper results for quantiles corresponding to
+minimum or maximum filters.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, int, float
+.SH "SEE ALSO"
+extremum(1),fmedian(1), merode(1),mdilate(1)
+.SH AUTHOR
+Mike Landy - 5/28/82
+.br
+median algorithm replaced <Pierre Landau 1/6/87>
+.br
+HIPS 2 - msl - 6/16/91
+.br
+modified for short, int, float <Rasmus Larsen>
+.br
+modified for general quantile <Lars Roenved> 
+.nf
+Rasmus Larsen
+IMSOR, Technical University of Denmark
+e-mail: rl@imsor.dth.dk

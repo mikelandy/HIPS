@@ -1,0 +1,19 @@
+.TH CLEARROI 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+clearroi \- reset the region-of-interest to be the entire image
+.SH SYNOPSIS
+.B clearroi
+.SH DESCRIPTION 
+.I Clearroi
+sets the region-of-interest specified in the image header to be the entire
+image.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+All formats.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+extractroi(1), setroi(1)
+.SH AUTHOR
+Michael Landy - 1/8/91

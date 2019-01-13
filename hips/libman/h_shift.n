@@ -1,0 +1,78 @@
+.TH H_SHIFT 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_shift \- subroutines to shift image pixels
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_shift(hdi,hdo,shift)
+h_shift_b(hdi,hdo,shift)
+h_shift_i(hdi,hdo,shift)
+struct header *hdi,*hdo;
+int shift;
+
+h_shift_B(imagei,imageo,nr,nc,nlpi,nlpo,shift)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo,shift;
+
+h_shift_I(imagei,imageo,nr,nc,nlpi,nlpo,shift)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo,shift;
+.fi
+.SH DESCRIPTION 
+These routines shift the values of an input subimage (specified by
+.I hdi
+or
+.IR imagei )
+a specified number of bits,
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_shift
+calls
+.I h_shift_b
+or
+.I h_shift_i
+depending upon whether the pixel format is byte or integer.
+.I h_shift_B
+and
+.I h_shift_I
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  The parameter
+.I shift
+specifies the number of bits to shift (positive is a leftward shift, negative
+is a rightward shift).
+The C `<<' and `>>' operators are used.  Thus, whether the shift is arithmetic
+or logical depends on the computer (according to Kernighan and Ritchie).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, integer
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_neg(3)
+.SH AUTHOR
+Michael Landy - 1/11/91

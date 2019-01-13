@@ -1,0 +1,86 @@
+The software in this directory includes tools for digitization and display of
+HIPS images using Datacube MaxVideo hardware, and a few general HIPS filters.
+It was donated by A. Kehoe, Department of Mechanical Engineering, University
+of Surrey, Guildford, Surrey  GU2 5XH, England.  The subdirectories are:
+
+	sources		Hips filters
+	include		Extra include files
+	man		Manual pages
+	maxman		Manual pages for Datacube stuff
+	max_hips_src	Datacube software for version 2.1 of MaxWare
+	max_src		   "        "      "     "     "   "    "
+	max_hips_srcV3	Datacube software for version 3.0 of MaxWare
+	max_srcV3	   "        "      "     "     "   "    "
+
+I have been able to get the V3 Datacube software to work on a Datacube system
+in the United States.  This required a certain amount of tailoring of the code
+which may be relevant for your own installation.  Here are the things I needed
+to do to get the code to work:
+
+	1)  The code is filled with declarations of the form
+			int RS_T50 = 0;
+	since RS_T50 is a predefined constant, the compiler didn't like these
+	and so I have commented them all out.
+
+	2)  The system I was using was 512x512, 60Hz, and had something other
+	than the default address space for the device registers.  So, I needed
+	to change RS_T50 to RS_T60 throughout, change RS_M2048 to RS_M512
+	throughout, and replace RS_MBASE and RS_RBASE with the appropriate
+	constants.
+
+	3)  His HIPS code neglected to define Progname, which I have fixed.
+
+	4)  His call to BitBlt left off the final argument, which I have
+	inserted as `512'.
+
+	5)  His diagram for the wiring didn't quite work.  When we connected
+	DIGI board P7 to ROI board P6, then things became visible on the
+	monitor.
+
+Good luck,
+
+Mike Landy
+
+*************************************************************************
+
+The Datacube programs only utilize the Framestore, ROI (region of interest),
+and Digimax boards.
+_____________________________________________________________________________
+
+General Functions for operating Datacube Maxvideo Hardware
+==========================================================
+These functions are designed to operate Datacube MaxVideo hardware from a  
+Sun3 host computer, running UNIX BSD V.4.2. MaxWare software drivers are used
+for the Datacube products as supplied with the hardware. Functions for both Versions 2.1 and 3.0 MaxWare are explained below.  
+
+MaxWare v.2.1
+-------------
+./max_src /* Functions operating DIGIMAX DG and FRAMESTORE FS */
+fsMenu.c  max_grab.c max_clear.c dgMenu.c windows/
+
+MaxWare v.3.0
+-------------
+./max_src_V3 /* Functions operating DIGIMAX DG and ROISTORE RS */
+rsGrab.c rsGrab512.c rsAquire.c rsClear.c       
+
+Functions to interface Datacube Software and HIPS
+=================================================
+These functions allow frames to be read from Datacube products and be stored as HIPS files, and HIPS files to be written to Datacube products for display.
+
+MaxWare v.2.1
+-------------
+./max_hips_src /* Functions interfacing DIGIMAX and FRAMESTORE to HIPS */
+max_rframe.c max_wframe.c 
+ 
+MaxWare v.3.0
+-------------
+./max_hips_srcV3 /* Functions interfacing DIGIMAX and ROISTORE to HIPS */
+max_Rroi.c max_Wroi.c
+
+HIPS functions for image processing of stored files
+===================================================
+These functions are additions to the HIPS system 
+ 
+./hips_src 
+disp_line.c gen_poly_frame.c polyfit_line.c histo_line.c 
+averages.c pick_line.c dual_thresh.c meanie.c

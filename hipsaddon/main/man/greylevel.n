@@ -1,0 +1,23 @@
+.TH GREYLEVEL 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+greylevel - gray level image generator
+.SH SYNOPSIS
+.B greylevel
+.SH DESCRIPTION
+.I greylevel
+generates a 512x512 image with gray levels ranging from 0
+through 255 forming a ramp intensity profile.
+
+It can be used  for monitor test purpose.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH EXAMPLE
+.in +3m
+greylevel > output_image
+.in -3m
+.SH SEE ALSO
+calcpix(1), ellipse(1), fgenframe(1), genframe(1), mandelbrot(1), saw(1)
+.SH AUTHOR
+Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

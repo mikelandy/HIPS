@@ -1,0 +1,70 @@
+.TH H_BTORLE 3 "8/15/94" "Version 2" "HIPS Manual"
+.SH NAME
+h_btorle \- subroutines to convert from byte to run-length encoding format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_btorle(hdi,hdo,bufsize,storelen)
+struct header *hdi,*hdo;
+int bufsize,*storelen;
+
+h_Btorle(imagei,imageo,nr,nc,nlpi,bufsize,storelen)
+byte *imagei,*imageo;
+int nr,nc,nlpi,bufsize,*storelen;
+.fi
+.SH DESCRIPTION 
+These routines perform run-length encoding compression on a byte formatted
+subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output buffer (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_btorle
+calls
+.I h_Btorle ,
+which is the low-level routine which doesn't require an image header.
+The subimage size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line.  The number of available buffer bytes in the output image is
+specified by
+.IR buflen ,
+and the amount actually used is returned in
+.IR storelen .
+The RLE format encodes each image row separately.  Runs are encoded as three
+bytes:  <255><length><byte-value>.  Bytes which are not in a run other
+than <255> are encoded as themselves.  <255>'s are encoded as a pair of
+<255>'s.  Thus, a run of two <255>'s will be coded as a run, but the run
+length must be at least 4 to bother coding any other value.  The length
+byte is the run-length minus 2 for runs of <255> and the run-length minus 4
+for runs of any other value.  The largest value of <length> allowed is 254.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+The output region-of-interest is irrelevant.  The input
+region-of-interest is compressed, its size is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_BUF - output buffer overflow
+.SH "SEE ALSO"
+btorle(1), rle(1), rle_r(1), rletob(1), htorle(1), h_rletob(3)
+.SH AUTHOR
+Michael Landy - 8/15/94

@@ -1,0 +1,48 @@
+.TH H_RGB 3 "8/14/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_rgb \- conversions to/from RGB formats
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_btorgb(hdr,hdg,hdb,hdo)
+h_btorgbz(hdr,hdg,hdb,hdo)
+h_rgbtob(hdi,hdr,hdg,hdb)
+h_rgbztob(hdi,hdr,hdg,hdb)
+h_rgbtob2(hdi,hdo,color)
+h_rgbztob2(hdi,hdo,color)
+struct header *hdr,*hdg,*hdb,*hdi,*hdo;
+char *color;
+.fi
+.SH DESCRIPTION 
+These routines convert between three pixel formats: byte, PFRGB and PFRGBZ.
+In each case, the entire input image (pointed to by
+.I hdi
+for RGB or RGBZ, or pointed to by
+.IR hdr ,
+.I hdg
+and
+.IR hdb ,
+for byte format) is converted and stored in the output image (pointed to by
+.I hdo
+for RGB or RGBZ, or pointed to by
+.IR hdr ,
+.I hdg
+and
+.IR hdb ,
+for byte format).
+In other words, any region-of-interest information is ignored.
+.I H_rgbtob2
+and
+.I h_rgbztob2
+extract a single color plane specified by
+.IR color ,
+which should be a string with value "r", "g" or "b".
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_COLSPEC - can't handle this pixel format
+.SH "SEE ALSO"
+h_tob(3), h_toc(3), h_tod(3), h_todc(3), h_tof(3), h_toi(3), etc.
+.SH AUTHOR
+Michael Landy - 8/14/91

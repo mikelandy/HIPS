@@ -1,0 +1,36 @@
+General Functions for operating Datacube Maxvideo Hardware
+==========================================================
+These functions are designed to operate Datacube MaxVideo hardware from a  
+Sun3 host computer, running UNIX BSD V.4.2. MaxWare software drivers are used
+for the Datacube products as supplied with the hardware. Functions for both Versions 2.1 and 3.0 MaxWare are explained below.  
+               Connections shoould be as follows	     			    
+               DIGI             ROI                                       
+               P3       ->      P3                                        
+     CAMERA -> P12                                                        
+     TV     <- P13                                                        
+               P7       <-      P7                                        
+                        ->      P9                                        
+               P10      ->      P10                                       
+
+MaxWare v.3.0
+-------------
+./max_src_V3 /* Functions operating DIGIMAX DG and ROISTORE RS */
+rsGrab.c rsGrab512.c rsAquire.c rsClear.c       
+
+Description
+===========
+Having followed the Datacube MaxWare V.3.0 installation proceedure as laid down in the documentation supplied, and already having the HIPS library installed as
+described in the release notes, these files are ready to be compiled and run.
+Modify the definitions of TOP, HOME and BIN in the Makefile to suit your file
+system: ie. if MaxWare lib files reside at /mnt/temp/fred/maxvideo/lib then 
+alter TOP to reflect this;  TOP = /mnt/temp/fred/maxvideo.
+Alter HOME to reflect the directory the source files reside in, and HIPSLIB to
+indicate where ./libhipl.a resides.
+
+Additional Note 
+===============
+rsAquire  acquire an active 512x512 frame in LS of ROISTORE   
+rsGrab    grab an full image into ROISTORE LS from the DIGIMAX
+rsClear   clear the ROISTORE with a set value  
+
+rsGrab512 grab a 512x512 frame in LS of ROISTORE 

@@ -1,0 +1,132 @@
+.\"%W%      %G%"
+.TH VACLS 1 "October 1, 1985"
+.SH NAME
+vacls - generate/test classification rules using feature/attribute vectors.
+.SH SYNOPSIS
+.B vacls [-c] [-a
+.ul
+file_name
+.B ] [-r
+.ul
+filename
+.B ] [
+.ul
+training_set_filename
+.B ]
+.SH DESCRIPTION 
+.I Vacls
+is an experimental version of ACLS (Analog Concept Leaning System,
+Blake, Paterson, Shapiro 1984).
+ACLS is a system which enables decision trees to be induced from 
+training examples expressed using either numerical (termed integer)
+or non-numerical (termed logical) attributes.
+Vacls contains all of the facilities of ACLS plus certain extensions
+designed to make it easier to apply to classification problems
+involving mainly numerical features. In particular it has been extensively
+applied to certain problems in shape recognition where a large
+selection of numerical shape measurements are available.
+Vacls can be operated in two modes. Firstly in a stand-alone interactive mode
+in which decision trees can be induced from training examples
+and tested on test examples. No arguments or flags should be supplied
+to operate in this mode.
+Its second mode of operation is non-interactive and is as a classification 
+system only. In this mode a classification rule should be supplied using
+the -r flag and also a file containing a set of feature vectors to be 
+classified using this rule. Alternatively a single feature vector
+can be supplied using the standard input. This mode is particularly suited to
+be included in a hips command line where a binary image of a single
+shape can be piped
+to
+.ul
+binatts
+and the output feature vector piped to 
+.ul
+vacls
+which will then classify the shape.
+.SH FLAGS
+.sp
+.in5
+.B -a
+Specify the name of an attribute-specification-file.
+The attribute specification file contains details
+of the attributes and classes occuring in the problem.
+The format of this file is the same as that used by
+.ul
+binatts
+and is easily seen by looking at the
+.ul
+binatts
+default attribute-specification-file: /mnt1/hipl/atts.35.
+.sp
+.B -r
+Specify the name of a text file containing a classification rule.
+Use of this flag will automatically put
+.ul
+vacls
+into its classification only mode, and hence it will expect
+either the name of a file, containing feature vectors, to be 
+supplied as the final argument
+or a feature vetor to be supplied on the standard input.
+.in 0
+.sp
+.SH INTERACTIVE COMMANDS
+.sp
+.in 5
+.nf
+ao	- swop the order in which ACLS examines each attribute
+	  when performing the attribute selections during the tree generation.
+ap	- print out all active (see below) attributes.
+as	- suppress an attribute, this makes it inactive and hence will
+	  not be considered when a rule is induced.
+ar	- release an attribute, this makes it active and hence 
+	  will be considered when a rule is induced.
+bool	- convert the example set to boolean examples. A class will
+	  be requested and all examples of this class will remain
+	  untouched, the rest will be relabeled with the class 'other'.
+	  This is useful when investigating the use of a separate
+	  tree (or concept) for each example class (see the concept command).
+	  Note: the actual class values are stored rather than lost,
+	  restoring the original class values can be achieved by using 
+	  the bool command and selecting the class 'restore'.
+build	- build rule, this induces a rule using the ID3 windowing technique.
+	  Here secondary examples which contradict the induced rule
+	  are placed in the primary store and the rule re-induced.
+	  This process is repeated until the secondary store contains
+	  no contradictions to the rule.
+check	- check the secondary examples against a rule.
+con	- Induce a single concept tree for each class from the examples
+	  contained in the training set.
+dprim	- delete all of the examples in the primary store.
+dsec	- delete all of the examples in the secondary store.
+delete	- delete a range of examples.
+help	- print this help message
+iauto	- induce a rule from the examples in the primary store
+	  using BS's automatic tree pruning method.
+induce	- induce a rule from the examples in the primary store using
+	  the ordinary ACLS algorithm.
+move	- move range of examples from one store to the other.
+print	- print out range of examples in attribute form.
+quit	- quit this program
+read	- read examples from a file, checking them against a specified rule.
+	  Place contradictions in the primary store, ignore repeats,
+	  and place the remainder in the secondary store.
+rprim	- read examples from a file and place in the primary store.
+rsec	- read examples from a file and place in the secondary store.
+rtell	- read examples from a file, specifying where all repeat examples
+	  and all clash examples are to go.
+rule	- print a selected rule (or range of rules).
+switch	- switch output between the terminal and a specified file.
+tweak	- tweak system parameters
+user	- enter users example reading routine
+xpair	- classify all examples in the secondary store using a specified rule. 
+	  Output the results as a series of 'true_class, classified_as' pairs.
+xsum	- classify all examples in the secondary store using a specified rule.
+	  Output a summary of the results, including a confusion matrix 
+	  of the misclassifications.
+.fi
+.in 0
+.sp
+.SH SEE\ ALSO
+binatts(1).
+.SH AUTHOR
+Barry Shepherd.

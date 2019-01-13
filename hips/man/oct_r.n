@@ -1,0 +1,46 @@
+.TH OCT_R 1 "7/23/91" "Version 2" "HIPS Manual"
+.SH NAME
+oct_r \- decode an oct-tree into a byte formatted sequence.
+.SH SYNOPSIS
+.B oct_r
+[-d]  < input_tree >output_sequence
+.SH DESCRIPTION 
+.I Oct_r
+converts a sequence coded using 
+.IR oct (1)
+into a byte formatted sequence.
+The default is to simply reconstruct the image.  If
+.I -d
+is specified, than a displayable picture is created which represents the
+decomposition into subblocks. The boundaries are painted in gray.
+.PP
+The input must be in PFOCT format.
+The coding uses the following bit mapping: {W,B,G}-->{00,01,1}.
+At the lowest level the eight pixels are
+coded as a ``nibble'' in 8 bits.  The code is assumed to be left shifted and
+packed, with last word of each oct-tree padded with 0's to the right.
+The Number of bits read is given on ``stderr''.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+OCT
+.SH "OUTPUT PIXEL FORMATS"
+byte
+.SH "REGION-OF-INTEREST"
+The region-of-interest is ignored and the entire image is decoded.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when reconstructing. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when reconstructing. Default: 255.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+ahc3(1), ahc3_r(1), binquad(1), binquad_r(1), hc_bin(1), hc_bin_r(1), oct(1)
+.SH AUTHOR
+Yoav Cohen - 4/7/83
+.br
+modified by Mike Landy - 6/21/83
+.br
+Hips 2 - msl - 7/23/91

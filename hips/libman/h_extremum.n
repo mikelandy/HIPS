@@ -1,0 +1,71 @@
+.TH H_EXTREMUM 3 "6/16/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_extremum - apply an extremum filter to an image
+.SH SYNOPSIS
+.nf
+.ta 2i
+#include <hipl_format.h>
+
+h_extremum(hdi,hdo,size)
+h_extremum_b(hdi,hdo,size)
+h_extremum_B(imagei,imageo,nr,nc,nlpi,nlpo,size)
+
+struct header *hdi,*hdo;
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo,size;
+.fi
+.SH DESCRIPTION 
+These routines apply an extremum filter to an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_extremum
+then calls
+.I h_extremum_b
+as long as the pixel format is byte.
+.I h_extremum_B
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+The extremum filter is applied to a
+.I size
+by
+.I size
+window centered on each input pixel, where the edge pixels of the input
+subimage are replicated to fill out the window if necessary.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_median(3)
+.SH AUTHOR
+Mike Landy - 5/28/82
+.br
+HIPS 2 - msl - 6/16/91

@@ -1,0 +1,48 @@
+.TH STRETCH 1 "6/29/91" "Version 2" "HIPS Manual"
+.SH NAME
+stretch \- stretch an image
+.SH SYNOPSIS
+.B stretch
+[-f xfactor yfactor | -s rows columns]
+.SH DESCRIPTION 
+.I Stretch
+changes the row and column dimensions of an image by stretching.
+The algorithm is basically block averaging, where each pixel in the old
+image is treated as square, and each pixel in the new image rectangular.
+The new pixel's value is an average of the pixels in the old image it
+overlaps, weighted by the degree of overlap.  The user can either specify
+the stretch factor for each dimension (the number of rows and columns will
+be truncated to an integer value), using the
+.I -f
+switch, or can specify the output image size, with the
+.I -s
+switch.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+The entire image is stretched.  The output image region-of-interest is the
+stretched portion of the output corresponding to the input image
+region-of-interest.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+enlarge(1), reduce(1)
+.SH AUTHOR
+Mike Landy - 6/11/87, based on code by Lou Salkind
+.br
+HIPS 2 - msl - 6/29/91

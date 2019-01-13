@@ -1,0 +1,15 @@
+This directory contains a simple display tool for the IRIS.  You
+should specify -I/usr/include/bsd when compiling, and -lbsd when linking.
+The following line should do all that is needed:
+
+	cc -Zg -I/usr/include/bsd -o wframe wframe.c -lbsd -lhips.
+
+The -Zg switch is shorthand for including all of the IRIS graphic libraries.
+The program was written by:
+
+	Aries Arditi
+	New York Lighthouse for the Blind
+	111 East 59th Street
+	New York, NY   10010
+	(212) 355-2200
+	aries@xp.psych.nyu.edu

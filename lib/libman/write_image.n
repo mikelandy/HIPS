@@ -1,0 +1,30 @@
+.TH WRITE_IMAGE 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+write_image \- write an image frame
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+write_image(hd,fr)
+fwrite_image(fp,hd,fr,fname)
+struct header *hd;
+int fr;
+FILE *fp;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+.I write_image
+and
+.I fwrite_image
+write a single image frame pointed to by the supplied image
+header.
+.I write_image
+is used for writing to the standard output.  The frame number and file name
+are supplied for more informative error messages.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_WRITEFRFILE - error during read
+.SH AUTHOR
+Michael Landy - 1/4/91

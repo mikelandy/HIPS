@@ -1,0 +1,46 @@
+#
+# makefile for hipsaddon/xanim/sources
+#
+
+PGMS = xanim.out
+
+CPPFLAGS2 = -I$(XVIEWHOME)/include 
+LDFLAGS2 = -L$(XVIEWHOME)/lib
+
+#
+# Redefine the compile macro for Turing Installation to make sure that
+# we get hold of the correct X11 subdirectory, ie the OpenWindows stuff
+# not the stuff in /usr/local. This is not part of the standard
+# installation.
+#
+
+COMPILEc = $(CC) -D$(ORIG) -D$(BITORDER) \
+	$(CFLAGS) $(CPPFLAGS2) $(CPPFLAGS) $(TARGET_ARCH) $(FASTCOPY) $(FLOAT) -c
+
+ICONS = backwards.ptr forwards.ptr palindromic.ptr bottomcorner.cursor \
+topcorner.cursor xview_hips.icon
+HEADERS = xv_frame.h xv_animation.h xv_file.h xv_adjust.h xv_header.h \
+xv_canvas.h
+OBJECTS = xv_frame.o xv_animation.o xv_file.o xv_adjust.o xv_header.o \
+xv_canvas.o appl.o colors.o
+
+.c.o:
+	$(COMPILEc) $<
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+xanim.out:	$(OBJECTS) $(HEADERS) $(ICONS)
+	$(LINKc) xanim $(OBJECTS) $(LIBRARIES) $(LDFLAGS2) $(LIBXVIEW)
+	strip xanim
+	mv xanim $(DESTDIR)
+	@touch $@
+
+FRC:

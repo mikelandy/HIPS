@@ -1,0 +1,76 @@
+#
+# makefile for user-contributed/imsor/sources
+#
+
+PGMS = deriche.out framecut.out frarithmetic.out \
+       acfass.out bil.out gauss.out grad.out histo2d.out taper.out \
+       bigextract.out quantile.out cubic.out \
+       asc2hips.out irr2reg.out reg2irr.out polyextract.out reduce_simp.out \
+       scale_all.out equalpoints.out crossv.out changehdr.out headfield.out \
+       standard.out \
+       histobe.out ihsdecorr.out rgb2ihs.out ihs2rgb.out \
+       linemeans.out \
+       distmin.out \
+       fhist.out glcm.out hips2pcl.out histinfo.out \
+       cbdilate.out cberode.out cobjects.out grow.out \
+       hole_fill.out isolate.out \
+       imf2hips.out hips2imf.out hips2tga.out tga2hips.out bmp2hips.out hips2bmp.out\
+       raw2hips.out \
+       mdilate.out merode.out \
+       spinexch.out \
+       patchwork.out prncpl.out subseq3.out subseq5.out
+# decorr.out pcdecorr.out
+
+FRLNKS = fradd frsub frdif frmul frdiv frmin frmax
+
+CPS  = acf mopen mclose mgradient mwtophat mbtophat 
+
+COMPILEc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+        $(CPPFLAGS) $(TARGET_ARCH) $(HNOVALUESH) $(USESTDARG) $(FLOAT) -c
+
+LINKc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+        $(CPPFLAGS) $(HNOVALUESH) $(FLOAT) $(USESTDARG) $(TARGET_ARCH) $(FASTCOPY) -o
+
+install:	$(PGMS)
+	for i in $(CPS) ; \
+	do \
+		cp $$i $(DESTDIR) ; \
+	done
+	for i in $(FRLNKS) ; \
+	do \
+		rm -f $(DESTDIR)/$$i ; \
+		ln -s $(DESTDIR)/frarithmetic $(DESTDIR)/$$i ; \
+	done
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+prncpl.out: prncpl.o eigenvect.o
+	$(LINKc) prncpl prncpl.o eigenvect.o $(LIBRARIES)
+	strip prncpl
+	mv prncpl $(DESTDIR)
+	@touch $@
+
+distmin.out: distmin.o h_hexagon.o h_chamfer.o h_sedt.o
+	$(LINKc) distmin distmin.o h_hexagon.o h_chamfer.o h_sedt.o $(LIBRARIES)
+	strip distmin 
+	mv distmin $(DESTDIR)
+	@touch $@
+
+dct.out: dct.o h_dct.o 
+	$(LINKc) dct dct.o h_dct.o $(LIBRARIES)
+	strip dct 
+	mv dct $(DESTDIR)
+	@touch $@
+
+pristine:	pristine-pgm
+	for i in $(FRLNKS) $(CPS) ; \
+	do \
+		echo rm -f $(DESTDIR)/$$i ; \
+		rm -f $(DESTDIR)/$$i ; \
+	done
+
+FRC:

@@ -1,0 +1,68 @@
+.TH COSUM 1 "8/12/91" "Version 2" "HIPS Manual"
+.SH NAME
+cosum \- Compute a sum of arbitrary spatiotemporal sinewave gratings
+.SH SYNOPSIS
+.ta 1i
+.B cosum
+< file > outseq
+.SH DESCRIPTION 
+.I Cosum
+generates a sum of 3-dimensional sinusoidal gratings.
+The user specifies a file which describes the sequence.
+The file contains N+1 lines directing the construction of a sum of N
+cosine gratings.  The first line is formatted
+.sp
+.ce
+"%d %d %d %d", N, nf, nr, nc
+.sp
+for
+.I N
+the number of gratings being summed,
+.I nc
+the number of columns,
+.I nr
+the number of rows, and
+.I nf
+the number of frames.  Each number must be greater
+than zero, but is otherwise unrestricted.
+.PP
+Each of the remaining
+.I N
+lines is formatted as follows:
+.sp
+.ce
+"%lf %lf %lf %lf %lf", tf[i], yf[i], xf[i], ph[i], am[i]
+.sp
+These represent, for the
+.IR i 'th
+grating:
+.TP 1i
+.I xf
+horizontal frequency in cycles per frame width
+.TP
+.I yf
+vertical frequency in cycles per frame height
+.TP
+.I tf
+temporal frequency in cycles per frame height
+.TP
+.I phase
+degrees of phase angle (0 = cosine phase at the mean,
+-90 = sine phase at the mean)
+.TP
+.I amplitude
+multiplier (peak value if in cosine phase)
+.SH "OUTPUT PIXEL FORMATS"
+float
+.SH "REGION-OF-INTEREST"
+The output region of interest is set to be the entire image.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+fastcosum(1), gabor(1), grating(1)
+.SH AUTHOR
+Charlie Chubb 12/6/85
+.br
+HIPS 2 - msl - 8/11/91

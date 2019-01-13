@@ -1,0 +1,983 @@
+
+This file describes how to install the HIPS-2 image processing software and to
+print out the documentation.  We have revamped the installation procedure a
+second time making it simpler and more flexible.
+
+SUMMARY
+
+Basically, all you need to do is edit a configuration file (several
+configuration files are supplied as a samples), edit the top-level
+makefile source file (`makefile.src'), create the directories in which
+the software will be installed (if they don't yet exist), then login as
+root and type:
+
+	Configure <configuration-file-name> ; make clean ; make
+
+Then, if you wish to print out all of the documentation, type:
+
+	make man ; make doc
+
+DETAILS
+
+Perform the following steps to install the software:
+
+1) Edit a configuration file for your installation.  Make a copy of a suitable
+configuration template file and edit it according to the following instructions:
+
+	*** Important Note: ***
+
+	Makefiles are touchy things, and in particular a makefile can stop
+	working correctly by changing characters in ways which aren't visible
+	in an editor, for example there is a difference between a <tab> and
+	a series of <blank>'s.  So, when you edit the makefile, keep a copy
+	of the original, don't change any <tab>'s to <blank>'s or vice versa,
+	and for variable settings such as DESTDIR, don't leave any trailing
+	blanks.
+
+	***********************
+
+	a) DRIVERDIRS/CONTRIBDIRS/MATLABDEST/MATINCLUDE/MEXPATH/SUNVDIRS/HTDIRS/
+	XDIRS/XVDIRS - These are the lists of device drivers and
+	user-contributed software which will be installed.  It is important
+	that you list only things that you want installed, that you can
+	install (i.e. for which you have the appropriate libraries) and that
+	you actually have.  In particular, for any piece of HIPS you did NOT
+	purchase (HIPSADDON, CTOOL, COLORHIPS and/or SUNANIM), don't include
+	items associated with those packages.
+
+	The drivers may be drawn from:  Iris (a user-contributed
+	viewing tool for the Silicon Graphics Iris windowing system),
+	NeXT (a user-contributed tool for the NeXT computer), SunView
+	(a variety of programs written by SharpImage and contributed by
+	HIPS users which run on Sun computers under the SunView window
+	system), X (viewing tools which run under any X windowing
+	system and only uses the basic Xlib calls), XView (a variety of
+	programs which run under X windows and require the
+	XView/OpenLook toolkit which was written by Sun but is publicly
+	available), ctool (a SunView image analysis tool sold by
+	SharpImage, include this only if you specifically purchased
+	ctool), sunanim (the SunView animator written by SharpImage, include
+	this only if you specifically purchased sunanim), xvanim (the XView
+	animator written by SharpImage and included with sunanim, include
+	this only if you specifically purchased sunanim), xanim (an XView
+	animator supplied with HIPSADDON, hence include this only if you
+	have both specifically purchased HIPSADDON and also have the XVIEW
+	libraries) and datacube (some Datacube drivers also supplied with
+	HIPSADDON).  There are also user-contributed drivers for a
+	number of other devices (more Sun drivers, Matrox, ITI,
+	Lexidata, Macintosh, more Datacube, etc.), but these must be
+	installed by hand.  We suggest that you keep the entire list on
+	a comment line for reference, and then define DRIVERDIRS to be
+	only those for which you have the appropriate software
+	support.  For example, for a user who purchased HIPS, HIPSADDON, and
+	SUNANIM running on a Sun computer which has SunView, X and XView
+	libraries, this should read:
+
+		# DRIVERDIRS = Iris NeXT SunView X XView ctool sunanim \
+		#	xvanim xanim datacube adage
+		DRIVERDIRS = SunView X XView sunanim xvanim xanim
+
+	Note that xanim and datacube are only available to folk who purchased
+	HIPSADDON (i.e. who have a subdirectory called `hipsaddon' in the
+	top-level hips directory, sunanim and xvanim are only available to
+	folks who purchased the SUNANIM package (i.e. who have subdirectory
+	`sunanim') and ctool is only available to folks who purchased it (i.e.
+	who have subdirectoy `ctool').
+
+	If you want to install no drivers at all, then specify:
+
+		DRIVERDIRS =
+	
+	This is a configuration parameter.  This means that after running
+	Configure below, if you decide to install another set of drivers (say,
+	for example, you acquire the X system and want to now install these
+	programs), you must then edit the configuration file and rerun
+	Configure before you attempt to make these new drivers.  Actually, any
+	time you change the configuration file you must rerun Configure.
+
+	Similarly, the parameter CONTRIBDIRS lists the user-contributed
+	software (other than device drivers) that will be installed
+	automatically.  Simply choose a subset of these directories that you
+	think contain programs that you will use.  You will have to peruse the
+	directories to figure this out. One reasonable strategy is to install
+	none of the user-contributed software initially, and install it after
+	you have become familiar with HIPS and can make more sense of what's
+	there.  If you decide, for example, that you can't live without at
+	least one implementation of the Canny edge detector (there are two in
+	user-contributed, actually), then things should read:
+
+		# CONTRIBDIRS = canny cc compress fsun imsor label lbl \
+		#	matlab pbm surrey tamu usl uva verdth
+		CONTRIBDIRS = canny
+
+	If you want to install no contributed software at all, then specify:
+
+		CONTRIBDIRS =
+	
+	*****************special notes on user-contributed software***********
+	If you decide to install the software in directory imsor, there is one
+	program (`deriche') which depends on the existence of the file
+	/usr/include/values.h which may, or may not exist on your machine.  If
+	it does not, then you may disable installation of deriche by editing
+	user-contributed/imsor/sources/makefile.src and deleting the
+	item `deriche.out' from the list of PGMS. NOTE AS OF 9/06: I've now
+	added a compile switch (HNOVALUESH) to deal with this particular
+	problem.
+
+	Also, this directory contains two programs decorr and pcdecorr which
+	require that you have the EISPACK/LINPACK libraries.  If you have
+	these libraries, you may compile these two programs by hand.
+
+	Also, in the past we have found that the lbl software will not compile
+	on a Vax running Berkeley 4.3 Unix or a Sun running SUNOS 3.4 or
+	earlier.  We have successfully compiled the lbl software on Suns
+	running SUNOS 4.0 or later and on an Iris 4D.  So, you may want to
+	omit lbl at first (although there is an awful lot of useful programs
+	there), and try to install it later after the rest of installation is
+	complete (remember to rerun Configure when you add lbl to CONTRIBDIRS
+	even if you do that at a later stage).  We also haven't been able to
+	compile user-contributed under LINUX (there is a flakiness in the
+	LINUX makefile interpretation of `$<' compared to other version of
+	make we have used).
+
+	Also, the lbl software includes a translator to/from tiff.  The
+	library for this includes a file:
+		user-contributed/lbl/lib/tifflib/tif_fax3.c
+	which you might have trouble compiling because it includes such a
+	large include file.  We have occasionally run out of space in /tmp
+	while compiling this program.  The solution is to compile it using the
+	-pipe option to cc (which is CPU-intensive, but uses no /tmp space).
+
+	Also, in that same directory, the makefile needs to be tailored for
+	specific machines.  In the file
+		user-contributed/lbl/lib/tifflib/makefile.src
+	in the definition of CONF_LIBRARY, on a Silicon Graphics machine
+	you need:
+		-DUSE_VARARGS=0 \
+		-DUSE_PROTOTYPES=1 \
+	on any other machine you need:
+		-DUSE_VARARGS=1 \
+		-DUSE_PROTOTYPES=0 \
+
+	The user-contributed/lbl/jpeg is currently linked to jpeg version 6.
+	On some systems, auto-configuration is required, which you will have
+	to do by hand before installing HIPS itself (assuming you are
+	installing user-contributed/lbl, of course).  The current version
+	of jconfig.h is good for many ANSI compilers, and has been tested
+	under SOLARIS2.4-5, OSF1/2-3.x, and IRIX 5.2-3. If you have problem
+	making this directory, you may either link it back to jpeg.v4 (which
+	was tested on a different variety of machines), or contact Jin Guojun
+	at LBNL (jin@george.lbl.gov).
+
+	The lbl directory contains a number of source files written in ANSI
+	style C (rather than the original Kernighan & Ritchie style).  To
+	compile these programs correctly on a machine with a compiler which
+	is sticky about ANSI C (such as older versions of SUNOS as well as
+	many other machines):
+
+		cd user-contributed/lbl/lib/libccs
+		cp for-knr ansi-knr
+	
+	Otherwise:
+
+		cd user-contributed/lbl/lib/libccs
+		cp for-ansi ansi-knr
+	
+	This may be done either before or after running Configure, but must
+	precede running `make'.
+
+	The lbl directory contains programs that depend on X11 libraries and/or
+	include files.  One of the X11 include files may need to be patched.
+	On my system, the file is /usr/openwin/include/X11/XWDFile.h (it may
+	be in a different directory on your system).  Near the end of the file
+	there is a line that reads:
+
+		struct {
+
+	it then defines a structure of type XWDColor.  That line should
+	instead read:
+
+		typedef struct {
+	
+	The lbl directory compilation generates about 50 warnings (most of
+	them about illegal pointer combination).  They may all be safely
+	ignored.
+
+	Also, the directory `matlab' includes a number of tools which allow
+	HIPS to interface with MATLAB (Version 4.0 is the one with which it
+	was tested, but later upgraded to work with version 7.5).  If you
+	don't own MATLAB, then don't include `matlab' in CONTRIBDIRS.  If
+	you do own MATLAB, then also set MATINCLUDE to be the directory in
+	which MATLAB external interface include files are to be found (if the
+	mex program doesn't add that directory by default), MEXPATH to be the
+	full path to the mex compiler (or just "mex" if it's found without
+	that), and MATLABDEST to be the directory in which to place the
+	MATLAB functions which are generated.  For example:
+
+		CONTRIBDIRS = canny matlab
+		MATINCLUDE = /usr/local/matlab/extern/include
+		MEXPATH = /usr/bin/mex
+		MATLABDEST = /usr/local/bin/matlab
+
+	Also, the directory `pbm' includes a bunch of conversions programs
+	to and from Jef Poskanzer's Portable Bitmap formats.  Conversions
+	between HIPS and Portable formats are accomplished by programs
+	hipstoportable and portabletohips which are generated from directory
+	hips2/pub (i.e. not from `pbm' or anywhere within user-contributed).
+	The `pbm' directory has a few caveats.  First, it uses the `tifflib'
+	library in user-contributed/lbl.  This does NOT mean that you need
+	to install all of `lbl'.  However, it does mean you may need to
+	configure the tifflib makefile.src file slightly as outlined above.
+	Also, in pbm/ppm, the library refers to the X11 database for color
+	names.  You may need to revise the definition of RGBDEF in
+	user-contributed/pbm/ppm/makefile.src to point to the proper file
+	in your installation.
+
+	Note, if you are interested in using the CEDAR image database, there
+	is a public domain package for reading the HIPS images into MATLAB
+	by Patrick Hew (grab
+
+		http://maths.uwa.edu.au/~phew/postgrad/sourcecode/cedintf.tar.Z
+
+	and follow the instructions within).
+
+	**********************************************************************
+	
+	If you choose to install the SunView tools, you must then specify
+	which ones from among hipstool (a user-contributed image analysis
+	tool), hipsview (another tool like hipstool), lblsun (a converter to
+	Sun raster format from Lawrence Berkeley Laboratories which has the
+	same caveats as discussed above for their other contributed software),
+	and sunv (a simple image viewer produced by SharpImage).  You do this
+	by a line which reads, for example:
+
+		SUNVDIRS = hipstool hipsview lblsun sunv
+	
+	If you do choose to install the SunView tool called hipstool, there
+	are two versions, one for SUNOS 3.4 and one for SUNOS 4.0 (and later
+	versions).  If your version of SUNOS is at least 4.0, the next line
+	will be:
+
+		# HTDIRS = sunos3.4 ****or**** sunos4.0
+		HTDIRS = sunos4.0
+
+	If you choose to install the raw X11 software, you must specify which
+	programs from among lblx11 (two tools from Lawrence Berkeley
+	Laboratory which has the same caveats as discussed above),
+	imsorx11 (a tool from IMSOR in Denmark which is a souped-up version
+	of xhips) and xhips (a very simple, basic X11 HIPS image viewer which
+	should compile and run on just about any X-based system).  The program
+	in imsorx11 is quite nice, but also quite large.  On some systems you
+	may have trouble compiling because you run out of space in /tmp
+	(especially if your /tmp is on your root disk partition).  I got it to
+	compile by symbolic linking /tmp to a directory on a disk partition
+	which had more space.  It needed about 2 MBytes of space in /tmp on my
+	machine.  To install it all, specify
+
+		XDIRS = lblx11 imsorx11 xhips
+
+	If you choose to install the XView software, you must specify which
+	programs as well.  There is lblxview, which includes several image
+	analysis programs contributed by Lawrence Berkeley Laboratories,
+	with the usual caveats about installation discussed above.  There is
+	also xvhips (written by SharpImage), which is a simple displayer for
+	Xview which has some ability to display images with various sorts of
+	colormaps.  There is also software written by the University of
+	Sheffield (the program xdisp).  The Sheffield software uses OpenLook
+	(not really XView), so omit it if you don't have the OpenLook includes
+	(in /usr/include/Xol or some such) and libraries (e.g., libXol). To
+	install them all, specify
+
+		XVDIRS = lblxview xvhips sheffield
+
+	b) DESTDIR - the directory into which to place the executables.  These
+	take up to 50 MBytes (on a Sun).  The usual declaration is:
+
+		DESTDIR = /usr/hips
+
+	This directory should be added to your search path (e.g., in your
+	.login file), so that you will be able to use the commands next time
+	you log in (or after you type a `rehash' command or whatever is
+	appropriate for your particular login shell).
+
+	c) LIBDIR - the directory into which to place the HIPS libraries, and
+	a few other standard files.  The usual declaration is:
+
+		LIBDIR = /usr/lib
+
+	If you change this, you will need to specify the directory later
+	when you load HIPS programs that you write.
+	
+	d) INCLUDE_DIR - the directory into which to place the HIPS C include
+	files.  The usual declaration is:
+
+		INCLUDE_DIR = /usr/include
+
+	If you change this, then you will need to specify this directory when
+	you compile HIPS programs that you write.
+
+	************* IMPORTANT NOTE ***************
+	Before you run the Makefile, the directories specified for DESTDIR,
+	LIBDIR, and INCLUDE_DIR must exist.  Typically, you will already have
+	a /usr/lib and a /usr/include directory on your system.  But, you
+	will almost certainly not have a /usr/hips directory.  So, type
+
+		mkdir /usr/hips
+
+	before you execute the makefile the first time.
+	********************************************
+
+	e) MANDIR/MANEXT/LIBMANDIR/LIBMANEXT - the directories into which to
+	place the HIPS manual pages, and the file name extensions to go with
+	them.  The usual declarations are:
+
+		MANDIR = /usr/man/mann
+		MANEXT = n
+		LIBMANDIR = /usr/man/mann
+		LIBMANEXT = n
+	
+	Other possibilities are:
+
+		MANDIR = /usr/man/manl
+		MANEXT = l
+		LIBMANDIR = /usr/man/manl
+		LIBMANEXT = l
+
+	and:
+
+		MANDIR = /usr/man/man1
+		MANEXT = 1
+		LIBMANDIR = /usr/man/man3
+		LIBMANEXT = 3
+	
+	Placing the manual pages in /usr/man/mann keeps them nicely segregated
+	from most other local additions.
+
+	f) TMPDIR - the directory in which to place temporary files (such
+	as the source code generated by the program `calcpix'), by default:
+
+		TMPDIR = /tmp
+
+	g) MASKDIR/MASK3DIR - the directory in which to place the library of
+	convolution masks.  This is a small library, and by default we keep
+	it in a subdirectory below the HIPS binaries:
+
+		MASKDIR = $(DESTDIR)/masks
+	
+	The user-contributed software from LBL includes a 3-dimensional
+	version of the convolution program called mask3d.  The masks for this
+	program are kept in the directory specified by MASK3DIR (which must be
+	different from MASKDIR), we keep it in:
+
+		MASK3DIR = $(DESTDIR)/3dmasks
+
+	h) LIB - the name of the low-level HIPS library.  The default is
+	`hips', which means that it is loaded as -lhips:
+
+		LIB = HIPS
+
+	i) HLIB/HALIB - the name of the HIPS and HIPSADDON image
+	processing subroutine libraries. The defaults are `hipsh'
+	and `hipsa' respectively, which means that they are loaded
+	as -lhipsh and -lhipsa:
+
+		HLIB = hipsh
+		HALIB = hipsa
+
+	Users who do not have HIPSADDON should comment out HALIB, i.e.
+
+		HLIB = hipsh
+		# HALIB = hipsa
+
+	j) FLOAT - this may be needed for Sun 2 and Sun 3 machines, for which
+	the appropriate switch depends on your hardware configuration (see the
+	"cc" manual page).  For our hardware, we use:
+
+		FLOAT = -f68881
+	
+	Note that this means that all programs in the HIPS library will be
+	loaded with the -f68881 switch, and so therefore all HIPS code (both
+	here and your own custom routines) must be compiled and loaded using
+	the same floating point option.  On Sun 4's, Sun 386's, and non-Sun
+	machines, the appropriate line is:
+
+		FLOAT =
+	
+	k) TARGET_ARCH - this switch is optional for Sun
+	computers, and irrelevant for other machines.  On Sun 2's 3's and
+	Sun 4's it is respectively:
+
+		TARGET_ARCH = -target sun2
+	and
+		TARGET_ARCH = -target sun3
+	and
+		TARGET_ARCH = -target sun4
+	
+	On older Sun systems (pre SUNOS 4.1, I think), it is:
+
+		TARGET_ARCH = -mc68010
+	and
+		TARGET_ARCH = -mc68020
+	and
+		TARGET_ARCH = -sparc
+
+	But, on most machines, including Suns, the following suffices:
+
+		TARGET_ARCH =
+
+	l) FASTCOPY - The Plot-3D software in HIPS has some code which is done
+	in a hardware-specific manner.  This code needs to copy from an
+	arbitrary byte position in a buffer into a floating-point variable.  On
+	some machines (e.g., Vax, Sun-2, Sun-3) this may simply be done using
+	an assignment statement (e.g., f = (float *) *buf;).  On other machines
+	(e.g., Sun-4), this generates machine code which incorrectly assumes
+	that the buffer pointer is aligned on a fullword boundary, and causes
+	the Plot-3D programs to crash with a bus error.  The alternative is to
+	copy the bytes one by one, which is quite inefficient.  So, if you
+	know that your hardware won't complain about the fullword alignment,
+	then set
+
+		FASTCOPY = -DFASTCOPY
+
+	and if your machine requires alignment, or if you aren't sure and want
+	to play it safe, then set
+
+		FASTCOPY =
+
+	m) USESTDARG - HIPS was written using the vararg method of dealing
+	with arbitrary function argument lists. Many recent machines are based
+	on the gcc compiler and libraries that have dropped this method in
+	favor of stdarg instead. So, if you have a machine that supports
+	stdarg but no longer supports vararg (e.g., Mac OSX), then set
+
+		USESTDARG = -DHUSESTDARG
+
+	else
+		USESTDARG =
+
+	n) HNOVALUESH - One of the programs depends on the include file
+	values.h which isn't available, e.g., under Mac OSX. So, if you have
+	such a file, then set:
+
+		HNOVALUESH =
+
+	otherwise
+
+		HNOVALUESH = -DHNOVALUESH
+
+	o) CPPFLAGS - the flags used by the C preprocessor.  By default, we
+	set this to:
+
+		CPPFLAGS = -I$(INCLUDE_DIR) -DHIPS_IMAGE
+	
+	in order that the C preprocessor knows where you've decided to stash
+	the include files and to define a flag identifying this as a HIPS
+	compilation (used by the user-contributed/lbl programs).
+
+	p) LIBRARY, LIBRARYH, LIBRARY1, LIBRARY2, HALIBRARY, LIBNAME, HLIBNAME,
+	HALIBNAME, OTHERLIBS, OTHERLIB2, and LDFLAGS - the libraries required
+	to load HIPS and HIPSADDON (if you have it), and the flags required
+	by the loader to find these libraries.  If you are willing to leave
+	the library in a sensible place (like /usr/lib, see LIBDIR above),
+	then this can be:
+
+		LIBRARYH = -l$(HLIB) -l$(LIB)
+		LIBRARY = -l$(HLIB) -l$(HALIB) -l$(LIB)
+		LIBRARY1 = -l$(HLIB)
+		LIBRARY2 = -l$(LIB)
+		HALIBRARY = -l$(HALIB)
+		LIBNAME = lib$(LIB).a
+		HLIBNAME = lib$(HLIB).a
+		HALIBNAME = lib$(HALIB).a
+		OTHERLIBS = -lm
+		OTHERLIB2 =
+		LDFLAGS =
+
+	If you want to move the library to a nonstandard place, and your
+	loader has a switch for searching nonstandard places for libraries
+	(e.g., -Ldirectory, see your "man ld"), then you can use:
+
+		LIBRARYH = -l$(HLIB) -l$(LIB)
+		LIBRARY = -l$(HLIB) -l$(HALIB) -l$(LIB)
+		LIBRARY1 = -l$(HLIB)
+		LIBRARY2 = -l$(LIB)
+		HALIBRARY = -l$(HALIB)
+		LIBNAME = lib$(LIB).a
+		HLIBNAME = lib$(HLIB).a
+		HALIBNAME = lib$(HALIB).a
+		OTHERLIBS = -lm
+		OTHERLIB2 =
+		LDFLAGS = -L$(LIBDIR)
+
+	Otherwise, you'll have to use:
+
+		LIBRARYH = $(LIBDIR)/lib$(HLIB).a $(LIBDIR)/lib$(LIB).a 
+		LIBRARY = $(LIBDIR)/lib$(HLIB).a \
+			$(LIBDIR)/lib$(HALIB).a \
+			$(LIBDIR)/lib$(LIB).a 
+		LIBRARY1 = $(LIBDIR)/lib$(HLIB).a
+		LIBRARY2 = $(LIBDIR)/lib$(LIB).a
+		HALIBRARY = $(LIBDIR)/lib$(HALIB).a
+		LIBNAME = lib$(LIB).a
+		HLIBNAME = lib$(HLIB).a
+		HALIBNAME = lib$(HALIB).a
+		OTHERLIBS = -lm
+		OTHERLIB2 =
+		LDFLAGS =
+
+	***********************special note on libraries**********************
+        IMPORTANT - note that if you do not have HIPSADDON, you should
+	comment out the definitions of HALIBRARY and HALIBNAME and remove
+	the reference to HALIB from LIBRARY. So, for example, the last example
+	would become:
+
+		LIBRARYH = $(LIBDIR)/lib$(HLIB).a \
+			$(LIBDIR)/lib$(LIB).a 
+		#LIBRARY = $(LIBDIR)/lib$(HLIB).a \
+		#	$(LIBDIR)/lib$(HALIB).a \
+		#	$(LIBDIR)/lib$(LIB).a 
+		LIBRARY = $(LIBDIR)/lib$(HLIB).a \
+			$(LIBDIR)/lib$(LIB).a 
+		LIBRARY1 = $(LIBDIR)/lib$(HLIB).a
+		LIBRARY2 = $(LIBDIR)/lib$(LIB).a
+		# HALIBRARY = $(LIBDIR)/lib$(HALIB).a
+		LIBNAME = lib$(LIB).a
+		HLIBNAME = lib$(HLIB).a
+		# HALIBNAME = lib$(HALIB).a
+		OTHERLIBS = -lm
+		OTHERLIB2 =
+		LDFLAGS =
+
+	For the first example, it would become:
+
+		LIBRARYH = -l$(HLIB) -l$(LIB)
+		# LIBRARY = -l$(HLIB) -l$(HALIB) -l$(LIB)
+		LIBRARY = -l$(HLIB) -l$(LIB)
+		LIBRARY1 = -l$(HLIB)
+		LIBRARY2 = -l$(LIB)
+		# HALIBRARY = -l$(HALIB)
+		LIBNAME = lib$(LIB).a
+		HLIBNAME = lib$(HLIB).a
+		# HALIBNAME = lib$(HALIB).a
+		OTHERLIBS = -lm
+		OTHERLIB2 =
+		LDFLAGS =
+
+	**********************************************************************
+
+	Typically, OTHERLIBS is defined to also include the math library
+
+		OTHERLIBS = -lm
+
+	However, some versions of UNIX may require additional libraries.  For
+	example, in order to access the random number generator `random' on
+	an Iris Workstation (which is used by some HIPS programs), change this
+	declaration to:
+
+		OTHERLIBS = -lm -lbsd
+
+	Typically, OTHERLIB2 is left defined to be null
+
+		OTHERLIB2 =
+
+	However, on some systems it may be true that a single library must
+	be mentioned on the command line for any compilation to succeed.  For
+	example, on Sun computers, the release 4.1.2 of SUNOS can not compile
+	programs with shared libraries (which is the default!) without mention
+	of the library `dl', so in this case, set
+
+		OTHERLIB2 = -ldl
+
+	q) CFLAGS/LDLIBFLAGS - the flags for the C compiler and for the loader
+	when building libraries.  By default, we specify the C optimizer, and
+	for libraries we generate relocation bits but delete nonglobal
+	symbols:
+
+		CFLAGS = -O
+		LDLIBFLAGS = -r -x
+
+	For AIX users (on IBM PC/RT machines):  there is at least one module
+	which gets a compile error because of a compiler bug (so it seems)
+	when using the optimizer.  Also, some modules require a large stack
+	(flag `-a'), and others require the Berkeley include files
+	(`-DBSD_INCLUDES', I think).  So, as I understand it, and you may need
+	to check your manuals, for an AIX system, you may need to use:
+
+		CFLAGS = -a -DBSD_INCLUDES
+	
+	For Solaris users (current Sun operating systems), and perhaps others,
+	the -x flag to the loader no longer exists (and it was just used to
+	save space so was unnecessary), so:
+
+		LDLIBFLAGS = -r
+
+	r) ORIG - the origin of images in your hardware.  Image processing
+	hardware may either treat the first byte of an image as the lower
+	left (LLORIG) or upper-left (ULORIG).  In particular, for Sun's,
+	Adage's, and most things, set:
+
+		ORIG = ULORIG
+	
+	but for the Grinnell (an ancient piece of hardware which we used when
+	the software was originally written in 1982!), set:
+
+		ORIG = LLORIG
+
+	s) BITORDER - the default bit-packing order for binary images.  The
+	HIPS program bpack can pack 8 binary pixels into one byte such that
+	either the most significant (MSBFVERSION) or least significant
+	(LSBFVERSION) is the first one.  This should match the hardware
+	requirements.  For example, the Sun 2's, 3's and 4's require:
+
+		BITORDER = MSBFVERSION
+
+	The Adage and the Sun 386i's require:
+
+		BITORDER = LSBFVERSION
+	
+	Of course, programs which do bit-packing have the option of using
+	either bit order.  This switch merely sets the default.
+
+	t) MANPRINT, MEPRINT, TBL, EQN - these specify the commands needed to
+	obtain hardcopy of the documentation, including how to print troff
+	documents using the -man macros, using the -me macros, and what the
+	local names are for tbl and eqn.  For example, for a Laserwriter named
+	`ps' using transcript, the declarations are:
+
+		MANPRINT = ptroff -man -Pps
+		MEPRINT = ptroff -me -Pps
+		TBL = tbl
+		EQN = eqn
+	
+	These definitions are used by `make man' and `make doc'.
+
+	u) RANLIB - the command to randomize the HIPS library archive.  For
+	most versions of UNIX, after creating an archive or adding new object
+	files to that archive, the program `ranlib' must be run.  For some
+	UNIX version V systems, the archive command does this automatically
+	and the ranlib command has been removed.  So, the default definition
+	is:
+
+		RANLIB = ranlib
+	
+	but, if you don't have or need a ranlib command (e.g., on an Iris
+	workstation), then use:
+
+		RANLIB = echo
+	
+	v) XVIEWHOME/LIBXVIEW/XINCLUDE/XLIB - these are only relevant if you
+	are installing the XView and/or raw X drivers.  They indicate the
+	directory in which the XView libraries and include files are to be
+	found, the names of the libraries to load with each XView tool, the
+	directory in which the plain old X11 include files sit, and the
+	directory in which the plain old X11 library files set.  For our
+	installation these values are:
+
+		XVIEWHOME = /usr/openwin
+		LIBXVIEW = -lxview -lolgx -lX11
+		XINCLUDE = /usr/include
+		XLIB = /usr/lib
+
+	Other folks only have include/X11 in /usr/openwin/include, and use:
+
+		XVIEWHOME = /usr/openwin
+		LIBXVIEW = -lxview -lolgx -lX11
+		XINCLUDE = /usr/openwin/include
+		XLIB = /usr/openwin/lib
+
+	w) D3HOME - this is only relevant if you are installing
+	the Datacube drivers. This indicates the directory in which
+	the MaxWare libraries and include files are to be found.
+	For our installation this value is:
+
+		D3HOME = /usr/local/maxvideo
+
+	x) LORDER/TSORT - this is to cover for those rare machines which
+	don't have the programs `lorder' and `tsort' for computing the
+	appropriate order of object files in a library.  On most machines the
+	appropriate definition is:
+
+		LORDER = lorder
+		TSORT = tsort
+
+	but on machines for which either is unavailable (e.g. on some MIPS
+	machines) you should use:
+
+		LORDER = echo
+		TSORT = cat
+
+	y) MEXEXT - if you have MATLAB and are installing the user-contributed
+	MATLAB software, set MEXEXT to the filename extension used by your
+	version of MATLAB for `mex' files.  On the Sun on which I debugged
+	this software, this was `mex4', but one user found that on his DEC
+	Alpha it was `mexaxp', so presumably it is specific to the hardware
+	for which the file is made.  The sample configuration files are thus
+	probably not correct for hardware other than Sun-4 and Alpha at the
+	moment.
+
+	z) OTHERJUNK - This is a list of files removed from every directory on
+	a `make clean'.  You shouldn't need to edit this.
+
+2) Edit the machine-dependencies section of the file sys/hips_basic.h.  It
+includes several lines at the beginning which are machine-dependent and
+which may have to be modified for your particular machine.  It defines the
+type `hsize_t' to be `unsigned long'.  This should be defined to be a type
+which is capable of holding the size of an image in bytes.  A 32-bit integer
+should suffice for this, and on most machines, the definition `long' gives a
+32-bit integer.  If this is not true on your machine, edit this file and change
+the definition to whatever is required.  It also defines several variables
+which describe your systems standard random number generator.  The default
+definitions are:
+
+#define H__RANDOM       random  /* routine to call for random numbers */
+#define H__RANDTYPE     long    /* type of H__RANDOM() */
+#define H__SRANDOM      srandom /* routine to call to set the seed */
+#define H__MAXRAND      (0x7fffffff)    /* maximum random number */
+#define H__RANDBITS     (31)    /* number of random bits returned */
+
+These should work on most machines (although on some you may need to specify a
+library in which random/srandom are to be found, e.g. the Silicon Graphics
+machines require -lbsd for this as described above).  In the OSF version
+of UNIX, the appropriate definitions are slightly different:
+
+#define H__RANDTYPE     int	/* type of H__RANDOM() */
+#define H__SRANDOM      srandom /* routine to call to set the seed */
+#define H__MAXRAND      (0x7fffffff)    /* maximum random number */
+#define H__RANDBITS     (31)    /* number of random bits returned */
+
+On other machines the routines random/srandom are not available.  For example,
+on the Hewlett-Packard system HPUX, the defines would be:
+
+#define H__RANDOM       lrand48  /* routine to call for random numbers */
+#define H__RANDTYPE     long    /* type of H__RANDOM() */
+#define H__SRANDOM      srand48 /* routine to call to set the seed */
+#define H__MAXRAND      (0x7fffffff)    /* maximum random number */
+#define H__RANDBITS     (31)    /* number of random bits returned */
+
+and somewhere out there, there may be a machine which still only has the old
+rand/srand functions and perhaps they only return a 15-bit random number.  If
+that is the case, the defines would be:
+
+#define H__RANDOM       rand  /* routine to call for random numbers */
+#define H__RANDTYPE     short    /* type of H__RANDOM() */
+#define H__SRANDOM      srand /* routine to call to set the seed */
+#define H__MAXRAND      (0x7fff)    /* maximum random number */
+#define H__RANDBITS     (15)    /* number of random bits returned */
+
+At the moment things are set up so that the top two cases (random and lrand48
+on HPUX) happen automatically (the user needn't modify the code).  For other
+cases you will have to edit sys/hips_basic.h.
+
+3) Edit the top-level makefile.  Edit `makefile.src' and specify the software
+that you have to install.  There is only one line which controls this, the
+definition of DIRS, which specifies the subdirectories which will get
+installed.  The relevant packages are HIPS (everyone has this), hipsaddon,
+colorhips, and ctool.  Folks who purchase HIPS as part of the HIPS
+"club" will have a combination of HIPS/hipsaddon/sunanim, but all other
+combinations are possible.   Note that the sunanim program is specified in
+the configuration file (see line `a' above).  You can tell which things you
+have by looking at the names of the subdirectories in this directory.  You
+should set the DIRS list to be all that you have, but no more.  For example,
+if you had the entire system, the line would read:
+
+	DIRS = sys lib hips hipsaddon colorhips drivers doc user-contributed pub
+	
+	The line with the "#" just before this one is a comment line to
+	remind you of the set.  So, this loads in order:
+
+		sys - the include files
+		lib - the low-level library
+		hips - the main package and image processing library
+		hipsaddon - the HIPS addons package
+		colorhips - the pseudocolor package
+		drivers - the device drivers (controlled by the configuration
+			variable DRIVERDIRS)
+		doc - the HIPS documentation
+		user-contributed - the user-contributed software
+		pub - a public domain library for reading/writing HIPS image
+			files and conversion programmers between HIPS and
+			portable bitmap formats (see above description of
+			user-contributed/pbm)
+
+	You should delete all items on this list that you don't actually
+	have.  For example, if you bought HIPS, HIPSADDON and CTOOL,
+	then delete `colorhips' from this definition (and `sunanim' from the
+	definition of DRIVERDIRS).  The drivers subdirectory is set up to
+	install whatever was listed in the variable DRIVERDIRS.
+
+	After you have installed HIPS, on later occasions it suffices to
+	reinstall only the things you change.  For example, if you change a
+	few HIPS filters, edit the Makefile and set it to be:
+
+		DIRS = hips
+	
+	Of course, if you change the library or include file in any
+	substantial way, you'll need to reinstall the whole thing.  Also, you
+	can always perform the make from a subdirectory to install only that
+	portion of the system.
+
+4) Type
+
+	`Configure <configuration-file-name>'
+
+where you substitute for <configuration-file-name> the name you used for your
+configuration file.  This will recursively create a Makefile in each
+subdirectory of the hips directory hierarchy.  Having done this, you may
+safely and sensibly type `make' at any level in the HIPS hierarchy after the
+initial installation to reinstall only a part of the system.
+
+Occasionally we have had difficulty running Configure because of the large
+number of Unix processes that it creates as it goes along.  If you are running
+this on a workstation with a window system and you get bizarre failures from
+Configure (which should normally complete within a minute or two), you might
+try minimizing the number of active processes you have running (by exiting
+from all windows you have which aren't strictly necessary).
+
+5) If this is an initial installation or a re-installation of the whole thing,
+type:
+
+		make clean
+
+This will delete any junk which is lying around.  In fact, it is generally a
+good idea to do this the first time to clean up binaries and such which were
+left by me on your HIPS software tape.
+
+6) If you aren't logged in as root, do so now.  Then, type:
+
+		make
+
+This will recursively do any required installation from all of the
+subdirectories that you have selected.
+
+We have occasionally had difficulties during the installation process
+(especially of user-contributed/lbl/hips/sources/tiff/lib/tif_fax3.c, which
+has a rather huge include file), because the system runs out of space in the
+temporary directory (often kept in /tmp).  If this happens, you may have to
+link /tmp to a directory on a filesystem with more space available.
+
+7) If you have an Adage, then the programs in the drivers/adage may be of use.
+
+8) The directory "user-contributed" contains various things contributed by a
+number of HIPS users, including additional drivers for the Sun, ITI boards,
+Lexidata boards, Matrox boards, and lots of additional HIPS filters.  Some
+have makefiles and were made recursively above, but some you'll need to make by
+hand.
+
+9) Documentation and manual pages are to be found in a variety of directories.
+You will probably want to print out all of the manual pages and documents.
+To print all of the manual pages, type:
+
+		make man
+		
+You can also print a subset of the manual pages.  For example, in
+subdirectory hips/man, and assuming you have a Laserwriter and Transcript
+software, type:
+
+	ptroff -man seeheader.n
+
+and you will get a copy of the manual page for the program `seeheader'.  To
+print all of the documents, type:
+
+		make doc
+
+This will print out manuals describing the software from the user's and
+programmer's standpoint, an introductory user's tutorial and several summary
+guides.
+
+10) To remove binaries and such from the source directory after installation,
+type:
+
+		make clean
+
+If you can afford the disk space, then don't do this.  Then, if you change
+only a few HIPS modules, subsequent make's will only compile that which has
+changed.  After a `make clean', the next `make' recompiles the entire system.
+
+In addition, the following command:
+
+		make pristine
+
+not only cleans up the hips source directory, but also removes the installed
+binaries, libraries, manual pages and include files.
+
+**********Special Note to IRIS and System V Users, and perhaps others******
+
+In compiling HIPS on an IRIS (which is basically a System V version of Unix),
+we discovered several incompatibilities of the `make' program with the one
+which we use on Suns and Vaxen.  This makefile is consistent with both, but
+we should note one probably we hit in case any other user should still have
+this problem.  The HIPS makefiles require that the commands issued from this
+makefile be interpreted by `sh', rather than by `csh'.  For most make
+programs, this is the default.  On the IRIS, if you have an environment
+variable called `SHELL', it will use the value of that variable.  We have
+fixed this by defining a variable called `SHELL' in all of our Makefiles.  If
+you have difficulties running these Makefiles, this may be the problem.  The
+error code we were getting was related to the `for loop' where it would either
+complain that it doesn't know what `for' means, or would complain about
+mismatched parentheses.  In any case, if the definition of SHELL here doesn't
+cure it for your version of UNIX, another possibility is to first issue the
+following command before typing `make':
+
+	setenv SHELL /bin/sh
+
+**********Special Note to MAC OSX users******
+HIPS works just fine under OS X on the Mac.  Basically, set up your Mac as
+usual.  In older versions of OS X, you have to install the Developer package,
+install X11 (you can get it from Apple, or from www.xfree86.org) and XDarwin
+(from www.Xdarwin.org). In current OS X (10.3), the regular installation works
+just fine; you simply have to check the appropriate options at installation
+time and it all works automatically.  Then, install/compile HIPS as
+usual.  At this point, all the HIPS 8-bit image viewers that you have managed
+to compile should work correctly (e.g., xhips/xhipsc).
+***************************************************************************
+
+
+**********Special Note on other software that works with HIPS**************
+
+Mvox - Interactive 2-4D Image and Graphics Visualization Software
+
+Mvox homepage: <http://www.imm.dtu.dk/~mvox/>
+
+Mvox is a general purpose tool for visualization and manipulation of a
+wide range of 2-4D grey level/colour images and 3D surface graphics.
+
+Mvox can handle images with different depths, number of colours,
+number of time instances and has been successfully used in the past
+to visualize 3D medical images with stacks of slices (CT, MRI, etc.),
+2D remote sensing images with many channels and 2D colour images
+(Red, Green and Blue). In addition Mvox can also display and manipulate
+3D surface graphics (as used in CAD programs). 3D graphics can be
+exported in VRML format for use on WWW.
+
+The wide range of data types that can be handled by Mvox makes it a
+very flexible tool and it is especially well suited for users with
+changing or widespread needs.
+
+Keywords: *Image browser, *Fast slicing, *Volume rendering using the
+    VolPack library, *Iso-surface rendering (result similar to Marching
+    Cubes), *3D surface graphics, *Interactive thresholding, *Drawing,
+    *Statistical classification using discriminant analysis, *Histogram,
+    *Statistics, *Histogram stretch, *Enlarge, *Colormaps, *Contours,
+    *3D shape from contours using Nuages, *Overview window, *Advanced
+    command line interface, *User-defined functions
+
+Image formats: *ANALYZE, *TIFF, *SGI, *TGA, *BMP, *Inrimage, *HIPS, *BRIMG.
+
+3D formats: Import: *OFF, *Flex3D - Export: *VRML, *DXF, *Inventor, *Flex3D
+
+Mvox is only supported on Silicon Graphics platforms, but can run on
+some HP, IBM RS/6000 and DEC-Alpha as well. A free demo version and test
+images are available from the Mvox homepage:
+
+		<http://www.imm.dtu.dk/~mvox/>
+
+The demo version will only work with the test images. Licenses are available
+for approximately $2,500 (DKK 15,000 excl. VAT).
+
+For further information, contact:
+
+	Morten Bro-Nielsen		Email: mvox@imm.dtu.dk
+	Mware
+	http://www.imm.dtu.dk/~mvox
+
+***************************************************************************

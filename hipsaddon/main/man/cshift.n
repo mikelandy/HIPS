@@ -1,0 +1,31 @@
+.TH CSHIFT 1 "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+cshift - image wrapping
+.SH SYNOPSIS
+.B cshift
+[-x srow] [-y scol]
+.SH DESCRIPTION 
+.I cshift
+shifts circularly each image in the input sequence.
+.I srow
+.I (scol)
+are the starting row (column) that will be shifted to
+the 0th row (column), and defaults to rows/2 (cols/2)
+where rows  (cols) is the number of rows (columns) of
+the image.
+.sp
+It can be used in processings involving FFT.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, int, float, double, complex, and double complex formats.
+.SH "OUTPUT PIXEL FORMATS"
+byte, short, int, float, double, complex, and double complex formats.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH EXAMPLE
+cshift < input_seq > output_seq
+.SH SEE ALSO
+extend(1), extract(1), fourtr(1)
+.SH AUTHOR
+Jin Zhengping - 25 July 1988 
+.br
+Rewritten by Jin Zhengping - 31 August 1991

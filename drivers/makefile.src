@@ -1,0 +1,22 @@
+#
+# makefile for directory drivers
+#
+
+# Subdirectories that get made are in DRIVERDIRS
+
+DIRS = $(DRIVERDIRS)
+
+# default action just makes src dirs
+
+all: install
+
+clean install pristine man doc: doit
+	@-if test 'x$(DIRS)' != x ; then eval \
+		'for d in $(DIRS) ; do \
+		( cd $$d ; echo make $@ on $(HERE)$$d ; make $(MFLAGS) $@ ) ; \
+		done' ; \
+	else \
+		true ; \
+	fi
+
+doit:

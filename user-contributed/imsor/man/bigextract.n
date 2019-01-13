@@ -1,0 +1,37 @@
+.TH BIGEXTRACT 1 "1 december, 1993" "Version 2" "HIPS Manual"
+.SH NAME
+bigextract \- extract a subimage without loading the entire image
+.SH SYNOPSIS
+.B bigextract
+[-s rows [cols]] [-p from-row [from-col]]
+.SH DESCRIPTION
+.I bigextract
+extracts a rectangular subpicture from a sequence. The new
+frame size is specified by
+.I rows
+and
+.I cols
+, and the offset from the corner of the input picture by
+.I from-row
+and 
+.I from-col.
+.I rows
+and
+.I cols
+default to one half of the input dimensions, and
+.I from-row
+and 
+.I from-col
+such that the sub-picture is centered.
+.SH PIXEL FORMATS HANDLED DIRECTLY
+all raster formats
+.SH STANDARD SWITCHES USED
+.I -U
+Print usage message.
+.SH SEE ALSO
+extract(1)
+.SH AUTHOR
+.nf
+Rasmus Larsen 
+IMSOR, Technical University of Denmark
+e-mail: rl@imsor.dth.dk

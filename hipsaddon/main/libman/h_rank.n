@@ -1,0 +1,182 @@
+.TH H_RANK 3 "12 September 1991" "Version 1" "HIPS Manual"
+.SH NAME
+.B h_rank 
+\- subroutines to rank-order filter an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_rank   (input_hdr, output_hdr, hor_size, ver_size, hor_rank, ver_rank)
+h_rank_b (input_hdr, output_hdr, hor_size, ver_size, hor_rank, ver_rank)
+h_rank_s (input_hdr, output_hdr, hor_size, ver_size, hor_rank, ver_rank)
+h_rank_i (input_hdr, output_hdr, hor_size, ver_size, hor_rank, ver_rank)
+h_rank_f (input_hdr, output_hdr, hor_size, ver_size, hor_rank, ver_rank)
+h_rank_d (input_hdr, output_hdr, hor_size, ver_size, hor_rank, ver_rank)
+struct  header  *input_header, *output_header;
+int     hor_size, ver_size, hor_rank, ver_rank;
+
+h_rank_B (input_roi, output_roi, roi_rows, roi_cols, input_cols, 
+          output_cols, hor_size, ver_size, hor_rank, ver_rank)
+byte    *input_roi, *output_roi;
+int     roi_rows, roi_cols, input_cols, output_cols;
+int     hor_size, ver_size, hor_rank, ver_rank;
+
+h_rank_S (input_roi, output_roi, roi_rows, roi_cols, input_cols, 
+          output_cols, hor_size, ver_size, hor_rank, ver_rank)
+short   *input_roi, *output_roi;
+int     roi_rows, roi_cols, input_cols, output_cols;
+int     hor_size, ver_size, hor_rank, ver_rank;
+
+h_rank_I (input_roi, output_roi, roi_rows, roi_cols, input_cols, 
+          output_cols, hor_size, ver_size, hor_rank, ver_rank)
+int     *input_roi, *output_roi;
+int     roi_rows, roi_cols, input_cols, output_cols;
+int     hor_size, ver_size, hor_rank, ver_rank;
+
+h_rank_F (input_roi, output_roi, roi_rows, roi_cols, input_cols, 
+          output_cols, hor_size, ver_size, hor_rank, ver_rank)
+float   *input_roi, *output_roi;
+int     roi_rows, roi_cols, input_cols, output_cols;
+int     hor_size, ver_size, hor_rank, ver_rank;
+
+h_rank_D (input_roi, output_roi, roi_rows, roi_cols, input_cols, 
+          output_cols, hor_size, ver_size, hor_rank, ver_rank)
+double  *input_roi, *output_roi;
+int     roi_rows, roi_cols, input_cols, output_cols;
+int     hor_size, ver_size, hor_rank, ver_rank;
+
+h_hor_rank_B (input_roi, output_roi, roi_rows, roi_cols, input_cols,
+              output_cols, size, rank)
+h_ver_rank_B (input_roi, output_roi, roi_rows, roi_cols, input_cols,
+              output_cols, size, rank)
+byte 	*input_roi, *output_roi;
+int     roi_rows, roi_cols, input_cols, output_cols;
+int     size, rank;
+
+h_hor_rank_S (input_roi, output_roi, roi_rows, roi_cols, input_cols,
+              output_cols, size, rank)
+h_ver_rank_S (input_roi, output_roi, roi_rows, roi_cols, input_cols,
+              output_cols, size, rank)
+short 	*input_roi, *output_roi;
+int     roi_rows, roi_cols, input_cols, output_cols;
+int     size, rank;
+
+h_hor_rank_I (input_roi, output_roi, roi_rows, roi_cols, input_cols,
+              output_cols, size, rank)
+h_ver_rank_I (input_roi, output_roi, roi_rows, roi_cols, input_cols,
+              output_cols, size, rank)
+int 	*input_roi, *output_roi;
+int     roi_rows, roi_cols, input_cols, output_cols;
+int     size, rank;
+
+h_hor_rank_F (input_roi, output_roi, roi_rows, roi_cols, input_cols,
+              output_cols, size, rank)
+h_ver_rank_F (input_roi, output_roi, roi_rows, roi_cols, input_cols,
+              output_cols, size, rank)
+float 	*input_roi, *output_roi;
+int     roi_rows, roi_cols, input_cols, output_cols;
+int     size, rank;
+
+h_hor_rank_D (input_roi, output_roi, roi_rows, roi_cols, input_cols,
+              output_cols, size, rank)
+h_ver_rank_D (input_roi, output_roi, roi_rows, roi_cols, input_cols,
+              output_cols, size, rank)
+double 	*input_roi, *output_roi;
+int     roi_rows, roi_cols, input_cols, output_cols;
+int     size, rank;
+
+.fi
+.SH DESCRIPTION 
+These routines rank order filter an input subimage (specified by
+.I input_hdr
+or
+.IR input_roi ),
+writing the result to the output subimage (specified by
+.I output_hdr
+or
+.IR output_roi ).
+Rank order filtering is performed first with a 1D horizontal filter, and
+then with a 1D vertical filter.
+.I h_rank
+calls
+.IR h_rank_b ,
+.IR h_rank_s ,
+.IR h_rank_i ,
+.IR h_rank_f
+or
+.I h_rank_d
+depending on whether the pixel format is byte, short, integer, float or
+double respectively. 
+.IR h_rank_B ,
+.IR h_rank_S ,
+.IR h_rank_I ,
+.IR h_rank_F
+and
+.I h_rank_D
+are the low-level routines which don't require an image header.
+.IR h_hor_rank_B ,
+.IR h_hor_rank_S ,
+.IR h_hor_rank_I ,
+.IR h_hor_rank_F ,
+and
+.I h_hor_rank_D
+are the low-level routines for horizontal filtering only and
+.IR h_ver_rank_B ,
+.IR h_ver_rank_S ,
+.IR h_ver_rank_I ,
+.IR h_ver_rank_F ,
+and
+.I h_ver_rank_D
+are the low-level routines for vertical filtering only.
+.PP
+The subimage (or region of interest) size is
+.I roi_cols
+by
+.I roi_rows
+while the input and output images are
+.I input_cols
+and
+.I output_cols
+columns wide respectively.
+.I hor_size
+and
+.I ver_size
+are the size of the 1D horizontal and vertical filtering windows respectively.
+.I hor_rank
+and
+.I ver_rank
+are the rank values to be used for horizontal and vertical rank order filtering
+respectively.
+.I size
+and
+.I rank
+are the size and rank for the one-dimensional filtering routines.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, float, integer, double
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR input_hdr .
+.SH "IN-PLACE PROCESSING"
+The subimage may 
+.B not 
+be processed in place. In other words
+.I input_hdr
+and
+.I output_hdr
+must be different. As must
+.I input_roi
+and
+.IR output_roi .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_ALLOCSUBR - can't allocate memory
+.br
+HE_MSG - miscellaneous error
+.SH "SEE ALSO"
+h_median(3), h_extremum(3)
+.SH AUTHOR
+Colin Urquhart, The Turing Institute, 12 September 1991

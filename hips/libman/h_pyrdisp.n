@@ -1,0 +1,114 @@
+.TH H_PYRDISP 3 "7/19/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_pyrdisp \- convert an image pyramid to a single image for display
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_pyrdisp(pyr,botlev,toplev,hdo,cflag,margin)
+FPYR-or-IPYR pyr;
+struct header *hdo;
+h_boolean cflag;
+int botlev,toplev,margin;
+
+h_pyrdisp_i(pyr,botlev,toplev,hdo,cflag,margin)
+IPYR pyr;
+struct header *hdo;
+h_boolean cflag;
+int botlev,toplev,margin;
+
+h_pyrdisp_f(pyr,botlev,toplev,hdo,cflag,margin)
+FPYR pyr;
+struct header *hdo;
+h_boolean cflag;
+int botlev,toplev,margin;
+
+h_pyrdisp_I(pyr,botlev,toplev,imageo,nlpo,cflag,margin)
+IPYR pyr;
+int botlev,toplev,*imageo,nlpo,margin;
+h_boolean cflag;
+
+h_pyrdisp_F(pyr,botlev,toplev,imageo,nlpo,cflag,margin)
+FPYR pyr;
+int botlev,toplev,nlpo,margin;
+float *imageo;
+h_boolean cflag;
+.fi
+.SH DESCRIPTION 
+These routines take an input pyramid (specified by
+.IR pyr ),
+and store a displayable version in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_pyrdisp
+calls
+.I h_pyrdisp_i
+or
+.I h_pyrdisp_f
+depending upon whether the pixel format is integer or float.
+.I h_pyrdisp_I
+and
+.I h_pyrdisp_F
+are the low-level routines which don't require an image header.
+The output image has
+.I nlpo
+pixels per line, and is
+in floating point format for floating point pyramids and integer format for
+integer pyramids.
+.PP
+There are two formats, either the default side-by-side format:
+.sp
+.in +1i
+.nf
+11111111 2222 33 4
+11111111 2222 33
+11111111 2222
+11111111 2222
+11111111
+11111111
+11111111
+11111111
+.fi
+.in -1i
+.sp
+or a `compressed' format (used if
+.I cflag
+is TRUE):
+.sp
+.in +1i
+.nf
+11111111 2222
+11111111 2222
+11111111 2222
+11111111 2222
+11111111
+11111111 33 4
+11111111 33
+11111111
+.fi
+.in -1i
+.sp
+The only difference is that the third and higher levels are shifted around
+to a second row.  The user specifies the number of pixels between
+each image in
+.IR margin .
+The background pixels are left untouched and should be
+initialized in advance by the caller (e.g. using
+.IR h_setimage ).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+integer pyramid to integer, float pyramid to float
+.SH "OUTPUT PIXEL FORMAT"
+integer (for integer pyramid), float (for float pyramid)
+.SH "REGION-OF-INTEREST"
+The displayed pyramid is placed in the output region of interest, taken from
+.IR hdo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.\" .SH "SEE ALSO"
+.SH AUTHOR
+Mike Landy - 3/6/89
+.br
+HIPS 2 - msl - 7/19/91

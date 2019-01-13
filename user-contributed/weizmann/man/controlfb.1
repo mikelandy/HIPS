@@ -1,0 +1,47 @@
+.TH CONTROLFB 1HIPS "April, 1987"
+.SH NAME
+controlfb - display a specific frame buffer as it is, or clear it
+beforehand.
+
+.SH SYNOPSIS
+.B controlfb
+[-g greylevel] [-p pan] [-s scroll] [-z] [-d dev] [-b fbnum] [-h]
+
+.SH DESCRIPTION
+.I Controlfb
+displays on the monitor the contents of the frame buffer \fIfbnum\fR.
+If the \fI-g\fR option is used, the frame buffer is cleared to the
+value \fIgreylevel\fR beforehand, and then displayed.
+.I Pan
+and
+.I scroll
+are only for the display : the contents of the frame buffer stays
+intact.  \fIz\fR  sets the zoom.
+.I h
+is relevant only if
+.I fbnum
+is a 16-bits buffer.  The monitor will display the low byte, unless
+.I h
+is on. In this case the high byte will be displayed.
+
+.SH DEFAULTS
+.I device
+defaults to /dev/ipfb0a.
+.I g
+defaults to be off.
+.I z
+defaults to be off.
+.I Pan
+and
+.I scroll
+default to 0.
+.I fbnum
+defaults to MASTER_FB ( =0).
+.I h
+is reset; low byte chosen.
+
+.SH SEE\ ALSO
+wframe(1HIPS), rframe(1HIPS), rbuffer(1HIPS)
+
+.SH AUTHOR
+LEAH MORY April, 1987

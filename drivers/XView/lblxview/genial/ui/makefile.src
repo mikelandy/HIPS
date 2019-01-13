@@ -1,0 +1,107 @@
+#
+# makefile for user-contributed/lbl/xview/genial/ui
+#
+
+PROGRAM = ui.out
+SOURCES = \
+	comment_ui.c cursor.c display.c display_ui.c \
+	file.c file_ui.c genial.c \
+	histo.c histo_ui.c linedom.c main_control_ui.c \
+	regdom.c trace_ui.c xscale.c zoom.c zoom_ui.c
+
+
+OBJECTS = \
+	comment_ui.o cursor.o display.o display_ui.o \
+	file.o file_ui.o genial.o \
+	histo.o histo_ui.o linedom.o main_control_ui.o \
+	regdom.o trace_ui.o xscale.o zoom.o zoom_ui.o
+
+CPPFLAGS2 = -I../include -I$(XVIEWHOME)/include -I$(GUIDEHOME)/include -I$(INCLUDE_DIR)
+LINTFLAGS = -h -target=$(MACHINE) -I$(INCLUDE_DIR) -I../include -I$(XVIEWHOME)/include
+
+$(PROGRAM): $(SOURCES) $(OBJECTS)
+	touch $@
+	 
+$(OBJECTS):
+	$(COMPILEc) $< $(CPPFLAGS2)
+
+# Targets to be used by Saber-C.
+		  
+saber_src:
+	#load $(CFLAGS) $(CPPFLAGS2) $(LDFLAGS) $(TARGET_ARCH) \
+	$(SOURCES) $(LDLIBS)
+
+saber_obj:
+	#load $(CFLAGS) $(CPPFLAGS2) $(LDFLAGS) $(TARGET_ARCH) $(OBJECTS) $(LDLI BS)
+
+install:	$(PROGRAM)
+
+depend:
+	makedepend -I../include *.c
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+lint:
+	lint $(LINTFLAGS) *.c
+	 
+saber_src:      *.c
+	#load $(CFLAGS) -I../include *.c -I$(XVIEWHOME)/include
+		  
+saber_obj:      *.o
+	#load $(CFLAGS) *.o
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+$(PGMS): $(OBJECTS)
+	touch $@
+
+FRC:
+
+cursor.o: ../include/display.h ../include/genial.h
+cursor.o: ../include/comment_ui.h ../include/display_ui.h
+cursor.o: ../include/file_ui.h ../include/main_control_ui.h
+cursor.o: ../include/gfm_ui.h ../include/histo_ui.h ../include/trace_ui.h
+cursor.o: ../include/zoom_ui.h
+display.o: ../include/display_ui.h
+display_ui.o: ../include/display_ui.h
+file.o: ../include/genial.h ../include/comment_ui.h ../include/display_ui.h
+file.o: ../include/file_ui.h ../include/main_control_ui.h ../include/gfm_ui.h
+file.o: ../include/histo_ui.h ../include/trace_ui.h ../include/zoom_ui.h
+file.o: ../include/sm.h ../include/gfm.h ../include/c_varieties.h
+file_ui.o: ../include/file_ui.h
+genial.o: ../include/display.h 
+genial.o: ../include/genial.h ../include/comment_ui.h ../include/display_ui.h
+genial.o: ../include/file_ui.h ../include/main_control_ui.h
+genial.o: ../include/gfm_ui.h ../include/histo_ui.h ../include/trace_ui.h
+genial.o: ../include/zoom_ui.h ../include/sm.h ../include/log.h
+gfm_ui.o: ../include/gfm_ui.h
+histo.o: ../include/trace_ui.h ../include/histo.h ../include/ui.h
+histo.o: ../include/genial.h
+histo.o: ../include/comment_ui.h ../include/display_ui.h ../include/file_ui.h
+histo.o: ../include/main_control_ui.h ../include/gfm_ui.h
+histo.o: ../include/zoom_ui.h
+histo_ui.o: ../include/histo_ui.h
+linedom.o: ../include/display.h ../include/ui.h
+linedom.o: ../include/comment_ui.h ../include/display_ui.h
+linedom.o: ../include/file_ui.h ../include/main_control_ui.h
+linedom.o: ../include/gfm_ui.h ../include/histo_ui.h ../include/trace_ui.h
+linedom.o: ../include/zoom_ui.h ../include/reg.h ../include/plist.h
+main_control_ui.o: ../include/main_control_ui.h genial.icon
+regdom.o: ../include/ui.h 
+regdom.o: ../include/comment_ui.h ../include/display_ui.h
+regdom.o: ../include/file_ui.h ../include/main_control_ui.h
+regdom.o: ../include/gfm_ui.h ../include/histo_ui.h ../include/trace_ui.h
+regdom.o: ../include/zoom_ui.h ../include/reg.h ../include/plist.h
+trace_ui.o: ../include/trace_ui.h
+zoom.o: ../include/display.h
+zoom.o: ../include/genial.h ../include/comment_ui.h ../include/display_ui.h
+zoom.o: ../include/file_ui.h ../include/main_control_ui.h ../include/gfm_ui.h
+zoom.o: ../include/histo_ui.h ../include/trace_ui.h ../include/zoom_ui.h
+zoom.o: ../include/reg.h ../include/plist.h ../include/zoom.h
+xscale.o: ../include/scale.h
+

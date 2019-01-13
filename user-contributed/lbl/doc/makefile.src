@@ -1,0 +1,20 @@
+#
+# makefile for ccs-lbl/doc
+#
+
+install:
+
+handbook:
+	lpr *book*.ps
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+#doc:
+#        $(MEPRINT) *.me
+
+pristine:	pristineman-pgm
+
+man:
+
+doc:

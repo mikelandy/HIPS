@@ -1,0 +1,85 @@
+.TH DPCM_R 1 "7/23/91" "Version 2" "HIPS Manual"
+.SH NAME
+dpcm_r \- DPCM decoding program receiver
+.SH SYNOPSIS
+.B dpcm_r
+[-f file-name]
+.SH DESCRIPTION 
+.I Dpcm_r
+is the receiver for the dpcm coding method.
+The exact DPCM method is determined by the
+parameters file:
+.IR file-name .
+If the file is not specified, default parameters are supplied.
+There are three sections to the parameter file.
+Each section starts with a single
+capital letter (the letters are M,P and Q).
+The first line of the file (the M-line) specifies the method for
+computing the mean. The line consists of three values: the first is the
+capital letter M, the second is a letter in small case that specifies
+the method (right now only the `c' method \- ``constant mean'' \- is
+implemented), the third is an integer which is the value for the mean.
+The second line of the file (the P-line) gives information about the
+prediction method. The first character is the capital letter P, the
+second is a letter in small case which specifies the prediction method
+(right now only the `l' method \- for linear prediction \- is implemented),
+the third value is an integer `n', which tells how many predictors there
+are. This line is followed by n lines, a line for each predictor.
+Each of these lines starts with a real number followed by three integers.
+The real number is the weight for the predictor, the other numbers
+give the signed difference between the coordinates of the predicted
+pixel and those of the predicting pixels. The order of the coordinates
+is: frame, row, column. For example, if a weight of .3 is given to
+the pixel which is one line below the predicted pixel, but is on the
+same column and the same frame, the line for this predictor would read:
+.ce
+ .3 0 -1 0
+The third section of the file starts with the Q-line, a Q followed by
+a letter in small case for the quantization method (right now only
+the f method \- for fixed quantization \- is implemented), followed
+by the number of the quantization cutoff-points (the number of quantization
+levels is 1 more than the number of the quantization cuts).
+The next lines specify the quantization cutoff-points and levels.
+There are two integers per line. The first is the upper bound 
+and the second is the level for each quantization interval.
+The upper bound for the last interval is not specified; hence the
+last line contains only one value \- that for the average level of the
+last interval.
+As an example consider a file for the default values for the
+program:
+.nf
+M c 128
+P l 3
+\.3 0 0 -1
+\.3 0 -1 0
+\.25 -1 0 0
+Q f 3
+-13 -20
+0 -5
+13 5
+20
+.fi
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+The entire image is coded.  The region-of-interest is ignored.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+dpcm_t(1)
+.SH AUTHOR
+Yoav Cohen - 6/15/82
+.br
+HIPS 2 - msl - 7/23/91

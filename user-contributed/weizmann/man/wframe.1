@@ -1,0 +1,69 @@
+.TH WFRAME 1HIPS "November 27, 1986"
+.SH NAME
+wframe - write a frame on the IP-512 and display it on the monitor
+
+.SH SYNOPSIS
+.B wframe
+[-y initialrow] [-x initialcol] [-d dev] [-z] [-p pan] [-s scroll] [-b
+fbnum] [-h] [-t] [-m mask]<frame
+
+.SH DESCRIPTION
+.I Wframe
+displays on the monitor a digital picture, input from the standard
+input file, and stores it in the frame buffer \fIfbnum\fR. The
+dimensions of the picture are known from it's header.
+(\fIinitialrow\fR,\fIinitialcol\fR) specifies the frame buffer position
+of the picture. If the picture does not fit the buffer due to a
+non-zero origin , there will be wraparound.
+.I Pan
+and
+.I scroll
+are only for the display. \fIz\fR, which sets the zoom, holds only if
+the picture is not more than 256 x 256 pixels.
+.I h
+and
+.I t
+are relevant only if
+.I fbnum
+is a 16-bits buffer. If
+.I t
+is on, the input file must be made of 16-bits pixels.  The monitor will
+display the low byte, unless
+.I h
+is on. In this case the high byte will be displayed. Only the bits that
+their correspondent bits in
+.I mask
+are 0 will be modified by the input file. The others are protected.
+Thus, if wframe uses a 16-bits picture and \fImask\fR==0xff00, only the
+low byte buffer will be changed, while the high will remain untouched.
+
+.SH DEFAULTS
+.I Initialrow
+and
+.I initialcol
+default to 0.
+.I device
+defaults to /dev/ipfb0a.
+.I z
+defaults to be off.
+.I Pan
+and
+.I scroll
+default to 0.
+.I fbnum
+defaults to MASTER_FB ( =0).
+.I h
+is reset; low byte chosen.
+.I t
+is reset; 8-bits pixels.
+.I Mask
+defaults to 0.
+
+.SH SEE\ ALSO
+rframe(1HIPS), rbuffer(1HIPS)
+
+.SH AUTHOR
+Michael Landy/Yoav Cohen - 2/4/82
+.br
+Modified: YC 6/9/82
+         LEAH MORY 27/11/86

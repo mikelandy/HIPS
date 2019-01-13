@@ -1,0 +1,21 @@
+.TH GETPLOT 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+getplot \- get a plot3d element from a plot3d frame buffer
+.SH SYNOPSIS
+.nf
+getplot(buf,index,op,b,x1,y1,z1,x2,y2,z2)
+char *buf;
+int *op;
+double *b,*x1,*x2,*y1,*y2,*z1,*z2;
+.fi
+.SH DESCRIPTION 
+This function extracts the next plot3d element from a frame buffer, and
+returns the new index to the buffer.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_CODE - unknown plot3d code
+.SH AUTHOR
+Yoav Cohen 11/11/82
+.br
+modified for HIPS 2 - msl - 1/3/91

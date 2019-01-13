@@ -1,0 +1,47 @@
+.TH PROJECT HIPS "31st August 1991" "Version 2" "HIPS Manual"
+.SH NAME
+project - image geometric transformer
+.SH SYNOPSIS
+.B project
+[-a angle] [-d rows cols] [-l distance] [-s scale]
+.SH DESCRIPTION 
+.I project
+projects images onto a projecting plane.
+The angle subtended by the image plane and the projecting plane is
+specified by
+.I angle
+in degree, and defaults to 10.0.
+Here, image plane is defined as the image extended into infinity.
+Its horizontal axis is passing through the central point of the image.
+The projecting plane is defined as a plane rotates about the horizontal axis of the image plane.
+.I rows
+and
+.I cols
+specify the size of the output image,
+and defaults to the size of the input image.
+.I distance
+specify the distance from
+perspective focus point to the centre of the image,
+and defaults to half of the height of the image.
+.I scale
+specify the scale by which the
+image is magnified, and defaults to 1.0.
+
+Note: any part of the projected image that lie outside the output
+image will be clipped.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH EXAMPLE
+.in +3m
+project -a 20 < input_seq > output_seq
+.in -3m
+.SH SEE ALSO
+enlarge(1), pictranspose(1), reflect(1), rotate(1), rotate90(1), rotate180(1), translate(1)
+.SH AUTHOR
+Jin Zhengping - 13 March 1989
+.br
+Rewritten by Jin Zhengping - 31 August 1991

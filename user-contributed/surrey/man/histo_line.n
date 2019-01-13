@@ -1,0 +1,20 @@
+.TH HISTO_LINE 1 "September 2, 1987"
+.SH NAME
+histo_line - convert a line image to histogram format
+.SH SYNOPSIS
+.B histo_line
+[-v] [-c]
+.SH DESCRIPTION 
+.I Histo_line
+converts a byte-formatted image into histogram format, so that it may be
+displayed as a grey-level graph using
+.IR disp_line .
+By default,
+.I histo_line
+expects a single row image in the input.  If
+.I -v
+is specified, then the input must be a single column image.  By default, each
+input image results in a single `histogram' output.  If
+.I -c
+is specified, then the multiple input frames are averaged, resulting in a
+single frame of `histogram' on the output.

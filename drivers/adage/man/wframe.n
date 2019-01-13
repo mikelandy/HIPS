@@ -1,0 +1,25 @@
+.TH WFRAME 1HIPS "January 2, 1984"
+.SH NAME
+wframe - write a frame on the Adage
+.SH SYNOPSIS
+.B wframe
+[initialrow [initialcolumn]] [-v] [-n]
+.SH DESCRIPTION 
+.I Wframe
+writes a single frame on the Adage.
+Coordinate
+.IR \c ( initialrow ,\  initialcolumn )
+specifies the screen position for 
+frame coordinate (0,0).  Effective off-screen coordinates are lost,
+so there is no wraparound.
+The default is to center the image on the screen.
+The
+.I -v
+switch uses standard 30Hz video.
+The
+.I -n
+switch is used to display an image but leave the lookup table unchanged.
+.SH SEE\ ALSO
+rframe(1HIPS), movie(1HIPS), bmovie(1HIPS)
+.SH AUTHOR
+Michael Landy/Yoav Cohen - 2/4/82

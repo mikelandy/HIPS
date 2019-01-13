@@ -1,0 +1,14 @@
+.TH HTORLE 1 "March 30, 1990" LBL-HIPS
+.SH NAME
+htorle \- convert a HIPS image to a RLE formated image (for use with
+Utah Raster Toolkit programs).
+.SH SYNOPSIS
+.B htorle
+< infile.hips > outfile.rle
+.SH DESCRIPTION 
+.I htorle
+reads a HIPS file with a header from the
+standard input and outputs it as a RLE file to standard output.
+This program can handle byte formatted, single frame images only.
+.SH AUTHOR
+Fritz Renema, LBL

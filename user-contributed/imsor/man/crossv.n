@@ -1,0 +1,349 @@
+.TH CROSSV 1 "October 8, 1991" "Version 2" "HIPS Manual"
+.SH NAME
+crossv \- calculate cross-covariance or crossv-semivariance matrices of a 
+dataset in the IMSOR defined irregular format
+.SH SYNOPSIS
+.B crossv
+.RB [ \-l
+.IR lag-spec ]
+.RB [ \-d
+.IR dir-spec ]
+.RB [ \-t ]
+.RB [ \-a ]
+.RB [ \-sym ]
+.RB [ \-p ]
+.RB [ \-sri ]
+.br
+.RB   [ \-2D 
+.I rows  
+.RI [ cols ] ]
+.RB [ \-0 ]
+.RB  [ \-cova
+.IR cova_file ]
+.RB [ \-m
+.I missing-value
+.RB [ skip ]]
+.br
+.RB 	[ \-n
+.IR neutralval ]
+.RB [ \-e
+.IR subsamp ]
+.RB [ \-ln ]
+.RB [ \-I
+.IR detection-levels ]
+.br
+.RB  [ \-L
+.IR detection-levels ] 
+.RB [ \-w4 ]
+.RB [ \-ws ]
+.RB [ \-wd ]
+.RB [ \-wn ]
+.RB [ \-b
+.IR block-density ]
+.RB [ \-f
+.IR log_file ]
+.br
+	< input-sequence  > variance-matrices
+.br
+use of option
+.B \-l, format A: 
+.br
+.RB 	[ \-l
+.I nlags
+.RB [ c
+.RI [ lag_range ]]
+.B \-r
+.IR max_range ]
+.br
+use of option
+.B \-l, format B:
+.br
+.RB 	[ \-l
+.I nlags lags
+.RB [ c
+.IR lag_range ]]
+.br
+use of option
+.B \-d, format A:
+.br
+.RB 	[ \-d
+.I ndirs
+.RB [ c
+.RI [ dir_range ]]]
+.br
+use of option
+.B \-d, format B:
+.br
+.RB 	[ \-d
+.I ndirs intervals
+.RB [ c
+.IR dir_range ]]
+.SH DESCRIPTION 
+.I crossv 
+calculates crossv-covariance or cross-semivariance matrices of a dataset 
+consisting of irregularly distributed observations.
+Input is a HIPS-file
+of the IMSOR defined irregular format, see
+.IR asc2hips .
+Matrices are calculated in lag-intervals split on both direction and 
+distance. It is also possible to define a cross-variance image, where
+the position of the pixel in proportion to the centerpixel is the
+displacement-vector.
+.sp 0.5
+The output form depends on the choice of lags:
+.sp 0.3
+.I pixel-lags:
+Output is a HIPS-file consisting of a sequence of frames each containing
+a cross-variance image. The covariance images of variable 1 to N are written
+first. Then follows the cross-variance images of variables 2 and 1, 3 and 1,
+3 and 2, etc. If
+.B \-wn 
+is set an image containing the number of point-pairs used in the pixels
+is written in the first frame.
+If \-wd
+is specified an extra N frames are written to output, which contains the
+drift values for each variable corresponding to the pixels.
+These matrices are written after the variance-images.
+.sp 0.3
+.I distance- and direction-lags.
+Output is a HIPS-file consisting of
+a sequence of frames each containing a cross-variance matrix. 
+The first frame always contains the covariance-matrix. 
+Lag-statistics are written before the matrix.
+The statistics are placed 
+in the first column of the first three rows and comprise: mean distance, 
+mean angle and number of point-pairs used in the estimate. 
+If
+.B \-wd
+is specified a fourth row containing drift values for the lag in question is
+placed before the semivariance-matrix.
+If
+.B \-wn
+is specified a matrix containing the number of point-pairs used to calculate
+the semivariance-matrix elements is
+placed before the semivariance-matrix.
+.sp 0.5
+A byte-parameter (equal to 1)
+containing information about the type of output
+is written to the extended output-header.
+The name of the parameter is 
+``Semivariance'', ``Covariance'' or ``Cova''.
+.sp 0.5
+Information about the calculations is written to a logfile.
+.SH OPTIONS
+.TP
+.B \-a 
+cross-covariance is calculated instead of cross-semivariance.
+.TP
+.B \-t 
+only the trace of the matrices are calculated and only the trace is written
+to output (as one row).
+.TP
+.B \-sri 
+calculate autocovariances using local means by a method from
+Isaaks & Srivastava (1988).
+.TP
+.BI \-2D \ rows 
+.RI [ cols ] 
+.B rows
+rows and 
+.B cols
+columns (by default square image).
+Origo of the 2 dimensional covariance is placed in the center of the image. 
+The range of the variance-image is specified by option
+.B -r.
+By default the variance is not included in the image. If
+.B rows
+and
+.B cols
+are odd it is possible to include the variance by specifying
+.B -0
+In this case the variance is placed in the center-pixel and the covariance-
+contributions with displacement vectors corresponding to the center-pixel
+are moved to the sorrounding 4 neighbor-pixels. The center-pixel is split
+in 4 triangles determined by the two diagonals. The contributions in the
+upper triangle are included in the North pixel, the contributions in the
+right triangle are included in the East pixel, etc.
+.TP
+.BI \-l \ lag-spec 
+The number of lags is specified by
+.I nlags.
+The lag-intervals are specified either by defining the lags
+separately (format B) or by specifying a maximum range,
+.I max_range
+(format A) which is split up in equally sized lags. 
+.sp 0.5
+.B format A:
+The size of the lags is step =
+.IR max_range /n.
+By default the lags are constructed so that: step, 2*step, ... ,
+.I max_range
+form the upper limits of the lags.
+By setting flag 
+.B c
+the lag-centers are placed in:  0, step, 2*step, ... ,
+.IR max_range ,
+which introduces an extra lag of half size at the origin.
+By default the lag-limits are placed halfway between the lag-centers.
+However, it is possible to limit the size of the lags, so that they
+only include an area near the centers.
+This is done by setting the
+parameter
+.I lag_range
+(default is 0.5).
+Lag i, i = 0, ...,
+.I nlags
+is calculated as: 
+[ i*step \- lag_range*step ; i*step + lag_range*step ].
+.sp 0.5
+.B format B:
+The upper limits of the lags are specified one by one.
+By setting flag
+.B c
+the specified distances constitute the centers of the lags instead of
+the upper limits.
+By default the lag-limits are placed halfway between the
+lag-centers.
+It is possible to limit the size of the lags, so
+that they only include an area near the centers.
+This is done by specifying
+the parameter 
+.IR lag_range .
+Lag i, i = 1, ...,
+.I nlags
+is calculated as:
+[ center[i]\-lag_range ; center[i]+lag_range ].
+This introduces the possibility of overlapping lags, as there are no
+limitations on the size of the coverage
+.RI ( lag_range )
+in this case.
+.TP
+.B \-d \ dir-spec
+The number of of direction-intervals is 
+.I ndirs
+(default is 1).
+Symmetric variances are assumed.
+This implies that direction-intervals
+are only specified in the halfplane [0,pi].
+If no other options are set the halfplane is split up in 
+.I ndirs 
+equispaced intervals, and [pi/n,2pi/n,...,pi] (n = 
+.IR ndirs )
+forms the upper limits of
+the intervals (format A).
+The upper-limits of the direction-intervals can be set specificly by
+.I dir_1, ..., dir_ndirs. 
+All angles are given in degrees (0\-180).
+If the maximum limit
+.RI ( dir_ndirs )
+is smaller than pi the interval
+.RI [ dir_ndirs ,pi]
+is regarded as part of the first interval
+.RI [0, dir1 ]
+(format B).
+.sp 0.5
+Using option
+.B c
+the specified directions are centered. 
+If the directions are equispaced, the intervals are pushed so that 
+[pi/n,2pi/n,...,(n\-1)pi/n] form the centers of the intervals.
+This introduces an extra interval [0:pi/2n, pi\-pi/2n:pi] equal to the
+interval [\-pi/2n, pi/2n] because of the symmetry condition. 
+If
+.I dir_range
+is specified only points within a certain angle-interval from the
+center of the directions are included in the calculations.  
+If the points are equispaced the coverage
+.RI ( dir_range )
+is a relative number between 0 and 0.5, otherwise it is a specific angle.
+.TP
+.BI \-e \ subsamp
+.I subsamp
+specifies the part (between 0 and 1) of 
+.BI \-r \ max_range
+up to which all point-pairs are included.
+Above this lag distance more and more point-pairs are excluded so that
+the number of included point-pairs is constant.
+.TP
+.BI \-m \ missing-value \ \fR[ \fBskip \fR]
+specifies data-value to be skipped in calculations (missing value). 
+If flag
+.B skip 
+is set the entire point-pair is excluded from the calculations if 
+one or more variables are missing in any of the points.
+.TP
+.BI \-n \ neutral-value
+elements of the variance-matrices, which can not be defined are set equal
+to
+.I neutral-value
+(default is 99).
+This is the case if no point-pairs exist within a lag.
+.TP
+.BI \-cova \ cova_file
+The cross-variance is calculated between features in the standard input
+data and features in the file
+.IR cova_file .
+The two datasets may be sampled at different locations and
+they may contain different numbers of features.
+.TP
+.B \-ln
+data are logaritmized before calculations.
+.TP
+.BI \-I \ detection-level
+data are transformed to indicator-variables.
+A detection-limit is
+required for each feature, and data-values below these limits are set
+equal to 0, otherwise 1. 
+.TP
+.BI \-L \ detection-level
+A detection-limit is read for each feature, and data-values below 
+detection-limit are skipped in the further calculations, the rest are not 
+changed.
+.TP
+.BI \-f \ log_file
+name of log-file (default: proces-number).
+.TP
+.B \-w4 
+output-format is float (default: double).
+.TP
+.B \-ws
+lag statistics omitted.
+.TP
+.B \-wd
+drift included in lag-statistics.
+.TP
+.B \-wn
+number of point-pairs used in calculating matrix-elements included in
+lag-statistics.
+.SH SEE\ ALSO
+asc2hips(1), irr2reg(1), reg2irr(1)
+.SH CREDIT
+Allan Aasbjerg Nielsen, IMSOR,
+was very helpful in the planning of the program.
+.SH REFERENCES
+A.G. Journel and Ch.J. Huijbregts (1978):
+"Mining Geostatistics",
+Academic Press, London.
+.sp 0.5
+P.R. Niehuis (1985):
+"Crossv, A simple Fortran 77 Program for calculating 2-Dimensional Experimental
+Cross-variograms",
+Computers and Geosciences,
+Vol. 11,
+pp. 375\-387.
+.sp 0.5
+H.E. Isaaks and R. Mohan Srivastava (1988): 
+"Spatial Continuity Measures for Probabilistic and Deterministic Geostatistics"
+Mathematical Geology,
+Vol. 20, No. 4,
+pp. 313\-341.
+.sp 0.5
+Karsten Hartelius (1992): 
+"Smoothing af irregulaert samplede data", 
+M.Sc. thesis in Danish,
+IMSOR, Technical University of Denmark.
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk

@@ -1,0 +1,93 @@
+.TH XHIPS 1 "8/21/91" "Version 2" "HIPS Manual"
+.SH NAME
+mhips \- HIPS viewer for X-windows on an OSX Mac
+.SH SYNOPSIS
+.B mhips
+[-d display] [-l lut-file] [-L framelabel]
+.ti 2i
+[-n] [-p] [-o] [-s framerate] [-b | -f]
+.SH DESCRIPTION 
+.I Mhips
+is a basic HIPS viewers for the X windows environment which will run on
+absolutely any platform because it uses only Xlib calls.
+It was written based on
+.IR xhips .
+.I Mhips
+opens a window and shows the HIPS image or animates the HIPS image sequence
+in that window. It uses the X11 parameters required for a Mac under OSX
+circa 2009 (i.e., a "truecolor" X11 visual and a color byte order
+corresponding to HIPS color format PFZRGB), and thus may work on other machines
+for which TRUECOLOR is available and this byte order works. It handles
+grayscale, pseudocolor and full color images (both packed formats such as its
+native PFZRGB as well as PFBYTE format with 3 color planes). The
+.I -d
+indicates the X11 server on which to display. The
+.I -l
+flag provides a lookup table (for pseudocolor for
+byte-formatted single-color images, and used separately on each
+color channel for color images) in the same format as required
+by addcmap:
+.sp
+.nf
+.in +1i
+.ta .4i
+#-of-entries
+r(0) g(0) b(0)
+r(1) g(1) b(1)
+	.
+	.
+	.
+r(n-1) g(n-1) b(n-1)
+.in -1i
+.fi
+This lookup table will override a lookup table in the
+image itself. If
+.I -l
+is not specified and the image has a lookup table, it will be used. The
+.I -L
+flag provides a text label for the window; otherwise the input filename will
+be used. If
+.I -n
+is specified, the image sequence (assuming it has more than one frame)
+is not initially animated. The
+.I -p
+switch indicates the movie should be shown palindromically (first to last
+to first...). If
+.I -o
+is specified, the movie
+will initially be animated just once and then will halt. The
+.I -s
+switch specifies the frame rate in frame/sec, which defaults to 15. The
+.I -b
+switch adds a sidebar to the frame which will include (if it fits) a 256x10
+colormap ramp and the frame number. The
+.I -f
+switch puts the frame number on the image itself instead (in the lower-right
+corner).
+.PP
+For movies (more than one frame), the window responds to the following
+keyboard commands:
+.nf
+.in +1i
+.ta .5i 1i
+>	move to next frame (if any)
+<	move to previous frame (if any)
+n	stop movie at the current frame
+p	switch to palindromic mode (and start movie if stopped)
+a	switch to forward-only (nonpalindromic) mode (and start movie
+		if stopped)
+o	switch to play-once mode and start movie from frame 0
+r	switch to play-repeatedly mode (and start movie if stopped)
+q	quit
+.fi
+.in -1i
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, PFZRGB
+.SH "REGION-OF-INTEREST"
+The entire image is displayed.
+.SH AUTHOR
+Michael Landy, based on
+.I xhips
+by Patrick Flynn and
+.I xshow
+by J. Michael Carstensen.

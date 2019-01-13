@@ -1,0 +1,33 @@
+.TH ADDPLOT 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+addplot \- collection of functions to add plot-elements to a plot3d buffer
+.SH SYNOPSIS
+.nf
+addpoint(buf,index,limit,b,x,y,z)
+char *buf;
+double b,x,y,z;
+
+addvec(buf,index,limit,b,x1,y1,z1,x2,y2,z2)
+char *buf;
+double b,x1,y1,z1,x2,y2,z2;
+
+addend(buf,index,limit,x,y,z)
+char *buf;
+double x,y,z;
+.fi
+.SH DESCRIPTION 
+These functions are used to add plot elements (points,
+vectors and half-vectors) to a plot3d buffer.
+It is assumed that the buffer has already been transformed,
+i.e. the shift-vector and the rotation-matrix which are
+associated with the buffer are the zero and identity respectively.
+All functions return the updated buffer-index \- the next
+available space in the buffer.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_BUF - buffer overflow
+.SH AUTHOR
+Yoav Cohen 11/11/82
+.br
+modified for HIPS 2 - msl - 1/3/91

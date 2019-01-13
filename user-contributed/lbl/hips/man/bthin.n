@@ -1,0 +1,29 @@
+.TH BTHIN 1 "1 May 1990" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+bthin \- thins binary objects down to a single pixel line
+.SH SYNOPSIS
+.B bthin
+[-v NN] < inseq > outseq
+.SH DESCRIPTION
+.I bthin
+thins objects in a binary HIPS image to single pixel width lines.
+Image must be of type byte. NOTE: This program uses a very simple
+and fast algorithm, but has some artifacts which are easily correctable.
+It often leave single pixel fragments that can be removed with 
+.I bclean.
+On sharp bends in the object, it often leaves small holes which can
+be filled in with 
+.I fill_holes.
+.sp
+.na
+So a typical command would be: 
+      bthin < inseq | bclean | fill_holes -e > seq
+.SH OPTIONS
+[-v NN]   pixel value for thinned output objects (default = 255).
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH "SEE ALSO"
+bclean(1), fill_holes(1)
+.SH BUGS
+Report to Brian Tierney.

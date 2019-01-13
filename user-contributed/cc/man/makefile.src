@@ -1,0 +1,18 @@
+#
+# makefile for user-contributed/cc/man
+#
+
+MANPAGES = getmean.n hupdown.n idealbp.n isobp.n \
+	normalize.n prune.n revalue.n rflipix.n rtex.n scaleseq.n \
+	shiftmin.n updown.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

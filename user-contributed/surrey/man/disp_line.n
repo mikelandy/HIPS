@@ -1,0 +1,24 @@
+.TH DISP_LINE 1 "September 9, 1987"
+.SH NAME
+disp_line - display a single line `histogram'
+.SH SYNOPSIS
+.B disp_line
+[-m maxcount]
+.SH DESCRIPTION 
+.I Disp_line
+creates a graph image much like that produced by
+.I disphist
+for histogram sequences which were produced by the program
+.IR histo_line .
+These are not really histograms, but rather are  single row or single column
+images which have been converted to HIPS histogram format by
+.IR histo_line .
+Thus, the output of
+.I disp_line
+is actually a grey level graph for a line image.  The maximum input line
+histogram length is 512.  The graph is generally normalized so that the
+largest grey level results in a bar which is the height of the image.  If
+.I maxcount
+is specified, then initially that will be the input value corresponding to the
+full range, but if the input line histogram values exceed that value, they
+will be rescaled so as not to exceed the full graph range.

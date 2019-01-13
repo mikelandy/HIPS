@@ -1,0 +1,13 @@
+
+These programs are to convert between HIPS for rle formats. RLE is
+the format of the Utah Raster Toolkit (URT), and is available from
+cs.utah.edu (128.110.4.21) in the file pub/urt-3.0.tar.Z
+
+These program require the rle library, which is part of this package.
+
+There are some very useful color handling programs in the URT, and a
+very nice X-windows image display program, called getx11. A script 
+which converts HIPS images to RLE images and calls getx11 is
+included here, called Xhips.
+
+Brian Tierney, LBL

@@ -1,0 +1,119 @@
+.TH ANIMA_FORMAT n "1992" "Scry Version 1.3" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+Anima format \- modified Sunvision .vff file format
+.SH DESCRIPTION
+The Anima format is a modification of Sun's .vff (visualization file) format.
+The keywords for a .vff movie file are used in
+the ASCII header, as in the following example.
+.sp
+.nf
+.na
+ncaa
+rank=3;
+type=raster;
+format=Anima;
+size=512 112 100;
+bands=1;
+bits=8;
+colormapsize=126;
+colormap=000000 c8c8c8 b000b0 00a0b0 b0b000 000000 b05858 b0753a b03a75
+2380b0 75a3a 58a858 5850b0 3aa575 42adb8 78b8be b09020 6fb6bd bcbc64 c1c18e
+698669 587c84 309490 6eae6e 699858 69b090 58669a b0842c b0238c b04669 b02c84
+b0644b b09d12 b0327d b04e61 23a38c b0129d 3a6ab0 b01996 b07d32 b0a20d 69a946
+138eb0 28a8b4 64b4bc 3074b0 13a19c 55b1ba b06e42 4b5bb0 c0c085 16a4b2 61a84e
+30a480 4ba664 c4c4a6 b8b842 36aab6 b4b421 bfbf7d b6b636 619561 c3c3a0 baba55
+4b8d7d 616e88 bdbd72 709a50 615a9c 3a8892 3084a0 4b7496 64ab64 23919e 5eae8a
+58926e 69747b 72ac52 618175 74ae64 25a5a0 1190b0 7dab32 3a9684 61b1a3 4eaa81
+6cac5a 67ae7a 5bab71 52ad9d 3ea996 b08c23 b06946 b09619 b0921d b02788 b08827
+b04b64 b07a35 b0614e b0a010 b08030 b09a16 b04070 b0169a b01d92 b06050 b07040
+b0426e 7fb9bf 70aa40 b0347b b05060 b1b10e b2b211 b4b428 baba58 bebe78 b7b73c
+b0a40b c2c296 b6b632 b9b94b b5b52c b9b950 20a290 ;
+^L
+.fi
+.ad
+.sp
+\f2ncaa\f1 is the first line, indicating that this
+is an .vff header.
+\f2rank\f1 indicates the number of dimensions, in
+Anima, three (x*y*num_frames).
+\f2type\f1 is always \f2raster\f1.
+\f2format\f1 indicates the format of the file.  The \f2slice\f1 format
+indicates that this is a canonical .vff movie.  The \f2Anima\f1 format
+indicates that this is a compressed sequence of images with a
+common colormap.  NOTE WELL:  You will have to convert from this
+format to \f2slice\f1 format to use any Sunvision programs on
+the image sequence.
+\f2size\f1 indicates the width, height, and number of frames,
+respectively, of the image sequence.
+\f2bands\f1 indicates the number of color channels (e.g. 1 for
+8-bit).  The only legal value is currently 1.
+\f2bits\f1 indicates the number of bits per band of the image(s).
+The only legal value currently is 8.
+\f2colormapsize\f1 indicates the number
+of entries in the color map.  The \f2colormap\f1 keyword is
+followed by the color map.  Each entry in the color map is an
+RGB triplet in hexadecimal.
+.LP
+An image sequence file
+created by \f3Xserv\f1 and \f3svserv\f1 has a temporary format
+that must be converted to \f2Anima\f1 or \f2slice\f1 by the
+program \f3genonemap\f1 before viewing by \f3Xanima\f1 or
+\f3svanima\f1.
+\f3genonemap\f1 generates a common colormap for all frames
+and converts them to \f2Anima\f1 or \f2slice\f1 format.
+.LP
+If the format is \f2Anima\f1, the compression scheme used is
+a combination of CCC [CHANGE: REF] and run-length encoding.
+It is described in the man page for the \f2a2bitmovie\f1
+demo used with the Sun TAAC board [CHANGE: REF].
+An \f2Anima\f1 file has a footer in ASCII format.
+The following is an example:
+.sp
+.nf
+.na
+anima
+number of frames=         765
+bytes to footer =     4848889
+0 1976 0
+1 1984 2977
+2 1984 4961
+3 1968 6945
+4 1956 8913
+5 1984 10869
+6 1980 12853
+7 2016 14833
+    ...
+    ...
+    ...
+760 7104 4813361
+761 7076 4820465
+762 7092 4827541
+763 7100 4834633
+764 7156 4841733
+^L
+.fi
+.ad
+.sp
+The footer can be viewed using the command \f3tail -r Animafile | more\f1,
+which views the end of the file in reverse order.  The last line
+is \f2anima\f1, indicating an Anima footer.  \f2number of frames\f1
+indicates the number of frames.  \f2bytes to footer\f1 indicates
+the position in the file of the beginning of the footer.
+Following are \f2number of frames\f1 lines indicating each frame
+number, the number of bytes in that compressed image, and its
+offset within the file.  This information is necessary because,
+with the compression used, compressed images are of variable
+size.
+.LP
+Two sample Anima files are provided in \f2scry/Anima/data\f1.
+\f2dye2d.vff\f1 is a sequence made from data provided
+by James Sethian of U.C. Berkeley and A. Ghoniem of MIT,
+showing 2D flow over a backward facing step.  \f2skull.vff\f1
+is a sequence made from X-ray CT and calculated radiation
+dose data provided by Thomas Budinger and Marc Kessler
+of Lawrence Berkeley Laboratory.
+.SH AUTHOR
+David Robertson
+.SH "SEE ALSO"
+.B Xanima(n), svanima(n), Xserv(n), svserv(n), clientlib(n),
+.B anima_utils(n)

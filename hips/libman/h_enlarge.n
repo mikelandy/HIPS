@@ -1,0 +1,91 @@
+.TH H_ENLARGE 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_enlarge \- subroutines to enlarge an image by pixel replication
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_enlarge(hdi,hdo,xf,yf)
+h_enlarge_b(hdi,hdo,xf,yf)
+h_enlarge_i(hdi,hdo,xf,yf)
+h_enlarge_f(hdi,hdo,xf,yf)
+h_enlarge_c(hdi,hdo,xf,yf)
+struct header *hdi,*hdo;
+int xf,yf;
+
+h_enlarge_B(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+
+h_enlarge_I(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+
+h_enlarge_F(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+
+h_enlarge_C(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo,xf,yf;
+.fi
+.SH DESCRIPTION 
+These routines enlarge an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo )
+by pixel replication.
+.I h_enlarge
+calls
+.IR h_enlarge_b ,
+.IR h_enlarge_i ,
+.I h_enlarge_f
+or
+.I h_enlarge_c
+depending upon whether the pixel format is byte, integer, float or complex.
+.IR h_enlarge_B ,
+.IR h_enlarge_I ,
+.I h_enlarge_F
+and
+.I h_enlarge_C
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  Each input pixel is replicated to fill a rectangle with
+.I xf
+columns and
+.I yf
+rows.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, integer, float, complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_ienlarge(3), h_ienlarge3(3), h_reduce(3)
+.SH AUTHOR
+Michael Landy - 1/12/91

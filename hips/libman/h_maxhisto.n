@@ -1,0 +1,32 @@
+.TH H_MAXHISTO 3 "7/2/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_maxhisto \- subroutines to compute the maximum bin of a histogram
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+int h_maxhisto(histo)
+struct hips_histo *histo;
+
+int h_Maxhisto(histo,nbins)
+int *histo,nbins;
+.fi
+.SH DESCRIPTION 
+These routines compute the maximum count in the bins of a histogram
+(specified by
+.IR histo ).
+The result is returned by each routine.
+.I h_maxhisto
+calls
+.IR h_Maxhisto ,
+which is the low-level routine which doesn't require a histogram structure.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+histogram
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+None
+.SH "SEE ALSO"
+h_disphist(3), h_histo(3)
+.SH AUTHOR
+Michael Landy - 7/2/91

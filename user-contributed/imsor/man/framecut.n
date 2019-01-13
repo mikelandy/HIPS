@@ -1,0 +1,26 @@
+.TH framecut 1hips "October 1, 1990" 
+.SH NAME
+framecut - cut a frame into more frames
+.SH SYNOPSIS
+.B framecut
+[-l len | -lv len | -lh len] [-c space | -cv space | -ch space] 
+.SH DESCRIPTION 
+.I Framecut
+cuts a frame into more new frames each with side length <len>. 
+The side lenght may differ in the 
+horisontal (-lh) and vertical (-lv) directions. 
+The center of the output frames are spaced <space> pixels apart in the input frame
+so the output frames may be overlapping.
+This option can also be different in horisontal and vertical directions.
+If an output frame reaches outside the edge of the input frame it is filled with zeros.
+.br
+<len> defaults to 16 and <space> defaults to the value of <len>.
+.br
+The input sequence can be in byte, short int, int,
+float, complex, double, or double complex format and the output has the
+same format.
+.SH SEE\ ALSO
+frameglue(1hips)
+.SH AUTHOR
+Carsten Kruse Olsson, IMSOR, Technical University of Denmark,
+e-mail: cko@vip.imsor.dth.dk

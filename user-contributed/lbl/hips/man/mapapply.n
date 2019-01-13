@@ -1,0 +1,25 @@
+.TH mapapply HIPS "31 January 1991" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+.B mapapply 
+- Filters an image through a previously generated look-up-table of values.
+.SH SYNOPSIS
+.B mapapply 
+tbl_name < inseq > outseq
+.SH DESCRIPTION
+.I mapapply 
+Maps each gray value in an image to its corresponding value in a specified
+look-up-table.
+.SH OPTIONS
+.SH AUTHOR
+Bryan Skene, LBL        email: skene@lbl.gov
+.SH SEE ALSO
+powertbl(1), logtbl(1), stretchtbl(1)
+.SH DIAGNOSTICS
+.PP
+This program may run out of memory if the object size is too large
+or if it is given a non-binary image.
+
+Only byte or short formatted images can be processed.
+.SH BUGS
+Report to Bryan Skene.

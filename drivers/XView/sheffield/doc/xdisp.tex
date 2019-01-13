@@ -1,0 +1,255 @@
+\documentstyle[titlepage]{article}
+
+\begin{document}
+
+\title{Image Processing With Xdisp}
+\author{Ian Staniforth\\
+School of Mathematics and Statistics\\
+Sheffield University}
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+{\bf xdisp} is a visualization tool for HIPS images on SUN OpenWindows systems. It features
+\begin{itemize}
+\item graphical HIPS image display using the X windowing system;
+\item pan and zoom;
+\item variable colormap look up tables (LUTs) with gamma control;
+\item support for HIPS colormaps;
+\item definition of polygonal regions within images;
+\item direct support for HIPS data types byte,short,int,float,double,complex;
+\item multiframe overlays in different colors.
+\end{itemize}
+{\bf xdisp} works best on 8-bit (256) color monitors, although other X servers with fewer colors are supported (with poorer resolution). 24-bit color is not yet supported.
+\section{Usage}
+{\bf xdisp} reads a HIPS image either from a single filename or from {\it stdin\/} at the end of a pipe. For example:
+\begin{quote}
+{\bf xdisp} {\it filename}
+\end{quote}
+or
+\begin{quote}
+{\bf histoeq} {\it filename} $\mid$ {\bf xdisp}
+\end{quote}
+{\bf xdisp} occasionally writes to {\it stderr\/} and can write to named files, but produces no output on {\it stdout\/}.
+
+There are several options to control startup. These are listed in the {\bf man} page, and discussed in detail below.
+
+\section{Getting Started}
+When {\bf xdisp} starts up, it produces a window in the top left hand corner of the screen with the image rendered in it. The window is sized to match the image, but with a default maximum size of 500 pixels in width or height. If the image is larger than this, only the top left hand section is shown. The {\bf -size} option can be used to change the default maximium window size; for example to get a 768 (rows) by 512 (columns) window at startup, use
+\begin{quote}
+{\bf xdisp -size 768 512} {\it filename}
+\end{quote}
+Once the window appears, it can be resized to show more or less of the image. If the window is bigger than the image, unused areas are shown in black. 
+
+If the HIPS image has a {\it cmap\/} extended parameter, this Lut is used to render the image, otherwise a grayscale Lut is used. Other Luts are discussed later.
+
+Above the image is a text area describing the current cursor position. Move the cursor into the window and you will see it change.
+A typical layout might look like 
+\begin{quote}
+{\bf [0] (30,50) = 10}
+\end{quote}
+This indicates that frame 0 is being shown (frames are numbered $0,1,2,\ldots$), that the cursor is at row 30, column 50, and that the data value (of the underlying data) at that point is 10. The default cursor is a cross-hair with a width of 3 pixels in the middle---this can be changed via a menu and is described more fully below.
+
+In order to render the image into the available number of colors, {\bf xdisp} linearly scales the underlying data (using the same algorithms as the HIPS {\bf scale} function) into an internal representation of 256 pixel values. Thus the first frame determines the scaling limits for all frames in the image. As with the {\bf scale} function, there is an option {\bf -e} which modifies this behaviour so that each frame is scaled according to its own limits. Note that the data value displayed is always the underlying data value at that point, not the scaled data.
+
+In order to avoid colors clashing with those already in use by other applications on the screen, {\bf xdisp} uses as many colors as are currently unused in the X default colormap. This usually gives satisfactory results, but if you want a different number of colors, there is a {\bf -colors} option to change it. {\bf xdisp} always preserves black and white, so it will use a maximum of 2 less than the number of colors physically available on the system (usually 254).
+
+To quit {\bf xdisp}, either quit the window using the OpenWindows menu, or use CTRL-C in the calling window. Note that {\bf xdisp} has several windows which pop up from choices on menus---quitting any of these using the OpenWindows menu will terminate {\bf xdisp}. 
+
+\section{Control}
+{\bf xdisp} is controlled from a control window which is popped up by pressing the right mouse button when the cursor is in the main image window. The control window is toggled, and can be popped down by pressing the same mouse button again with the cursor in the main window. The buttons in the control window are now described.
+
+\subsection{Frame}
+If your image has more than one frame, you can select another frame by clicking with the left mouse button on the number of the frame you want. Note that frames in {\bf xdisp} are numbered $0,1,2,\ldots$. The button marked * controls the overlaying of multiple frames and is discussed in the section on overlays later.
+
+When a frame is chosen, it takes a little time for the image to be redrawn. This is because {\bf xdisp} tries to save on memory and startup time by only drawing images when it needs to. This default behaviour can be modified by using the {\it pixmap cache\/} option under the properties menu described later.
+
+\subsection{Zoom}
+You can zoom in to the image by clicking with the left mouse button on the required zoom level. Again this takes a little time to redraw. Pixel replication is used to achieve the zoom effect. The main window does not change size under zoom operations, so differing amounts of the image will be shown when changing levels. However, the top left hand corner of the image is always used as a reference point for the magnification whenever possible.
+
+\subsection{Lut}
+A Lut, or Look Up Table, is used to map pixel values to colors on the screen. On 8-bit displays, there can be a maximum of 256 different colors on the screen at the same time. As noted previously, {\bf xdisp} converts various input data types into an internal byte form (256 pixel values) before rendering an image on the screen. Default Luts for monochrome and pseudocolor viewing are supplied. In addition, if the HIPS image has its own colormap (Lut) given by a {\it cmap\/} parameter in the header, this is also made available. 
+
+Because the default Luts have 256 entries, there is a many-one mapping from a Lut to the number of available colors. This explains why different pixel values can get rendered to the same color in the image. However, if a HIPS Lut is available which has fewer entries than the number of colors available, then the mapping is one-one.
+
+Selection of Luts takes place by clicking the left mouse button on the Lut required. Normally the Lut is changed immediately, but if the new Lut is a different size to the current Lut, the image has to be redrawn to take account of this, and some delay may be experienced. You can add your own Luts to the default list when you build {\bf xdisp} from the released software---the section on installation describes how to do this.
+
+\subsection{Cursor}
+The cursor which appears in the main image window can be changed by clicking with the left mouse button on the required cursor name. Additional cursors can be defined at installation time---the section on installation describes how to do this.
+
+\subsection{Windows}
+{\bf xdisp} has a number of pop-up windows which are available under this menu. Click with the left mouse button on the required window name. These windows can be popped down by clicking again on the same name to turn the button off. Note that the pop-up windows can be iconified separately. Also, using the OpenWindows menu on a pop-up window to quit it will cause {\bf xdisp} to terminate.
+
+The pop-up windows are described below.
+
+\section{Pan}
+When the image is bigger than the displayed window, you can pan around by popping up the Pan window. This is a small window showing a subsampled version of the current frame with a box marking the limits of the main image window. The box can be picked up and moved around by pressing the left mouse button and keeping it depressed while moving the cursor to the desired spot in the pan window. The cursor is attached to the top left hand corner of the box. Releasing the mouse button drops the box at that spot and draws the appropriate section of the image in the main window. The box changes size if zooming takes place.
+
+The pan window is not resizable.
+
+\section{Gamma}
+The contrast of the colors used to render the image can be changed by use of the Gamma window facilities. The window consists of a picture of the histogram corresponding to the current frame, a colorbar showing the current mapping of all 256 internal pixel values, 2 slider bars (upper and lower), and 2 integer indicators of the position of the sliders. The sliders can be moved to change the contrast as follows: all pixel values less than the lower slider value are rendered in the lowest color in the current Lut, and all pixel values above the upper slider value are rendered in the highest color of the current Lut. Pixel values in between these two limits are rendered on a linear ramp between the limits. Note that the lowest and highest values in the default Luts are black and white respectively.
+
+In order to view a certain range of pixels in an image, it is sometimes desirable to have the background values (less than the lower limit and greater than the upper limit) rendered in the same color. This can be achieved by using the {\it extreme values\/} menu under the properties window described later.
+
+\section{Properties}
+Various properties of the display can be changed by using the Properties window.
+
+\subsection{float precision}
+If the underlying data type of the image is float or complex, this property specifies how many decimal points are shown in the value field in the main image window. It also controls the precision of statistical results.
+
+\subsection{complex numbers}
+If the underlying data type of the image is complex, this property controls whether complex numbers are displayed in rectangular ($x+iy$) or polar ($(r,\theta): -\pi < \theta \leq \pi$) format.
+
+\subsection{distributions}
+The histograms in the Gamma window can be displayed either as histograms or cumulative density functions. This menu chooses between the two.
+
+\subsection{extreme values}
+As pointed out in the Gamma section, pixel values below the lower slider value are rendered in the lowest color in the Lut, and pixel values above the upper slider value are rendered in the highest color in the Lut. This is known as low/high (l/h). This menu offers low/low (l/l), high/high (h/h) and high/low (h/l) in addition. These facilities are useful for concentrating on a set range of pixel values.
+
+\subsection{color scheme}
+This menu chooses between the RGB and CMY color models, and is only applicable to overlay mode. It is discussed further in the overlay section.
+
+\subsection{pixmap cache}
+To save time at startup, and to economize on memory usage, {\bf xdisp} only draws image sections (pixmaps) when required. This can result in tedious delays when changing frames or panning around. The bigger the main image window, the longer the delay. To circumvent this, pixmap caching is offered. When this mode is turned on, the first time a section of an image frame is required, the whole frame is drawn in an off-screen pixmap. Sections of the frame can then be copied to the screen at high speed when panning or changing frames. Obviously, it takes some time to fill the cache initially, and also imposes a heavier burden on memory usage.
+
+Note that images zoomed at greater than level 1 are never cached.
+
+Also note that the cache has to be cleared when the image is redrawn as a result of changing to a Lut of a different size.
+
+\section{Info}
+The data from the image header (as displayed by the HIPS {\bf seeheader} function) is available by opening this window.
+
+\section{Polygons}
+One of the main features of {\bf xdisp} is the facility  to interactively define polygonal areas on the image. Polygons of interest (POIs) are rather like HIPS regions of interest (ROIs), except that several polygons can be associated with a single image, either in the image header or in a separate file. The HIPS extended parameter mechanism is used to store polygon information in headers. The idea is that the user defines polygons interactively, saves them, then writes a HIPS style program to process the polygonal areas of the image. A sample program is included in the software distribution to show how to do this.
+
+A polygon is a list of vertices in (row,column) format. {\bf xdisp} keeps a linked list of currently defined polygons.
+
+The polygons window is a set of on/off buttons describing various actions to do with handling polygons. The buttons have left to right precedence, when more than one is set.
+
+\subsection{Define}
+To define a polygon, click with the left mouse button on this menu button. The menu button is set to on. Now click with the left mouse button in the main image window. This defines a vertex at that point (where the cursor is). Continue in this way adding vertices. The polygon edges are drawn as you click around the area. The final edge back to the starting vertex is automatically added when the {\it Define\/} button is clicked again (into the off state). This procedure can be repeated for additional polygons. Points and lines are allowed as polygons. 
+
+Note that polygons can be defined at higher zoom levels for finer control. In this case, {\bf xdisp} draws the edges to and from the top left hand corner of each zoomed pixel.
+
+Polygons can self-intersect. In this case the inside of the polygon is determined using the X windows EvenOddRule. See the X documentation under XPolygonRegion for further details.
+
+\subsection{Name}
+Polygons can be given names. Click the left mouse button on the {\it Name\/} menu button. The button is set to the on state. If you now click on a polygon vertex, a window pops up to ask you for a polygon name. If the selected polygon already has a name, it is renamed. You don't have to be too exact with selecting a vertex---there is a gravity field of 5 pixels in each direction around each vertex. The name itself attaches to the last vertex which was drawn when the polygon was defined. 
+
+The significance of names is explained in the {\it File\/} menu section below.
+
+Turn off naming by clicking again on the {\it Name\/} button.
+
+\subsection{Edit}
+If you don't like the shape of your polygon, it can be edited. The location of the vertices (but not their number) can be changed with the {\it edit\/} action button. Click on this to set it. You can now pick up a polygon vertex with the left mouse button, move it by moving the mouse with the button pressed, then dropping it to a new location by releasing the mouse button. As with naming, a gravity field surrounds each vertex.
+
+Turn off editing by clicking again on the {\it Edit\/} button.
+
+\subsection{Delete}
+Click the left mouse button on the {\it Delete\/} menu button. The button is set to the on state. To delete a polygon, click the left mouse button near one of its vertices. 
+
+Turn off delete mode  by clicking again on the {\it Delete\/} button.
+
+\subsection{Hide}
+This is a toggle button which can be used to hide the current set of polygons.
+
+\subsection{Clear}
+Caution! This is not a toggle button. Clicking once with the left mouse button will clear all currently defined polygons.
+
+\subsection{Stats}
+This is also not a toggle button. Clicking with the left mouse button here will cause a set of simple statistics to be calculated for all the pixels currently lying within the set of defined polygons. The output is sent to {\it stderr\/}, which is usually the calling screen. Statistics can take a little time to calculate, so hang loose. The statistics calculated (all in double precision) are as follows:
+\begin{enumerate}
+\item The number of polygons currently defined;
+\item The area $n$ (in pixels) of the current set of polygons as a ratio of the total image area;
+\item The mean $\mu$ ($=\Sigma x /n$);
+\item The second moment about zero ($=\Sigma \mid x \mid^2/n$);
+\item The second moment about the mean $\mu$ ($=\Sigma\mid x-\mu\mid^2/n$);
+\end{enumerate}
+
+\section{File}
+Polygon information is only useful if it can be saved for further processing, and loaded again at a later date. Clicking with the left mouse button on the {\it File\/} item brings up a menu of file commands. There are two types of file: polygon files and HIPS headers. Polygon files are designed to fit in with the extended parameters scheme associated with HIPS headers. An extended parameter takes the form of 
+\begin{enumerate}
+\item A text name. Polygons are signalled by a {\it .poi\/} suffix;
+\item A parameter format. Polygons are always {\it i\/} (integer);
+\item An integer specifying the number of following items. For polygons this is 2 times the number of vertices;
+\item The data items. For polygons, this is a list of vertices (row,column).
+\end{enumerate}
+The file menu allows you to load and save polygon files or HIPS headers (without the associated image).
+
+\subsection{Load Polys}
+If a set of polygons has already been saved using the {\it Save Polys\/} command, they can be reloaded using this menu item. Clicking with the left mouse button pops up a window for you to enter the file name of the file to load. All polygons in the file are then loaded.
+
+Note that the file contents are appended to the current list of polygons. If this is not the desired effect, use the {\it Clear\/} button under the {\it Polygon\/} menu to clear the current polygons first.
+
+\subsection{Save Polys}
+The current list of polygons is saved as a polygon file. Clicking with the left mouse button pops up a window for you to enter the file name of the file to save to. If the file already exists, it is overwritten. The file contents can be reloaded at a later time by using the {\it Load Polys\/} button.
+
+The format of the file is defined above. The name of each polygon is that given by the {\it Name\/} action on the {\it Polygon\/} menu, with a {\it .poi\/} suffix. If a polygon has not been named, it is simply called {\it .poi\/}.
+
+The file is an ordinary text file and can be edited, although this is not recommended.
+
+\subsection{Load Header}
+If a set of polygons has already been saved in a HIPS header using the {\it Save Header\/} command, they can be reloaded using this menu item. Clicking with the left mouse button pops up a window for you to enter the file name of the header file to load. All polygons in the header are then loaded. The header is only used for its polygons---the rest of it is ignored. Polygons are recognised in the extended parameter section of the header by a {\it .poi\/} suffix.
+
+Note that the header contents are appended to the current list of polygons. If this is not the desired effect, use the {\it Clear\/} button under the {\it Polygon\/} menu to clear the current polygons first.
+
+\subsection{Save Header}
+The current list of polygons is written to a copy of the HIPS header derived from the input file. The header is then saved (without the associated image) as a file. Clicking with the left mouse button pops up a window for you to enter the file name of the file to save to. If the file already exists, it is overwritten. The header contents can be reloaded at a later time by using the {\it Load Header\/} button.
+
+Polygon names are suffixed by {\it .poi\/} before inclusion in the header.
+
+An image can easily be attached to the saved header by using the HIPS {\bf stripheader} function, then cat'ing the new header with the resulting image.
+
+\subsection{Print Image}
+A color PostScript (encapsulated) print of the image can be sent to a file by using this button. Clicking with the left mouse button pops up a window for you to enter the file name of the file to save to. The current visible portion of the drawing window is rendered into the file. Note that parts of the window which are obscured by other windows are not reproduced.
+
+\section{Overlays}
+A major feature of {\bf xdisp} is its ability to overlay frames of data from the same image in colors corresponding to each of the 3 guns on a color monitor.
+
+When the image has more than one frame, an extra button (*) appears on the {\it Frame\/} menu. Clicking with the left mouse button on this will pop up an overlay chooser consisting of a set of frame numbers for each of the Red,Green and Blue guns on the monitor. Choose which frames you want to overlay (these need not be all distinct), then select the {\it Draw\/} button with the left mouse button. A 6x6x6 color cube is then used to render all 3 frames on the screen simutaneously. The text field at the top of the main image window changes to display the underlying data from all 3 frames at the point where the cursor is. The overlaid image is treated as an extra virtual frame on the end of the image and can be selected, panned, zoomed and cached in the same way as the other frames. The Lut menu is disabled. Polygons are displayed and can be manipulated in the usual way.
+
+Although 6 colors each of red, green and blue might seem rather crude, the use of the overlay mechanism is greatly increased by the enhanced Gamma control. The Gamma window is expanded to contain 3 separate controls, one for each color gun. 3 histograms are displayed (corresponding to the frames selected) and separate gamma control sliders are supplied for each color. The 6 colors used for each gun are clearly visible. Each slider controls its own color contrast separately from the other colors. The whole of the 6 color range for each gun can be compressed to enhance a restricted range of pixels as follows. It may be obvious from the histogram for a particular frame that most of the pixels have been rendered into one color because of their restricted range. To get round this, use the sliders for each frame to narrow down to a range of pixels, then press the {\it Draw\/} button again with the left mouse button. The 3 frames are now redrawn with the whole of the contrast range for each color compressed into the narrowed ranges. The sliders are reset to their outer positions, but are now  less sensitive, as you will see by experimenting. Each time the {\it Draw\/} button is selected the overlay is redrawn with the current position of the sliders (NOT the integer indicators) used to determine the new contrast ranges. All this is much easier done than said!
+
+While in overlay mode, the {\it color scheme\/} menu on the {\it Properties\/} window is enabled. This allows you to choose the CMY (Cyan, Magenta, Yellow) color model instead of the more usual RGB (Red, Green, Blue) model. Note that CMY is a subtractive model, so that the dynamic range of the image is inverted (lighter to darker and vice versa) and the sliders work in the opposite sense (subtracting instead of adding color).
+
+Although the {\it extreme values\/} menu under {\it Properties\/} is not disabled in overlay mode, its use is not recommended. However, some quite interesting effects can be achieved by combining this with the {\it color scheme\/} selector. Use for amusement only!
+
+\section{Installation}
+The software distribution has a text INSTALL file describing local installation issues. This section discusses two user-configurable features of the program: LUTs and cursors.
+
+\subsection{LUTs}
+A LUT is a file in the /luts subdirectory which defines the LUT in C code. The name of the file is the name which appears on the menu in {\bf xdisp}. The file consists of a line giving the size of the LUT, followed by a C definition with that number of entries for red, green and blue. The values are between 0 and 255 (0x0 to 0xff in hex), where 0 represents the darkest, and 255 the brightest shade.
+The name of the file must be appended with ``\_lut\_n'' and ``\_lut'' for these two items.
+So a LUT {\it mydef\/} of size 256 might look like:
+\begin{verbatim}
+static int mydef_lut_n = 256;
+static unsigned char mydef_lut[] = {
+0x0,0x10,0x17,0x1c,0x20,0x24,0x27,0x2a,  /* 256 red values */
+...
+0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,         /* 256 green values */
+...
+0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff, /* 256 blue values */
+...
+  };
+\end{verbatim}
+\subsection{cursors}
+A cursor is a file in the /cursors subdirectory which defines the cursor in C code. A bitmap editor (such as supplied with the X windows system) can be used to help create the file. As for LUTs, the filename is the name which appears on the {\bf xdisp} menu, and the name must appear in the internal declarations in the file. As an example, {\it mycursor\/} might be defined as:
+\begin{verbatim}
+#define mycursor_width 21
+#define mycursor_height 21
+#define mycursor_x_hot 10
+#define mycursor_y_hot 10
+static unsigned char mycursor_bits[] = {
+  /* cursor bits */
+};
+#define mycursor_mask_width 21
+#define mycursor_mask_height 21
+static unsigned char mycursor_mask_bits[] = {
+  /* mask bits */
+};
+\end{verbatim}
+This is most easily done by using a bitmap editor to create two files, one for the cursor, and one for the mask, then concatenating them, and editing if necessary. It sounds complicated, but is fairly easy once you've got the hang of the bitmap editor. I use the OpenWindows {\bf bitmap} command, although most X systems will have an equivalent.
+\end{document}
+

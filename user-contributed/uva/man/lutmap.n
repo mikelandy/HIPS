@@ -1,0 +1,22 @@
+.TH LUTMAP 1BIPS "January 2, 1986"
+.SH NAME
+lutmap - to use an LUT data file to map an image into an RGB sequence. 
+.SH SYNOPSIS
+.B lutmap
+<lut data file> < input seq  > output seq
+.SH DESCRIPTION
+.I Lutmap 
+is a filter procedure that allows the LUT function in the image display
+hardware to be performed within a pipe.
+.I Lut data file
+is the output file from either of the programs
+.I rdlut
+or
+.I lutmake
+.  The directory in which the file resides can be either defaulted
+(to /usr/files/lut) or can be included with the file name by beginning
+the file name with a directory designator (/ or .) .  
+.SH SEE\ ALSO
+rdlut(1BIPS), lutmake(1BIPS)
+.SH AUTHOR
+Chuck Carman - 11/18/85

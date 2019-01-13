@@ -1,0 +1,26 @@
+.TH SCALE_ALL 1 "May 10 1993" "Version 2" "HIPS Manual"
+.SH NAME
+scale_all \- scale a sequence of images
+.SH SYNOPSIS
+.B scale_all 
+.RI < input-seq  
+.RI < output_seq
+
+.SH DESCRIPTION
+.I scale_all 
+scales an input sequence. The scaling is linear (opix \= b*ipix + c, where
+c defaults to zero). The scale factors are based on pixel values in all
+frames. If switch
+.B load 
+is specified the program loads all frames into the memory, and avoids 
+reading each frame twice, which means that it is possible to 
+pipe data into the program.
+
+.SH SEE ALSO
+	scale(1) 
+
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk 

@@ -1,0 +1,42 @@
+.TH POWERPIX 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+powerpix \- raise to a power and normalize each pixel of a frame
+.SH SYNOPSIS
+.B powerpix
+[-p power]
+.SH DESCRIPTION 
+.I Powerpix
+applies a power function to each pixel.  For byte images, it renormalizes to
+fit in the range 0-255, resulting in a byte formatted output image.  For
+short, integer and floating point images, no renormalization is performed, and
+the resulting image is in floating point format.  The power defaults to .5.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float
+.SH "OUTPUT PIXEL FORMATS"
+byte (for byte input), float (for all other input)
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+logimg(1), stretchpix(1), scale(1)
+.SH AUTHOR
+Yoav Cohen - 2/16/82
+.br
+added int/float - Mike Landy - 3/16/89
+.br
+look-up tables - Brian Tierney, LBL 10/90
+.br
+Hips 2 - msl - 1/10/91

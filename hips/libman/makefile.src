@@ -1,0 +1,40 @@
+#
+# makefile for hips/libman
+#
+
+MANPAGES = \
+	h_abdou.n h_abs.n h_absdiff.n h_add.n h_addcos.n h_addgabor.n \
+	h_affine.n h_and.n h_applylut.n h_avg.n h_bclean.n h_bnoise.n \
+	h_btorle.n h_checkers.n h_clearhisto.n h_colorkey.n h_combine.n \
+	h_conj.n \
+	h_convolve.n h_copy.n h_correl.n h_dct.n h_diff.n h_discedge.n \
+	h_discedge2.n h_disphist.n h_dither.n h_div.n h_divscale.n \
+	h_dotdiff.n h_enlarge.n h_entropy.n h_entropycnt.n h_exp.n \
+	h_extract.n h_extremum.n h_fastaddcos.n h_fft2.n h_filter.n \
+	h_flipquad.n h_fourtr.n h_fourtr3d.n h_gaussmask.n h_gnoise.n \
+	h_greybar.n h_gridwarp.n \
+	h_halftone.n h_hardthresh.n h_hconvolve.n h_histo.n \
+	h_histoeq.n h_ienlarge.n h_ienlarge3.n h_invert.n h_invfourtr.n \
+	h_invfourtr3d.n \
+	h_linscale.n h_log.n h_mask.n h_max.n h_maxabsp.n h_maxhisto.n \
+	h_maxp.n h_mean.n h_median.n h_minabsp.n h_minmax.n h_minp.n \
+	h_minroi.n h_morphdil.n h_morphero.n h_mul.n h_mulscale.n \
+	h_neg.n h_noise.n h_nonisot.n h_or.n h_pixmap.n h_power.n \
+	h_pyrdisp.n h_quadscale.n h_reduce.n h_reflect.n h_rletob.n h_rot180.n \
+	h_rot90.n h_sample.n h_scaleadd.n h_sepconv.n \
+	h_seqord.n h_setimage.n h_shift.n \
+	h_shuffleadd.n h_slice.n h_softthresh.n h_stats.n h_stretch.n \
+	h_stretchimg.n h_thicken.n h_thin.n h_translate.n h_transpose.n \
+	h_vconvolve.n h_walshtr.n h_wgauss.n h_wtsum3.n h_xor.n h_zc.n \
+	h_zoneplate.n
+
+install:	libman-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristinelibman-pgm

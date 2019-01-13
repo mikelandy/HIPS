@@ -1,0 +1,66 @@
+.TH RLE 1 "7/23/91" "Version 2" "HIPS Manual"
+.SH NAME
+rle \- run length encoding of binary sequences
+.SH SYNOPSIS
+.B rle
+[-b | -w] [-s] [-g | -a > out_sequence] < input_sequence 
+.SH DESCRIPTION 
+.I Rle
+gives statistics on compression of a binary sequence using run-length encoding
+which is performed separately for each image row.
+.PP
+.I -g
+indicates that actual code should be generated.
+.I -a
+generates code in ASCII (with no header output).
+.I -s
+reports statistics on each individual frame.
+.I -b
+denotes that each line must begin with a black pixel.  If this is not the
+case, the first pixel is set to black (0).
+.I -w
+is the same as
+.IR -b ,
+but for white.  If neither
+.I -b
+nor
+.I -w
+is specified, the first output bit for each line specifies the color.
+.PP
+The input must be in byte-unpacked-format with 1 bit per pixel.  If
+.I -g
+is specified the actual code is generated.  It is left shifted and packed,
+with last word of each frame padded with 0's to the right.  Compression
+statistics are given on ``stderr''.  The program computes the number of input
+bits, output bits and compression ratio.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "OUTPUT PIXEL FORMATS"
+RLED, RLEW or RLEB (with
+.IR -g ,
+and which format depends on the presence or absence of switches
+.I -b
+and
+.IR -w )
+.SH "REGION-OF-INTEREST"
+The region-of-interest is ignored and the entire image is coded.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+dpcm(1), dpcm_r(1), rle_r(1)
+.SH AUTHOR
+Yoav Cohen - 5/23/83
+.br
+HIPS 2 - msl - 7/23/91

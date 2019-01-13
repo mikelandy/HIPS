@@ -1,0 +1,22 @@
+.TH POLYFIT_LINE 1 "February 2, 1988"
+.SH NAME
+polyfit_line - compute a polynomial fit to a single line of data
+.SH SYNOPSIS
+.B polyfit_line
+[-dn] [-w] [-v] [-c]
+.SH DESCRIPTION 
+.I Polyfit_line
+fits an n-th order polynomial to a single line of image data, resulting in a
+histogram formatted image with the fitted values.  The order of the fitted
+polynomial may be specified using
+.IR -d ,
+and defaults to 3.  Using
+.I -w
+specifies a weighted fit (not yet implemented).  The input images must be
+single image rows, or if
+.I -v
+is specified then single image columns.  The default is to produce one fit per
+input frame.  If
+.I -c
+is specified, then the fits from the successive frames are collapsed to a
+single output frame.  This program handles byte-formatted images.

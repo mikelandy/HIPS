@@ -1,0 +1,119 @@
+.TH HIGHPASS 1 "8/9/91" "Version 2" "HIPS Manual"
+.SH NAME
+highpass \- apply a highpass filter to a sequence
+.SH SYNOPSIS
+.ta 1i
+.B highpass
+[-b | -r] [-d metric] [-f filterno | -p highcut [highorder]]
+.br
+	[-I | -B | -E] [-s | <inseq] >outseq
+.SH DESCRIPTION 
+.I Highpass
+calculates a highpass filter Modulation Transfer Function (MTF) and either
+outputs that MTF as
+a floating point image (with
+.IR -s ),
+or multiplies that MTF by an input
+image sequence.  The user may specify one of a standard set of highpass
+filters (with
+.IR -f ),
+or specify the precise filter desired (using
+.I -p
+for the filter parameters, and
+.IR -I ,
+.I -B
+or
+.I -E
+to specify which filtering method:
+Ideal, Butterworth or Exponential, which defaults to Ideal).  Filters are
+parameterized by the cutoff frequency, and for Butterworth and Exponential
+filters, by the order of the filter.
+.PP
+The input sequence must be of images in the Fourier domain (represented
+in complex or double complex format), or of spectra (represented in float or
+double format), e.g. as output by
+.IR fourtr (1).
+If the
+.I -s
+option is specified
+no input is expected, and the program outputs the MTF of the filter in float
+format.  The MTF is plotted on a 128X128 picture.  Of course, the program
+may be used with a uniform frame input which consists entirely of 1's in
+order to compute a general MTF in any of the four formats.
+Option
+.I -d
+specifies the distance metric used to compute frequency (the
+Minkowski exponent, which defaults to 2, for a Euclidean metric, which
+results in an isotropic filter).
+.PP
+Option
+.I -f
+specifies a standard filter number according to the following
+list (the default filter is number 1 if neither
+.I -f
+nor
+.I -p
+is specified):
+.sp
+.ta 1i 2i 3i 4i
+.nf
+	number	method	cutoff	order
+
+	1	Ideal	.333
+	2	Butterworth	.333	1
+	3	Exponential	.333	1
+	4	Ideal	.5
+	5	Butterworth	.5	1
+	6	Exponential	.5	1
+	7	Ideal	.667
+	8	Butterworth	.667	1
+	9	Exponential	.667	1
+.fi
+.sp
+Three filter types have been implemented: Ideal, Butterworth and Exponential.
+The cutoff frequency is expressed as a fraction of the frequency range.
+The frequency range is controlled by the options
+.I -b
+or
+.IR -r .
+If neither is
+specified, then frequency ``1.0'' is controlled
+by half the number of columns, and the rows are treated with the same
+distance metric, so that non-square pictures may have a different range of
+frequencies in the rows and columns.  Option
+.I -r
+specifies frequency ``1.0''
+by the number of rows rather than columns.  Option
+.I -b
+specifies both, so
+that the distance metric for non-square pictures is different for rows and
+columns, adjusted so that both (number of rows/2) and (number of columns/2)
+are treated as frequency 1.0.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float, double, complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed, and it is treated as if it is a full
+Fourier image.  In other words, specifying a region-of-interest does not allow
+one to filter only a portion of the frequency range, but rather to store and
+manipulate a transform in a portion of a larger image.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+bandpass(1), bandrej(1), fourtr(1), inv.fourtr(1), lowpass(1), mulseq(1)
+.SH AUTHOR
+Yoav Cohen 5/21/82
+.br
+modified by Mike Landy 7/13/84
+.br
+HIPS 2 - msl - 8/9/91

@@ -1,0 +1,47 @@
+.TH LINEMEANS 1 "15 March 1993" "Version 2" "HIPS Manual"
+.SH NAME
+linemeans \- calculate mean (or sum) and variance across each image line
+.SH SYNOPSIS
+.B linemeans
+.RB [ \-s ]
+.RB [ \-v ]
+.RB [ \-tm ]
+.SH DESCRIPTION 
+.I linemeans
+calculates mean (or sum if
+.B \-s
+is specified)
+and variance (if
+.B \-v
+is specified) across each image line in a one-frame HIPS byte image.
+Output is a one-frame HIPS float image with one column containing line means
+(or sums).
+If
+.B \-v
+is given, the output is a two-frame, bandinterleaved (see
+.IR bil )
+HIPS float image with one column containing alternating
+line means (or sums) and line variances.
+.sp 0.5
+.I linemeans
+is useful for assessing scanner quality.
+.SH OPTIONS
+.TP
+.B \-s
+calculate sum across image lines rather than mean.
+.TP
+.B \-v
+calculate variance across image lines along with mean (or sum).
+.TP
+.B \-tm
+specifies that input is a TM quarter scene with 3150 image pixels
+in each line (which is physically longer); also info on position of first
+actual image pixel is read from image.
+Pixels which are not actual image pixels are not included in calculations.
+.SH SEE\ ALSO
+bil(1), debil()
+.SH AUTHOR
+.nf
+Allan Aasbjerg Nielsen
+IMSOR, Technical University of Denmark
+e-mail: aa@imsor.dth.dk

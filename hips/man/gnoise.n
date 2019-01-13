@@ -1,0 +1,73 @@
+.TH GNOISE 1 "8/6/91" "Version 2" "HIPS Manual"
+.SH NAME
+gnoise \- pipe sequence through a channel with Gaussian noise
+.SH SYNOPSIS
+.B gnoise
+[-p sd [random-seed]] [-l] [-f] [-c [rows [cols [frames [colors]]]]
+.SH DESCRIPTION 
+.I Gnoise
+adds pseudo-random, independent, identically-distributed noise to an image.
+The noise values have a zero-mean Gaussian distribution.  The user may
+specify the standard deviation of the noise, which defaults to 30.  The user
+may also specify the seed for the pseudo-random number generators (which
+defaults to 1).
+For multiple frames, the normal operation of gnoise is to generate a
+noise frame for the first frame, and randomly permute its rows and columns
+for subsequent frames.  The
+.I -l
+switch specifies that a new noise frame
+should be generated for every frame.
+.I -f
+specifies that a faster (and less accurate) Gaussian deviate generator be used
+(it computes the sum of 12 uniformly distributed pseudo-random numbers,
+counting on the central limit theorem to get an approximately Gaussian
+result).  If
+.I -c
+is specified, a new float sequence is generated and no input is read.  With this
+option,
+.I rows
+defaults to 512;
+.I cols
+defaults to the value of
+.IR rows ;
+and
+.I frames
+and
+.I colors
+(which means color planes per frame) default to 1.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking.  Also used to
+initialize each frame when
+.I -c
+is specified.  Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+bnoise(1), noise(1)
+.SH AUTHOR
+Yoav Cohen 3/15/82
+.br
+modified for float images: Mike Landy 10/19/83
+.br
+bug fixed for byte images: Mike Landy 11/4/87
+.br
+Hips 2 - msl - 8/5/91
+.br
+-c flag - msl - 11/13/92

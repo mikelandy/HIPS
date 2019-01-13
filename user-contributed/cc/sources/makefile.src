@@ -1,0 +1,19 @@
+#
+# makefile for user-contributed/cc/sources
+#
+
+PGMS = getmean.out hupdown.out idealbp.out isobp.out \
+	normalize.out prune.out revalue.out rflipix.out rtex.out scaleseq.out \
+	shiftmin.out updown.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

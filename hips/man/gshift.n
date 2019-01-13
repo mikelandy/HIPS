@@ -1,0 +1,21 @@
+.TH GSHIFT 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+gshift \- shift a 3-D graph
+.SH SYNOPSIS
+.B gshift
+[-p x [y [z]]]
+.SH DESCRIPTION 
+.I Gshift
+globally shifts a PLOT3D graph in space.
+The translation is specified in terms of a three-dimensional translation
+vector.  The y and z vector components default to 0.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+Plot3d
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH AUTHOR
+Yoav Cohen - 11/15/82
+.br
+HIPS 2 - msl - 7/24/91

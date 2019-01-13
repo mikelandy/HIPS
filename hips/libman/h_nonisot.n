@@ -1,0 +1,103 @@
+.TH H_NONISOT 3 "8/13/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_nonisot \- nonisotropic convolution
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_nonisot(hdi,hdc,nmasks,hdm,hdo)
+h_nonisot_i(hdi,hdc,nmasks,hdm,hdo)
+struct header *hdi,*hdc,**hdm,*hdo;
+int nmasks;
+
+h_nonisot_I(imagei,imagec,nmasks,imagem,imageo,nr,nc,nlpi,nlpc,nrm,ncm,nlpm,nlpo)
+int *imagei,*imagec,**imagem,*imageo;
+int nmasks,nr,nc,nlpi,nlpc,*nrm,*ncm,*nlpm,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines perform a nonisotropic convolution operation on an input
+subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+The program is provided with an array of 
+.I nmasks
+convolution masks (specified by
+.I hdm
+or
+.IR imagem ),
+and a `chooser' subimage (specified by
+.I hdc
+or
+.IR imagec )
+which indicates which convolution mask is used at each location.
+.I h_nonisot
+calls
+.I h_nonisot_i
+as long as the pixel format is integer.
+.I h_nonisot_I
+is the low-level routine which doesn't require an image header.  The input,
+chooser and output subimage sizes are
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, the chooser image has
+.I nlpc
+pixels per line, and the output image has
+.I nlpo
+pixels per line. Mask subimage number
+.I i
+has a size of
+.I nrm[i]
+by
+.IR ncm[i] ,
+with
+.I nlpm[i]
+pixels per line.
+.PP
+.I H_nonisot
+performs nonisotropic convolution.  It is supplied with an array
+of single frame convolution masks.
+.I H_nonisot
+does the following.
+For every row and column of the input image, the value of the chooser image
+is used as an index into the list of masks.  The appropriate mask is scaled
+by the input and added into the output image.  The chooser values are used
+modulo the number of masks (i.e. a chooser value  of
+.I nmasks
+uses mask number 0).
+The mask's first pixel is added to the corresponding output pixel position
+(hence, for a coordinate system with the origin at the upper-left,
+it is added rightward and downward, otherwise it is 
+added rightward and upward).  Note that the output image is not first
+zeroed; that is the caller's responsibility.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+integer
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from the input and mask image headers.
+.SH "IN-PLACE PROCESSING"
+The input may not be processed in place.  In other words,
+.I hdi
+may not be the same as
+.I hdo
+and
+.I imagei
+may not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_convolve(3), h_correl(3), h_mask(3)
+.SH AUTHOR
+Michael Landy - 7/9/88
+.br
+Hips 2 - msl - 8/13/91

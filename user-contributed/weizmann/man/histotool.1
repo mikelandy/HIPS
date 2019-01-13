@@ -1,0 +1,42 @@
+.TH HISTOTOOL 1HIPS "November, 1987"
+
+.SH NAME
+histotool - display a histogram file as a bar graph in a suntools
+window
+
+.SH SYNOPSIS
+.B histotool
+[subwindow_fd] < infile
+
+.SH DESCRIPTION
+.I histotool
+converts a histogram file
+.I infile
+(created with
+.IR histo )
+to a displayable format, and displays it on a
+.I suntools
+window. It must be invoked from within
+.I suntools.
+The display window must be big enough - 300x300, to accomodate the
+graph. If
+.I histotool
+is activated from a program which has a subwindow to display the
+histogram, like
+.I imagetool,
+the calling program gives that
+.I subwindow_fd
+as an argument to
+.I histotool.
+Otherwise,
+.I histotool
+opens an output subwindow on it's own.
+
+.SH AUTHOR
+Gal Hasson - Oct. 1987
+.br
+Modified: Leah Mory - Nov. 1987
+
+.SH SEE ALSO:
+histo(1HIPL), disphist(1HIPL), imagetool(1HIPL)
+

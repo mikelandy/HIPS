@@ -1,0 +1,384 @@
+.\" troff -me HIPSTool.me
+.if t .nr pp 12
+.if t .nr tp 12
+.if t .nr sp 12
+.if t .nr fp 12
+.if t .sz 12
+.if n .po 3
+.if n .pl 999
+.if n .ll 70
+.if n .ad l
+.\"
+.if t .fo \f1 //-%-\ \ \ \ \ \ \ \*(td//      \" put page numb and date in footer
+.if t .nr $r 8        \" set vertical spacing (in terms of some ratio) 
+.po 1i
+.ce
+HIPSTool: A  General Image Analysis Program
+.sp
+.ce
+Pre-Release Notes
+.sp
+.ce
+William Johnston, Max Rible, and Antony Courtney
+.sp
+.ce
+Information and Computing Sciences Division
+.ce
+Lawrence Berkeley Laboratory
+.ce
+October, 1989
+.sp
+.pp
+HIPSTool represents an effort to
+design and implement a general purpose
+image analysis program that will deal with very general 2D and 3D
+images, and which is built around the HIPS image processing software package, developed at New York University. See:
+.in +3
+Landy, M. S., Cohen, Y. and Sperling, G. (1984). ``HIPS: A
+Unix-based Image Processing System'', Computer Vision, Graphics, and
+Image processing, 25, 331-347.
+.sp
+Also refer to:
+.br
+Mike Landy
+.br
+SharpImage Software
+.br
+P.O. Box 373, Prince Street Station
+.br
+New York, NY   10012-0007
+.br
+[landy@nyu.nyu.edu]
+.br
+ofc: (212) 998-7857
+.in 0
+.sp
+The goals for this program are to provide an easily used,
+flexible tool for the quantitative analysis and annotation of the geometric
+and gray level features of almost arbitrary size and resolution sequences of monochrome images.
+The goals are supplemented by the requirements that (1) the original image
+(as opposed to the displayed image)
+is used for all analytical operations, (2) the original image is never modified,
+(3) that the interaction mechanisms must work on workstations with a variety of 
+functional and performance characteristics, and that the X 
+window system provide the underlying image display and interaction.
+.pp
+The salient features of the functionality include:
+.np
+An interaction history mechanism for keeping a permanent, modifiable,
+recallable, and re-invokable record of all interactive analysis operations;
+.np
+A general and flexible ``image notebook'' mechanism that permits
+both textual and graphical annotation of the image in keyed records
+suitable for indexing and extraction by an image data management
+system;
+.np
+A variety of analytical operations including display of gray level
+traces under arbitrary curves, histograms of arbitrarily shaped areas,
+distance and area measurement, and the ability to invoke any of a variety
+of standard image processing algorithms on sub-windows of the
+original image.
+.pp
+The user interface includes adaptive and/or optional changes in the interaction
+style (e.g. line endpoint dragging vs. explicit endpoint placement, cursor
+appearance, automatic view window size limiting, etc.) depending
+on the workstation characteristics. There is
+extensive use of sub-windows for gray level traces, histograms, and transformed
+sub-images of the original image. The
+cursor in the sub-windows may be coupled with the cursor in the main
+viewing window, so that geometric input may come from whichever
+representation is more convenient.
+.pp
+Among the implementation considerations are:
+.np
+When possible, the program uses operating system supplied memory mapping
+functions to avoid copying image data that is not being viewed (a
+substantial consideration when the image is
+4096\(mu4096\(mu16 bits/pixel = 32 Megabytes.)
+.np
+The annotational and analytical functions are treated like object classes
+so that extensions are facilitated;
+.np
+No special graphics or image hardware accelerators are assumed, but
+the implementation of the functions is such
+that these facilities could easily be used if available.
+.lp
+.sp
+.ce
+**************************************
+.ce
+NOTE:
+.sp
+HIPSTool is a current research and development effort at Lawrence
+Berkeley Laboratory. It is provided in it's current prototype state as
+a contribution to the research and education community. No
+responsibility can be assumed for its correctness or completeness, both
+of which are currently guaranteed to be lacking. HIPSTool is
+under active development (including being ported to X), and some
+of the notes below include things to be done.
+For further information contact:
+.sp
+.nf
+.na
+Bill Johnston
+Lawrence Berkeley Laboratory
+Information and Computing Sciences Division
+Advanced Development Group
+MS 50B/3238
+Berkeley, CA  94720
+(wejohnston@lbl.gov, ...ucbvax!lbl-csam.arpa!johnston)
+.fi
+.sp
+The development
+of HIPSTool is supported by
+the Energy Research Division, U.S. Department of Energy.
+.sp
+.ce
+**************************************
+.sp
+.ce
+Using HIPSTool
+.sp
+HIPSTool is typically invoked with out any arguments (though an initial
+image file name can be give with the ``-i'' flag), and put into the background.
+The image or sequence is loaded into memory, and a scaled version
+displayed on the screen. The screen image provides a convenient
+visual representation of the real image. All direct interaction
+is with the screen image but all analytical operations are done on the
+original image.
+.sp
+HIPSTool understands byte, short, int
+.in +3
+(not float yet)
+.in 0
+image formats.
+No HIPSTool function can change the original
+image. The original image is transformed through a look up table
+to produce the screen image. The default LUT maps the full range of the
+original image to 250 gray levels for screen display (the other 5 LUT
+entries are reserved for the window system foreground and background colors,
+a ``stand out'' color, and a few others.
+.sp
+.in +6
+[To be done:
+.br
+The original image is geometrically scaled so that it can fit in an on-screen
+window. All operations specified on the screen version are mapped back to
+the original image. Magnification windows will resort to the original
+image to provide full resolution.
+.sp
+A second image (the ``primary'' image), which must be geometrically identical
+to the first, can be specified
+to be the image that the analysis data comes from. This permits
+areas, and so forth, to be defined on an enhanced image, but the real
+data to come from the primary image. This can be done currently
+in a somewhat awkward way using the LOG facility.]
+.in 0
+.sp
+To load an image, enter name in INPUT text area and click on LOAD.
+.in +6
+[X: The text windows should be boxed - can't tell where
+to put the cursor when typing in text.]
+.in 0
+.sp
+.sh 1 "Analysis functions:"
+.sp
+In general, the analysis functions are selected and then STARTed, at which point
+two or three lines of instruction are displayed. Any needed input is provided
+(e.g. point or line placement), when the input is complete, EVAL causes
+the function to execute.
+.sp
+All functions are log-able, either after the fact, or automatically.
+The log can be stored in the HIPS header or in an ascii file for
+subsequent replay or editing.
+.sh 2 "BOX"
+.sp
+BOX is used to
+select a sub-area for output (to a file given in OUTPUT text window)
+or to use as input to a HIPS filter given in the COMMAND text window.
+.in +6
+[Currently I believe that only one HIPS command can be given in the
+COMMAND box, and that
+probably without args. This needs to be fixed. Ultimately this interface
+should be replaced with subroutine calls to HIPS routines.]
+.in 0
+.sp
+START enables box placement (corners), EVAL executes command, SAVE saves the the
+resulting sub-image to OUTPUT file.
+.in +3
+In general there can be several save options.
+Right click (r-C) in SAVE button gives options.
+Left click (l-C) for action.
+.in 0
+.sh 2 "Line and Spline Trace"
+These functions display the gray values of the pixels under a line
+or spline curve. As with all such functions, the data is gotten
+from the original,
+.in +6
+[or primary image.]
+.in 0
+The trace is displayed in a sub-window.
+The cursor in the sub-window can be coupled to the cursor in the parent
+window (the screen image).
+In the trace window, l-C puts up a line cursor, and a cross on screen image at
+the corresponding location.
+.in +6
+[SunView version: I think two clicks are needed to get first line
+cursor to appear.]
+.in 0
+Right click will add another line (for measuring image
+features based on gray value of, say, boundaries.)
+When both lines are present the Cartesian distance between them and the gray values
+appear in the control window, together with the positions on the screen
+image. Middle click deletes both lines.
+.in 3
+X: cntl-l-C will redraw trace window, 
+cntl-r-C will delete the window.
+.in 0
+.sp
+In general, lines can be defined in three ways (selected by a line
+attribute menu). (1) Click (l-C) to place one end, click (l-C) to place the second
+end. (2) Click (l-C) to place one end, drag (l-C) to place the second end. (3)
+Enter (l-C) a series of points that define a line by least squares fit.
+In all cases, individual points can be moved after the fact (middle click (m-C)).
+.sp
+A vector of the trace coordinates and gray values can be written
+to a file (a SAVE option when the trace function is active).
+.sh 2 "Distance  Measurement"
+.sp
+This function measures the distance between two points.
+All distance and angle measurements are based on square pixels
+and distances in Euclidean 1x1 pixels.
+.in +3
+How about an option to set the scale
+of the x and y pixel distances, independently, as real numbers.  This way,
+the measurements can come out in inches (microns, etc.).
+.in 0
+.sh 2 "Angle Measurement"
+.sp
+This function measures the angle between image features. The image
+features are identified by lines placed on the image.
+.sh 2 "Histograms"
+.sp
+Histograms can be calculated for box, polygon and closed spline bounded
+areas. Histograms can be saved.
+.in +6
+[Actually, I think on the boundary defining the area to histogram
+is saved. Check.]
+.in 0
+.sp
+The areas are defined by a series of points and the order of placement
+is (of course) significant. Any point can be moved after the fact.
+.sp
+In the histogram window, left and right click will define a window
+of the histogram to display. Middle click expands histogram, second m-C
+restores original histogram.
+.in +6
+[In the sub-windows where graphics is done, e.g. traces and histograms,
+resizing the window should resize the graph.
+.in 0
+.sh 1 "Auxiliary Operations"
+.sh 2 "Zoom Window"
+.sp
+At any time a ``magnifying glass'' can be brought up. This sub-window
+can be used both for examination, and fine placement of points or
+line endpoints. (This may be slowwwwww.)
+.in +6
+[The cursor in the magnify sub-window should be ``small pixels'' (as
+opposed to fat line pixels.]
+.in +3
+In SunView: meta-l-C (meta keys are next to space bar) creates
+the magnified view from the screen image. While in the magnified
+area, m-l-C causes the magnify window to shift so as to center it self
+in the cursor. Meta-r-C destroys the window. While in the zoom window,
+meta-m-C expands the resolution.
+.sp
+In X: It is the same, except use cntl key instead of meta key.
+.in 0
+.sh 2 "Color Map Manipulation"
+.sp
+Selecting ``modify color map'' (may still be called ``abuse colormap'') permits several types of manipulation
+of two color maps. The two maps are a software map that maps the memory
+version of the original image to the screen copy, and the second
+map is the hardware lookup table.
+The manipulation commands are entered textually
+in the COMMAND window. The first command (SCALE) permits setting a gray
+level window. That is a restricted gray range of the original image
+is mapped to the screen display.
+SCALE expects the lower gray vale and upper gray value for the input
+window. WINDOW is like scale, but expects lower limit, and window
+size.
+.sp
+The hardware color map (the LUT on the output side of the image
+that creates the screen image) can have its gamma
+correction changed. The argument to GAMMA is a floating point number, with 1.5-2.5
+being typical values.
+.sp
+The STANDOUT color (used for the cursor, lines, etc.) can be changed
+by supplying the desired 8 bit RGB values.
+.sh 2 "The Log"
+.sp
+The log facility provides a mechanism for saving, recovering, editing,
+and re-executing command. The log entry is triggered either by
+clicking on LOG, or automatically after every operation. EDIT causes
+the current log to be read in and all logged operations. to be shown
+on the image (a small integer identifies each operation). DELETE deletes
+operation an operation (log entry). EVAL re-executes the currently
+selected operation.
+.sp
+By way of example, to transfer areas (say a spline bounded histogram)
+from one image to another
+first log the operations, save log as ascii file (select this option from
+the list gotten by
+r-C on SAVE, then enter a file name in the
+OUTPUT box, and l-C on SAVE for action), load second image, load log (select the ``load log'' option
+by r-C in LOAD box), give file name in INPUT box, l-C for action.
+.sp
+EDIT log: clicking on START will display numbered operations.
+Type ``SELECT n'' in COMMAND window, click on EVAL [twice ??].
+.sp
+.in 3
+X:
+to enter cmd in COMMAND window, put cursor just to the right of title.
+To SELECT a function, r-C to right of ``function''.
+To do EDIT function, have to  set parms (which can be gotten from
+the currently active log re-executed command), and reselect.
+.sh 2 "The Notebook"
+.sp
+.sh 2 "Scale"
+.sp
+.sh 2 "Interactive Classification"
+.sp
+.ce
+ ---------------- Begin Copyright notice -------------------
+.pp
+HIPSTool is copyright (C) 1988, 1989, Regents of the University
+of California.  Anyone
+may reproduce ``HIPSTool'', the software in this distribution,
+in whole or in part, provided that:
+.np
+Any copy or redistribution of HIPSTool must show the
+Regents of the University of California, through its
+Lawrence Berkeley Laboratory, as the source, and must
+include this notice;
+.np
+Any use of this software must
+reference this distribution, state that the
+software copyright is held by the Regents of the University of
+California,
+and that the software is used by their permission.
+.pp
+It is acknowledged that
+the U.S. Government has rights in HIPSTool under Contract
+DE-AC03-765F00098 between the U.S. Department of Energy
+and the University of California.
+.pp
+HIPSTool is provided as a professional academic contribution
+for joint exchange.  Thus it is experimental, is provided ``as is'',
+with no warranties of any kind whatsoever, no support,
+promise of updates, or printed documentation.
+The Regents of the University of California shall have no liability
+with respect to the infringement of copyrights by HIPSTool,
+or any part thereof.
+.ce
+ ---------------- End Copyright notice -------------------

@@ -1,0 +1,50 @@
+.TH PATTERN 1 "May 15, 1991" LBL-HIPS
+.\" @(#)PATTERN .1  5/1/91 JIN;
+.SH NAME
+pattern \- generate variant square patterns.
+.SH SYNOPSIS
+.I pattern
+[-c #] [-r #] [-fr #] [-h #] [-fx #] [-fy #] [-s #] [-w #] [> output]
+.SH DESCRIPTION
+pattern generates test images with different patterns for study and analysis.
+.SH OPTIONS
+.TP
+-c #
+columns of the pattern image. The default is 256.
+.TP
+.I -r #
+rows of the pattern image. default = 256.
+.TP
+.I -fr #
+frames for repeating output, default = 1.
+.TP
+.I -h #
+starting line height. default = 8.
+.TP
+.I -f[x, y] #		function number on X or Y axis. The default is
+to generate square pattern.
+.TP
+.I -s #
+step of equal difference for function 2. The default is 2.
+.TP
+.I -w #
+starting line width. The default is 8.
+.TP
+functions:
+.nf
+0	square - n, n, n
+1	step - 1,2,3, ...
+2	equal difference - 1, 4, 7, 10, ... {ed=3 => -s 3}
+3	pascal tri-angle
+4	power of 2
+5	sine
+.fi
+.SH EXAMPLE
+pattern -w1 -fy 2 -l2 -fx 3 | xhips
+.SH NOTE
+.br
+The output is a HIPS image.
+.SH SEE ALSO
+tuner(1), dcvtob(1), vfft(1), vfftpass(1), vfftfilter(1), inv-vfft(1)
+.SH AUTHOR
+Jin, Guojun - LBL 5/1/91

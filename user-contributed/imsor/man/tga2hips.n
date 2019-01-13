@@ -1,0 +1,17 @@
+.TH TGA2HIPS 1hips "OCTOBER 9, 1991" 
+.SH NAME
+tga2hips - converts from TrueVision's TGA format to HIPS.
+.SH SYNOPSIS
+.B tga2hips
+< iseq > oseq
+.SH DESCRIPTION 
+.I Tga2hips 
+converts from TrueVision's TGA format to HIPS.
+.SH SEE\ ALSO
+hips2tga(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

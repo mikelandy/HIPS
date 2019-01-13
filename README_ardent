@@ -1,0 +1,44 @@
+
+-------------Important note for Ardent Computer users--------------
+
+The compiler for the Ardent computer has a bit of difficulty compiling
+the HIPS software.  The following notes should help you to install the
+software.
+
+1.  The Ardent system does not include the program `lorder' for calculating
+the order in which to place things in a library.  So, in the file lib/Makefile,
+replace the line:
+
+	ar cr libhips.a `lorder *.o | tsort`;
+
+with:
+
+	ar cr libhips.a *.o;
+
+2.  The Ardent system does not include the program `strip' for stripping off
+symbol tables from binaries.  So, delete all references to this program in
+the Makefiles, e.g., in hips/sources/Makefile.
+
+3.  The Ardent C compiler requires the user to specify the amount of
+optimization, vectorization, and parallelization to apply.  This implies a lot
+of editing of the Makefiles in order to use the most optimization possible.
+Unfortunately, when the Ardent compiler has difficulties, it fails in a major
+way (i.e., it crashes and dumps core).  At that point, you try a lower
+optimization flag.  So, start by compiling everything with:
+
+	-vreport -vector_c -O2
+
+but if the compiler crashes on a given file, then try -O1 instead.  For
+example, in hips/sources, I remember it crashing (and -O1 working) on abdou,
+adddesc, exppix, and mask, among others.  When I did this, I modified the
+Makefile so that it compiled with -O2 by default, and I added a special case
+in the Makefile for the modules which required -O1.
+
+4.  The Ardent C compiler does not really know how to vectorize and
+parallelize C code, unless you write your C as if you were writing FORTRAN!
+In particular, you can't step pointer variables in loops and get things
+treated correctly.  So, almost all of HIPS will not compile in such a way as
+to take advantage of the speed of this machine.  If you want a particular
+module sped up, it will require tuning of the code so as to allow their
+compiler to do the right thing.  For example, change `*p++ = 0' to `p[i++] = 0'
+and so on.  Good luck!

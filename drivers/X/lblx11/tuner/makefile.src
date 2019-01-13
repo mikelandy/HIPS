@@ -1,0 +1,100 @@
+#
+# makefile for user-contributed/lbl/x11/tuner
+#
+# Note: 3 binaries, tuner, ftuner, and getx are created from the same source
+#        files. ftuner uses the -DDIRECT cpp directive for Fast display
+#
+
+LOCALINC=-I$(CCS_ROOT)/include -I$(XINCLUDE)
+XLOGO = getxe.logo
+CPPFLAGS_tuner = $(LOCALINC) -DX_WINDOW_DEP -DCOMMON_TOOL
+CPPFLAGS_ftuner = $(CPPFLAGS_tuner) -DDIRECT
+CPPFLAGS_getx = $(CPPFLAGS_ftuner) -DC_TUNER $(THREAD_INC)
+CPPFLAGS_getxe = $(CPPFLAGS_getx) -DXLOGO=\"$(DESTDIR)/$(XLOGO)\" -DX_Extender
+LOCALCFLAGS = $(LOCALINC) $(CPPFLAGS_tuner) -DEXTENDED_COLOR
+
+PUBLIC = p_public.o t_editor.o	# common sources
+ANSI_OBJ = p_public.o sendto.o t_editor.o
+
+PANEL_LIB = -lpanel -lccs -lrle -lX11 -ltiff $(LIBRARY2) $(OTHERLIBS) \
+	$(OTHERLIB2) -ljpeg
+#	for writing RLE & HIPS, and reading jpeg
+LIBRARIES = $(PUBLIC) $(LDFLAGS) -lscs5 $(PANEL_LIB)
+#	for writing other image tpye, such as sun-raster file
+LIBRARIE6 = $(PUBLIC) $(LDFLAGS) -lscs6 $(PANEL_LIB) -lpixrect $(ACS_LIBS)
+
+SOURCES = update.c tuner.c
+Objects = update.o tuner.o
+OBJECTS = fupdate.o ftuner.o
+GETOBJS = cupdate.o colors.o
+GETOBJX = getx.o
+GETOBJE = getxe.o
+
+PGMS = getx.out getxe.out sendto.out tuner.out ftuner.out
+
+install:	$(ANSI_OBJ) $(GETOBJS) $(PGMS)
+
+tuner.o:	info_any.c
+ftuner.o:	info_any.c
+colors.o:	info_any.c
+
+include ansi-knr
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+.c.o:
+	$(COMPILEc) $< $(LOCALCFLAGS)
+
+$(Objects):
+	$(COMPILEc) $< $(CPPFLAGS_tuner)
+
+$(OBJECTS):
+	$(COMPILEc) $(CPPFLAGS_ftuner) $<
+
+$(GETOBJS) $(GETOBJX):
+	$(COMPILEc) $(CPPFLAGS_getx) $< -DXLOGO=\"Empty\ Input\"
+
+$(GETOBJE):	getx.c
+	$(COMPILEc) $(CPPFLAGS_getxe) -o getxe.o getx.c -DGETXE_RTP
+
+tuner.out:	$(Objects)
+	$(LINKc) tuner $(Objects) $(LIBRARIE6) $(ACS_LIBS)
+	mv tuner $(DESTDIR)
+	@touch $@
+
+ftuner.out:	$(OBJECTS)
+	$(LINKc) ftuner $(OBJECTS) $(LIBRARIE6)
+	mv ftuner $(DESTDIR)
+	@touch $@
+
+getx.out: $(GETOBJS) $(GETOBJX)
+	$(LINKc) getx $(GETOBJX) $(GETOBJS) $(LIBRARIE6)
+	mv getx $(DESTDIR)
+	@touch $@
+
+getxe.out: $(GETOBJS) $(GETOBJE)
+	$(LINKc) getxe $(GETOBJE) $(GETOBJS) $(LIBRARIE6)
+	mv getxe $(DESTDIR)
+	cp $(XLOGO) $(DESTDIR)
+	@touch $@
+
+sendto.out:
+	$(LINKc) sendto sendto.o $(LDFLAGS) -lccs $(ACS_LIBS) $(OTHERLIBS)
+	mv sendto $(DESTDIR)
+	rm -f tmpansi.c
+	@touch $@
+
+FRC:
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+mkdest:
+	@if [ ! -f getxe.logo ];	then	\
+		ln -s ../getxe.logo	. ;	\
+	else	: ;	fi
+

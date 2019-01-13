@@ -1,0 +1,137 @@
+/*
+ * Copyright (c) 1992	Jin Guojun
+ *
+ * Disclaimer:  No guarantees of performance accompany this software,
+ * nor is any responsibility assumed on the part of the authors.  All the
+ * software has been tested extensively and every effort has been made to
+ * insure its reliability.
+ *
+ * to_stream - convert an image to HIPS-JPEG format
+ *
+ * usage:	to_stream < idata > oseq
+ *
+ * to load:	cc -o to_stream to_stream.c -hipsh -lhips -ljpeg
+ *
+ * AUTHOR:	Jin Guojun - 11/12/92
+ */
+
+#include <stdio.h>
+#include <hipl_format.h>
+#include "imagedef.h"
+
+static Flag_Format flagfmt[] =
+{
+    {"c", {LASTFLAG}, 0, {{PTBOOLEAN, "FALSE"}, LASTPARAMETER}},
+/*  {"f", {LASTFLAG}, 1, {{PTINT, "30", "frames / sec."}, LASTPARAMETER}}, */
+    {"n", {LASTFLAG}, 1, {{PTINT, "99999999", "number frames"}, LASTPARAMETER}},
+    {"j", {LASTFLAG}, 0, {{PTBOOLEAN, "FALSE"}, LASTPARAMETER}},
+    {"p", {LASTFLAG}, 0, {{PTINT, "0", "pad to 2**"}, LASTPARAMETER}},
+    {"Q", {LASTFLAG}, 1, {{PTINT, "75", "Q-factor"}, LASTPARAMETER}},
+    LASTFLAG};
+
+
+main(argc, argv)
+int	argc;
+char**	argv;
+{
+int	oform, qfact, pflag=-1;
+h_boolean	jflag, ciflag, ccflag, coflag;
+int	rows, cols, frames, f, pad;
+struct header	hd;
+sframe_header	fhd;
+Filename	filename;
+FILE	*fp;
+byte	*fakec;
+extern	U_IMAGE	uimg;
+
+    Progname = strsave(*argv);
+    parseargs(argc, argv, flagfmt, &coflag, &frames, &jflag, &pflag, &qfact,
+	FFONE, &filename);
+
+    fp = hfopenr(filename);
+    jpeg_uimg_init(fp, HIPS, 0, coflag);
+    fread_header(fp, &hd, filename);
+    if (frames > hd.num_frame)
+	frames = hd.num_frame / hd.numcolor;
+    else	hd.num_frame = frames * hd.numcolor;
+    ciflag = hjpeg_color(&hd);
+    ccflag = coflag & !ciflag;
+
+    if (get_sinfo(0, 0))	/* stream in	*/
+	if ((pad=get_sinfo(1, 0)) == 1)	{	/* compress type for reading */
+		if (jflag)	prgmerr('j', "s_jpeg to s_jpeg - Why ?");
+		stream_jpeg_rinit(fp, get_sinfo_q(0), ciflag | coflag);
+	} else if (!jflag)
+		prgmerr(0, "Warning: stream to stream - waste time");
+
+    set_stream_param(&hd, get_stream_header_sline(hd.ocols, hips_channels(&hd)),
+		jflag, -1, qfact, -1 /* no data_size */, 1);
+    if (!jflag)
+	if (coflag && hd.numcolor == 1)	{
+	    if (hd.pixel_format != PFRGB)
+		hd.sizeimage *= hips_channels(&hd);
+	    if (ciflag & pad)	{ /* jpeg stream in	*/
+		hd.pixel_format = PFRGB;
+		hd.num_frame /= hd.numcolor,	hd.numcolor = 1;
+	    }
+	} else	{
+		hd.pixel_format = PFBYTE;
+		hd.num_frame /= hd.numcolor,	hd.numcolor = 1;
+	}
+    write_headeru(&hd, argc, argv);
+    if (jflag)
+	hhjpeg_winit(stdout, &hd, get_sinfo_q(1), ciflag | coflag);
+
+	fakec = (byte *) malloc(hd.ocols * hd.orows * 3);
+	if (ccflag)
+		hd.image = (byte *) malloc(hd.ocols * hd.orows * 3);
+	if (pflag < 0)	pflag = 0;
+	if (pflag)	{
+		for (pad=0, pflag=(pflag<<1)-1; pflag>>=1; pad++);
+		pflag = 1 << pad;
+	}
+
+    for (f = 0; f < frames; f++) {
+	if (stream_jpeg_read_image(fakec, &hd, f) < 1)
+		prgmerr('r', "stream_jpeg_read_image");
+	if (ccflag) {
+		register byte *sp = fakec, *cp = hd.image;
+		register int r = hd.orows, w = hd.ocols;
+		while (r--) {
+		    memcpy(cp, sp, w);
+		    cp += w;
+		    memcpy(cp, sp, w);
+		    cp += w;
+		    memcpy(cp, sp, w);
+		    cp += w;
+		    sp += w;
+		}
+	} else	hd.image = fakec;
+
+	if (jflag) {
+	    if (stream_jpeg_write_frame(hd.image, &fhd) < 0)
+		return (perr(HE_WRITEFRFILE, f, filename));
+	    /*
+	     * this routine points hd->image to the compressed image, and
+	     * sets the size of the compressed frame in fhd
+	     */
+	    fhd.frame = f;
+	    if (pflag)	{
+		pad = pflag - (fhd.size % pflag);
+		fprintf(stderr, "padding by %d bytes \n", pad);
+		fhd.size += pad;
+	    }
+	    if (write_stream_header(stdout, &hd, &fhd, f) < 0
+	    	|| fwrite(hd.image, fhd.size, 1, stdout) != 1)
+		return (perr(HE_WRITEFRFILE, f, filename));
+
+	} else	write_image(&hd, f);
+    }
+
+write_jpeg_eof(stdout);
+fclose(stdout);
+free(fakec);
+if (ccflag)
+	free(hd.image);
+return (0);
+}

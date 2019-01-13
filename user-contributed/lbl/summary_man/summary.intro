@@ -1,0 +1,65 @@
+TH ISOBUILD n "1991" "LBL-HIPS" "ISOBUILD"
+.SH NAME
+HIPS2 summary 
+.pp
+HIPS (New York University's Human Information Processing Laboratory
+Image Processing System) is a software image processing system that
+runs under the Unix operating system. HIPS is modular and flexible,
+it provides automatic documentation of its actions, and is hardware
+independent. 
+.pp
+For the most part, each image processing operation is provided
+by a small ``filter'' program. These filters are ``piped'' together
+in the Unix fashion to provide for complete image transformations. HIPS images
+are row and column oriented images with the pixels being represented
+by a variety of data types (e.g. byte, short, integer, float, complex),
+and with a header that contains sufficient information so that
+each HIPS program can operate on the image without requiring user
+provided
+format or dimension information.
+.pp
+There are number of ``display'' filters that take a HIPS image
+and display it on a particular piece of hardware, or type of
+window system (e.g. X and SunView). Typical HIPS ``jobs''
+are Unix shell scripts that transform an image, and then display it.
+The following (non-trivial) example illustrates typical HIPS usage.
+The original image is a 650x1445 pixel image, which is rotated 90 deg.
+from the natural ``up'' orientation, and which has gray values in the
+range 0-37000 stored in 16 bit pixels. Without going into great
+detail, operation (1) scales the image to a smaller gray range, performs
+a maximum likelyhood smoothing for noise suppression, and
+an adaptive histogram equalization for contrast enhancement. Operation
+(2) displays the image in an X window by scaling to 255 gray levels,
+rotating, sizing to a specified window height, and sending to the
+desired workstation. Operations (3) and (4) convert a gray level scaled image
+to a halftoned PostScript representation that is printed in two
+pieces (for full spatial resolution) on a high resolution PostScript
+printer.
+.nf
+.na
+
+(1)
+scale_gray -m 0 2000 -s < image_plate.1.h | mls \\
+| mahe -H -o image_plate.1.h.sca2000.mls.ahe.w20 -W 20 20
+
+(2)
+scale_gray -b < image_plate.1.h.sca2000.mls.ahe.w20 \\
+| rotate90 \\ 
+| scale_geom  -h 750 | Xhips -d george.lbl.gov:0.0&
+
+(3)
+scale_gray -b < image_plate.1.h.sca2000.mls.ahe.w20 \\
+| extract 650 700 \\ 
+| rotate90 | pshalftone -F 100 -w 8.5 \\ 
+| lpr -Pvt1 -J "image_plate.1.h.sca2000.mls.ahe.w20"
+
+(4)
+scale_gray -b < image_plate.1.h.sca2000.mls.ahe.w20 \\
+| extract 650 745 1 700 \\ 
+| rotate90 | pshalftone -F 100 -w 8.5 \\ 
+| lpr -Pvt1 -J "image_plate.1.h.sca2000.mls.ahe.w20"
+.fi
+.ad
+.pp
+The following summary gives all HIPS related programs, first organized
+categorically, then alphabetically.

@@ -1,0 +1,97 @@
+.TH ZC 1 "6/21/91" "Version 2" "HIPS Manual"
+.SH NAME
+zc \- find zero-crossings in a convolved sequence
+.SH SYNOPSIS
+.B zc
+[-e error] [-p percent | -s] [-n] [-z]
+.SH DESCRIPTION 
+.I Zc
+is used to compute zero crossings, generally in an image which has already
+been convolved with a bandpass kernel such as a Laplacian or difference of
+Gaussians.  The
+.I -e
+option sets the value of the Laplacian which is considered to be
+zero to
+.IR error .
+(A Laplacian of absolute value less than or equal to 
+.I error
+will be coded as zero.)  The
+.I error
+definition defaults to zero.
+The
+.I -s
+option outputs a floating point image which gives the ``slope'' at each zero
+crossing.  This is not an actual slope, but merely a crude approximation.
+If the
+.I -p
+option is specified, the best ``percent'' pixels will be coded as
+zero-crossings.  ``Percent'' defaults to 100%.  The program generally places
+zero crossings where the image
+is actually zero and abuts pixels of opposite signs, or at a
+positive pixel which abuts a negative pixel.  The
+.I -n
+option places the zero
+crossings at actual zeroes and at negative pixels which abut positive ones.
+Lastly, if an actual zero (as defined by
+.IR error )
+abuts pixels of one sign
+but not the other (as occurs at the edges of a broad area of zeroes), no
+zero crossing is marked.  Such a pixel will be marked if
+.I -z
+is specified.
+Note that zero crossings are marked with
+.I hips_hchar
+(set with
+.IR -UH )
+on a background of
+.I hips_lchar
+(set with
+.IR -UL ).
+With
+.IR -s ,
+the
+.I -CB
+switch is effective.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float
+.SH "OUTPUT PIXEL FORMATS"
+float (for
+.IR -s ),
+byte (for
+.IR -p )
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking.  Also used with
+.I -p
+to specify the value used for non-zero crossing pixels. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Also used with
+.I -p
+to specify the value used for zero crossing pixels. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.  Used only with
+.IR -s .
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+dog(1), mask(1), fmask(1)
+.SH AUTHOR
+Yoav Cohen 7/6/82
+.br
+YC modified 7/28/82, for use with the -p option.
+.br
+YC modified 1/17/83, for INT input.
+.br
+totally rewritten/extended - Mike Landy 8/14/84
+.br
+HIPS 2 - msl - 6/21/91

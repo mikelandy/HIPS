@@ -1,0 +1,43 @@
+.TH CHECKERS 1 "7/5/91" "Version 2" "HIPS Manual"
+.SH NAME
+checkers \- generate a checkerboard image
+.SH SYNOPSIS
+.B checkers
+[-s rows [cols]] [-f frames] > oseq
+.SH DESCRIPTION 
+.I Checkers
+creates a checkerboard sequence.  The alternating pixel values may be
+specified with standard switches
+.I -UL
+and
+.IR -UH ,
+which default to 0 and 255, respectively.  The upper-left pixel of the first
+frame has the value set by
+.IR -UH .
+The switches
+.I -s
+and
+.I -f
+are used to specify the size and number of frames.  The number of rows
+defaults to 512, the number of columns defaults to the number of rows, and the
+number of frames defaults to 1.
+.SH "OUTPUT PIXEL FORMATS"
+byte
+.SH "REGION-OF-INTEREST"
+The output region of interest is cleared.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+genframe(1)
+.SH AUTHOR
+Michael Landy/Yoav Cohen - 5/5/82
+.br
+HIPS 2 - msl - 7/5/91

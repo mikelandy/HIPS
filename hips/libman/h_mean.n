@@ -1,0 +1,61 @@
+.TH H_MEAN 3 "8/7/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_mean \- subroutines to compute the mean of an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_mean(hd,mean,nzflag)
+h_mean_f(hd,mean,nzflag)
+struct header *hdi;
+float *mean;
+h_boolean nzflag;
+
+float h_mean_F(image,nr,nc,nlp,nzflag)
+float *image;
+int nr,nc,nlp;
+h_boolean nzflag;
+.fi
+.SH DESCRIPTION 
+These routines compute the mean pixel value across an input subimage
+(specified by
+.I hd
+or
+.IR image ).
+The result is stored in 
+.I mean
+(for the generic routines), or is the return value (for the low-level
+routine).
+.I h_mean
+calls
+.I h_mean_f
+as long as the pixel format is float.
+.I h_mean_F
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The image has
+.I nlp
+pixels per line.
+If
+.I nzflag
+is FALSE, then the mean is computed over the entire subimage.  If
+.I nzflag
+is TRUE, pixels with values identically zero are ignored in the calculation,
+and the returned mean is set to zero if the entire subimage is zero.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_max(3), h_minmax(3)
+.SH AUTHOR
+Michael Landy - 8/7/91

@@ -1,0 +1,53 @@
+#
+# makefile for user-contributed/lbl/x11/lib
+#
+
+THREAD_OBJ = get_pic.o	# needs to be in K&R style for mit pthreads
+PANEL_OBJ = function.o panel.o
+ANSI_OBJ = cursors.o draws.o dumy_api.o image.o movie.o vwroot.o	\
+	x_colors.o p_widget.o pw_ctrl.o popmenu.o public.o xwd_r.o
+
+OBJECTS = a_gamma.o ccwindow.o cimginfo.o cursors.o draws.o	\
+	find_mmm.o in_cmap.o init_img.o ld_image.o \
+	magnify.o map_scan.o para_win.o panelset.o scroll.o \
+	timer.o visual.o vwroot.o x_window.o XCopyImg.o \
+	$(PANEL_OBJ) $(ANSI_OBJ) $(THREAD_OBJ)
+
+LOCALINC = -I$(CCS_ROOT)/include -I$(XINCLUDE) \
+	-DHELP_INFO="\"h => help"\" -DXLIBINT_H_NOT_AVAILABLE
+LIBNAME = libpanel.a
+LIBFLAG = -DC_TUNER -DX_WINDOW_DEP -DCOMMON_TOOL -DUSE_CCS_MEMMM
+LOCALCFLAGS = $(LOCALINC) $(LIBFLAG)
+
+default install:	$(PANEL_OBJ) $(OBJECTS) $(LIBNAME)
+
+include ansi-knr
+
+$(PANEL_OBJ):
+	$(COMPILEc) $< $(LIBFLAG) $(LOCALINC) -DPANEL_SEPARATED_WLIB
+
+$(THREAD_OBJ):
+	$(COMPILEc) $(LIBFLAG) $(THREAD_INC) $(LOCALINC) $*.c
+
+.c.o:
+	$(COMPILEc) $(LIBFLAG) $(LOCALINC) $*.c # -D_DEBUG_
+	@-ld $(LDLIBFLAGS) $*.o;	mv a.out $*.o
+
+$(LIBNAME):	$(OBJECTS)
+	@rm -f $(LIBNAME)
+	ar cr $(LIBNAME) `$(LORDER) $(OBJECTS) | $(TSORT)`;
+	mv $(LIBNAME) $(LIBDIR)
+	$(RANLIB) $(LIBDIR)/$(LIBNAME)
+	@touch $(LIBNAME)
+
+clean:
+	rm -f $(OBJECTS) $(LIBNAME) tmpansi.c
+clean-all:	clean_all
+
+pristine:
+	rm -f $(OBJECTS) $(LIBNAME) $(LIBDIR)/$(LIBNAME)
+
+mkdest:
+	@if [ ! -f circle.bitmap ];	then	\
+		ln -s ../circle* . ;	\
+	else	true;	fi

@@ -1,0 +1,44 @@
+.TH SNN 1 "31st August 1991" "Version 2" "HIPS Manual"
+.SH NAME
+snn - symmetric-nearest-neighbour filter
+.SH SYNOPSIS
+.B snn
+[-d] [-s size]
+.SH DESCRIPTION 
+.I snn
+applies a symmetric-nearest-neighbour filter to each image
+of the input sequence to suppress random noise.
+.I -d
+offers a choice for the labelling method involved.
+With
+.I -d
+"median value method" is used
+whereas without it "mean value method" is used.
+.I size
+specifies the width of the window,
+and defaults to 3.
+If an even number is specified, it will
+be reduced by 1 automatically.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH EXAMPLE
+.in +3m
+snn < input_seq > output_seq
+.in -3m
+.sp
+.br
+will smooth every image in input_seq by a 3x3 window.
+.SH REFERENCES
+D. Harwood, M. Subbarao, H. Hakalahti and L.S. Davis,
+"A new class of edge-preserving smoothing filters",
+CAR-TR-59 CS-TR-1397, University of Maryland, May 1984.
+.SH SEE ALSO
+asl(1), mask(1), mean(1), median(1), mls(1), nns(1), sasmooth(1)
+.SH AUTHOR
+Jin Zhengping - 16/10/86
+.br
+Rewritten by Jin Zhengping - 31 August 1991

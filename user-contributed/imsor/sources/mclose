@@ -1,0 +1,4 @@
+#!/bin/csh
+# Jens Michael Carstensen, IMSOR 1991
+
+mdilate $argv[1] | merode $argv[1]

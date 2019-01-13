@@ -1,0 +1,20 @@
+.TH GRABHEADER 1 "7/5/91" "Version 2" "HIPS Manual"
+.SH NAME
+grabheader \- throw out an image sequence, preserving the header alone
+.SH SYNOPSIS
+.ta 1i
+.B grabheader
+<iseq >oheader
+.SH DESCRIPTION 
+.I Grabheader
+grabs the header alone from an image sequence, discarding the images.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+genframe(1), genheader(1), seeheader(1), stripheader(1)
+.SH AUTHOR
+Michael Landy - 5/5/82
+.br
+HIPS 2 - msl - 7/5/91

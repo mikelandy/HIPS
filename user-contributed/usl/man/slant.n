@@ -1,0 +1,15 @@
+.TH SLANT 1 "Spring, 1990"
+.SH NAME
+slant \- compute a slant transform
+.SH SYNOPSIS
+.B slant
+.SH DESCRIPTION 
+.I Slant
+computes a slant transform of an input image then does
+an inverse slant, and rewrites the image. The input should be available
+through standard input in hips format.  The imagesize should be square,
+and sides should be a power of two in length.  The pixel cells should be
+8 bit grayscale.  The output is in the same format as the input, and is
+sent to standard output.
+.SH AUTHOR
+Craig E. Thayer

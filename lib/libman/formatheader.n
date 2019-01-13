@@ -1,0 +1,33 @@
+.TH FORMATHEADER 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+formatheader \- format a sequence header into readable form
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+char *formatheader(h)
+char *formatheadera(h)
+struct header *h;
+.fi
+.SH DESCRIPTION 
+These routines are used to format a HIPS header into readable form (such as
+that output by
+.IR seeheader (1)).
+They return a pointer to the string.
+.I formatheader
+only prints up to the first five values of parameter arrays (40 for PFASCII),
+and
+.I formatheadera
+prints parameter arrays in their entirety.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_HDPTYPE - unknown parameter type
+.br
+HE_PCOUNT - supplied count doesn't match that of `depth'
+.SH "SEE ALSO"
+seeheader(1)
+.SH AUTHOR
+Michael Landy - 1/3/91

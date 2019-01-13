@@ -1,0 +1,358 @@
+From wotan.cns.nyu.edu!cmcl2!yale.edu!qt.cs.utexas.edu!cs.utexas.edu!uunet!sparky!kent Fri Oct 18 02:11:28 1991
+Article 26 of comp.sources.misc:
+Newsgroups: comp.sources.misc
+Path: wotan.cns.nyu.edu!cmcl2!yale.edu!qt.cs.utexas.edu!cs.utexas.edu!uunet!sparky!kent
+>From: jef@well.sf.ca.us (Jef Poskanzer)
+Subject:  v23i060:  pbmplus - Extended Portable Bitmap Toolkit, Patch05oct91
+Message-ID: <1991Oct18.024610.959@sparky.imd.sterling.com>
+Followup-To: comp.sources.d
+X-Md4-Signature: cf9794f2f9a018977c4c038c868a59d7
+Sender: kent@sparky.imd.sterling.com (Kent Landfield)
+Reply-To: Jef Poskanzer <uunet!well.sf.ca.us!jef>
+Organization: Sterling Software, IMD
+Date: Fri, 18 Oct 1991 02:46:10 GMT
+Approved: kent@sparky.imd.sterling.com
+Lines: 340
+
+Submitted-by: jef@well.sf.ca.us (Jef Poskanzer)
+Posting-number: Volume 23, Issue 60
+Archive-name: pbmplus/patch05oct91
+Environment: UNIX
+Patch-To: pbmplus: Volume 23, Issue 36-59
+
+This new version is dated 05oct91.  If you have the 27sep91 version,
+via comp.sources.misc or FTP, you can update with the appended patch
+file.  Or, you can FTP the new version complete from:
+
+    export.lcs.mit.edu:contrib/pbmplus05oct91.tar.Z  (18.24.0.12)
+    ftp.ee.lbl.gov:pbmplus05oct91.tar.Z              (128.3.112.20)
+
+      Jef Poskanzer  jef@well.sf.ca.us  {apple, ucbvax}!well!jef
+
+- - - - - - - - - -
+diff -cr pbmplus27sep91/CHANGES pbmplus05oct91/CHANGES
+*** pbmplus27sep91/CHANGES	Fri Sep 27 01:43:48 1991
+--- pbmplus05oct91/CHANGES	Sat Oct  5 23:51:13 1991
+***************
+*** 1,3 ****
+--- 1,14 ----
++ Changes since the 27sep91 comp.sources.misc distribution:
++ 
++     Fixed spelling error in giftoppm.  Fixed ppmrelief to not shrink the
++       image by 2 rows and columns.  Minor fix to pgmramp.  Fixed off-by-one
++       error in pnmtoxwd.  Man page fix for pnmgamma.  (Arthur David Olson)
++     Converted ANSI trigraphs in ppmtosixel into good old octal.  (Jeff Glover)
++     Fix to 24/32 bit case in rasttopnm.  (Behr de Ruiter)
++     Float/double portability fix to libppm4.  (Bruce Holmer, Ronald Khoo)
++     Fixed typo in compat.ksh.  (Larry Virden)
++     Fixed int/short incompatibility in tifftopnm.  (Salik Rafiq)
++ 
+  Changes during the extended beta test period, starting on 15jan91:
+  
+      Lots of fixes from: Anthony A. Datri, Arthur David Olson, David Brooks,
+diff -cr pbmplus27sep91/README pbmplus05oct91/README
+*** pbmplus27sep91/README	Fri Sep 27 13:49:21 1991
+--- pbmplus05oct91/README	Sat Oct  5 22:36:16 1991
+***************
+*** 1,6 ****
+                    Extended Portable Bitmap Toolkit
+!                       Distribution of 27sep91
+!                    Previous distribution 05feb91
+  
+  
+  PBMPLUS is a toolkit for converting various image formats to and from
+--- 1,6 ----
+                    Extended Portable Bitmap Toolkit
+!                       Distribution of 05oct91
+!                    Previous distribution 27sep91
+  
+  
+  PBMPLUS is a toolkit for converting various image formats to and from
+diff -cr pbmplus27sep91/compat.ksh pbmplus05oct91/compat.ksh
+*** pbmplus27sep91/compat.ksh	Thu Sep 26 16:59:00 1991
+--- pbmplus05oct91/compat.ksh	Sat Oct  5 23:43:56 1991
+***************
+*** 16,21 ****
+--- 16,22 ----
+  alias pbmtoxwd='pnmtoxwd'
+  alias pbmtrnspos='pnmflip -xy'
+  alias pcxtopbm='pcxtoppm'
++ alias pgmtops='pnmtops'
+  alias picttopbm='picttoppm'
+  alias ppmarith='pnmarith'
+  alias ppmconvol='pnmconvol'
+***************
+*** 24,30 ****
+  alias ppmscale='pnmscale'
+  alias ppmshear='pnmshear'
+  alias ppmsmooth='pnmsmooth'
+- alias ppmtops='pnmtops'
+  alias ppmtops='pnmtops'
+  alias ppmtorast='pnmtorast'
+  alias ppmtoxwd='pnmtoxwd'
+--- 25,30 ----
+diff -cr pbmplus27sep91/version.h pbmplus05oct91/version.h
+*** pbmplus27sep91/version.h	Mon Sep 23 15:03:23 1991
+--- pbmplus05oct91/version.h	Sat Oct  5 22:35:33 1991
+***************
+*** 1,4 ****
+  /* version.h - define the current version of PBM, PGM, PPM, and PNM
+  */
+  
+! #define PBMPLUS_VERSION "27sep91"
+--- 1,4 ----
+  /* version.h - define the current version of PBM, PGM, PPM, and PNM
+  */
+  
+! #define PBMPLUS_VERSION "05oct91"
+diff -cr pbmplus27sep91/pgm/pgmramp.c pbmplus05oct91/pgm/pgmramp.c
+*** pbmplus27sep91/pgm/pgmramp.c	Fri Jun 28 14:29:29 1991
+--- pbmplus05oct91/pgm/pgmramp.c	Sat Oct  5 23:08:10 1991
+***************
+*** 62,72 ****
+  	    switch ( ramptype )
+  		{
+  		case RT_LR:
+! 		*gP = col * PGM_MAXMAXVAL / cols;
+  		break;
+  
+  		case RT_TB:
+! 		*gP = row * PGM_MAXMAXVAL / rows;
+  		break;
+  
+  		case RT_RECT:
+--- 62,72 ----
+  	    switch ( ramptype )
+  		{
+  		case RT_LR:
+! 		*gP = col * PGM_MAXMAXVAL / ((cols == 1) ? 1 : (cols - 1));
+  		break;
+  
+  		case RT_TB:
+! 		*gP = row * PGM_MAXMAXVAL / ((rows == 1) ? 1 : (rows - 1));
+  		break;
+  
+  		case RT_RECT:
+diff -cr pbmplus27sep91/pnm/pnmgamma.1 pbmplus05oct91/pnm/pnmgamma.1
+*** pbmplus27sep91/pnm/pnmgamma.1	Tue Jun  4 14:11:45 1991
+--- pbmplus05oct91/pnm/pnmgamma.1	Sat Oct  5 23:16:07 1991
+***************
+*** 19,26 ****
+  The arguments specify what gamma value(s) to use.
+  A value of 1.0 leaves the image alone, less than one darkens it,
+  and greater than one lightens it.
+- .PP
+- All flags can be abbreviated to their shortest unique prefix.
+  .SH "SEE ALSO"
+  pnm(5)
+  .SH AUTHOR
+--- 19,24 ----
+diff -cr pbmplus27sep91/pnm/pnmtoxwd.c pbmplus05oct91/pnm/pnmtoxwd.c
+*** pbmplus27sep91/pnm/pnmtoxwd.c	Wed Sep 25 23:14:24 1991
+--- pbmplus05oct91/pnm/pnmtoxwd.c	Sat Oct  5 23:13:09 1991
+***************
+*** 88,94 ****
+  	    case PPM_TYPE:
+  	    direct = 0;
+  	    pm_message( "computing colormap..." );
+! 	    chv = ppm_computecolorhist( xels, cols, rows, xmaxval, &colors );
+  	    if ( chv == (colorhist_vector) 0 )
+  		{
+  		pm_message(
+--- 88,94 ----
+  	    case PPM_TYPE:
+  	    direct = 0;
+  	    pm_message( "computing colormap..." );
+! 	    chv = ppm_computecolorhist( xels, cols, rows, xmaxval+1, &colors );
+  	    if ( chv == (colorhist_vector) 0 )
+  		{
+  		pm_message(
+diff -cr pbmplus27sep91/pnm/rasttopnm.c pbmplus05oct91/pnm/rasttopnm.c
+*** pbmplus27sep91/pnm/rasttopnm.c	Mon Sep 23 15:28:20 1991
+--- pbmplus05oct91/pnm/rasttopnm.c	Sat Oct  5 23:02:38 1991
+***************
+*** 244,250 ****
+  		    PPM_ASSIGN(
+  			*xP, pr_colormap.map[0][r], pr_colormap.map[1][g],
+  			pr_colormap.map[2][b] );
+- 		++byteP;
+  		}
+  	    break;
+  
+--- 244,249 ----
+diff -cr pbmplus27sep91/pnm/tifftopnm.c pbmplus05oct91/pnm/tifftopnm.c
+*** pbmplus27sep91/pnm/tifftopnm.c	Mon Sep 23 16:41:53 1991
+--- pbmplus05oct91/pnm/tifftopnm.c	Sat Oct  5 23:50:14 1991
+***************
+*** 45,51 ****
+      int headerdump;
+      register u_char sample;
+      register int bitsleft;
+!     int bps, spp, photomet;
+      unsigned short** redcolormap;
+      unsigned short** greencolormap;
+      unsigned short** bluecolormap;
+--- 45,51 ----
+      int headerdump;
+      register u_char sample;
+      register int bitsleft;
+!     unsigned short bps, spp, photomet;
+      unsigned short** redcolormap;
+      unsigned short** greencolormap;
+      unsigned short** bluecolormap;
+diff -cr pbmplus27sep91/ppm/giftoppm.c pbmplus05oct91/ppm/giftoppm.c
+*** pbmplus27sep91/ppm/giftoppm.c	Wed Sep 25 22:25:38 1991
+--- pbmplus05oct91/ppm/giftoppm.c	Sat Oct  5 22:36:46 1991
+***************
+*** 439,445 ****
+  				;
+  
+  			if (count != 0)
+! 				pm_message("missing EOD in data stream (common occurance)");
+  			return -2;
+  		}
+  
+--- 439,445 ----
+  				;
+  
+  			if (count != 0)
+! 				pm_message("missing EOD in data stream (common occurence)");
+  			return -2;
+  		}
+  
+diff -cr pbmplus27sep91/ppm/libppm4.c pbmplus05oct91/ppm/libppm4.c
+*** pbmplus27sep91/ppm/libppm4.c	Wed Sep 25 22:48:01 1991
+--- pbmplus05oct91/ppm/libppm4.c	Sat Oct  5 23:37:10 1991
+***************
+*** 118,124 ****
+  	/* It's a new-X11-style decimal/float rgb specifier. */
+  	float fr, fg, fb;
+  
+! 	if ( sscanf( colorname, "rgbi:%lf/%lf/%lf", &fr, &fg, &fb ) != 3 )
+  	    pm_error( inval, colorname );
+  	if ( fr < 0.0 || fr > 1.0 || fg < 0.0 || fg > 1.0 || fb < 0.0 || fb > 1.0 )
+  	    pm_error( "invalid color specifier - \"%s\" - values must be between 0.0 and 1.0", colorname );
+--- 118,124 ----
+  	/* It's a new-X11-style decimal/float rgb specifier. */
+  	float fr, fg, fb;
+  
+! 	if ( sscanf( colorname, "rgbi:%f/%f/%f", &fr, &fg, &fb ) != 3 )
+  	    pm_error( inval, colorname );
+  	if ( fr < 0.0 || fr > 1.0 || fg < 0.0 || fg > 1.0 || fb < 0.0 || fb > 1.0 )
+  	    pm_error( "invalid color specifier - \"%s\" - values must be between 0.0 and 1.0", colorname );
+***************
+*** 185,191 ****
+  	/* It's an old-style decimal/float rgb specifier. */
+  	float fr, fg, fb;
+  
+! 	if ( sscanf( colorname, "%lf,%lf,%lf", &fr, &fg, &fb ) != 3 )
+  	    pm_error( inval, colorname );
+  	if ( fr < 0.0 || fr > 1.0 || fg < 0.0 || fg > 1.0 || fb < 0.0 || fb > 1.0 )
+  	    pm_error( "invalid color specifier - \"%s\" - values must be between 0.0 and 1.0", colorname );
+--- 185,191 ----
+  	/* It's an old-style decimal/float rgb specifier. */
+  	float fr, fg, fb;
+  
+! 	if ( sscanf( colorname, "%f,%f,%f", &fr, &fg, &fb ) != 3 )
+  	    pm_error( inval, colorname );
+  	if ( fr < 0.0 || fr > 1.0 || fg < 0.0 || fg > 1.0 || fb < 0.0 || fb > 1.0 )
+  	    pm_error( "invalid color specifier - \"%s\" - values must be between 0.0 and 1.0", colorname );
+diff -cr pbmplus27sep91/ppm/ppmrelief.c pbmplus05oct91/ppm/ppmrelief.c
+*** pbmplus27sep91/ppm/ppmrelief.c	Fri Jun 28 14:30:48 1991
+--- pbmplus05oct91/ppm/ppmrelief.c	Sat Oct  5 22:38:29 1991
+***************
+*** 50,61 ****
+      inputbuf = ppm_allocarray( cols, 3 );
+      outputrow = ppm_allocrow( cols );
+  
+!     ppm_writeppminit( stdout, cols - 2, rows - 2, maxval, 0 );
+  
+      /* Read in the first two rows. */
+      ppm_readppmrow( ifp, inputbuf[0], cols, maxval, format );
+      ppm_readppmrow( ifp, inputbuf[1], cols, maxval, format );
+  
+      /* Now the rest of the image - read in the 3rd row of inputbuf,
+      ** and convolve with the first row into the output buffer.
+      */
+--- 50,66 ----
+      inputbuf = ppm_allocarray( cols, 3 );
+      outputrow = ppm_allocrow( cols );
+  
+!     ppm_writeppminit( stdout, cols, rows, maxval, 0 );
+  
+      /* Read in the first two rows. */
+      ppm_readppmrow( ifp, inputbuf[0], cols, maxval, format );
+      ppm_readppmrow( ifp, inputbuf[1], cols, maxval, format );
+  
++     /* Write out the first row, all zeros. */
++     for ( col = 0; col < cols; ++col )
++         PPM_ASSIGN( outputrow[col], 0, 0, 0 );
++     ppm_writeppmrow( stdout, outputrow, cols, maxval, 0 );
++ 
+      /* Now the rest of the image - read in the 3rd row of inputbuf,
+      ** and convolve with the first row into the output buffer.
+      */
+***************
+*** 73,82 ****
+  		( mv2 - PPM_GETG( inputbuf[rowb][col + 2] ) );
+  	    b = PPM_GETB( inputbuf[rowa][col] ) +
+  		( mv2 - PPM_GETB( inputbuf[rowb][col + 2] ) );
+! 	    PPM_ASSIGN( outputrow[col], r, g, b );
+  	    }
+! 	ppm_writeppmrow( stdout, outputrow, cols - 2, maxval, 0 );
+  	}
+      pm_close( ifp );
+  
+      exit( 0 );
+--- 78,93 ----
+  		( mv2 - PPM_GETG( inputbuf[rowb][col + 2] ) );
+  	    b = PPM_GETB( inputbuf[rowa][col] ) +
+  		( mv2 - PPM_GETB( inputbuf[rowb][col + 2] ) );
+! 	    PPM_ASSIGN( outputrow[col + 1], r, g, b );
+  	    }
+! 	ppm_writeppmrow( stdout, outputrow, cols, maxval, 0 );
+  	}
++ 
++     /* And write the last row, zeros again. */
++     for ( col = 0; col < cols; ++col )
++         PPM_ASSIGN( outputrow[col], 0, 0, 0 );
++     ppm_writeppmrow( stdout, outputrow, cols, maxval, 0 );
++ 
+      pm_close( ifp );
+  
+      exit( 0 );
+diff -cr pbmplus27sep91/ppm/ppmtosixel.c pbmplus05oct91/ppm/ppmtosixel.c
+*** pbmplus27sep91/ppm/ppmtosixel.c	Fri Sep 27 13:00:31 1991
+--- pbmplus05oct91/ppm/ppmtosixel.c	Sat Oct  5 22:59:27 1991
+***************
+*** 16,25 ****
+  #define MAXVAL 100
+  #define MAXCOLORS 256
+  
+! #define DCS '\x90'   /* Device Control String */
+! #define ST  '\x9c'   /* String Terminator */
+! #define CSI '\x9b'   /* Control String Introducer */
+! #define ESC '\x1b'   /* Escape character */
+  
+  static pixel** pixels;   /* stored ppm pixmap input */
+  static colorhash_table cht;
+--- 16,25 ----
+  #define MAXVAL 100
+  #define MAXCOLORS 256
+  
+! #define DCS '\220'   /* Device Control String */
+! #define ST  '\234'   /* String Terminator */
+! #define CSI '\233'   /* Control String Introducer */
+! #define ESC '\033'   /* Escape character */
+  
+  static pixel** pixels;   /* stored ppm pixmap input */
+  static colorhash_table cht;
+
+exit 0 # Just in case...
+-- 
+Kent Landfield                   INTERNET: kent@sparky.IMD.Sterling.COM
+Sterling Software, IMD           UUCP:     uunet!sparky!kent
+Phone:    (402) 291-8300         FAX:      (402) 291-4362
+Please send comp.sources.misc-related mail to kent@uunet.uu.net.
+
+

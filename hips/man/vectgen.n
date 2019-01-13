@@ -1,0 +1,63 @@
+.TH VECTGEN 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+vectgen \- spanning tree coding
+.SH SYNOPSIS
+.B vectgen
+[-p] [-d] [-x] [-c short [long [break]]]
+.SH DESCRIPTION 
+.I Vectgen
+tracks a thinned and categorized image and simulates vector coding.
+Option
+.I -p
+causes the graph to be printed for each frame.
+Option
+.I -d
+is a debugging switch
+which prints the graph on errors.
+Option
+.I -x
+yields a byte pixel formatted image as
+output, so that cut points can be observed, otherwise a spanning tree is 
+output. 
+Option
+.I -c
+allows the user to change the minmax distance criterion. The 
+.I short
+threshold is used below the 
+.I break
+point, and the 
+.I long
+criterion is used above
+it.  The defaults are 
+.I short
+= 1.5, 
+.I long
+= 1.5, and
+.I break
+= 12.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "OUTPUT PIXEL FORMATS"
+spanning tree
+.SH "REGION-OF-INTEREST"
+The entire image is coded.  The region-of-interest is ignored.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+vectcode(1), thin(1)
+.SH AUTHOR
+Mike Landy - 11/22/82
+.br
+HIPS 2 - msl - 7/24/91

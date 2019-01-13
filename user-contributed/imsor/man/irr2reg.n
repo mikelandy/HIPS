@@ -1,0 +1,240 @@
+.TH IRR2REG 1 "20 August 1992" "Version 2" "HIPS Manual"
+.SH NAME
+irr2reg \- transform HIPS-file of the IMSOR-defined irregular format to
+regular HIPS-image
+.SH SYNOPSIS
+.B irr2reg 
+.RB [ \-r
+.I rows
+.RB [ \-c
+.IR cols ]
+.RB [ \-S ]]
+|
+.B \-s
+.IR pixelside ]
+.br
+.RB [ \-i
+.B x
+.I min max
+|
+.BI y \ min
+.IR max ]
+.RB [ \-g
+.B x
+.I min max
+|
+.BI y \ min
+.IR max ] 
+.RB [ \-a ]
+.br
+.RB [ \-p
+.IR pixel-val ] 
+.RB [ \-m
+.IR missing ]
+.RB [ \-n \ [ o \ | \u | \ m
+.RI | \ value ]]
+.br
+.RB [ \-e
+.I masksize
+|
+.B \-E
+.IR masksize ] 
+.RB [ \-mir ]
+.RB [ \-w4 ]
+.RB [ \-w8 ]
+.RB [ \-wf
+.IR logfile ]
+.SH DESCRIPTION 
+.I irr2reg
+creates a HIPS image from a dataset of the IMSOR defined irregular format,
+see
+.IR asc2hips .
+The image is constructed from a user-specified regular grid, which contains
+the locations of the pixel-centroids.
+The image-pixels are assigned a value, which is a function
+of the values of the input points placed inside the pixel-domain. 
+.sp 0.5
+The dimension of the grid is specified by setting the coordinate-limits, 
+and either the number of rows, columns by options 
+.BR \-r , \ \-c 
+or the pixel-size by option 
+.BR \-s .
+.sp 0.5
+By default the grid is the smallest rectangle which includes the entire 
+input point-set. 
+It is possible to extend this grid beyond the data-domain by option
+.BR \-g .
+By default the coordinate-limits apply for the image.
+If switch 
+.B \-a
+is set the coordinate-limits apply for the grid, meaning that the outer 
+pixels are moved out on the edge of the specified domain. 
+.sp 0.5
+Option
+.B \-i
+limits the domain of the data to be included in the grid. 
+.sp 0.5
+The grid is oriented so that the origin of the (x,y) coordinate-system 
+is positioned in the lower-left image corner (row=Max_row, col=0), and 
+the x-axis is horisontal. 
+If switch 
+.B \-m
+is set, the image is mirrored in the horisontal axis. 
+.sp 0.5
+Pixels which do not contain any irregular points are given a "neutral" 
+value, which is specified by option
+.B \-n
+and defaults the value: (max \- min)/2 of the frame. 
+.sp 0.5
+A parameter Gridspec is placed in the extended header, which is a vector
+of 10 float elements holding: index 0\-3: coordinate limits of the 
+regular grid, index 4\-7: coordinate limits of data included in grid, 
+index 8: horisontal sidelength of pixel, index 9: vertical sidelength of pixel.
+The coordinate limits are arranged: lower x, upper x, 
+lower y, upper y.
+
+.SH OPTIONS
+
+.TP
+.BI  \-r \ rows \ \fR[ \fB-s \fIcols \fR]
+sets the number of rows and columns in the HIPS-grid.
+By default 
+.I rows
+=
+.IR cols .
+
+.TP
+.B \-S
+forces the pixels to be square. In this case the specified number of  
+rows and columns (option
+.B \-r \fR, \fP \-c 
+) are considered as maximum numbers,
+and the sidelength of the pixels is set as high as possible without exceeding
+any of the two.
+
+.TP
+.BI \-s \ length 
+specifies the side-length of the pixel.
+If the span of the grid is
+not a multiplum of side-lengths, the span is extended by increasing the
+upper limit(s).
+
+.TP
+.B \-i x
+.I min max
+.B y 
+.I  min max
+specifies a rectangle of points to be included in the grid if this is
+not simply the entire point-set.  The rectangle is specified by
+lower and upper x-coordinate, and/or lower and upper y-coordinate. 
+
+.TP
+.B \-g x
+.I min max
+.B y 
+.I  min max
+specifies the domain of the grid, if this is not simply the
+rectangle of included points (option i).
+The include rectangle 
+must lie completely inside the grid-rectangle.   
+
+.TP
+.B \-a
+By default the dimensions given in option 
+.B \-g
+apply for the image, so that the pixels are placed completely inside the 
+specified domain.
+By setting flag
+.B \-a 
+the dimensions instead apply for the pixel-grid,
+meaning that the centroids of the edge-pixels are placed on the borders
+of the specified domain, whereby the
+image-domain is extended a bit beyond the given dimensions. 
+.sp 0.5
+This option is usable in the case where the input-points are more or less
+placed in a regular grid.
+In this case the default setting may cause problems
+for points positioned near pixel-borders.
+
+.TP
+.BI \-p \ n
+there are 5 ways of calculating the pixel-values: 
+.I n=1
+: minimum value of point-values inside the pixel-domain,
+.I n=2
+: mean value of point-values inside the pixel-domain (default),
+.I n=3
+: maximum value of point-values inside the pixel-domain,
+.I n=4
+: number of points inside the pixel-domain,
+.I n=5
+: 1 if there are any points inside the pixel-domain, 
+otherwise 0.
+.sp 0.5
+Points placed on a border between two pixels are allocated to the pixel
+with highest column-number and/or lowest row-number.
+
+.TP
+.B \-m 
+specifies value of value of input-data to be skipped in compution of image
+(missing value).
+
+.TP
+.BI \-n \ method 
+there are 5 methods of calculating values of unused pixels.
+Let min
+and max be the minimum and maximum value of the pixels assigned a value. 
+By default the neutral value is equal to (max \+ min)/2.
+Other
+methods are:
+.I method=\fBu
+: neutral = min \- 0.01*(max\-min)
+.I method=\fBo
+: neutral = max + 0.01*(max\-min)
+.I method=\fBm
+: neutral = min + (max \- median)
+.I method=value
+: neutral = value.
+
+.TP
+.BI \-e \ order 
+assigns (extends) the calculated pixel-values to the surrounding pixels
+if these are not given a value already.
+If several pixels wish to "include" the same pixel, the pixel-evaluation
+method given by option 
+.B \-p 
+is used to calculate the value.  Parameter
+.I order 
+sets the size of the extension mask; mask size = 2*order + 1. 
+.br
+
+.TP
+.BI \-E \ order
+same as option
+.BR \-e ,
+except that the used pixels are also modified.
+
+.TP
+.B \-mir
+mirrors the y-coordinates, so that the origin of the (x,y)-coordinate system
+is positioned at the position (row=0,col=0) of the image. 
+
+.TP
+.B \-w8 
+output format is double (default: equal to input format).
+
+.TP
+.B \-w4
+output format is float (default: equal to input format).
+
+.TP
+.BI \-wf \ logfile
+name of logfile (default: i2r + process-number).
+
+.SH SEE\ ALSO
+asc2hips(1), reg2irr(1)
+.SH AUTHOR
+.nf
+Karsten Hartelius
+IMSOR, Technical University of Denmark
+e-mail: kah@imsor.dth.dk

@@ -1,0 +1,36 @@
+#
+# makefile for ccs-lib/libs/libccs/dpi.s
+#
+
+OBJECTS = rtcp.o rtp_cnct.o rtp_group.o rtp_subr.o
+ANSI_OBJ = $(OBJECTS)
+
+LIBFLAG = -DEXTENDED_U_IMAGE #-DPROHIBITEN_RELEASE
+LOCALINCDIR = $(CCS_ROOT)/include
+LOCALINC = -I$(LOCALINCDIR) -I.
+LOCALCFLAGS = $(LOCALINC) $(LIBFLAG) $(ADD_FUNCS)
+
+default install:	$(OBJECTS)
+
+ANSI2KNR = cp	# make non-ANSI anyway
+include ansi-knr
+
+.c.o:	$(LOCALINCDIR)/stdef.h
+	@-( $(COMPILEc) $(LOCALCFLAGS) $*.c ;	\
+	    if [ $$? -ne 0 ];	then	\
+		echo	$*.o is empty;	\
+	    else	\
+		ld $(LDLIBFLAGS) $*.o ;	mv a.out $*.o ;	\
+	    fi	\
+	)
+
+clean:
+	rm -f $(OBJECTS)
+
+clean-all:	clean_all
+
+pristine:	clean
+
+man:
+
+doc:

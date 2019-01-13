@@ -1,0 +1,80 @@
+.TH GENHEADER 1 "7/5/91" "Version 2" "HIPS Manual"
+.SH NAME
+genheader \- generate a image header
+.SH SYNOPSIS
+.ta 1i
+.B genheader
+[-MP -LP -B -SB -S -US -I -UI -F -D -C -DC -RGB -RGBZ -ZRGB -BGR -BGRZ -ZBGR]
+.br
+	[-s rows [cols]] [-f frames] [-nc numcolor] [-nd numdepth] [-p] <iseq >oseq
+.SH DESCRIPTION 
+.I Genheader
+creates an image header.  The output pixel format may be either MSBF (\c
+.IR -MP ),
+LSBF (\c
+.IR -LP ),
+byte (\c
+.IR -B,
+the default), signed byte (\c
+.IR -SB ),
+short (\c
+.IR -S ),
+unsigned short (\c
+.IR -US ),
+integer (\c
+.IR -I ),
+unsigned integer (\c
+.IR -UI ),
+float (\c
+.IR -F ),
+double (\c
+.IR -D ),
+complex (\c
+.IR -C ),
+double complex (\c
+.IR -DC ),
+RGB (\c
+.IR -RGB ),
+RGBZ (\c
+.IR -RGBZ ),
+ZRGB (\c
+.IR -ZRGB ),
+BGR (\c
+.IR -BGR ),
+BGRZ (\c
+.IR -BGRZ )
+or ZBGR (\c
+.IR -ZBGR ).
+Switches
+.IR -s ,
+.IR -f ,
+.I -nd
+and
+.I -nc
+specify the size, number of 3D color frames, number of depths
+and number of color planes.  The
+actual number of frames of data is frames*numdepth*numcolor.
+The number of rows defaults to 512, the number of
+columns defaults to the number of rows, and the number of color frames, depths
+and color planes default
+to 1.  Switch
+.I -p
+specifies that there is a header-less input sequence
+which should be read and appended to the new HIPS header.
+.SH "OUTPUT PIXEL FORMATS"
+MSBF, LSBF, byte, signed byte, short, unsigned short, int, unsigned int,
+float, double, complex or double complex
+.SH "REGION-OF-INTEREST"
+The output region of interest is cleared.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+genframe(1), grabheader(1), stripheader(1)
+.SH AUTHOR
+HIPS 2 - Michael Landy - 7/5/91
+.br
+added ZRGB/BGR/BGRZ/ZBGR - msl - 5/24/93
+.br
+added depths - msl - 3/8/94

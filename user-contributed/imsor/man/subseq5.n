@@ -1,0 +1,61 @@
+.TH SUBSEQ5 1 "10 December 1992" "Version 2" "HIPS Manual"
+.SH NAME
+subseq5 \- extract a 5-frame subsequence
+.SH SYNOPSIS
+.B subseq5
+.RB [ \-f
+.I frame1 frame2 frame3
+.RI [ frame4
+.IR frame5 ]]
+.SH DESCRIPTION 
+.I subseq5
+extracts a 5-frame subsequence from an image sequence.
+.sp 0.5
+.I subseq5
+with less than 4 parameters
+always extracts frames 0 and 1 along with the frames indicated.
+(This is related to IMSOR's Irregular image HIPS-2 format in which
+x and y coordinates are stored in frames 0 and 1 respectively.)
+.I frame1
+defaults to 2,
+.I frame2
+defaults to 3
+and
+.I frame3
+defaults to 4.
+.sp 0.5
+.I subseq5
+with more than 3 parameters extracts the frames indicated.
+.I frame1
+defaults to 0,
+.I frame2
+defaults to 1,
+.I frame3
+defaults to 2,
+.I frame4
+defaults to 3
+and
+.I frame5
+defaults to 4.
+.sp 0.5
+From a disk file sequence, frames can be read in any order.
+From a piped sequence, frames must be read sequentially.
+.sp 0.5
+.I subseq5
+uses little memory (only one frame in RAM at a time) at the
+potential expense of
+CPU time spent on disk search
+and the inability to read in any order
+from a piped input sequence.
+.SH SEE\ ALSO
+catframes(1), subseq(1), subseq3(1).
+.SH CREDIT
+.I subseq5
+is (of course) based on
+.I subseq
+originally written by Yoav Cohen and Michael Landy.
+.SH AUTHOR
+.nf
+Allan Aasbjerg Nielsen
+IMSOR, Technical University of Denmark
+e-mail: aa@imsor.dth.dk

@@ -1,0 +1,43 @@
+.TH MINSEQ 1 "8/17/91" "Version 2" "HIPS Manual"
+.SH NAME
+minseq \- compute the minimum of two sequences, pixel by pixel
+.SH SYNOPSIS
+.B minseq
+file < iseq > oseq
+.SH DESCRIPTION 
+.I Minseq
+computes the minimum of each pixel in a sequence with the corresponding pixel
+in a stored sequence.
+If either sequence is shorter than the other, the last frame is repeated
+a sufficient number of times to match (and a warning message is printed).
+The header text is generally taken from the standard input header, although
+the treatment of history, sequence description and extended parameters depends
+on the standard switch settings (see below).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, int, float, double, integer pyramid, float pyramid
+.SH "REGION-OF-INTEREST"
+The combination of the  regions-of-interest of the sequences
+replaces the region-of-interest of iseq, and then iseq is output.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I -NFH
+Do not preserve the input sequence histories of all input sequences.
+.TP 1.3i
+.I -NFD
+Do not preserve the input sequence descriptions of all input sequences.
+.TP 1.3i
+.I -FXP
+Merge the extended parameter lists from all input sequences.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+maxabsseq(1), maxseq(1), minabsseq(1)
+.SH AUTHOR
+Michael Landy - 8/17/91

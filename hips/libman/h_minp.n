@@ -1,0 +1,108 @@
+.TH H_MINP 3 "8/17/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_minp \- subroutines to compute the minimum of two images pixel by pixel
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_minp(hdi1,hdi2,hdo)
+h_minp_b(hdi1,hdi2,hdo)
+h_minp_s(hdi1,hdi2,hdo)
+h_minp_i(hdi1,hdi2,hdo)
+h_minp_f(hdi1,hdi2,hdo)
+h_minp_d(hdi1,hdi2,hdo)
+h_minp_ip(hdi1,hdi2,hdo)
+h_minp_fp(hdi1,hdi2,hdo)
+struct header *hdi1,*hdi2,*hdo;
+
+h_minp_B(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+byte *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_minp_S(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+short *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_minp_I(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+int *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_minp_F(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+float *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+
+h_minp_D(imagei1,imagei2,imageo,nr,nc,nlpi1,nlpi2,nlpo)
+double *imagei1,*imagei2,*imageo;
+int nr,nc,nlpi1,nlpi2,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines compute the minimum of two input subimages (specified by
+.I hdi1
+and
+.IR hdi2 ,
+or by
+.I imagei1
+and
+.IR imagei2 )
+pixel by pixel,
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_minp
+calls
+.IR h_minp_b ,
+.IR h_minp_s ,
+.IR h_minp_i ,
+.IR h_minp_f ,
+.IR h_minp_d ,
+.IR h_minp_ip ,
+or
+.IR h_minp_fp
+depending upon whether the pixel format is byte, short, integer, float, double,
+integer pyramid or float pyramid.
+.IR h_minp_B ,
+.IR h_minp_S ,
+.IR h_minp_I ,
+.I h_minp_F
+and
+.I h_minp_D
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input images have
+.I nlpi1
+and
+.I nlpi2
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, short, integer, float, double, integer pyramid, float pyramid
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi1 .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi1
+and/or
+.I hdi2
+can be the same as
+.I hdo
+and
+.I imagei1
+and/or
+.I imagei2
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_maxp(3), h_maxabsp(3), h_minabsp(3)
+.SH AUTHOR
+Michael Landy - 8/17/91

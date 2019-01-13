@@ -1,0 +1,17 @@
+.TH DUAL_THRESH 1 "March 2, 1988"
+.SH NAME
+dual_thresh - apply a dual threshold to an image
+.SH SYNOPSIS
+.B dual_thresh
+[-pP] [-gN]
+.SH DESCRIPTION 
+.I Dual_thresh
+applies a dual threshold to an image.  The darkest P percent of the pixels
+will be set to black (zero), and the brightest P percent of the pixels will be
+set to white (255).  The percent may be specified with the
+.I -p
+switch, and defaults to 10%.  By default, the intermediate-valued pixels are
+left unmodified, but they may be set to a fixed value using the
+.I -g
+switch, which specifies the grey-level to use.
+This program works with byte-formatted images.

@@ -1,0 +1,68 @@
+.TH H_COL1TOCOL3 3 "5/21/93" "Version 2" "HIPS Manual"
+.SH NAME
+h_col1tocol3 \- conversions from single pixel to 3-color format
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_col1torgb(hdi,hdo,fr)
+h_col1torgbz(hdi,hdo,fr)
+h_col1tozrgb(hdi,hdo,fr)
+h_col1tobgr(hdi,hdo,fr)
+h_col1tobgrz(hdi,hdo,fr)
+h_col1tozbgr(hdi,hdo,fr)
+h_btorgb_1(hdi,hdo,fr)
+h_itorgb_1(hdi,hdo,fr)
+h_btorgbz_1(hdi,hdo,fr)
+h_itorgbz_1(hdi,hdo,fr)
+h_btozrgb_1(hdi,hdo,fr)
+h_itozrgb_1(hdi,hdo,fr)
+h_btobgr_1(hdi,hdo,fr)
+h_itobgr_1(hdi,hdo,fr)
+h_btobgrz_1(hdi,hdo,fr)
+h_itobgrz_1(hdi,hdo,fr)
+h_btozbgr_1(hdi,hdo,fr)
+h_itozbgr_1(hdi,hdo,fr)
+struct header *hdi,*hdo;
+int fr;
+.fi
+.SH DESCRIPTION 
+These routines convert from a variety of pixel formats to the 3-color formats
+(RGB, RGBZ, ZRGB, BGR, BGRZ and ZBGR).  The
+entire image pointed to by
+.I hdi
+is converted to the requested format and stored in the image pointed to by
+.I hdo
+(any region-of-interest information is ignored).  The routines
+.IR h_col1torgb ,
+.IR h_col1torgbz ,
+.IR h_col1tozrgb ,
+.IR h_col1tobgr ,
+.I h_col1tobgrz
+and
+.I h_col1tozbgr
+check the pixel format of the input image and call the appropriate
+individual routines
+according to whether it is byte or integer.
+All values are clipped to lie between 0 and 255.
+The number of clipped pixels is recorded in HIPS global variables
+.I hips_lclip
+(for negative values) and
+.I hips_hclip
+(for positive values).  The input image is in a single color format, and thus
+only sets a single color value in the output image.  The supplied value of
+.I fr
+specifies the color to be set.  If
+.I fr
+is a multiple of 3, then the red plane is set.  If it is 1 more than a
+multiple of 3, then the green plane is set.  Otherwise, the blue plane is
+set.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_col3tob(3), h_col3tocol3(3), h_col3toi(3), h_rgb(3), h_toc(3), h_tod(3),
+h_todc(3), h_tof(3), h_toi(3), etc.
+.SH AUTHOR
+Michael Landy - 5/20/93

@@ -1,0 +1,91 @@
+.TH ADDPARAM 1 "8/14/91" "Version 2" "HIPS Manual"
+.SH NAME
+addparam \- add parameters to a HIPS image header
+.SH SYNOPSIS
+.B addparam
+[-F paramfile]
+.br
+.ta 1i
+	[-b name bytevalue]
+.br
+	[-s name shortvalue]
+.br
+	[-i name intvalue]
+.br
+	[-f name floatvalue]
+.br
+	[-S name stringvalue]
+.br
+	[-SF name stringfile] <iseq >oseq
+.SH DESCRIPTION 
+.I Addparam
+is used to add parameters to a HIPS image header.  A few
+parameters may be specified in the command line, or any number of
+parameters may be specified in a file.  Single-valued parameters may
+be specified in the command line with
+.IR -b ,
+.IR -s ,
+.I -i
+or
+.I -f
+for a single
+byte, short, integer or float parameter.
+.I -S
+may be used to specify an Ascii
+array (a string of length 1 or more).
+.I -SF
+also defines an Ascii
+array, setting the parameter equal to the entire contents of the named
+file.  Note that each of these parameters may be specified at most once.
+Thus, to specify more than one of a given parameter type, either pipe the
+results into another
+.IR addparam ,
+or use the
+.I -f
+option.
+.PP
+The
+.I -f
+option allows the user to specify any number of parameters in a
+file.  The format of the file is as a series of descriptions of single
+parameters.  Each parameter description takes the following form:
+.sp
+.ce
+name format count values
+.sp
+.I Name
+is the name of the parameter.
+.I Format
+is the the parameter type.  This is a string which may be `b', `s', `i' or `f'
+for byte, short, integer or
+floating point.
+.I Count
+is the count of values.  The
+.IR scanf (3)
+format `%d' is used
+for byte, short and integer types, `%f' is used for floating point types.
+For Ascii parameters there are two forms.  First, there is:
+.sp
+.ce
+name string "value"
+.sp
+which sets parameter name to be a string array with the indicated value.
+The quotation marks are stripped off and the string array is terminated
+with a null.  A backslash character may be used to quote a quotation
+character (or another backslash) if desired.  Finally:
+.sp
+.ce
+name stringfile filename
+.sp
+sets the value of parameter name to be the entire contents of the named
+file.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+All formats
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+convertxhd(1)
+.SH AUTHOR
+Mike Landy - 8/14/91

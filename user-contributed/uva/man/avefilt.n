@@ -1,0 +1,19 @@
+.TH AVEFILT 1HIPS "April 2, 1987"
+.SH NAME
+avefilt - apply an averaging filter to an image
+.SH SYNOPSIS
+.B avefilt
+[size]
+.SH DESCRIPTION 
+.I Avefilt
+applies an averaging filter to an image,
+where 
+.I size
+is the length of the side of the neighborhood in which the
+average is computed. 
+.I Size
+defaults to 3.
+.SH SEE\ ALSO
+extremum(1HIPS), median(1HIPS)
+.SH AUTHOR
+Chuck Carman - 4/2/87

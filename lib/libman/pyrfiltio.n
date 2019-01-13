@@ -1,0 +1,68 @@
+.TH PYRFILTIO 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+pyrfiltio \- read pyramid filter definitions
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+getpyrfilters(filename,rf,ef)
+read_1dfilter(f,stream,filename)
+default_1dfilter(f)
+Filename filename;
+FILTER *rf,*ef,*f;
+FILE *stream;
+.fi
+.SH DESCRIPTION 
+These routines are used to read pyramid filter definitions.
+.I getpyrfilters
+reads the reduce and expand filters from the supplied file.  If the filename
+is null, then the default (Gaussian-like: .4, .25, .05) filters are used.
+.I read_1dfilter
+actually reads each filter, and
+.I default_1dfilter
+supplies the default filter.
+.PP
+Note that the pyramid code is based only upon symmetric filters with an
+odd number of taps.  Filters are stored in Ascii with only the taps from
+the center (tap 0) rightward or downward through tap n, so that taps -1 to
+-n are defined to be the same as taps 1 to n.  The file format is:
+.nf
+.in 1i
+.ta .5i 1i 1.5i 2i
+
+nred scalered
+reduce filter tap 0
+reduce filter tap 1
+	.
+	.
+	.
+reduce filter tap nred
+nexp scaleexp
+expand filter tap 0
+expand filter tap 1
+	.
+	.
+	.
+expand filter tap exp
+
+.fi
+.in -1i
+All tap values are divided by the corresponding value of scale.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_OPEN - can't open file
+.br
+HE_READFILE - error during read
+.SH AUTHOR
+The pyramid utilities are derived from code originally written by
+Raj Hingorani at SRI/David Sarnoff Research Institute.  The original
+Gaussian and Laplacian pyramid algorithms were designed by Peter Burt (also
+currently at SRI/DSRC).  See:  Computer Graphics and Image Processing,
+Volume 16, pp. 20-51, 1981, and IEEE Transactions on Communications,
+Volume COM-31, pp. 532-540, 1983.
+.sp
+modified for HIPS 2 - msl - 1/3/91

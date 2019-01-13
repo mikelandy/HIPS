@@ -1,0 +1,266 @@
+.TH SEGAL n "1992" "Segal Version 3d" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+segal \- X-based image processing tool for segmentation
+of 2d and 3d images and registration of 3d images.
+.SH SYNOPSIS
+.IP \fBsegal\fR 7
+[-i
+.I image
+] [-m
+.I mask
+] [-l
+.I list
+] [-v] [-c
+.I NN
+] [-n] [-h[elp]]
+.SH DESCRIPTION
+\fIsegal\fR takes a 2d (single frame) or 3d (multi-framed) image as input
+and produces bit masks of segmented objects in that image as output.
+.LP
+Segmentation is the process of separating objects (also called
+Regions Of Interest, or roi's) from the background and other
+impertinent objects of an image.  One can think of this process
+as Object Recognition minus the neural network component which
+assigns a name or other description to the object.  The product of a
+segmentation algorithm is a collection of points that define an object.
+\fIsegal\fR outputs the collections in the form of bit masks which
+can be used in conjunction with the image by some other image
+processing program to analyze, manipulate, or render the objects for
+display.
+.LP
+\fIsegal\fR grew out of a need for human interaction in the segmentation
+process.  Completeley automatic algorithms for segmentation
+require some prior knowlege of the input image and especially
+the characteristics of the objects to be found.  Hence, no
+general automatic segmentation algorithm exists that can satisfactorily
+segment a broad class of scientific images
+acquired through serial
+sectioning techniques (i.e NMR, earth siesmic tomography, confocal
+microscopy, mechanical sectioning of object, etc.) because
+these techniques are imperfect and subject to a wide variety of
+errors during acquisition.
+.LP
+These errors result in a non-uniformity of characteristics of an object
+both within one frame (slice, tomogram, etc.) and (usually more
+pronounced) from frame to frame.  This non-uniformity presents
+the greatest challenge to the automatic segmentation algorithm, as
+uniformity in characteristics of the pixels (or voxels) of an object is
+its criteria for including each pixel in the collection of points.
+.SH "HOW TO USE"
+.nr PS 12
+.LP
+\fBLoading an Image:\fR 
+.nr PS 10
+.IP "" 5
+Before doing anything, an image must be loaded into memory.  It can be
+a single or multi framed image stored in one of the image formats listed
+at the end of this man page.  To load an image, select the \fBFile\fR:
+\fILoad image ...\fR menu option from the main window.  Enter the
+Directory (default is the current directory) and file name and then
+press return.  The image header info will be read and then various
+options on the \fBLoad Image\fR window will become accessible.  In this
+release, color images will be converted to gray scale during the loading
+process.
+.nr PS 12
+.LP
+\f3Masks: Creating and Loading\f1
+.nr PS 10
+.IP "" 5
+The next thing to do is to create a new mask or load an existing one.
+All mask input/output is done from the \fBMask Log\fR window's \fBMask\fR
+menu.  This menu allows the \fIloading, creating, saving, and unloading\fR
+of masks in the \fUMask Log\fR.  The \fUMask Log\fR can contain at most 6
+masks at a given time.  These masks may be designated as one of the
+following types: \fIEdit\fR (one at a time)\fI, Not applied, Exclusive,
+and Inclusive\fR.
+.IP "" 5
+Once this is done, the various segmentation
+facilities of \fIsegal\fR\ become accessible from the main window.
+.nr PS 12
+.LP
+\f3Modes: Segment\f1
+.nr PS 10
+.IP "" 5
+\fIsegal\fR\ has two main modes: \fISegment\fR and \fIRegister\fR.
+In \fISegment\fR mode, segal creates, loads, edits, stores,
+adds, subtracts, and otherwise manipulates masks.  Some primitive editing
+of the image may be performed also.
+.nr PS 12
+.LP
+\f3Image Editing:\f1
+.nr PS 10
+.IP "" 5
+\fBPainting\fR the image with a lightening or darkening paintbrush is possible
+in the \fBPaint\fR window \fI(Brush Mode: Image)\fR.  This is especially
+useful when a \fIbridge points\fR can be found.  They can be either
+lightened or darkened to create a barrier for the mask growing algorithm.
+While painting is useful, it is only advised if the
+results of \fIsegal\fR do not need to be accurate enough for
+precise scientific analysis.
+.IP "" 5
+\fBThresholding\fR the image is accomplished be selecting the appropriate
+\fIupper\fR and \fIlower\fR threshold values (click the left or right
+button on the Histogram in the \fBSegment:\fR\fIThreshold\fR window
+and then pressing either the \fIBlack Image\fR or \fIWhite Image\fR
+button).  All pixel values in the image within the \fIRegion of application\fR
+and within the threshold boundaries will be mapped to either Black
+or White, respectively.  Various \fIRegions of application\fR
+can be selected, and the histogram will update to reflect each one.
+(IMPLEMENTED: whole frame, whole image)
+.nr PS 12
+.LP
+\f3Mask Editing:\f1
+.nr PS 10
+.IP "" 5
+\fBPainting\fR the mask involves either \fIpainting\fR or \fIerasing\fR.
+When a mask is created, it is blank.  Painting will add to the mask.
+From the \fBMask Log:\fR\fIOptions ...\fR, addition of the
+\fIInclusive\fR and subtraction of the \fIExclusive\fR masks can
+be controled.  If multiple masks are loaded in the \fImask log\fR
+and one is designated as \fIExclusive\fR, one may find that attempting
+to paint mask over any region of the image covered by the \fIExclusive\fR
+mask does not work.  Either the \fIExclusive\fR mask must be set to
+\fINot applied\fR or the \fBMask Log: Options ...:\fR\fIApply mask log\fR
+must be set to \fINo\fR.
+.IP "" 5
+The main uses of painting the edit mask are planting seed points for the
+mask grow algorithm and touching up any automatic algorithm's results.
+.IP "" 5
+The paintbrush can change \fImode\fR (Image/Mask);
+\fIAffect\fR (Lighter/Darker or Paint/Erase);
+\fIShape\fR (Square/Round);
+and \fISize\fR (1x1 ... 20x20).
+.IP "" 5
+\fIsegal\fR\'s power is its \fIinteraction\fR with the human user.
+It contains a quite general, fast, and good \fBautomatic\fR segmentation
+algorithm available via the \fBMask Grow\fR window.
+This region growing algorithm incorporates:
+.IP "" 5
+\fBThreshold:\fR
+(Is the candidate pixel's (voxel's) intesity within some range of values?),
+.IP "" 5
+\fBGradient:\fR
+(How fast are the intensities of the pixels changing with respect to some direction at the candidate pixel (voxel)?
+* Low in center of an object, High at edge of object *), and
+.IP "" 5
+\fBConnectivity:\fR
+(How many pixels (voxels) close to the candidate pixel satisfy the thresholing and gradient criteria?
+* Low at edge of object or at a \fIbridge point\fR, High in center of an
+object *).
+.IP "" 5
+The progress of the mask growing algorithm may be viewed in all three
+aspects of the main window.  If the connectivity criteria \fI(Bridge)\fR
+is applied (selected by a check in the box), then the progress is
+plotted in color; otherwise it is plotted as red.  The \fIBridge\fR
+colors signify how connected the candidate pixel (voxel) is to the
+object.  Their interpretation is as follows:
+.IP "" 5
+\fBBridge-Strength\fR
+.IP "" 10
+8 PURPLE \fB(Most Connected)\fR
+.IP "" 10
+7 BLUE
+.IP "" 10
+6 TURQUOISE
+.IP "" 10
+5 GREEN
+.IP "" 10
+4 YELLOW
+.IP "" 10
+3 ORANGE
+.IP "" 10
+2 BROWN
+.IP "" 10
+1 RED \fB(Least Connected)\fR
+.IP "" 5
+The mask grow algorithm runs in the background, as do the various
+loading and saving routines.  It can be \fBStopped\fR and
+\fBContinued\fR by pressing the buttons.  The parameters can be adjusted
+during the growing if desired.  During these background processes,
+the user interface is active, allowing the user to "get on with it"
+instead of waiting for i/o or growing.  Growing a mask in a large 3d
+image may take as long as 15 to 20 minutes if all mask growing criteria
+are \fIapplied\fR, though typical images take much less time.  In any case,
+often the preliminary results of growing within a frame are good, while
+when attempting to grow throughout the entire image may reveal \fIbridge\fR
+points that need to be handled by adjusting the parameters,
+\fBUndoing\fR, and then pressing \fBGrow\fR once again.
+.IP "" 5
+A simple \fBthreshold\fR is also available.  Review the description of
+thresholding above in the \fBImage Editing\fR section.  The difference
+is that whatever pixels (voxels) in the image have intensities that
+fall within the \fIMax\fR and \fIMin\fR are either \fIoverwritten to,
+added to,\fR or \fIsubtracted from\fR the edit mask when the \fBThreshold\fR
+button is pressed.
+.nr PS 12
+.LP
+\f3Mode: Register\f1
+.nr PS 10
+.IP "" 5
+Often with images acquired through serial sectioning,
+the frames are out of alignment with one another.  \fIsegal\fR
+has facilities to register the frames with a reference frame
+of the image.  The
+.I "Image Registry"
+window pops up when the
+.I Register
+mode is selected.  When \fIsegal\fR is in this mode,
+no attempt at segmentation
+(alteration in any way) of the edit mask should be made.  Most options
+are disabled in this mode.
+.IP "" 5
+A window containing an image will pop up
+next to the view window.  The user should
+move this window next to the
+appropriate aspect in the view window (main window). This view window
+will have the reference frame's mask overlayed on it in red.  First, locate
+a common object or point of symmetry in each of the two windows.
+Then with the left mouse button draw a line along or across the
+common object in each window.  If, for example, the reference image
+contains a square with sides aligned with the window's edge,
+and the view window contains the same square translated,
+smaller, and rotated, then the line drawn in the view window's square should
+be likewise translated, smaller, and rotated with respect to the line
+drawn in the reference image's square.
+.SH OPTIONS
+.IP -i 7
+specify image file name.
+.IP -m 7
+specify mask file name.
+.IP -l 7
+specify list file name.  The list file contains various paths and file names
+of an image and masks, as well as comments and a description.  It is created
+from the
+.I List
+window by entering appropriate info and storing it.
+.IP -v 7
+turn on verbose mode for debugging purposes.
+.IP "-c NN" 7
+color hue of edit mask.  NN takes values from 0 to 360 and defaults to 170
+(Green).
+.SH FILES
+.LP
+\fIsegal\fR requires the input image to be in one of the formats handled by
+Jin Goujin's \fIComplex Conversion Library\fR.  Presently, they are:
+.sp
+.nf
+HIPS
+FITS
+RLE
+GIF
+SUN-RASTER
+TIFF
+PNM
+ICC
+.fi
+.LP
+\fIsegal\fR outputs the masks as byte HIPS images with each pixel having
+the value 0 (blank) or 255 (part of mask).
+.SH "SEE ALSO"
+.B xmask(n),
+.B ccs(n)
+.SH DIAGNOSTICS
+.SH BUGS
+Report to Bryan Skene (skene@george.lbl.gov)
+.SH AUTHORS
+Bryan Skene, Brian Tierney, Jin Goujin

@@ -1,0 +1,78 @@
+.TH H_STRETCHIMG 3 "6/29/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_stretchimg \- subroutines to stretch an image
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_stretchimg(hdi,hdo)
+h_stretchimg_b(hdi,hdo)
+struct header *hdi,*hdo;
+
+h_stretchimg_B(imagei,imageo,nr,nc,nlpi,nor,noc,nlpo)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nor,noc,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines stretch an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_stretchimg
+calls
+.IR h_stretchimg_b
+as long as the pixel format is byte.
+.IR h_stretchimg_B
+is the low-level routine which doesn't require an image header.  The input
+subimage size is
+.I nr
+by
+.IR nc ,
+and the input image has
+.I nlpi
+pixels per line.  The output subimage size is
+.I nor
+by
+.IR noc ,
+and the output image has
+.I nlpo
+pixels per line.
+.I H_stretchimg
+changes the row and column dimensions of an image by stretching.
+The algorithm is basically block averaging, where each pixel in the old
+image is treated as square, and each pixel in the new image rectangular.
+The new pixel's value is an average of the pixel's in the old image it
+overlaps, weighted by the degree of overlap.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi ,
+and is stretched to fit in the output region-of-interest.
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_enlarge(3), h_ienlarge(3), h_ienlarge3(3), h_reduce(3)
+.SH AUTHOR
+Mike Landy - 6/11/87, based on code by Lou Salkind
+.br
+HIPS 2 - msl - 6/29/91
+

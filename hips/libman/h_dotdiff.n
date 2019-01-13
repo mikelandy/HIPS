@@ -1,0 +1,84 @@
+.TH H_DOTDIFF 3 "8/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_dotdiff \- subroutines to halftone using an 8x8 dot diffusion matrix
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_dotdiff(hdi,hdt,hdo)
+h_dotdiff_b(hdi,hdt,hdo)
+struct header *hdi,*hdt,*hdo;
+
+h_dotdiff_B(imagei,imaget,imageo,nr,nc,nlpi,nlpt,nlpo)
+byte *imagei,*imageo;
+short *imaget;
+int nr,nc,nlpi,nlpt,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines compute a halftone of an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ),
+using a temporary, short-formatted subimage for temporary storage (specified by
+.I hdt
+or
+.IR imaget ),
+.I h_dotdiff
+calls
+.I h_dotdiff_b
+as long as the pixel format is byte.
+.I h_dotdiff_B
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, the temporary image has
+.I nlpt
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.I H_dotdiff
+converts an 8-bit sequence to a bi-level
+sequence using an 8 x 8 dot error diffusion matrix.  Note that the error
+diffusion is computed based on replacing pixels with 0 or 255, although
+pixels are actually replaced with
+.I hips_lchar
+and
+.IR hips_hchar .
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte (with short temporary image)
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+Obviously, the temporary image (\c
+.I hdt
+or
+.IR imaget )
+must be separate.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_dither(3), h_halftone(3)
+.SH AUTHOR
+Mike Landy - 7/13/89 (algorithm from Hong Min)
+.br
+HIPS 2 - msl - 8/10/91

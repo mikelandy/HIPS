@@ -1,0 +1,34 @@
+#
+# makefile for user-contributed/hipstool/sources/sunos4.0
+#
+
+OBJS = hipstool.o panel.o list.o data.o \
+	functions.o setups.o selects.o modifys.o evals.o edit.o \
+	log_funcs.o log_load.o log_save.o log_comment.o \
+	vector.o spline.o metaprimits.o zoom.o trace.o histo.o \
+	loadimage.o saveimage.o xheader.o \
+	sun_events.o sun_primits.o sun_funcs.o sun_menus.o
+
+HEADERS = hipstool.h defines.h macros.h structs.h externs.h
+OTHERLIBS = -lm -lsuntool -lsunwindow -lpixrect
+
+PGMS = hipstool.out
+
+install:	$(PGMS)
+
+hipstool.out: $(OBJS)
+	$(LINKc) hipstool $(OBJS) $(LIBRARIES)
+	strip hipstool
+	mv hipstool $(DESTDIR)
+	@touch $@
+	
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

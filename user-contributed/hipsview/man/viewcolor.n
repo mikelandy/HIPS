@@ -1,0 +1,100 @@
+.TH VIEWCOLOR 1 "March 26, 1990"
+.SH NAME
+viewcolor - Pseudocolor tool for use under SunView
+.SH SYNOPSIS
+.B viewcolor
+.SH DESCRIPTION 
+.I Viewcolor
+is a simple tool for reading and manipulating pseudocolor color lookup tables.
+Since it writes to the same colormap as that used by the program
+.IR hipsview ,
+any changes it makes to the lookup table will also affect the appearance of
+the images displayed concurrently by that program.
+.I Viewcolor
+displays a ramp from 1 to 253 in a small window.  The user interacts with
+the tool using the mouse and the keyboard.  A left mouse button press directed
+at the window will change the color lookup table so that the color map is a
+simple greyscale ramp to the left of the cursor, and a sequence of color bars
+to the right of that position.  All other commands are given using the
+keyboard, and thus the
+.I viewcolor
+window must be the window accepting keyboard input for these commands to take
+effect.
+The basic way that
+.I viewcolor
+is used is to run the program from a shelltool window under SunView, running
+the program in the background (type `viewcolor &'), so that the shelltool
+window is still available for running other commands.
+All messages from the program (including echoing of user input) are shown in
+the top name stripe of the window.  Each keyboard command is a single
+character, optionally followed by a number of parameters which are prompted in
+the name stripe.  The command or parameter list is terminated with a carriage
+return.  Here are the available commands:
+.TP
+I
+Interchange foreground (text) and background colors. (Color map locations
+0 (254) and 255 respectively). Exact mapping depends on the color Sun model.
+.TP
+i 
+Invert the greyscale color map.
+.TP
+l
+Load a color map from a file.  The user is prompted for the file name.  The
+format of the color map file is described below.
+.TP
+c
+Generate a set of color bars in the color map.  The user is prompted for three
+parameters:  the start position in the lookup table for the bars (below that
+position the lookup table will contain a greyscale ramp), the width of the
+bars (the number of lookup table entries which are given the same color),
+and the gap between successive color bar map locations (i.e. locations that
+remain unchanged).
+.TP
+> 
+Change the current working directory.  The user is prompted for the new
+directory.
+.TP
+q
+Quit.
+.TP
+?
+Help.
+.PP
+The format of the lookup table file is as follows.  The file consists of up to
+three tables of lookup table values.  Each table begins with a sequence of
+characters which include one or more of the letters `r', `g', and `b'.  This
+indicates which of the three lookup tables into which the following data will
+be written.  The next character should be the letter `s', followed by a number
+which indicates the starting location in the lookup table into which the
+following data will be placed.  This is followed by a sequence of lookup table
+entries which will be placed in lookup table entries from the starting entry
+through entry number 253. Locations not explicitly addressed by the file
+remain unchanged. There can be more than one of these subtables, in
+order to write different data into the three lookup tables.  Finally, after
+the last table, indicate the end of the file with the letter `e'.  Here is an
+example color table:
+.sp
+.nf
+
+rs0
+000 006 012 018 024 030 036 042 048 054 060 066 072 078 084 090
+096 102 108 114 120 126 132 138 144 150 156 162 168 174 180 186
+192 198 204 210 216 222 228 234 240 246 252 etc. etc.
+
+gs0
+000 000 000 000 000 000 000 000   000 000 000 000 000 000 000 000
+000 000 000 000 000 000 000 000   000 000 000 000 000 000 000 000
+000 000 000 000 000 000 000 000   000 000 000 etc. etc.
+
+bs0
+000 000 000 000 000 000 000 000   000 000 000 000 000 000 000 000
+000 000 000 000 000 000 000 000   000 000 000 000 000 000 000 000
+000 000 000 000 000 000 000 000   000 000 000 etc. etc.
+
+e
+
+.fi
+.SH SEE\ ALSO
+hipsview(1)
+.SH AUTHOR
+Walt Kropfl

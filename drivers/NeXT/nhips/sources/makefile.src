@@ -1,0 +1,19 @@
+#
+# makefile for user-contributed/nhips/sources
+#
+
+OTHERLIBS = -g -Wimplicit -lNeXT_s -lsys_s
+
+PGMS = nhips.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

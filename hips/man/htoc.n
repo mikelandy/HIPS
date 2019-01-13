@@ -1,0 +1,28 @@
+.TH HTOC 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+htoc \- convert to complex pixel format
+.SH SYNOPSIS
+.B htoc
+.SH DESCRIPTION 
+.I Htoc
+converts from any pixel format to complex format.
+.SH "REGION-OF-INTEREST"
+The entire image is converted.  The region-of-interest remains unchanged.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-RC [R | I | B]"
+Real-to-complex conversion: Set real part, imaginary part or both.
+Default: R.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+bpack(1), htodc(1), htoi(1), htolp(1), htomp(1), etc.
+.SH AUTHOR
+Mike Landy - 1/8/91

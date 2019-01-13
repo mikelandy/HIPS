@@ -1,0 +1,17 @@
+The Adage doesn't allow the user in BYTE mode to write any byte but the
+low order one.  Thus, for byte movies, there is a problem in LORES for systems
+with more than one memory board, since all boards can't be
+written without affecting the others or doing some complicated nonsense
+involving masked writes and moving bytes around.  The
+files bpsmovie.1board and bps_viewport.1board will work with systems with one
+DR256 board.  In April, 1986, we acquired three more boards, and discontinued
+work on these programs, switching to bps*.4board.  These programs use the
+Adage always in HIRES mode, the 4 boards supplying the 8 bits of each pixel,
+or 8 separate planes of binary images.
+
+The routine vaximgld is strictly for downloading image sequences - it does
+nothing to cause the images to be displayed.  We use it for pre-downloading
+images before running experiments where the MPC or BPS controls image display
+of previously downloaded images.  In this routine it is possible to download
+images separately to each of four boards in lores mode (by replicating bytes
+and using the mask registers).

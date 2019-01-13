@@ -1,0 +1,27 @@
+################ Beginning of makefile.hdr ################
+# Stuff that goes at the beginning of all the makefiles, but is not
+# configuration parameters, should be in this file.  It is included
+# after the configuration file, and before makefile.src.
+
+DIRS =
+PGMS =
+
+SHELL = /bin/sh
+
+COMPILEc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+	$(CPPFLAGS) $(TARGET_ARCH) $(FASTCOPY) $(USESTDARG) $(FLOAT) -c
+LINKc = $(CC) -D$(ORIG) -D$(BITORDER) $(CFLAGS) -DHIPS_IMAGE \
+	$(CPPFLAGS) $(FLOAT) $(USESTDARG) $(TARGET_ARCH) $(FASTCOPY) -o
+LIBRARIES = $(LDFLAGS) $(LIBRARY) $(OTHERLIBS) $(OTHERLIB2)
+
+.SUFFIXES:	.out
+
+.c.o:
+	$(COMPILEc) $<
+
+.c.out:
+	$(LINKc) $* $< $(LIBRARIES)
+	strip $*
+	mv -f $* $(DESTDIR)
+	@touch $@
+################ End of makefile.hdr ################

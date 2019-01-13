@@ -1,0 +1,23 @@
+#
+# UNIX makefile for pub/sources
+#
+
+PGMS = hipstoportable.out portabletohips.out
+DESTDIR = /usr/hips
+
+install:	$(PGMS)
+
+clean:
+	rm -f $(PGMS) *.o
+
+hipstoportable.out: hipstoportable.c
+	cc -o hipstoportable hipstoportable.c
+	strip hipstoportable
+	mv hipstoportable $(DESTDIR)
+	@touch hipstoportable.out
+
+portabletohips.out: portabletohips.c
+	cc -o portabletohips portabletohips.c
+	strip portabletohips
+	mv portabletohips $(DESTDIR)
+	@touch portabletohips.out

@@ -1,0 +1,120 @@
+.TH H_FOURTR 3 "7/10/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_fourtr \- subroutines to compute a Fourier transform
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_fourtr(hd)
+h_fourtr_c(hd)
+h_fourtr_dc(hd)
+struct header *hd;
+
+h_fourtr_C(image,nr,nc,nlp)
+h_complex *image;
+int nr,nc,nlp;
+
+h_fourtr_DC(image,nr,nc,nlp)
+h_dblcom *image;
+int nr,nc,nlp;
+
+h_fft_c(vec,loglen)
+h_fft2d_c(vec,loglen,nlp)
+h_fft2dgen_c(vec,logrows,logcols,nlp)
+h_fftn_c(vec,loglen,nskip)
+h_complex *vec;
+int loglen,nlp,logrows,logcols,nskip;
+
+h_fft_dc(vec,loglen)
+h_fft2d_dc(vec,loglen,nlp)
+h_fft2dgen_dc(vec,logrows,logcols,nlp)
+h_fftn_dc(vec,loglen,nskip)
+h_dblcom *vec;
+int loglen,nlp,logrows,logcols,nskip;
+.fi
+.SH DESCRIPTION 
+These routines take a subimage of an input image (specified by
+.I hd
+or
+.IR image ),
+compute a Fourier transform, and store the result in that subimage.
+.I h_fourtr
+calls
+.I h_fourtr_f
+or
+.I h_fourtr_c
+depending upon whether the pixel format is complex or double complex.
+.I h_fourtr_C
+and
+.I h_fourtr_DC
+are the low-level routines which don't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc ,
+and both dimensions must be powers of 2.
+The input image has
+.I nlp
+pixels per line.
+.PP
+Low-level routines are also provided to perform the
+fast-Fourier transform.
+.I h_fft_c
+and
+.I h_fft_dc
+perform a 1-dimensional fft.
+.I h_fft2d_c
+and
+.I h_fft2d_dc
+perform a 2-dimensional fft on a square array, where
+.I loglen
+is the log (to the base 2) of the length of a side of the array, and
+.I nlp
+is the number of stored elements per row (as in a region-of-interest in a
+larger image).
+.I h_fft2dgen_c
+and
+.I h_fft2dgen_dc
+perform a 2-dimensional fft on nonsquare arrays, but are otherwise analogous to
+.I h_fft2d_c
+and
+.IR h_fft2d_dc .
+.I h_fftn_c
+and
+.I h_fftn_dc
+are the lowest level routines which actually do the work.  These routines
+perform a 1-dimensional fft on a complex vector. Again,
+.I loglen
+is the log (to the base 2) of the number of elements in the vector.  The
+elements of the vector are not necessarily stored consecutively, but rather
+each element is
+.I nskip
+values after the previous.  This allows the routine to perform an fft on rows
+or columns of a 2-dimensional array.
+.PP
+All of these routines omit the final division by the number of entries in the
+array.  This can be performed afterward using
+.IR h_divscale (3).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+complex, double complex
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH "IN-PLACE PROCESSING"
+The image is always processed in place.
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_FFTI - strange index
+.br
+HE_FMTSUBR - can't handle this pixel format
+.br
+HE_POW2 - image dimensions not a power of 2
+.SH "SEE ALSO"
+h_divscale(3), h_fft2(3), h_flipquad(3), h_fourtr3d(3), h_invfourtr(3),
+h_invfourtr3d(3)
+.SH AUTHOR
+Michael Landy - 7/10/91

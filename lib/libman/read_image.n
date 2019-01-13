@@ -1,0 +1,31 @@
+.TH READ_IMAGE 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+read_image \- read an image frame
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <hipl_format.h>
+
+read_image(hd,fr)
+fread_image(fp,hd,fr,fname)
+
+FILE *fp;
+struct header *hd;
+int fr;
+Filename fname;
+.fi
+.SH DESCRIPTION 
+.I read_image
+and
+.I fread_image
+read a single image frame into the image pointed to by the supplied image
+header.
+.I read_image
+is used for reading from the standard input.  The frame number and file name
+are supplied for more informative error messages.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_READFRFILE - error during read
+.SH AUTHOR
+Michael Landy - 1/4/91

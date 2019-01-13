@@ -1,0 +1,43 @@
+.TH ADDDESC 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+adddesc \- add information to a sequence header
+.SH SYNOPSIS
+.B adddesc
+[-d ``original sequence date'' ] [-s ``sequence name'' ]
+.br
+.ti 2i
+[-o ``originator's name'' ]
+[-a ``additional description'' ]
+.br
+.ti 2i
+[-r ``description replacement'' ]
+.SH DESCRIPTION 
+.I Adddesc
+adds descriptive information to an image header.
+Switches
+.IR -d ,
+.IR -s ,
+and
+.I -o
+replace the indicated header entries.
+Switches
+.I -a
+and
+.I -r
+both affect the sequence description;
+.I -a
+appends text to the end of the description, and
+.I -r
+replaces the description entirely.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+All formats
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+genheader(1), grabheader(1), seeheader(1), stripheader(1)
+.SH AUTHOR
+Michael Landy - 2/8/82
+.br
+HIPS 2 - msl - 1/14/91

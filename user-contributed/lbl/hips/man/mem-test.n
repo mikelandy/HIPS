@@ -1,0 +1,79 @@
+.TH ACCESS-TEST 1 "FEBURARY 1, 1991"
+.\" @(#)mem-test.1  1.10 2/1/91 JIN;
+
+.SH NAME
+mem-test -- memory access time test (measurement).
+
+.SH SYNOPSIS
+.nf
+mem-test [-m] [-f] [-g] [-c] [-r] [-S f r c || inputfilename] [-s] [-t]
+
+.SH DESCRIPTION
+.TP
+.I -m
+process in row -> column -> frame order.
+.TP
+.I -f
+process in frame -> column -> row order.
+.TP
+.I -g
+process in frame -> row -> column order.
+.TP
+.I -c
+in column -> frame -> row order.
+.TP
+.I -r
+in row -> frame -> column order.
+.TP
+.I -s
+default. In column->row->frame order.
+.TP
+.I -S [frame] [row] [column]
+to simulate the large file with or without really reading.
+If one or all of frame, row and column parameter is missing, the default is
+128 for the missing one.
+.br
+If no file name given, after type command and carrage return, press the CTRL-D
+to end the standard input (console). This is used for simulating a large image
+and without wasting input time. If -S no given on command line, the standard
+HIPS image should be sent to input by given a file name or redirecting the
+standard input device.
+.TP
+.I -t
+trace the -r and -g testing to get fast result.
+.nf
+.TP0
+Example:
+
+access-test -S 124 256 256 -r
+begin processing: Tue Feb 26 13:46:09 1991
+end of allocating: at 22 seconds   =>	end of reading: at 95 seconds
+124 frames, 256 rows, 256 columns -- in memory mode (Regular)
+row->frame->column access
+finishing time: 8043 seconds
+14.7u 1464.5s 2:14:04 18% 0+5204k 1040+0io 503586pf+0w
+.fi
+
+This is not a very time consuming one but it takes quite time. So, let's see
+next example:
+
+.nf
+Homer:  sparc SLC cpu=4/20 [8 MBytes, 16M_VM]
+5 /home/oliver/data2/users/jin/pc/mri: access-test -S 124 12 5461 -r -t
+begin processing: Fri Mar  1 07:52:33 1991
+end of allocating: at 17 seconds   =>	end of reading: at 18 seconds
+Reading image 0 bytes, rest 8125968 are 0
+124 frames, 12 rows, 5461 columns => memory 8125968 -- in memory mode (Regular)
+row->frame->column access
+182^C6.9u 883.6s 45:22 32% 0+5260k 3+0io 266462pf+0w
+x 30 = 207u 25008s 22:41:00 32% xxx ioio 7993860pf+0w
+.fi
+
+This time we stop at 182 = 5461/30. Then use 30 multiply every result to get
+finally testing result which saves 22 hours.
+
+.SH SEE\ ALSO
+.BR 3drotate(1).
+
+.SH AUTHOR
+Jin Guojun - 1/2/90

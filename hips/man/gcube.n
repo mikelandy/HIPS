@@ -1,0 +1,22 @@
+.TH GCUBE 1 "7/24/91" "Version 2" "HIPS Manual"
+.SH NAME
+gcube \- generate a 3-D cube.
+.SH SYNOPSIS
+.B gcube
+.SH DESCRIPTION 
+.I Gcube
+generates a PLOT3D cube.
+If a file is redirected, it adds a cube to the last frame.
+The cube is generated so that its center is at (0,0,0)
+and its sides are 2.0 units long.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+plot3d
+.SH STANDARD SWITCHES USED
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+gpoly(1)
+.SH AUTHOR
+Yoav Cohen - 11/15/82
+.br
+HIPS 2 - msl - 7/24/91

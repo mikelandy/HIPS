@@ -1,0 +1,128 @@
+.TH SVANIMA n "1992" "Scry Version 1.3" "LAWRENCE BERKELEY LABORATORY"
+.SH NAME
+svanima - Sunview animation playback program for a Sun 4 or Sparcstation.
+.SH SYNOPSIS
+.B svanima
+[
+.B \-i
+Anima file] [
+.B \-w
+winx winy]
+.SH DESCRIPTION
+Reads image data from an Anima file (usually created by \f3svserv\f1)
+and allows the user to review the frames of a
+movie in forward or reverse order at various speeds, advance or reverse frame
+by frame, skip to a particular frame,
+or save a frame as a Postscript
+file or Sun rasterfile.  \f3svanima\f1 will only run under Sun OS 4.0 and above.
+.PP
+After \f3svanima\f1 is invoked, two windows will appear on the screen, one
+a control panel, and the other the window in which the image(s) will
+appear.  These behave like ordinary Sunview windows, e.g. they can be
+moved.
+.PP
+The display window comes up with a width and height given by
+\f3S_DEF_WINSERV_WIDTH\f1 and \f3S_WIN_WINSERV_HEIGHT\f1 in 
+\f2scry/include/scry_limits.h\f1.  It will automatically resize to
+the size of whatever \f3Anima\f1 file is entered, up to the
+default maximum size, given by \f3S_MAX_WINSERV_WIDTH\f1 and
+\f3S_MAX_WINSERV_HEIGHT\f1 in \f2scry_limits.h\f1.  \f3svanima\f1
+will exit if images in an \f3Anima\f1 file are bigger than the
+maximum.
+.PP
+Sunview allocates entries for color map segments in powers of
+2.  \f3svanima\f1 will allocate 128 or 256 colors, depending
+on the number of entries in the color map in the \f3Anima\f1 file.
+The screen will go black outside the display window if 256 entries
+are allocated and the mouse is moved into the display window, and
+if the mouse is outside, the colors in the displayed image will not appear
+correctly.
+.PP
+The usage of the buttons is as follows:
+.PP
+Pushing the "quit" button causes the windows to be destroyed and \f3svanima\f1
+to exit.
+.PP
+To stop at a particular frame and/or to clear all the text fields,
+click the "stop" button.
+.PP
+To read a file, type its name in after "File:" followed by a carriage return.
+If the caret is not in the file field, click the left button with
+the cursor to the right of "File:".  (All control features require the use
+of the left button.)
+\f3svanima\f1 must be in stopped mode to read in a file.
+.PP
+Entering a number in the "Number Input:" field and then pushing the
+"go to" button
+will display the image associated with that number.  The current frame
+number and the total number of frames in the sequence are displayed
+after the "#:" sign.
+.PP
+"< step" will step to the previous frame if one
+is not at the beginning of the sequence, and
+"> step" will step to the next frame if not at the end of the sequence.
+"   >   " instructs \f3svanima\f1 to move forward through a sequence of images,
+and "    <    " instructs it to move backward.
+If the end of the sequence of frames is reached, \f3svanima\f1
+will go back to the beginning.  If frames are being played back
+in reverse order and the beginning is reached, \f3svanima\f1
+will start playing frames backwards from the end of the file.
+.PP
+"full" instructs \f3svanima\f1
+to display images at full speed.
+Alternatively, one can click on the slider to control the speed (10 is the
+same as "full" speed.)
+.PP
+Entering a number in the "gamma" field will adjust the gamma value of the
+next image displayed.
+\f3svanima\f1 must be in stopped mode for this to
+have effect.  The default value is 1, and the legal range is from
+0.1 to 4.
+.PP
+To save a file on disk in Postscript form, first type in the
+dots per inch in the "Number Input:" field (the default is 60 dpi),
+and then push the "postscr" button.  The file saved will be of
+the form "Anima_file_name.current_frame.post".
+Note that it will be grey-scale and not color Postscript format.
+.PP
+To save a file on disk in Sun rasterfile format,
+push the sunrast button.  The file saved will be of
+the form "Anima_file_name.current_frame.ras".
+.PP
+At full speed, \f3svanima\f1 can play back \f2scry/Anima/data/dye2d.iff\f1
+at 10 frames per second on a Sun 4/110, and 25 frames per second
+on a Sparcstation 2 with the standard frame buffer.
+\f2scry/Anima/data/skull.iff\f1 can be played back at 3 frames per
+second on a Sun 4/110, and 9 frames per second on a Sparcstation 2.
+Note that both these files are the output of the program
+\f3genonemap\f1.
+.SH OPTIONS
+.TP
+.B \-i filename
+Read in the Anima file.  This is an optional argument.
+.TP
+.B \-w x y
+The upper left corner of the window will be at x y on the screen.
+.SH FILES
+.TP
+svanima is located in \f2scry/Anima/svanima\f1
+.TP
+.I Makefile
+makes the executable of the server
+.TP
+.I svanima.c
+starts up the animation playback program and handles panel set-up and buttons
+.TP
+.I svdisplay.c
+load the color lookup table and display the images in the Sunview window as
+they come in
+.TP
+.I procs.c
+button functionality
+.SH WARNINGS
+\f3svanima\f1 will die if there are images of different sizes
+in an Anima file.
+.SH SEE ALSO
+\f3scry(n),scry_client(n),svserv(n),scripter(n)\f1
+.SH AUTHORS
+David Robertson, Teck-Joo Chua, and Max Rible

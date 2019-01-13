@@ -1,0 +1,116 @@
+.TH H_MORPHDIL 3 "8/3/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_morphdil \- apply the morphological operator of dilation
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_morphdil(hdi,hde,hdo,centerr,centerc,gray)
+h_morphdil_b(hdi,hde,hdo,centerr,centerc,gray)
+struct header *hdi,*hde,*hdo;
+int centerr,centerc,gray;
+
+h_morphdil_B(imagei,imagee,imageo,nr,nc,nlpi,nlpo,nre,nce,nlpe,centerr,centerc,gray)
+byte *imagei,*imagee,*imageo;
+int nr,nc,nlpi,nlpo,nre,nce,nlpe,centerr,centerc,gray;
+.fi
+.SH DESCRIPTION 
+These routines apply the morphological dilation operation to a subimage
+(specified by
+.I hdi
+or by
+.IR imagei ),
+using the structuring element in another subimage (specified by
+.I hde
+or by
+.IR imagee ),
+and store the result in the output subimage (specified by
+.I hdo
+or by
+.IR imageo ).
+.I h_morphdil
+calls
+.I h_morphdil_b
+as long as the pixel format is byte.
+.I h_morphdil_B
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+The structuring element size is
+.I nre
+by
+.IR nce ,
+and has
+.I nlpe
+pixels per line.
+The structuring element pixel position specified by
+.I centerr
+and
+.I centerc
+is treated as the position which overlies a given input position.  Image and
+structuring element pixels with values less than or equal to
+.I gray
+are treated as foreground pixels.
+.pp
+These routines applies the dilation operation to an image.  Although they
+apply to byte-formatted images, they effectively treat the image as a
+binary image, where dark pixels (with grey levels less than or equal to
+.IR gray )
+are treated as
+`foreground' or `object' pixels, and others are treated as background.  The
+dilation of the input subimage is controlled by another subimage, specified
+by hde, the structuring element.  For each foreground element
+in the image, the structuring element is centered on that pixel.  All
+other pixels lying at the same position as foreground pixels of the
+structuring element will be set to foreground if they are not already
+foreground pixels.  Actually, they are set to the darkest value that
+overlaps that pixel position (among the structural element pixels that
+can replace it and its former value in the input image).  Background input
+image pixels which can not be replaced by any structural element foreground
+pixel are left unchanged in the output image.  Foreground input image pixels
+which can not be replaced by any structural element are changed to 255.
+.pp
+The center of the structure element as specified by
+.I centerr
+and
+.I centerc
+is centered over the pixel, so the user may determine the shift caused by
+the dilation operation.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+The program dilates the region of interest of the input image by the region of
+interest of the structuring element, and stores the result in the region of
+interest of the output image.  For the input and output images, the size of
+the region of interest is taken from
+.IR hdi .
+The size of the structuring element region of interest is taken from
+.IR hde .
+.SH "IN-PLACE PROCESSING"
+The image may not be processed in place.  In other words
+.I hdi
+can not be the same as
+.I hdo
+and
+.I imagei
+can not be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_morphero(3)
+.SH AUTHOR
+Ahmed. Abbood 19/10/1988
+.br
+rewritten by Michael Landy 10/29/89
+.br
+HIPS 2 - msl - 8/3/91

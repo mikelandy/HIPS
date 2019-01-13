@@ -1,0 +1,26 @@
+.TH SETSIZE 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+setsize \- set image size
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+setsize(hd,r,c)
+struct header *hd;
+int r,c;
+.fi
+.SH DESCRIPTION 
+This routine sets the image size to the supplied size, and adjusts the header
+parameters
+.I numpix
+and
+.I sizeimage
+accordingly.  It also resets the region-of-interest to be the entire image.
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_MISSPAR - missing parameter (pyramid top level)
+.SH "SEE ALSO"
+setformat(3), setroi(3)
+.SH AUTHOR
+Michael Landy - 1/3/91

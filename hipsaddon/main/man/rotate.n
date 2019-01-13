@@ -1,0 +1,38 @@
+.TH ROTATE HIPS "31st August 1991" "Version 2" "HIPS Manual"
+.SH NAME
+rotate - image 2D geometric transformer
+.SH SYNOPSIS
+.B rotate
+[-a angle] [-d rows cols]
+.SH DESCRIPTION 
+.I rotate
+rotates an image by an angle
+which is specified by
+.I angle,
+in degree, and defaults to 90.0.
+A positive angle corresponds to an anticlockwise rotation.
+The size of the output image can be specified with
+.I rows
+and
+.I cols,
+which default to the size of the input image.
+
+Note: any part of the rotated image that lie outside the output
+image will be clipped.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Always the whole image is processed.
+.SH EXAMPLE
+.in +3m
+rotate -a 20 < input_seq > output_seq
+.in -3m
+.SH SEE ALSO
+enlarge(1), pictranspose(1), project(1), reflect(1),
+rotate90(1), rotate180(1), translate(1)
+.SH AUTHOR
+Jin Zhengping - 13 March 1989
+.br
+Rewritten by Jin Zhengping - 31 August 1991

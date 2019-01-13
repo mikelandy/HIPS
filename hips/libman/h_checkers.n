@@ -1,0 +1,62 @@
+.TH H_CHECKERS 3 "7/5/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_checkers \- subroutines to fill an image with a checkerboard
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_checkers(hd,highflag)
+h_checkers_b(hd,highflag)
+struct header *hd;
+h_boolean highflag;
+
+h_checkers_B(image,nr,nc,nlp,highflag)
+byte *image;
+int nr,nc,nlp;
+h_boolean highflag;
+.fi
+.SH DESCRIPTION 
+These routines fill an input subimage
+(specified by
+.I hd
+or
+.IR image )
+with a checkerboard.
+.I h_checkers
+calls
+.IR h_checkers_b ,
+as long as the pixel format is byte.
+.I h_checkers_B
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The image has
+.I nlp
+pixels per line.
+The pixels alternate between
+.I hips_hchar
+and
+.IR hips_lchar .
+The first pixel is set to
+.I hips_hchar
+if
+.I highflag
+is TRUE, and to
+.I hips_lchar
+otherwise.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hd .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_setimage(3)
+.SH AUTHOR
+Michael Landy - 7/5/91

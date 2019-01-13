@@ -1,0 +1,98 @@
+.\" @(#)3dog.1  1.M2 10/8/90 JIN;
+.TH 3DOG 1 "November 25, 1990" LBL-HIPS
+.SH NAME
+3dog \- filter an image by applying a difference of Gaussians mask
+.SH SYNOPSIS
+.B 3dog
+[-A esigma [masksize [ratio ]]] [-p #] [-b #] [-n #]
+.br
+.ti 1i
+[-s #] [-g #] [-i [-c]] [-m] [-lvf] [-w]
+.br
+.ti 1i
+[ < ] input > output
+.SH DESCRIPTION
+.I 3dog
+filters an image by applying a difference of Gaussians mask.
+The input is in byte or float format of HIPS or FITS image type, and the
+output is in floating point or in integer format of HIPS image type.
+.SH OPTIONS
+.TP
+.B -A
+.I Esigma
+is the standard deviation of the ``excitatory'' Gaussian (default 1.0).
+(i.e. esigma gives the centeral peak feature).
+
+.I Masksize
+is the size of the mask (an integer, defaults to 7).
+
+.I Ratio
+is the ratio between the standard deviations of the inhibitory and
+excitatory Gaussians and defaults to 1.4. (when ratio = 1.0, the middle ring
+is flat. when ratio > 1.0, the middle ring is a valley. otherwise, middle is
+a slope from center top to side edge).
+.TP
+.I -p
+followed by a positive integer specifies the precision and
+defaults to 1.
+.TP
+.I -b
+begin process from #'th frame.
+.TP
+.I -n
+the number of frames which will be processed
+.TP
+.I -i
+implies output in integer format
+.TP
+.IR -c
+if -i is specified, causes checking of input to be in the
+range [-1024 to 1024].
+.TP
+.I -l
+force 3dog to perform a level 2d filter (x-y, where `x' is an axis pointed
+toward the viewer, `y' is an axis from left to right, and `z' is a vertical
+axis.
+.TP
+.I -v
+force 3dog to perform a vertical x-z 2d filter
+.TP
+.I -f
+force dog3d to perform a vertical y-z 2d filter
+.TP
+.I -m
+output the Gaussian(s) only, without convolving.
+.TP
+.I -g
+normally the Gaussian output is a square image with sides which are a power of
+2 just large enough to hold the Gaussian masks.  The -g switch specifies the
+number of border pixels beyond the mask.
+.TP
+.I -s
+span # \- interpolate this number of frames between two neighboring slices
+(frames)
+.TP
+.I -w
+output the pure image without header
+.PP
+If no input file is redirected, the program outputs an impulse
+response in a 7 x 7 x 7 frame.
+.SH EXAMPLES
+3dog -A .8 12 1.5  -b 4 -n 5 < bird > bird.dog3d
+.br
+3dog -A1. 28 .8 < bird | scale_gray | histoeq | powertool -s "768 768" | xhips
+.br
+After filtering,
+.I powertool
+spreads the 3d image to a large 2d surface (the
+.I -s
+switch).
+.sp
+3dog -A .6 53 1.6 -s7 bird | scale_gray | histoeq | slice -v 30 | xhips
+.br
+After filtering, slice along x axis turned clockwise 30 degree about the
+center.
+.SH "SEE ALSO"
+dog2(1), multi_mask(n), mask(1), 3dmask(1), append(n), powertool(n), 3dslice(n)
+.SH AUTHOR
+Jin, Guojun 10/30/90

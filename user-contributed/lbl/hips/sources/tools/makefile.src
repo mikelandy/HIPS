@@ -1,0 +1,84 @@
+#
+# makefile for user-contributed/lbl/hips/sources/tools
+#
+
+PGMS =	append.out hexdump.out histo_simulate.out mdisphist.out \
+	magicprint.out mem-test.out
+
+PGM3 =	mainpeak.out mean_scale.out mhisto.out mixadd.out mixmul.out
+
+PGM5 =	elastic.out frame.out \
+	multi_mask.out powertool.out rotate90n.out
+
+PGMC = to_stream.out to_jfif.out
+
+# PSDIR set in config file
+PSFLAGS = "-DLDLIB=\"$(LIBDIR)/magicprint.pro\""
+MFONT = \"NewCenturySchlbk-Bold\"
+FontFlag = -DMFont=$(MFONT)
+
+LOCAL_INC = $(CCS_ROOT)/include
+PUBLICLIB = -lccs -ltiff -lrle $(LIBRARY2) $(OTHERLIBS) $(OTHERLIB2) $(LOCALCFLAGS)
+LIBRARIE1 = $(LDFLAGS) -lscs1 $(PUBLICLIB)
+LIBRARIE2 = $(LDFLAGS) -lscs2 $(PUBLICLIB)
+LIBRARIE3 = $(LDFLAGS) -lscs3 $(PUBLICLIB)
+LIBRARIE5 = $(LDFLAGS) -lscs5 $(PUBLICLIB) -ljpeg -lpanel
+LIBRARIEC = $(LDFLAGS) -ljpeg -lscs1 $(PUBLICLIB)
+LOCALCFLAGS = $(CPPFLAGS) -I$(LOCAL_INC) -DHIPS_IMAGE -DCOMMON_TOOL \
+	-DNO_STRUCT_AUTOINIT -DNO_SINGLE_WORD_REG -DNO_UNION_AUTOINIT
+MASKLOC = -DMY_LIB=\"$(MASK3DIR)/mask\"
+
+.c.out:
+	$(LINKc) $* $< $(LIBRARIE2)
+	mv $* $(DESTDIR)
+	@touch $@
+
+#install:	$(PGMS)	$(PGM3) $(PGM5) $(PGMC)
+install:	$(PGMS)	$(PGM3) $(PGM5)
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+
+# Routines which require special parameters
+
+$(PGMC):
+	$(LINKc) $* $< $(LIBRARIEC) 
+	mv $* $(DESTDIR)
+	@touch $@
+
+$(PGM3):
+	$(LINKc) $* $< $(LIBRARIE3) $(CPL_FLAGS)
+	mv $* $(DESTDIR)
+	@touch $@
+
+$(PGM5):
+	$(LINKc) $* $< $(LIBRARIE5)
+	mv $* $(DESTDIR)
+	@touch $@
+
+mdisphist.out:	mdisphist.c
+	$(CC) -O -o mdisphist mdisphist.c $(LIBRARIE2)
+	mv $* $(DESTDIR)
+	@touch $@
+
+# it is very important to test print magin for setting MGPOffset (0.04 - 0.6).
+magicprint.out: magicprint.c
+	$(LINKc) $* $< $(PSFLAGS) $(FontFlag) -DMGPOffset=0.2 $(LIBRARIE5)
+	mv $* $(DESTDIR)
+	cp magicprint.pro $(LIBDIR)
+	chmod 664 $(LIBDIR)/magicprint.pro
+	@touch $@
+
+mkdest:
+	@if [ ! -f magicprint.pro ];	then	\
+		ln -s ../*.pro . ;	\
+	else	true;	fi
+
+FRC:

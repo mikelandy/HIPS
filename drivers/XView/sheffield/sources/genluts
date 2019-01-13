@@ -1,0 +1,50 @@
+#!/bin/sh
+
+#
+# Shell script to build lut library from ./luts directory. The
+# default lut is given by the parameter.
+#
+
+fname=create_lut_list.c
+n=`ls ./luts | awk 'END {print NR}'`
+
+lnames=$1" "`ls ./luts | awk '{if ($1 != "'$1'") print}'`
+
+if [ $n -eq 0 ]
+then
+  echo "error: no luts!!"; exit 1
+fi
+
+echo "#include <X11/Intrinsic.h>" >$fname
+echo "#include <xdisp.h>" >>$fname
+
+cat ./luts/* >>$fname
+
+echo "lut_t *lut_list[$n+1];" >>$fname
+echo "char *lut_names[$n+1] = {" >>$fname
+
+echo '"hips",' >>$fname
+for i in $lnames
+do
+  echo '"'$i'",' >>$fname
+done
+echo "};" >>$fname
+
+echo "int nluts=$n;" >>$fname
+echo "extern lut_t *current_lut;" >>$fname
+echo "lut_t *create_lut();" >>$fname
+echo "lut_t *create_ov_lut();" >>$fname
+echo "void create_lut_list() {int j = 0;" >>$fname
+
+echo "if (hips_lut_exists) {lut_list[j++] = create_lut(hips_lut,\"hips\",hips_lut_n); nluts++;}" >>$fname
+
+for i in $lnames
+do
+  echo "lut_list[j++] = create_lut("$i"_lut,\""$i"\","$i"_lut_n);" >>$fname
+done
+
+echo "lut_list[j++] = create_ov_lut();" >>$fname
+
+echo "current_lut = lut_list[0];" >>$fname 
+
+echo "}" >>$fname

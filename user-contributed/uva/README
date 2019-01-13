@@ -1,0 +1,21 @@
+
+This directory consists of programs developed at the University of Virginia.
+These include device support for a Lexidata and an ITI IP-512, and a number
+of new device-dependent filters as well.  Routines which extended already
+existing HIPS filters have been merged into the main filter directory
+(../../hips).
+
+The drivers support a Lexidata Lex/90 and Imaging Technology boards that are
+running at UVA on a Masscomp MC-5520 system, which has a Berkeley and
+System 5 AT&T Unix System (op. sys. vers. 3.2).  There should be little problem
+putting the system up as is on any Masscomp system.  The Lexidata Lex/90 they
+have can be operated in either a 512 x 640 or 1024 x 1280 mode - each is
+supported.  The Lex/90 is 12 bits deep but only has pseudocolor.  The Imaging
+Technology board set contains 1 RGB-512 board and 3 FB-512 boards set up for
+real color, 3 x 8 bits.  The ITEC boards have been used for 3 years,
+but they have had virtually no trouble with them.  There are certainly faster
+VME boards which are now available.
+
+The contact at UVA is Mike Mirackel in Biomedical Engineering:
+
+	mbm@uvabme.bme.virginia.edu

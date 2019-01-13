@@ -1,0 +1,32 @@
+.TH PYRTOIMG 1 "7/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+pyrtoimg \- reconstruct an image from a Laplacian pyramid
+.SH SYNOPSIS
+.B pyrtoimg
+[-f filter] [-r rtype]
+.SH DESCRIPTION 
+.I Pyrtoimg
+reconstructs an image from its Laplacian pyramid representation.
+The default filters for reduction and expansion are the Gaussian-like set
+proposed by Burt (.05/.25/.4/.25/.05), but any symmetric filter with an
+odd number of taps may be specified using the
+.I -f
+switch.  The
+.I -r
+switch is used to specify the reflection mode at the borders (the default is
+even reflection).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+integer pyramid, float pyramid
+.SH "REGION-OF-INTEREST"
+The entire image is reconstructed.  The region-of-interest is left untouched.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+imgtopyr(1), pyrdisplay(1), pyrexpand(1), pyrextract(1),
+pyrmerge(1), pyrreduce(1)
+.SH AUTHOR
+Mike Landy - 3/5/89
+.br
+HIPS 2 - msl - 7/18/91

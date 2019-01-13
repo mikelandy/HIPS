@@ -1,0 +1,39 @@
+.TH MAP 1BIPS "June 2, 1986"
+.SH NAME
+map - maps specified grayscale range of an image into the
+grayscale range of 0-255 using a linear transformation. 
+.SH SYNOPSIS
+.B map 
+[-s scale] [[-i] in_LOval in_HIval] [-o out_LOval [out_HIval]]
+< iseq > oseq
+
+.I  Argument Definitions:
+
+ <scale>:     specific scale factor
+ <in_LOval>:  low value of input grayscale range
+ <in_HIval>:  high value of input grayscale range
+ <out_LOval>:  low value of output grayscale range
+ <out_HIval>:  high value of output grayscale range
+.SH DESCRIPTION 
+.I Map
+takes an input image in int, short or byte format and maps it
+into a byte output image (0-255) using a linear transformation.
+If a scale factor is given (with the -s flag) then the scale
+factor is used to calculate the effective in_LOval and in_HIval.
+
+.I DEFAULTS: 
+All grayscale values less than in_LOval and greater than
+in_HIval will be mapped into the greyscale values of
+out_LOval and out_HIval, respectively.
+If in_LOval and in_HIval are not specified they default to 
+0 and the 4095 respectively.
+if out_LOval and out_HIval are not specified, they default to
+0 and 255 respectively.
+
+.I INPUT: 
+Map works on INT, SHORT, and BYTE input images.  The output
+image is BYTE format.
+.SH SEE\ ALSO
+scale (1HIPS), btof(1HIPS), powerpix(1HIPS), stretchpix(1HIPS), shiftpix(1BIPS)
+.SH AUTHOR
+Stuart Ware and Charles Carman - 4/30/86

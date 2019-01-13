@@ -1,0 +1,86 @@
+.TH ADD_HEADER 3 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+add_header \- routines to append text to the sequence history
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+history_set(hd,argformat,fmtstring,sprintfargs...)
+history_append(hd,argformat,fmtstring,sprintfargs...)
+struct header *hd;
+int argformat;
+char *formatstring;
+various-types sprintfargs;
+
+history_indentadd(hd,s)
+struct header *hd;
+char *s;
+.fi
+.SH DESCRIPTION 
+These routines are used to add to the sequence history of the standard HIPS
+sequence header.  They are used by programs (such as frame arithmetic
+programs) which combine two or more HIPS
+sequences, and allow the user to keep a complete record in the output sequence
+history of the histories of all of the input sequences.  The standard usage is
+to create a sequence history consisting of each input history (indented by
+four blanks), preceded by an identifying line.
+.I History_set
+is called first, and sets the initial history by using supplied
+.I fmtstring
+and
+.IR sprintfargs .
+The sequence of arguments must match that required by the format string, and
+the sequence of argument types must be specified as
+.IR argformat .
+The possible values of
+.I argformat
+are listed in hipl_format.h, and at last count included HEP_N, HEP_D, HEP_S,
+HEP_SD, HEP_DS, HEP_SS, HEP_SDD, HEP_SDS, HEP_SSS, HEP_DDDD, HEP_SDDDDS,
+according to whether the successive sprintf arguments are strings (`S') or
+integers (`D').
+This yields the first identification line for one of the input sequences.
+Then,
+.I history_indentadd
+is called to append the indented version of that input sequence's history.
+For all other input sequences, the same operations are performed using
+.I history_append
+instead of
+.IR history_set .
+Finally, the sequence will be given a line of history for the current command
+by calling
+.IR write_headerun (3),
+which calls
+.IR update_headern (3)
+to add the final header line.  An example sequence of calls, taken from
+.IR addseq (1)
+follows.
+.sp
+.in 1i
+.ta 1i 2i
+.nf
+char *savehist;
+struct header1 hdpf,hdp;
+Filename filename1,filename2;
+
+savehist = hdp.seq_history;
+history_set(&hdp,HEP_SS,
+	"****%s: stored sequence, file: %s****\\n",Progname,
+	filename1);
+history_indentadd(&hdp,hdfp.seq_history);
+history_append(&hdp,HEP_SS,
+	"****%s: input sequence, file: %s****\\n",Progname,
+	filename2);
+history_indentadd(&hdp,savehist);
+write_headerun(&hdp,argc,argv);
+.fi
+.in -1i
+.SH FILES
+/usr/local/lib/libhips.a
+.SH ERRORS
+HE_ALLOC - can't allocate memory
+.br
+HE_BADFMT - unknown argument format code
+.SH "SEE ALSO"
+write_headeru(3), write_headerun(3)
+.SH AUTHOR
+Michael Landy - 1/3/91

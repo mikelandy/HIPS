@@ -1,0 +1,46 @@
+.TH MLS "31 August 91" "Version 2" "HIPS Manual"
+.SH NAME
+mls - maximum-likelihood-smoothing filter
+.SH SYNOPSIS
+.B mls
+[-p perc] [-s size [ssize]]
+.SH DESCRIPTION
+.I mls
+applies a maximum-likelihood-smoothing filter to each image in
+the input sequence to suppress random noise.
+.I perc
+is the percentage (x 100) of the nearest neighbours
+in the original window which have the closest grey levels to that
+of the central pixel,
+and defaults to 62.
+.I size
+is the width of the window in which mls filtering is performed and
+defaults to 3.
+.I ssize
+is the width of smaller windows withing the original window,
+one of them containing the greatest concentration of the nearest neighbours,
+and defaults to
+.I (size
++ 1) / 2.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte.
+.SH "OUTPUT PIXEL FORMATS"
+byte.
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.
+.SH EXAMPLE
+.in +3m
+mls < input_seq > output_seq
+.in -3m
+.sp
+.br
+will smooth every image in input_seq by a 3x3 window.
+.SH REFERENCES
+S.L. Hurt and A. Rosenfeld, "Noise reduction in three-dimensional digital 
+images", Pattern Recognition, Vol. 17, No. 4, pp. 407-421, 1984.
+.SH SEE ALSO
+asl(1), mask(1), mean(1), median(1), nns(1), sasmooth(1), snn(1)
+.SH "AUTHOR"
+Peter Mowforth and Jin Zhengping - 8/5/1985
+.br
+Rewritten by Jin Zhengping - 31 August 1991

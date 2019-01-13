@@ -1,0 +1,39 @@
+.TH ROTATE90 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+rotate90 \- rotate a frame by 90 degrees
+.SH SYNOPSIS
+.B rotate90
+[-l]
+.SH DESCRIPTION 
+.I Rotate90
+rotates a frame by 90 degrees to the right (clockwise, the default) or to
+the left (counterclockwise, specified by
+.IR -l ).
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte, integer, float
+.SH "REGION-OF-INTEREST"
+The entire image is rotated.  The output image region-of-interest is the
+rotated input image region-of-interest.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I "-UL zerolevel"
+Specify greylevel substituted for zero bits when unpacking. Default: 0.
+.TP 1.3i
+.I "-UH onelevel"
+Specify greylevel substituted for one bits when unpacking. Default: 255.
+.TP 1.3i
+.I "-CR [M | P | R | I]"
+Complex-to-real conversion: magnitude, phase, real part or imaginary part.
+Default: M.
+.TP 1.3i
+.I -CB
+Convert back to the input pixel format.
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+picinvert(1), pictranspose(1), reflect(1), rotate180(1)
+.SH AUTHOR
+Michael Landy - 11/30/84
+.br
+HIPS 2 - msl - 1/11/91

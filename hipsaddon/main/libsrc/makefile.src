@@ -1,0 +1,33 @@
+#
+# makefile for directory hipsaddon/main/libsrc
+#
+
+OBJECTS = \
+	h_asl.o h_average.o h_cshift.o h_csinegen.o h_ellipse.o h_extend.o \
+	h_framing.o h_grey2disp.o h_meanfilt.o h_mls.o h_nns.o \
+	h_project.o h_rank.o h_rotate.o h_rsinegen.o h_sasmooth.o h_sigmaspat.o \
+	h_sigmatemp.o h_snn.o h_translatei.o h_unoise.o
+
+.c.o:
+	$(COMPILEc) $*.c
+#	@-ld $(LDLIBFLAGS) $*.o
+#	@mv a.out $*.o
+
+libhipsa.a:	$(OBJECTS)
+	@rm -f libhipsa.a
+	ar cr libhipsa.a `$(LORDER) *.o | $(TSORT)`;
+	mv libhipsa.a $(LIBDIR)/$(HALIBNAME)
+	$(RANLIB) $(LIBDIR)/$(HALIBNAME)
+	@touch libhipsa.a
+
+install:	libhipsa.a
+
+clean:
+	rm -f $(OBJECTS) libhipsa.a
+
+pristine:
+	rm -f $(OBJECTS) libhipsa.a $(LIBDIR)/$(HALIBNAME)
+
+man:
+
+doc:

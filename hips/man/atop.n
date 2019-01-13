@@ -1,0 +1,56 @@
+.TH ATOP 1 "1/18/91" "Version 2" "HIPS Manual"
+.SH NAME
+atop \- converts images to various pixel formats from ASCII
+.SH SYNOPSIS
+.B atop
+[-B -S -I -F -C -RGB -RGBZ -ZRGB -BGR -BGRZ -ZBGR]
+.ti 1.5i
+[-c rows [cols]] [-f frames] [-d numdepth] [-nc numcolor] <iseq >oseq
+.SH DESCRIPTION 
+.I Atop
+creates a pixel formatted image from an Ascii image.  The
+.I -c
+switch is used to create images from ascii data.  With this switch, no header
+is expected in the input, and one is created for the output.  Cols defaults
+to rows.
+If
+.I -c
+is specified,
+.I -f
+may be used to specify the number of frames, which defaults to 1,
+.I -d
+may be used to specify the number of depths, which defaults to 1,
+and
+.I -nc
+may be used to specify the number of
+colorplanes, which also defaults to 1.  The actual number of frames of
+input is frames*numdepth*numcolor.
+By default, the output format is bytes (also set with
+.IR -B ).
+Other formats available are shorts (\c
+.IR -S ),
+ints (\c
+.IR -I ),
+floats (\c
+.IR -F )
+and complex (\c
+.IR -C ),
+and the various 3-color formats.  Note that for complex pixels,
+the number of columns in the input header is halved (to be consistent with
+ptoa.c), as are the number of region-of-interest columns and the first
+region-of-interest column.  Similarly, for 3-color formats these values are
+divided by three.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH "SEE ALSO"
+ptoa(1)
+.SH AUTHOR
+Mike Landy - 10/12/83
+.br
+HIPS 2 - msl - 1/8/91
+.br
+RGB/RGBZ/etc. - msl - 5/24/93
+.br
+added -d - msl - 3/2/94

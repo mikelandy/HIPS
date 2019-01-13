@@ -1,0 +1,81 @@
+.TH H_FASTADDCOS 3 "8/12/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_fastaddcos \- subroutines to add a sinusoidal grating to an image (quickly)
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_fastaddcos(hdi,hdo,xf,yf,phase,amplitude)
+h_fastaddcos_f(hdi,hdo,xf,yf,phase,amplitude)
+struct header *hdi,*hdo;
+float xf,yf,phase,amplitude;
+
+h_fastaddcos_F(imagei,imageo,nr,nc,nlpi,nlpo,xf,yf,phase,amplitude)
+float *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+float xf,yf,phase,amplitude;
+.fi
+.SH DESCRIPTION 
+These routines add a sinusoidal grating to an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_fastaddcos
+calls
+.I h_fastaddcos_f
+as long as the pixel format is float.
+.I h_fastaddcos_F
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc ,
+and must evenly divide 512.
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.  The other arguments are as follows:
+.TP 1i
+.I xf
+horizontal frequency in cycles per frame width
+.TP
+.I yf
+vertical frequency in cycles per frame height
+.TP
+.I phase
+degrees of phase angle (0 = cosine phase at the mean,
+-90 = sine phase at the mean).  This is converted to an integer representing
+one part in 512.
+.TP
+.I amplitude
+a multiplier (peak value)
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+float
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_addcos(3), h_addgabor(3)
+.SH AUTHOR
+Charlie Chubb - 12/5/86
+.br
+HIPS 2 - msl - 8/12/91

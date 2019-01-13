@@ -1,0 +1,40 @@
+.TH HIPS2TOHIPS1 1 "2/11/93" "Version 2" "HIPS Manual"
+.SH NAME
+hips2tohips1 \- convert a HIPS-2 sequence back to HIPS-1 format
+.SH SYNOPSIS
+.B hips2tohips1
+[-n] [-h]
+.SH DESCRIPTION 
+.I Hips2tohips1
+converts a HIPS-2 sequence back to HIPS-1 format.
+By default the sequence history is deleted and the sequence description is
+left in.  The history can be retained with
+.I -h
+and the description deleted with
+.IR -n .
+Note that the program does not check whether the HIPS-2 sequence
+history and/or description are appropriate for HIPS-1.  In particular, if
+the description contains a line with a sole `.', that will confuse a HIPS-1
+program.  If the history contains a line prior to the last line which does
+not end with the sequence `| \\', then the history will confuse a HIPS-1
+program.  The default program operation is likely to work for most
+sequences.
+.PP
+No filter is required to convert HIPS-1 images to HIPS-2
+format since all HIPS-2 filters can directly input either HIPS-1 or
+HIPS-2 images.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+all formats available in HIPS-1 except histograms and image pyramids
+.SH "REGION-OF-INTEREST"
+The entire image is converted.
+HIPS-1 images do not contain ROI parameters.
+.SH STANDARD SWITCHES USED
+.TP 1.3i
+.I -U
+Print usage message.
+.SH AUTHOR
+Michael Landy - 1/17/92
+.br
+based on padheader - msl - 2/11/93
+.br
+also based on hips2tohips1 - David Wilson, The Turing Institute - 14/11/92

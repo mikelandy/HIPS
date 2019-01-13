@@ -1,0 +1,18 @@
+.TH HIPS2TGA 1hips "MAY 5, 1993" 
+.SH NAME
+hips2tga - converts an image from HIPS to TrueVision's TGA format
+.SH SYNOPSIS
+.B hips2tga
+< iseq > oseq
+.SH DESCRIPTION 
+.I hips2tga 
+converts an image from HIPS to TrueVision's TGA format.
+HIPS image must be in byte or rgb format.
+.SH SEE\ ALSO
+tga2hips(1)
+.SH AUTHOR
+.nf
+J. Michael Carstensen
+IMSOR, Technical University of Denmark
+E-mail: jmc@imsor.dth.dk
+.fi

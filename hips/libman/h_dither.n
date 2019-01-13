@@ -1,0 +1,72 @@
+.TH H_DITHER 3 "8/8/91" "Version 2" "HIPS Manual"
+.SH NAME
+h_dither \- halftones using an 8x8 dither matrix
+.SH SYNOPSIS
+.nf
+#include <hipl_format.h>
+
+h_dither(hdi,hdo)
+h_dither_b(hdi,hdo)
+struct header *hdi,*hdo;
+
+h_dither_B(imagei,imageo,nr,nc,nlpi,nlpo)
+byte *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+.fi
+.SH DESCRIPTION 
+These routines dither an input subimage (specified by
+.I hdi
+or
+.IR imagei ),
+and store the result in the output subimage (specified by
+.I hdo
+or
+.IR imageo ).
+.I h_dither
+calls
+.IR h_dither_b ,
+as long as the pixel format is byte.
+.IR h_dither_B ,
+is the low-level routine which doesn't require an image header.  The subimage
+size is
+.I nr
+by
+.IR nc .
+The input image has
+.I nlpi
+pixels per line, and the output image has
+.I nlpo
+pixels per line.
+.I H_dither
+converts an 8-bit sequence to a bi-level sequence using an 8 x 8
+dither matrix.  The input and output sequences are both byte-formatted,
+although only values
+.I hips_lchar
+and
+.I hips_hchar
+are used in the output image.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+Only the region-of-interest is processed.  The size of the region-of-interest
+is taken from
+.IR hdi .
+.SH "IN-PLACE PROCESSING"
+The image may be processed in place.  In other words
+.I hdi
+can be the same as
+.I hdo
+and
+.I imagei
+can be the same as
+.IR imageo .
+.SH FILES
+/usr/local/lib/libhipsh.a
+.SH ERRORS
+HE_FMTSUBR - can't handle this pixel format
+.SH "SEE ALSO"
+h_dotdiff(3), h_halftone(3)
+.SH AUTHOR
+Mike Landy - 7/13/89
+.br
+HIPS 2 - msl - 8/8/91

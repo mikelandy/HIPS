@@ -1,0 +1,15 @@
+.TH NHIPS 1 "8/21/91" "Version 2" "HIPS Manual"
+.SH NAME
+nhips \- HIPS viewer for the NeXT computer
+.SH SYNOPSIS
+.B nhips
+.SH DESCRIPTION 
+.I Nhips
+is a basic HIPS viewer for the NeXT computer which displays an image in a
+window.
+.SH "PIXEL FORMATS HANDLED DIRECTLY"
+byte
+.SH "REGION-OF-INTEREST"
+The entire image is displayed.
+.SH AUTHOR
+Patrick Flynn

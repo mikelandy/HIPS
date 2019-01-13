@@ -1,0 +1,17 @@
+#
+# makefile for user-contributed/compress/sources
+#
+
+PGMS = zcatframes.out
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+FRC:

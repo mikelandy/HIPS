@@ -1,0 +1,31 @@
+.TH MLS_SHORT 1 "8th May 1985" LBL-HIPS
+.SH NAME
+mls_short \- suppress random noise in an image (short format)
+.SH SYNOPSIS
+.I mls_short
+[bigsize [smallsize]] [-pN]  
+.SH DESCRIPTION
+\fImls_short\fP uses maximum likelihood smoothing technique to suppress random 
+noise in an image.
+The option \fIbigsize\fP is an integer which specifies the length of the side
+of the window in which \fImls_short\fP is computed and defaults to 3.
+The option \fIsmallsize\fP is an integer which specifies the length of the side
+of the windows which make up the original window, to find the window with the 
+greatest concentration of the nearest neighbours. It defaults to (\fIbigsize\fP 
++ 1) / 2.
+\fIN\fP is an integer which specifies the percentage of the nearest 
+neighbours in the original window which have the closest gray levels to that 
+of the central pixel and it defaults to 62.  The input pixel format must be
+short integers.
+See S.L.Hurt and A.Rosenfeld, "Noise Reduction in Three-Dimensional Digital 
+Images", Pattern Recognition, Vol.17, No.4, pp407-421, (1984).
+.IE
+
+.SH SEE ALSO
+mean(1), nns(1), sas(1), median(1)
+.IE
+
+.SH AUTHOR
+Peter Mowforth and Jin Zhengping - 8/5/1985
+version to handle short format: Brian Tierney, LBL
+.IE
