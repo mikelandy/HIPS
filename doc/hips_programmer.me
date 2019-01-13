@@ -1,0 +1,2260 @@
+.\" to print:  tbl hips_programmer.me | psroff -me
+.po 1i
+.(l C
+.b "\s+2A Programmers Guide to the HIPS Software"
+.sp
+.b "HIPS-2 Version - January 21, 1991\s-2"
+.sp 2
+.i "Michael S. Landy"
+.sp
+Department of Psychology and Center for Neural Science
+New York University
+.sp
+and
+.sp
+SharpImage Software
+.)l
+.he 'HIPS Programmers Guide''%'
+.sp 4
+.pp
+This document reviews the HIPS image processing software from the programmer's
+point of view.  The HIPS image header format is reviewed, both as it is stored
+on disk and as it is maintained in memory header structures at runtime.  Then,
+the low-level library (loaded with -lhips) is discussed.  The structure of the
+HIPS and HIPSADDON image processing routine libraries (loaded with -lhipsh
+and -lhipsa respectively) is outlined.
+Finally, tips are given as to how to add new capabilities to the HIPS system.
+This manual assumes the reader already has some knowledge of the HIPS software
+from the user's perspective (as discussed in the
+.i "User's Guide to the HIPS Software" ).
+The library routines are only outlined here.  More extensive information on
+individual routines is given in the individual manual pages (there is one
+manual page for each source file for the -lhips, -lhipsh and -lhipsa routines).
+.pp
+Any HIPS program is required to include the standard HIPS definitions by
+including the following line near the beginning
+of each program:
+.(l
+#include <hipl_format.h>
+.)l
+Note that if you haven't already done so, this will also include stdio.h as
+well.  This include file defines the HIPS image header and lots of macro and
+structure definitions used in the HIPS software.  It also defines a number of
+standard types such as
+.i h_boolean
+(for variables which are either `TRUE' or `FALSE'),
+.i Filename
+(which is a shorthand for `char *'),
+.i Pixelval
+(which is a union of all possible pixel value types used by generic routines
+which are passed a single pixel value) and
+.i hips_histo
+(the structure in which histograms are placed).
+.sh 1 "The image header"
+.pp
+Each image in HIPS is stored on disk with an image header.
+The intent for this standard is to reduce the overhead in writing new image
+transformation programs in as general a form as possible.
+All common image parameters are stored in a header associated with every
+sequence of images.
+A library of subroutines (discussed below) allows one to read, write, and
+initialize header information.
+When in memory, the header information is stored in a structure of type
+.i header .
+The memory structure which holds the image header is a bit more elaborate than
+the version stored on disk, and we will discuss those differences momentarily.
+The definition for the header structure, along with other parameter
+definitions, is in the include file `hipl_format.h' (actually, in files that
+it subsequently includes).
+In order to process more than one sequence at a time, one need merely define
+a separate 
+.i header
+structure for each sequence you wish to process.
+For example, the following line will allow you to process two images:
+.(l
+struct header image1,image2;
+.)l
+.pp
+The contents of the image header are intended to serve multiple purposes.  
+First, it should provide a sufficient description of the image format and
+frame sequence so as to eliminate the need for further parameters to 
+image processing programs in order to handle the sequence.
+Second, it should provide identification of the origin of the sequence and
+any transformations to which the sequence has been subjected.
+Third, it should be flexible, and allow the addition of new image parameters
+as needed.
+.pp
+Each image header consists of a fixed section, a list of extended parameters,
+and a parameter array area.  The first two sections are in Ascii and hence are
+reasonably readable.  The third area is in binary, and is intended to make the
+reading of image headers efficient when the added header parameters include
+large arrays (such as pseudo-color lookup tables, etc.).
+The following table describes each header entry from the fixed section
+as stored on disk together with its format and its contents.
+.sp
+.(b L F
+.TS
+expand;
+cb s s
+c c c
+lti lt lw(3.5i).
+The HIPS Image Header - Fixed Section
+.sp 1.5
+Entry Name	Format	Contents
+.sp
+magic	*char	T{
+The string `HIPS', on a line by itself, indicates that this is a HIPS-2 image
+sequence.  If it is missing, the software will attempt to read this file as if
+it is an old, pre-HIPS-2 image sequence (see
+.i read_header (3)
+and
+.i fread_oldhdr (3)).
+T}
+orig_name	*char	T{
+An indication of the originator of this sequence.
+T}
+seq_name	*char	T{
+The sequence name.
+T}
+num_frame	int	T{
+The number of frames in this sequence.
+T}
+orig_date	*char	T{
+The date the sequence was originated.
+T}
+orows	int	T{
+The number of rows in each image, the height.
+T}
+ocols	int	T{
+The number of columns in each image, the width.
+T}
+rows	int	T{
+The number of rows in the region-of-interest.
+T}
+cols	int	T{
+The number of columns in the region-of-interest.
+T}
+frow	int	T{
+The first row in the region-of-interest.
+T}
+fcol	int	T{
+The first column in the region-of-interest.
+T}
+pixel_format	int	T{
+An indication of the format of each pixel. The actual values are listed
+below.
+T}
+numcolor	int	T{
+The number of color planes in this sequences.  For example, a color
+byte-formatted sequence
+consisting of 5 time steps, each of which consisted of a red, green, and then
+blue image frame, would have
+.i num_frame
+set to 15 and
+.i numcolor
+set to 3.  Note, however, that a packed 3-color version of this sequence (e.g.
+in format PFRGB) would be stored with
+.i num_frame
+set to 5 and
+.i numcolor
+set to 1, since there are only 5 frames stored (each including all 3 colors).
+T}
+sizehist	int	T{
+The number of bytes in the sequence history which follows (for efficiency's
+sake), including the final <newline>, excluding any stored final <null>.
+T}
+seq_history	*char	T{
+A description of the sequence of transformations leading up to the current
+image.  A line is added by each transformation filter.  The format is
+described below.
+T}
+sizedesc	int	T{
+The number of bytes in the sequence description which follows (for efficiency's
+sake), including the final <newline>, excluding any stored final <null>.
+T}
+seq_desc	*char	T{
+A free form description of the contents of the sequence.
+T}
+.TE
+.)b
+.pp
+In the actual data files, each header item is in Ascii form, and on separate
+lines.  Thus, an image header is fairly readable in the format in which it is
+stored.
+The
+.i read_header
+and
+.i write_header
+routines perform the necessary conversions to and from the internal format.
+As a consequence of this, the format of all items is quite free, and
+string lengths are reasonably unrestricted.
+The 
+.i pixel_format
+is chosen from among a large number of possible image/pixel formats.  The list
+is given in hipl_format.h, and includes a number of types defined by HIPS
+users over the years.  Below, we list some of the most common types, including
+all of the raster-based formats.
+.(b L
+.TS
+center;
+c c c
+l n l.
+Format Name	Format Number	Pixel Format
+.sp
+PFBYTE	0	Bytes interpreted as unsigned integers
+PFSHORT	1	Short integers
+PFINT	2	Integers
+PFFLOAT	3	Float's
+PFCOMPLEX	4	2 Float's interpreted as (real,imaginary)
+PFASCII	5	ASCII representation, with linefeeds after each row
+PFDOUBLE	6	Double's (8 byte floats)
+PFDBLCOM	7	Double complex's (2 Double's)
+PFHIST	12	histogram of an image (using ints)
+PLOT3D	24	plot-3d format
+PFMSBF	30	packed, most-significant-bit first
+PFLSBF	31	packed, least-significant-bit first
+PFSBYTE	32	signed bytes
+PFUSHORT	33	unsigned shorts
+PFUINT	34	unsigned ints
+PFRGB	35	RGBRGBRGB bytes
+PFRGBZ	36	RGB0RGB0RGB0 bytes
+PFZRGB	37	0RGB0RGB0RGB bytes
+PFMIXED	40	mixed raster formats
+PFBGR	41	BGRBGRBGR bytes
+PFBGRZ	42	BGR0BGR0BGR0 bytes
+PFZBGR	43	0BGR0BGR0BGR bytes
+PFINTPYR	50	integer pyramid
+PFFLOATPYR	51	float pyramid
+etc.		(See /usr/include/hipl_format.h)
+.TE
+.)b
+.pp
+The 
+.i seq_history
+is intended to give a complete history of the transformations that have
+been applied to a sequence.
+Thus, each transformation filter will add an indication that it was applied,
+on what date, and with what parameters applied.
+The string consists of a sequence of lines which taken together can yield an 
+executable command string.
+Each line corresponds to one subcommand of a pipe, corresponding to the
+action of a given transformation.
+This line gives the transformation name (i.e. the program name), the
+parameters given to the program, and a pseudo-parameter (\c
+.i -D
+date-time)
+which gives the date the transformation was applied.
+Thus, every transformation program should be prepared to ignore a
+.i -D
+switch at the end of the command line.
+Finally, all lines except the last include the string ``| \\'',
+in order
+to make the entire string an executable pipe.
+The following example history string should clarify matters.
+.(l
+expand 2 "-D Thu Feb  4 11:21:05 EST 1982" | \\
+lshift 3 "-D Fri Feb  5 12:02:45 EST 1982" | \\
+reduce 5 "-D Mon Feb  8 09:45:33 EST 1982"
+.)l
+However, if a program combines more than one image (e.g. including one
+specified as a filename on the command line), then the default is to list the
+sequence histories of all inputs (each one labeled and indented).  In this
+case the history is no longer executable as such, but still preserves all
+information about how the sequences was processed.
+.pp
+The
+.i seq_desc
+is a textual description of the sequence.
+The body of the sequence description may be entirely free-form.  The
+.i write_header (3)
+routine ensures that it ends with a <newline> for readability's sake.
+If a program combines more than one image (e.g. including one
+specified as a filename on the command line), then the default is to list the
+sequence descriptions of all inputs (each one labeled and indented).
+.pp
+The fixed header section is followed by a section which describes the extended
+parameters associated with this image sequence.  This section allows the HIPS
+user to define additional header fields with a name, format, and a value or
+values.  The parameters section of the header
+consists of a single line which gives the number of parameters, followed by
+one line describing each parameter.  The parameter lines consist of four
+items: the parameter name (a string with no white space), the parameter type
+(a single character which is `b', `c', `s', `i', or `f' for byte, Ascii
+character, short, integer, or floating
+point parameters), the size of this parameter (the number of values associated
+with this name), and finally the parameter value.  If the count is 1, then the
+value is the actual value of the parameter (an integer for byte, Ascii, short
+or integer
+parameters, or a floating point number for `f').  If the count is greater than
+1, then the parameter values are actually stored in the binary area which
+follows this section of the image header.  In this case, the fourth value of
+the parameter line gives the offset from the beginning of the binary area
+where the values of this parameter are to be found.  The parameters which
+require the binary area are stored in this list in the order in which their
+corresponding data is to be found in the binary area (\c
+.i write_header (3)
+takes care of this).  Note that Ascii parameters are treated identically to
+byte parameters except that an Ascii parameter is intended to contain a
+printable Ascii string, whereas a byte parameter is intended to contain binary
+byte data (such as a lookup table or another image).  The only way in which
+they are handled differently is by
+.i formatheader (3),
+which formats byte parameters as integers representing their binary values,
+and formats Ascii parameters as is, assuming they are already a printable
+string.  Finally, if you are interested in storing an Ascii string parameter
+and have it read in as a null-terminated string, then provide a
+null-terminated string to the appropriate routines and declare the length to
+be the length of the string including the final null.
+.pp
+The final section of the header is the binary area.  It is preceded by an
+Ascii count of the size of the binary area, in bytes, followed by the binary
+data.
+.pp
+For handling very large images, some HIPS users
+have found it useful to keep the entire HIPS sequence in shared memory, for
+which it is important to keep any binary data (including the binary parameter
+area and the first image which follows it)
+on a full word boundary.  In order to accommodate this, the last Ascii item in
+the header (which is the count of the number of bytes in the binary area) is
+padded with blanks so that the first binary item is on a fullword boundary
+relative to the beginning of the header as stored on disk.  And, each binary
+area item (i.e. each extended parameter area) is padded with nulls if
+necessary to be a multiple of four bytes in length
+(this is only necessary, of course, for `b' and `s' items).
+.pp
+When an image reader is read using
+.i read_header (3),
+it is read into a structure of type
+.i header ,
+which is defined in hipl_format.h.  This structure includes all of the fields
+given in the table above (other than the initial magic line).  It also
+includes a number of utility items:
+.(b L F
+.TS
+expand;
+cb s s
+c c c
+lti lt lw(3.5i).
+Additional Header Fields Kept in Memory
+.sp 1.5
+Entry Name	Format	Contents
+.sp
+ondealloc	h_boolean	T{
+This is TRUE if the string
+.i orig_name
+associated with this header has been allocated,
+and if the owner of this particular header has the right to deallocate that
+string memory (see Memory allocation and management, below).
+T}
+sndealloc	h_boolean	T{
+This is just like
+.i ondealloc
+for the string
+.i seq_name .
+T}
+oddealloc	h_boolean	T{
+This is just like
+.i ondealloc
+for the string
+.i orig_date .
+T}
+numpix	int	T{
+The number of pixels per stored frame.
+T}
+sizepix	hsize_t	T{
+The number of bytes per pixel.
+T}
+sizeimage	hsize_t	T{
+The number of bytes per image.  This is used by
+.i alloc_image (3)
+to allocate image memory, and by
+.i read_image (3)
+and
+.i write_image (3)
+as well.  For image pyramids, the size of the image (\c
+.i orows
+and
+.i ocols )
+and the index of the top pyramid level (\c
+.i toplev ,
+which is an extended parameter) are used to compute this, so that routines
+which don't interpret image contents can handle pyramid formats easily.
+T}
+image	byte *	T{
+A pointer to the image as allocated by
+.i alloc_image (3).
+T}
+imdealloc	h_boolean	T{
+This is TRUE if the image associated with this header has been allocated,
+and if the owner of this particular header has the right to deallocate that
+image memory (see Memory allocation and management, below).
+T}
+firstpix	byte *	T{
+A pointer to the first pixel in the image region-of-interest.
+T}
+histdealloc	h_boolean	T{
+This is TRUE if the sequence history associated with this header has been
+allocated, and if the owner of this particular header has the right to
+deallocate that memory (see Memory allocation and management, below).
+T}
+seqddealloc	h_boolean	T{
+This is TRUE if the sequence description associated with this header has
+been allocated, and if the owner of this particular header has the right to
+deallocate that memory (see Memory allocation and management, below).
+T}
+numparam	int	T{
+The number of extended parameters.
+T}
+paramdealloc	h_boolean	T{
+This is TRUE if the owner of this particular header has the right to
+deallocate the memory allocated to the parameter structures  (see Memory
+allocation and management, below).
+T}
+params	struct extpar *	T{
+A pointer to the linked list of extended parameter structures.
+T}
+.TE
+.)b
+.pp
+The last item,
+.i params ,
+implements the extended header parameters.  It points to a linked list of
+structures, one for each extended parameter.  Each parameter structure
+consists of five items:
+.(b L F
+.TS
+expand;
+cb s s
+c c c
+lti lt lw(3.5i).
+Extended Parameter Structures
+.sp 1.5
+Entry Name	Format	Contents
+.sp
+name	char *	T{
+The name of this extended parameter.
+T}
+format	int	T{
+The format of this parameter: PFBYTE, PFASCII, PFSHORT, PFINT or PFFLOAT.
+T}
+count	int	T{
+The number of values for this parameter.
+T}
+val	union	T{
+The value of this parameter.  This may be a single byte, short,
+int, or float, or a pointer to an array of bytes, shorts,
+integers, or floats.  These are referenced as
+val.v_b, val.v_s, val.v_i or val.v_f for the single values, and val.v_pb,
+val.v_ps, val.v_pi or val.v_pf for the pointers to value arrays (e.g. as read
+from the header binary area).  Ascii parameters are stored in val.v_b or
+val.v_pb.
+T}
+dealloc	h_boolean	T{
+If this value is TRUE, and if additionally the header variable
+.i paramdealloc
+is TRUE, then the owner of this header has the right to deallocate the
+binary data pointed to by this parameter structure (see Memory allocation and
+management,
+below).
+T}
+nextp	struct extpar *	T{
+A pointer to the next extended parameter in this linked list of parameters.
+T}
+.TE
+.)b
+.sh 1 "The low-level library (-lhips)"
+.pp
+The HIPS software is organized around a number of libraries.  The basic,
+low-level library common to all programs is loaded by adding `-lhips' to the
+end of your compilation command (although this may differ for individual HIPS
+installation sites).  This library includes the basic routines for reading,
+writing, and managing HIPS image headers and HIPS images, and for handling
+command arguments and errors in a standardized way, along with a few other
+functions.  Any HIPS program must be loaded with this library, and the source
+code will almost certainly need to have the following include line:
+.sp
+.(l
+#include <hipl_format.h>
+.)l
+which defines the image header structure, a large number of HIPS parameters,
+and definitions of a number of external variables and functions.
+.pp
+In order to standardize the error handling, all HIPS routines always return
+some value or other, and the value will be equal to the predefined value
+.i HIPS_ERROR
+if there is an error condition.   If no problems were encountered, each
+routine returns something other than HIPS_ERROR (for example, HIPS_OK, which
+is a different value).  If the user has the error handler print error
+messages (see The error handler, below),
+then the main program must also define a variable to be
+the current program name.  Typically, all HIPS main programs begin with the
+following line:
+.sp
+.ce
+Progname = strsave(*argv);
+.sp
+This uses the HIPS library routine
+.i strsave (3)
+to allocate space for a string and copy into it the program
+name, and then save the pointer in
+.i Progname ,
+which is an external defined in hipl_format.h.
+.pp
+Another important issue is input/output.  With HIPS-2, the stdio package is
+now used for all input/output.  This means that all reading and writing uses
+routines such as
+.i fopen (3s),
+.i fscanf (3s),
+.i fprintf (3s),
+.i fread (3s)
+and
+.i fwrite (3s),
+and that the user may not use the system subroutines
+.i read (2)
+or
+.i write (2)
+to read image data having used HIPS routines to read the image header.  This
+was done to enhance the portability of the HIPS source code.
+.pp
+Finally, a word about argument conventions for HIPS subroutines.  Basically,
+whenever possible images are referred to using a pointer to a header
+structure.  Thus, most main programs will have lines such as:
+.sp
+.(b
+struct header hd;
+.sp
+read_header(&hd);
+update_header(&hd,argc,argv);
+write_header(&hd);
+read_image(&hd,fr);
+write_image(&hd,fr);
+.)b
+Note that the
+.i read_image
+and
+.i write_image
+calls were given the frame number as an argument.  This is not necessary for
+these routines' operation, but rather allows the error handler to print a more
+informative error message (such as `error reading frame 3') when there are
+problems.  Many of the HIPS routines take a frame number and/or a file name as
+an argument for this purpose, so check to make sure that you are supplying all
+necessary arguments by referring to the relevant manual pages.
+.pp
+What follows is a survey of the routines available in the low-level HIPS
+library.  For more detailed information on each routine, refer to the manual
+page for each set of routines (there is one manual page for each source file
+in the lib/sources directory).
+.sh 2 "The error handler"
+.pp
+All errors are handled by calls to the error handler
+.i perr (3).
+It is intended that the HIPS programs be used both by command-level routines,
+which want to print an error message and then exit if error conditions occur,
+and as subroutines to more elaborate (i.e. windows-and-menus) user interfaces,
+which need to learn about error messages, inform the user, and do their best
+to recover from them and continue functioning.  Thus, the main routine sets
+two global variables
+.i hipserrprt
+and
+.i hipserrlev
+to control how severe an error must be for
+.i perr
+to print error messages (rather than merely formatting them in a
+globally-available string pointer) and for it to exit entirely rather than
+returning to the caller.  In order to successfully implement this, when any
+HIPS subroutine calls another, the call generally looks like:
+.(b
+if (getparam(hd,"toplev",PFINT,count,&toplev) == HIPS_ERROR)
+.ti 1i
+return(HIPS_ERROR);
+.)b
+Thus, if an error is detected and the error handler doesn't exit, then the
+error indication is passed back to the user.  The manual
+pages generally mention all error conditions which are detected by a given
+routine and by the routines that it calls.
+.sh 2 "The argument handler"
+.pp
+Command line arguments to HIPS filters are handled by the library routine
+.i parseargs (3).
+This routine enforces a consistent user interface for all command-level HIPS
+routines, dealing with predefined HIPS flag options, the syntax of flags
+and their associated parameters, building a usage message and reporting
+any error conditions which are detected.
+.pp
+To make use of 
+.i parseargs (3)
+a filter program must first of all define format descriptors identifying
+each of the flag options associated with that filter and the input
+image filenames which can be accepted.
+Definitions of structures for these format descriptors are available in
+the header file \fIhipl_format.h\fP along with other HIPS parameter
+definitions and this file should be included near the top of your
+program file.
+The parser relies on these format descriptors to validate the command line
+arguments
+\fIargc\fP and \fIargv\fP
+and to retrieve the required parameter settings.
+A typical call to
+.i parseargs (3)
+would look something like:
+.(b
+.ta 1i 1.6i
+	parseargs (argc,
+		argv,
+		flag_format,
+		flag_parameter_ptrs,
+		filename_format,
+		filename_parameter_ptrs)
+.)b
+.sp
+where
+\fIflag_parameter_ptrs\fP is a list of pointers to variables which are
+assigned the value of their corresponding parameters from the command line
+arguments, and \fIfilename_ptrs\fP is a list of pointers to variables
+which are assigned the input image filenames from the command line
+arguments.  In addition, there is
+.i parseargsu ,
+if the user wants to specify usage text which describes the file usage of the
+filter.
+.pp
+For reasons of efficiency,
+.i parseargs (3)
+assumes that the format descriptors which are passed to it are correctly
+specified and contain no errors.
+If this is not the case, 
+.i i.e. ,
+if mutual exclusion relationships are not fully described or invalid
+parameter types are given, the parser may terminate abruptly.
+It is also essential that the number of pointer variables which are
+passed to
+.i parseargs (3)
+matches the number of parameters and filenames
+which are expected for the filter.
+.pp
+A full description of
+.i parseargs (3)
+can be found in the associated manual pages.
+The following sections discuss some of the more important issues.
+Finally, the routine
+.i print_usage (3)
+may be called to print the usage message previously constructed by
+.i parseargs (3)
+and then exit.
+.sh 3 "Command-line syntax"
+.pp
+The grammar of the command line accepted by HIPS filters has been
+rationalized to some degree for HIPS-2, leading to a  change in the interface
+presented by certain filters.
+Basically, the situation now is that each filter can accept a number of
+flag options with associated parameters followed by a (possibly empty)
+list of input image filenames.
+A flag option must consist of the flag itself, \fIi.e.\fP a string with
+a leading ``-'', followed by a list of parameters.
+This parameter list may be empty but if not, each parameter must be
+surrounded by white space.
+Currently, the only parameter types recognized are characters,
+strings, filenames, integers, double-precision floating points and lists
+(which consist of a count and list of strings).
+The trailing input image filenames define the images which will be
+processed by the filter.
+Of course, the number of filenames appropriate in each case
+is dependent upon the transformation performed by that filter.
+.pp
+One of the main differences between this interface and the HIPS-1
+interface is that all parameters must now be attached to some flag
+option.
+The rationale for this point is that positional dependencies on
+parameters are removed and a label is attached to each parameter which
+should make it easier to remember.
+For example, instead of
+.sp
+.(b
+.ta 1i
+	genframe [graylevel [ rows [ cols ]]]
+	genframe graylevel frames rows cols
+.)b
+.sp
+as was the case in HIPS-1, the synopsis  for the filter to generate a
+synthetic image is now
+.sp
+.(b
+.ta 1i
+	genframe [-g graylevel] [-f frames] [-s rows [cols]]
+.)b
+.pp
+A second difference is that white space must be used to separate all
+flags, parameters and filenames on the command line.
+This ensures a more consistent interface and removes situations like
+those in HIPS-1 some filters expected options of the form ``-t26'' whilest
+others expected ``-t 26''.
+Under HIPS-2, the space must be present.
+.pp
+The HIPS-2 interface also allows input image filenames to be specified on
+the command line which will be treated equivalently to image input
+redirected via \fIstdin\fP.
+This is more in line with standard UNIX conventions and should prove a
+very useful extension to the  user interface.
+.sh 3 "Lexical Analysis"
+.pp
+The parser can accept optional parameters for any of the flags
+associated with a filter. To avoid any ambiguities however, it adopts a
+greedy parsing strategy. So, if an argument can be taken as an optional
+parameter for a flag, it will be. For example, consider the situation
+where a filter can accept trailing image filenames and has a flag option
+``-f'' which takes a filename as an optional parameter.
+In this case, the command line
+.sp
+.(b
+.ta 1i
+	filter -f filename
+.)b
+.sp
+will be interpreted as selecting the ``-f'' option with associated
+parameter \fIfilename\fP and no trailing image filename.
+.sh 3 "Predefined flag options"
+.pp
+Certain flags options have been reserved in HIPS-2 and are predefined
+across the board for all filters in the HIPS library.
+These predefined flag options are \fIhardwired\fP into the parser and need not
+be redefined for each individual filter.
+Note, however, that these flag options will not be included in the usage
+messages which are built.
+The current set of predefined flags is given in the table shown below.
+.sp
+.(b L
+.TS
+expand;
+cb s
+c c
+lt lw(4.5i).
+Predefined HIPS Flag Options
+.sp 1.5
+Flag Option	Meaning
+.sp
+-D 	T{
+To set the date at which this transformation was applied.
+Useful for documentation purposes.
+T}
+-U	T{
+To print a usage message for the filter and quit.
+T}
+-P \fImode\fP	T{
+To set the prevailing \fImode\fP for packing images.
+The \fImode\fP can be either ``M'', or ``L'' indicating respectively
+that the image should be packed most significant bit first or least
+significant bit first.
+The default \fImode\fP is defined in the top level Makefile at
+installation.
+T}
+-CR \fImode\fP	T{
+To set the prevailing \fImode\fP for converting from complex-valued images
+to real-valued images.
+The \fImode\fP can be either ``M'', ``P'', ``I'' or ``R'' indicating respectively
+that the real-valued image should be formed from the complex magnitude,
+the complex phase, the imaginary part or the real part of the
+complex-valued image.
+The default \fImode\fP is to take the complex magnitude value.
+T}
+-RC \fImode\fP	T{
+To set the prevailing \fImode\fP for converting from real-valued images
+to complex-valued images.
+The \fImode\fP can be either ``R'', ``I'' or ``B'' indicating respectively
+that the complex-valued image should be formed by setting the real part
+from input and clearing the imaginary part, by setting the imaginary part
+from input and clearing the real part or by setting both the real and
+imaginary parts from input.
+The default \fImode\fP is to set the real part from input and to clear
+the imaginary part.
+T}
+-UL \fIvalue\fP	T{
+To set the \fIvalue\fP substituted for a bit 0 during unpacking.
+This should lie in the range 0 - 255 and defaults to 0.
+T}
+-UH \fIvalue\fP	T{
+To set the \fIvalue\fP substituted for a bit 1 during unpacking.
+This should lie in the range 0 - 255 and defaults to 255.
+T}
+-CB 	T{
+Convert back to the input pixel format.
+T}
+-NFH 	T{
+Do not preserve the input sequence histories of all input sequences.
+T}
+-NFD 	T{
+Do not preserve the input sequence descriptions of all input sequences.
+T}
+-FXP 	T{
+Merge the extended parameter lists from all input sequences.
+T}
+.TE
+.)b
+.sh 3 "Filter-specific flag options"
+.pp
+The parser also handles flag options which are specific to each
+individual HIPS filter.
+Format descriptors are required for each of these flags which identify
+not only the flag itself, but all flags with which it is mutually exclusive
+and  a list of all parameters associated with it.
+.sh 4 "Defining the format of the flag options"
+.pp
+To cater for these filter-specific flag options,
+an array of \fIFlag_Format\fP structures must be defined and
+initialized in the program prior to calling
+.i parseargs (3). 
+This array should contain a single entry for each flag option to be
+accepted by that filter.
+The fields present in the \fIFlag_Format\fP structure are:
+.sp
+.(b L
+.TS
+expand;
+cb s s
+c c c
+lti lt lw(3.5i).
+Flag Format Descriptor
+.sp 1.5
+Entry Name	Format	Contents
+.sp
+value	Flag	T{
+A string containing the value of the flag, \fIi.e.\fP the string after
+the leading ``-''.
+T}
+mutex_flags	Flag[ ]	T{
+An array containing the value of all the flags with which this flag
+is mutually exclusive.
+This list should be terminated with the value LASTFLAG.
+T}
+min_parameters	int	T{
+The minimum number of parameters which must be specified  with this flag
+option.
+If this count is less than the total number of parameters associated
+with a flag, the additional parameters are taken to be optional.
+T}
+parameters	Parameter[ ]	T{
+An array of structures containing the type, default value, and usage
+description for each parameter associated with the flag option.
+This list should be terminated with the value LASTPARAMETER.
+T}
+.TE
+.)b
+.sp
+For example, the program
+.i mask (1)
+which performs a generalized convolution contains the definition:
+.(b
+.ta 0.4i 0.8i
+.ps -1
+static Flag_Format flags[] =
+{
+	{"f", {"m", LASTFLAG}, 1, {{PTBOOLEAN, "TRUE"},
+		{PTINT, "1", "filter-number"}, LASTPARAMETER}},
+	{"m", {"f", LASTFLAG}, 1, {{PTBOOLEAN, "FALSE"},
+		{PTFILENAME, "", "filter-file"}, LASTPARAMETER}},
+	LASTFLAG
+};
+.ps +1
+.)b
+The first descriptor defines the flag ``-f'' which selects a filter number from
+a standard library, the second defines the flag  ``-m'' which
+selects a user-specified mask file and the last entry is LASTFLAG
+which terminates the format descriptor array.
+As outlined above, the first element of each entry defines the flag
+itself, \fIi.e.\fP either ``f'' or ``m''.
+The remaining entries are discussed in the following sections.
+.sh 4 "Defining mutually exclusive flags"
+.pp
+The second entry in the format descriptor defines a list of flags which are
+mutually exclusive to the flag under consideration. 
+In the above example,  the flag ``-m'' is deemed mutually exclusive to the flag
+``-f'' so  it is not possible to select a standard convolution mask and a
+user-specified one at the same time.
+If there are no mutually exclusive flags, the first and only entry in this list
+should be the terminator LASTFLAG.
+.sh 4 "Defining parameters to flag options"
+.pp
+Parameters associated with the flag options are identified in the third and
+fourth entries in the format descriptor.
+These define respectively the minimum number of parameters which must be
+specified with the flag and the type, default value, and usage message text
+of all parameters associated with  the flag.
+The minimum count can of course range from zero to the total number of
+parameters registered for the flag.
+If this number is less than the total count, the remaining parameters
+are considered optional and need not be present on the command line.
+The order of parameters in the parameter list is important and should be
+identical to the order in which they are specified on the command line.
+The value LASTPARAMETER should appear as the last entry in the
+parameter list.
+.pp
+At present, parameters must be assigned one of the types shown in the
+following table.
+.sp
+.(b L
+.TS
+expand;
+cb s
+c c
+lt lw(4.5i).
+Valid Parameter Types
+.sp 1.5
+Type Name	Parameter Type
+.sp
+PTBOOLEAN	T{
+Boolean type used to signify whether an operating mode has been
+enabled or disabled.
+T}
+PTCHAR	T{
+Character type, usually a single letter but any non-control character can be
+given.
+T}
+PTSTRING	T{
+Character string type used to give an arbitrary character sequence. 
+T}
+PTFILENAME	T{
+Filename type, \fIi.e.\fP a string representing a filename according to the
+standard UNIX conventions.
+T}
+PTINT	T{
+Integer numerical values.
+T}
+PTDOUBLE	T{
+Floating point type stored in double-precision format.
+T}
+PTLIST	T{
+The list type is used to permit the user to specify an arbitrary length list
+of tokens as a single parameter.  It consists of a count (an integer)
+followed by a list of strings.
+T}
+.TE
+.)b
+.pp
+Boolean  parameters are special in the sense that they do not appear
+explicitly on the command line.
+Instead, these parameters are used in situations where a particular flag
+option enables or disables a fundamental operating mode.
+Consider for example, a flag with no command line parameters such as
+the ``-l'' flag in
+.(b
+.ta 1i
+	rotate90 [-l].
+.)b
+If the flag is present, \fIrotate90\fP rotates the image counterclockwise,
+otherwise the filter rotates the image clockwise.
+Although, the parameter list for this flag  will contain no explicit
+command line parameters, \fIi.e.\fP no integers, reals, strings, \fIetc.\fP,
+it must contain a boolean parameter which will be set to indicate whether
+the flag itself was present on the command line.
+Similarly, boolean parameters are required for mutually exclusive flags 
+where they are necessary to signify which one of set of options has been
+enabled.
+For example, the flag format descriptors  for the filter \fImask\fP both
+contained boolean parameters.
+In both these examples, the boolean parameter must appear as the first
+entry in the parameter list.
+For a flag with no command line parameters, this will obviously be the only
+parameter in the list.
+It is important to note that the minimum parameter count applies only to
+parameters which are explicitly given on the command line and ignores
+these boolean parameters.
+.pp
+Default values for parameters should be given as strings enclosed in
+double quotes and should match the type of the parameter according to
+normal UNIX conventions for specifying literals.
+Boolean parameters may be assigned either the value ``TRUE'' or ``FALSE''.
+PTLIST parameters are defaulted to a count of zero, and the user-specified
+default string is ignored.
+The usage text for parameters is a string as well, and may be omitted for
+boolean parameters.
+.sh 4 "Retrieving flag option parameters"
+.pp
+The call to
+.i parseargs (3)
+expects a number of pointer variables
+immediately after the flag format descriptor and these variables are
+assigned either the default setting for the corresponding parameter or,
+if present, a values taken from the command line.
+It is essential that these pointer variables are given in the same order in
+which their associated flag option parameter is specified in the format
+descriptors.
+For example, the call to
+.i parseargs (3)
+in the program
+.i mask (1)
+should look something like the program excerpt:
+.sp
+.(b
+.ta 1i 1.6i
+	h_boolean	use_standard_mask;
+	h_boolean	use_mask_file;
+	int	mask_num;
+	char	*mask_file;
+
+
+	parseargs (argc,
+		argv,
+		flags,
+		&use_standard_mask,
+		&mask_num,
+		&use_mask_file,
+		&mask_file,
+		...);
+.)b
+The
+.i parseargs (3)
+routine does not expect space to have been previously
+allocated for the character pointer variables which are passed to it.
+For the PTLIST parameter type, the user supplies a pointer to a Listarg. This
+structure contains a count and a list of strings which are set appropriately
+based on the user's command string.
+.sh 3 "Trailing image filenames"
+.pp
+The parser will also accept input image filenames for a filter from the
+command line so that the commands
+.(b
+.ta 1i
+	filter imagefile > outimagefile
+.)b
+and
+.(b
+.ta 1i
+	filter < imagefile > outimagefile
+.)b
+are equivalent.
+These image filenames must appear as the last arguments on the command
+line after any flag options which are given,
+To specify how many such filenames can be accepted, the next argument 
+in the call to
+.i parseargs (3)
+after the parameter pointer variables 
+should be the filename format descriptor.
+This format should be one of the options given in the following table.
+.(b L
+.TS
+expand;
+cb s
+c c
+l lw(4.5i).
+Valid Filename Formats
+.sp 1.5
+Format Name	Filename Format
+.sp
+FFNONE	T{
+No trailing image filenames are accepted.
+This is appropriate for filters which do not have any input image such as
+\fIgenframe\fP to generate a synthetic image.
+T}
+FFONE	T{
+Only one input image filename can be accepted.
+This is appropriate for the majority of filters which operate on a
+single input image.
+If no filename is given, the image is assumed to come from \fIstdin\fP.
+T}
+FFTWO	T{
+One or two input image filenames can be accepted.
+This is appropriate for filters such as \fIaddseq\fP which perform dyadic
+operations.
+If only one filename is given, the second image is assumed to come from
+\fIstdin\fP.
+T}
+FFLIST	T{
+A sequence of zero or more input image filenames can be accepted.
+This is appropriate for filters such as \fIcatframes\fP which operate
+on sequences of images.
+If no filenames are given, only one input image is assumed to come from
+\fIstdin\fP.
+If one or more filenames are given, the input images are assumed to come
+from these filenames.
+T}
+.TE
+.)b
+.pp
+In each of these cases, a filename specified as ``-'' is taken to indicate
+that \fIstdin\fP should be used.  Of course, this may only be specified once
+in a given command line.
+.pp
+If the filename format is FFNONE, no further arguments are required for
+the call to
+.i parseargs (3).
+If the format is FFONE or FFTWO, then one or two unallocated character
+pointers respectively are expected as the next arguments to
+.i parseargs (3).
+These variables will be assigned the image filenames on the command line or
+their default values.
+If the format is FFLIST,
+.i parseargs (3)
+expects a pointer to an integer
+variable and a pointer to a pointer to a character pointer (char ***) as
+the next arguments following the filename format descriptor.
+These are respectively assigned the number of filenames present on the
+command line and the values of each of these filenames.
+Here again, no space should be allocated for the filename character
+strings as shown in this example:
+.(b
+.ta 1i 1.6i
+	int	num_files;
+	char	**image_files;
+
+
+	parseargs (argc,
+		argv,
+		...,
+		FFLIST,
+		&num_files,
+		&image_files);
+.)b
+The filename pointer variables should be the last arguments in the call to
+.i parseargs (3).
+In all cases, a file argument which is to be substituted with
+.i stdin
+returns the string ``stdin'' as the filename.
+This happens when
+.i stdin
+was the default or when the user specifies a file as ``-''.
+Thus, it is impossible to actually specify the filename ``stdin'', and any
+attempt to do so will be mapped to the standard input.  The routine
+.i hfopenr (3)
+should be used to open these files, since it maps the string ``stdin''
+appropriately.  Finally, if
+.i parseargsu (3)
+is used, then a final argument is supplied which is a string describing the
+file usage.
+.pp
+.sh 2 "Image headers and type conversion"
+.pp
+The bulk of the low-level library is concerned with image headers:  how to
+read and write them, how to set various header variables, how to convert
+between various image formats, the implementation of the HIPS `object
+oriented' behavior for raster formats, and to manage the header extended
+parameters.
+.sh 3 "Header I/O"
+.pp
+To read and write headers there are such routines as
+.i read_header (3),
+.i fread_header (3),
+.i write_header (3),
+and
+.i fwrite_header (3).
+In addition, there are utility routines to make things more convenient.  There
+are routines which read a header and also allocate the image, check the pixel
+format, or check the header for consistency with another header (including
+.i read_hdr_a (3),
+.i fread_hdr_a (3),
+.i read_hdr_cpf (3),
+.i fread_hdr_cpf (3),
+.i read_hdr_cpfa (3),
+.i fread_hdr_cpfa (3),
+.i fread_hdr_cpfac (3),
+.i read_hdr_cc (3),
+.i fread_hdr_cc (3),
+.i read_hdr_cca (3),
+.i fread_hdr_cca (3)
+and
+.i fread_hdr_ccac (3)).
+There are routines which first update the header, perhaps choose which of two
+headers to output, and then write the header (including
+.i write_headeru (3),
+.i write_headeru2 (3)
+and
+.i write_headerun (3)).
+The
+.i read_header
+routines call the routine
+.i fread_oldhdr (3)
+if it turns out that the input image is in the old (pre-HIPS-2) header format.
+Finally, the
+.i write_header
+routines use the routines
+.i wnocr (3)
+and
+.i dfprintf (3)
+for low-level operations.
+.sh 3 "Header utilities"
+.pp
+There are a several subroutines for changing various header variables.  For
+updating the image sequence history, programs either use
+.i update_header (3)
+(if they only read a single input image file), or use
+.i history_set (3),
+.i history_append (3),
+.i history_indentadd (3)
+and
+.i update_headern (3)
+(if they read more than one and want to save all of the input sequence
+histories).  For changing the sequence description, there are
+.i desc_set (3)
+and
+.i desc_append (3),
+and if you combine two or more images, you will use
+.i desc_set2 (3),
+.i desc_append2 (3)
+and
+.i desc_indentadd (3).
+Because the various header variables (such as
+.i sizepixel
+and
+.i sizeimage )
+must be kept up to date, there are utilities for setting the image size and
+format, including
+.i setformat (3),
+.i setpyrformat (3)
+and
+.i setsize (3).
+Note that
+.i setsize (3)
+resets the region-of-interest to be the entire image.
+For copying the header, there are
+.i dup_header (3)
+and
+.i dup_headern (3).
+The latter is used when the header being copied into will subsequently have
+image memory allocated for it, so that deallocation rights to the image
+pointed to by the original header are retained by it (see Memory allocation
+and management,
+below).  For initializing a header from scratch, there are
+.i init_header (3)
+and
+.i init_hdr_alloc (3)
+(the second one also allocates an image for the header).
+If you want control over the deallocation rights of several of the strings in
+the header (\c
+.i orig_name ,
+.i seq_name ,
+.i orig_date
+and
+.i seq_desc )
+then you can use the routines
+.i init_header_d (3)
+and
+.i init_hdr_alloc_d (3)
+(see Memory Allocation and Management below).
+Note that these routines can not set all of the variables appropriately for
+image pyramids (because the pyramid variable
+.i toplev
+is not provided), and so for these pixel formats,
+.i setpyrformat
+should subsequently be called.
+Finally, various aspects of an image may be queried such as the size of
+pixels, the name of the pixel format, or simply a readable version of the
+entire header as given by
+.i seeheader (1).
+These routines include
+.i hsizepix (3),
+.i hbitsperpixel (3),
+.i formatheader (3),
+.i formatheadera (3),
+.i hformatname (3),
+.i hformatname_f (3)
+and
+.i hformatname_t (3).
+.sh 3 "Type conversion"
+.pp
+The HIPS low-level library includes all the routines necessary to convert
+between any two raster-based pixel formats, and to determine whether and how
+to convert to the pixel formats which any given program can handle, in order
+for these programs to be `object-oriented'.  There are 17 HIPS raster-based
+formats and two pyramid formats, and HIPS uses a standard abbreviation for
+each throughout the software:
+.(b L
+.TS
+center;
+c c c
+l n l.
+Format Name	Format Abbreviation	Pixel Format
+.sp
+PFMSBF	mp	packed, most-significant-bit first
+PFLSBF	lp	packed, least-significant-bit first
+PFBYTE	b	Bytes interpreted as unsigned integers
+PFSBYTE	sb	signed bytes
+PFUSHORT	us	unsigned shorts
+PFSHORT	s	Short integers
+PFUINT	ui	unsigned ints
+PFINT	i	Integers
+PFFLOAT	f	Float's
+PFDOUBLE	d	Double's
+PFCOMPLEX	c	2 Float's interpreted as (real,imaginary)
+PFDBLCOM	dc	Double complex's (2 Double's as real,imaginary)
+PFRGB	rgb	3-color pixels (RGBRGBRGB)
+PFRGBZ	rgbz	3-color pixels (RGB0RGB0RGB0)
+PFZRGB	zrgb	3-color pixels (0RGB0RGB0RGB)
+PFBGR	bgr	3-color pixels (BGRBGRBGR)
+PFBGRZ	bgrz	3-color pixels (BGR0BGR0BGR0)
+PFZBGR	zbgr	3-color pixels (0BGR0BGR0BGR)
+PFINTPYR	ip	integer pyramid
+PFFLOATPYR	fp	float pyramid
+.TE
+.)b
+.pp
+There are a large number of routines which convert from one image type to
+another.  These are gathered into source files (and corresponding manual
+pages) associate with the type to which they convert: h_tomp, h_tolp, h_tob,
+h_tosb, h_tous, h_tos, h_toui, h_toi, h_tof, h_tod, h_toc, h_todc.
+For example, there are several formats which can be converted to byte format.
+All can be converted by calling the general routine
+.i h_tob (3),
+but if you know the format of the image to be converted, you can call the
+routine which performs that specific conversion, such as
+.i h_stob (3),
+which converts from short to byte.  The other routines follow this same naming
+scheme.  The packed 3-color formats are handled somewhat specially.  For
+example, a conversion from PFRGB to PFBYTE must not only reorder the bytes,
+but also results in a different value of
+.i numcolor
+and
+.i num_frame ,
+with other implications of this fact.  The color conversion routines are
+also organized differently (see h_col1tocol3, h_col3tob, h_col3tocol3,
+h_col3toi and h_rgb).
+(At the moment, image pyramids are not handled automatically, but we plan to
+extend the object-oriented character of HIPS to include image pyramids at a
+future time.)  Each conversion routine takes as arguments the headers of the
+two images (`from' and `to').  Regions-of-interest are ignored \- entire
+images are converted.  The conversion methods are pretty intuitive:  rounding
+is applied from float/double to nonfloating-point formats, clipping is
+performed for conversions to byte, signed-byte, or various unsigned formats.
+For conversions from bit-packed formats, the user may specify what values to
+substitute for 0- and 1-bits by setting the global variables
+.i hips_lchar
+and
+.i hips_hchar
+(which are bytes, by the way, so can be a number from 0 to 255).  These
+globals are also used by a number of the HIPS library routines whenever a
+pixel is replaced with a high or low value.  Conversions
+from complex formats to real formats may be accomplished by taking the complex
+magnitude, phase, real part, or imaginary part (controlled by the global
+variable
+.i hips_cplxtor ).
+Conversions from real formats to complex formats may be accomplished by
+setting the real part only (and setting the imaginary part to zero), setting
+the imaginary part only, or setting both parts to the value of the input
+(controlled by the global variable
+.i hips_rtocplx ).
+Conversions between packed 3-color formats (such as RGB) and 1-color formats
+(such as byte) require an additional argument which is the frame number for
+the 1-color sequence.  These routines set or extract a single color plane at a
+time.  If the frame number is a multiple of 3, this will be the red plane, if
+1 more than a multiple of 3 then it will be the green plane, and otherwise it
+will be the blue plane.
+.pp
+For programs with only a single input image sequence, the implementation of
+format independence is accomplished by calling
+.i set_conversion (3)
+early on, in order to choose the method for converting input images to a
+format that the program knows how to process, and calling
+.i read_imagec (3)
+for each input image frame to read the image and convert it to the appropriate
+format.
+.i set_conversion (3)
+is provided with an input header and a `process header'
+(which is subsequently used in all processing).  Because of the possibility of
+conversions between packed 3-color formats and 1-color formats, it is very
+important that this `process header' be used to determine values of the header
+variables
+.i numcolor
+and
+.i num_frame ,
+because these may change during the conversion from input to process header. 
+.i Set_conversion (3)
+allocates an image for the process header if conversion is actually
+necessary,
+and if not, copies the input image pointer to the process header.  Then,
+.i read_imagec (3)
+either reads an image into the image memory pointed to by the input header and
+performs the conversion, or if no conversion is necessary then it simply reads
+into the image pointed to by the process header.  This allows the caller to
+have multiple process headers and read-and-convert to each of them (see, for
+example, the code for
+.i enlarge (1)
+which deals with temporal interpolation).  For conversions from 3-color to
+1-color formats,
+.i read_imagec (3)
+will only read the 3-color image every 3 frames, and will extract the red,
+green and blue plans on successive calls.  Thus, it is crucial that the caller
+supply the appropriate frame number so that it knows which plane is required.
+A number of low-level routines are used to accomplish automatic conversion, and
+a couple of alternatives exist, including:
+.i find_closest (3),
+.i ffind_closest (3),
+.i pfind_closest (3),
+.i in_typeslist  (3),
+.i find_method (3),
+.i ffind_method (3),
+.i fset_conversion (3),
+.i hconvert (3),
+.i fhconvert (3)
+and
+.i fread_imagec (3).
+.pp
+Because there aren't routines for direct conversion between all possible
+formats, the method of conversion may include first converting from the input
+pixel format to integer, and then from integer to the output format.  Thus,
+the code ensures that there are direct conversion routines to and from integer
+for every raster pixel format.
+The programs which set up for conversion print a warning if any conversion is
+necessary, and if that conversion is via integer.  This is a rare case where
+.i perr (3)
+is called, but HIPS_ERROR is not returned to the caller.  But, the caller can
+figure this out given the method code that is returned.
+.pp
+If a program needs to read more than one input sequence, then it must choose a
+pixel format which is the most appropriate for combining the various input
+formats \- one which this program can handle and which involves the least
+computational load and least loss of information.  This is accomplished by
+using
+.i maxformat (3)
+to choose the appropriate format
+(with the help of
+.i hformatlevel (3)),
+and
+.i pset_conversion (3)
+to set things up for conversion.  It is assumed that the user is going to
+process images in a 1-color raster format, and therefore
+.i maxformat (3)
+treats 3-color images (such as RGB format) as if they were in byte format for
+purposes of choosing the format in which to process things.
+.pp
+If the program wants to give the user the option of converting back to the
+input pixel format, it can use
+.i write_imagec (3)
+or
+.i fwrite_imagec (3),
+which do the conversion using
+.i hconvertback (3).
+These routines make the assumption that if the method for converting from
+input to process format is direct, then there is a direct conversion possible
+back to the input format.  The code ensures that this is the case.  The
+argument parser handles the standard switch ``-CB'' for this, and sets the
+HIPS global variable
+.i hips_convback
+if the user wants this to happen.  If so, use
+.i write_headeru2 (3)
+to write the header.  Finally, if the header is changed in any meaningful way
+by this program (e.g., changing image size), then you will need an extra
+header for the return conversion, which is filled out using
+.i setupconvback (3).
+.pp
+The manual page for these routines is listed under `conversion'.
+.sh 3 "Extended parameters"
+.pp
+The HIPS header may be freely extended by the user through it's extended
+parameters capability.  Basically, each header points to a linked list of
+parameters.  A parameter has a name (as may be read with the `%s' format of
+.i scanf (3s)),
+a format (byte, Ascii, short, integer or float), and one or more values.
+These may be set using
+.i setparam (3)
+or
+.i setparamd (3),
+read using
+.i getparam (3),
+and deleted using
+.i clearparam (3).
+These routines use
+.i findparam (3)
+to find a given parameter in the linked list, although you may also use
+.i grepparam (3)
+to search for a parameter using only a substring as the search key.
+To combine the extended parameters from two input image sequences (e.g., if
+the HIPS global variable
+.i hips_fullxpar
+is set), use
+.i mergeparam (3).
+.sh 2 "Memory allocation and management"
+.pp
+The HIPS low-level library includes a number of routines for memory
+allocation. For simply allocating areas of memory, there are
+.i halloc (3),
+.i hmalloc (3)
+and
+.i memalloc (3).
+For making a newly allocated copy of a string, use
+.i strsave (3).
+.i alloc_image (3)
+and
+.i alloc_imagez (3)
+are used to allocate the image associated with an image header, and
+.i free_image (3)
+is used to deallocate that image.
+.i alloc_histo (3)
+and
+.i alloc_histobins (3)
+are used to allocate histogram storage.
+.pp
+The image header includes a number of pointers, and several can point to
+reasonably large amounts of memory.  Although HIPS is often used simply as a
+command-level interface, the subroutine interface of HIPS has been provided so
+that eventually more elegant (read: windows-and-menus) interfaces will be
+written.  For such interfaces, the issue of memory management is quite
+important.
+.pp
+Here's how our memory management model works.  It is assumed that each program
+that uses a header deals with the allocation and management of the header
+structure itself.  However, the memory associated with header pointers must be
+managed in some way.  Each such pointer
+has an associated deallocation flag which, if TRUE, specifies
+that the owner of this particular header has the right to deallocate the
+memory pointed to by the associated pointer.  Thus, there is a deallocation
+flag for the originator name, for the sequence name, for the origination date,
+for the image, for the sequence history, for the sequence description,
+for the linked list of parameter structures (which are assumed to be
+controlled by a single header, so cross-linking would be a bad practice), and
+for the parameter value arrays associated with individual parameters.
+.pp
+Most library routines which manage these structures also manage the
+deallocation flags.  For example,
+.i desc_append (3)
+allocates new memory for the newly combined sequence description.  It
+deallocates the old memory if the deallocation flag had been set, and sets the
+flag in any case for this newly allocated memory.  Any other routine which
+plays with any of these pointers also deals with deallocation and the
+deallocation flags in a similar manner.
+.i read_header (3)
+allocates a separate area of memory for each parameter array it reads, and
+sets all of the deallocation flags.
+.pp
+When a header is copied, this issue is most critical, because having copied a
+header there are two headers that point to the same image memory, description,
+and so on.  The two routines which do this,
+.i dup_header (3)
+and
+.i dup_headern (3),
+handle this by giving only the newly copied header the rights to almost
+everything.  With
+.i dup_header (3),
+the newly copied header does get the rights to all things, but with
+.i dup_headern (3),
+the image pointer isn't copied at all and its rights remain with the original
+header.  This latter routine would be used, for example, if the new header
+will have a different size or format, and hence will get its own image
+memory.  The conversion routines (like
+.i set_conversion (3))
+use
+.i dup_headern
+if there will actually be format conversion, and
+.i dup_header
+if no conversion is needed.
+This issue of having multiple copies is even more complex with regard
+to the extended parameters, since elements of the extended parameter list also
+point to memory if the count of values is greater than 1.  We treat this in
+the most conservative manner by allowing only the header which has the right
+to deallocate the parameter structures to also have the right to deallocate
+the memory to which those structures point.  And, each parameter structure
+itself has a deallocation flag to control whether the binary parameters to
+which it points may be deallocated at all.  This should work correctly in
+most cases, but memory may be lost to deallocation if
+.i clearparam (3)
+is called
+with a non-master header (paramdealloc = FALSE) and a parameter other than the
+first one, because having done that, the master header list of parameters
+no longer points to this parameter binary area either.  So, don't do this!
+.pp
+The histogram allocation routine
+.i alloc_histo (3)
+also follows a similar memory model, and histogram structures include a
+.i histodealloc
+flag.
+.pp
+There is a routine which frees all contents pointed to by a header,
+.i free_hdrcon (3),
+and another which does that and also frees the header memory itself as well,
+.i free_header (3).
+These routines obey all the rights conferred by the various deallocation 
+flags.
+.sh 2 "Input/Output"
+.pp
+There are a few utility routines for I/O.  Since image headers point to
+images, it is possible to read and write an image simply by reference to an
+image header.  This function is carried out by
+.i read_image (3),
+.i fread_image (3),
+.i write_image (3)
+and
+.i fwrite_image (3).
+For histograms, the analogous routines are
+.i read_histo (3),
+.i fread_histo (3),
+.i write_histo (3)
+and
+.i fwrite_histo (3),
+along with
+.i hdr_to_histo (3)
+and
+.i histo_to_hdr (3)
+to transfer the histogram parameters to/from the header parameter section.
+In addition, there are low-level routines which act like the stdio routines
+except that they call the HIPS error handler if problems arise, including
+.i ffopen (3),
+.i ffreopen (3),
+.i ffread (3)
+and
+.i ffwrite (3).
+The routine
+.i hfopenr (3)
+is used to open most HIPS input files.  It is used in conjunction with
+.i parseargs (3),
+which returns the string ``stdin'' for any file which should use the standard
+input.
+.i hfopenr (3)
+opens the supplied file for reading, but if the filename is ``stdin'', it
+returns the standard input instead.  It flags an error if it is called a
+second time with ``stdin''.
+.sh 2 "Region-of-interest"
+.pp
+For raster-based formats,
+HIPS image headers may define a region-of-interest (ROI).  This is a rectangular
+subregion of the image defined by its first column, number of columns, first
+row, and number of rows (header variables
+.i fcol ,
+.i cols ,
+.i frow
+and
+.i rows ).
+Having defined an ROI, subsequent calls to image processing routines will
+often merely process the ROI, rather than the entire image (although see the
+specific manual page for the details of how any given routine handles ROIs).
+The ROI size and position is basically unrestricted with one exception: for
+bit-packed formats (PFLSBF and PFMSBF), the left-hand edge of the ROI must lie
+on a byte boundary (the first ROI pixel must be the first pixel in a byte).
+In other words,
+.i fcol
+must be a multiple of eight.  This restriction is enforced by various
+routines, and if it is violated, the HIPS routines generally give a warning
+and reset the ROI for that image to be the entire image
+(\fIfrow\fR=\fIfcol\fR=0, \fIrows\fR=\fIorows\fR, and
+\fIcols\fR=\fIocols\fR).  An ROI may be specified using
+.i setroi (3).
+There is also a structure for storing the four ROI values (struct
+.i hips_roi ),
+and the ROI for a given header may be set or queried with such a structure
+using
+.i setroi2 (3)
+and
+.i getroi (3).
+The ROI is reset to be the entire image using
+.i clearroi (3).
+Finally, to read and write just the ROI of an image, rather than the entire
+image, there are
+.i read_roi (3) ,
+.i fread_roi (3) ,
+.i write_roi (3)
+and
+.i fwrite_roi (3).
+.pp
+For writing programs which support ROIs and which call HIPS subroutines for
+processing, it is important to understand how ROI processing works.  An ROI is
+simply a set of four numbers in an image header which define a subregion.
+Most HIPS image processing subroutines (in libhipsh.a) abide by these values,
+and process an input image ROI, placing the results in the output image ROI.
+Some HIPS routines ignore ROIs.  In particular, the pixel format conversion
+routines (byte to float, int to short, etc.) all process entire images rather
+than just the ROI.  Concentrating on those routines which respect ROIs, there
+is also the issue of `in-place processing.'  Some routines can process an
+image `in-place', replacing pixels with their new values as they proceed.  The
+routine
+.i h_neg (3)
+is an example of such a routine:  it replaces each pixel in the ROI by its
+negative, leaving other pixels untouched.  However, some routines can not
+process images in place either because the output image is in a different
+format from the input (e.g.
+.i h_power (3),
+which can raise byte pixels to a power, resulting in float pixels), or because
+changing the pixels as the processing occurs would disturb the results because
+the replaced pixel is examined again later (e.g.
+.i h_mask (3)).
+In such cases, the caller must be careful about what is desired for the
+non-ROI regions.  For example, the program
+.i powerpix (1)
+calls
+.i h_power (3)
+to process the ROI, but if the ROI is smaller than the entire image, it also
+calls
+.i h_tof (3)
+(with the ROIs cleared).  If it did not do this, the output image would
+consist of the ROI with the appropriate values surrounded by indeterminate
+nonROI values.  Other programs which don't change pixel format call
+.i h_copy (3)
+to copy the nonROI pixels (again, with the ROI cleared so that the entire
+image is copied).  Finally, note that the HIPS subroutine code is generally not
+defensive about ROIs.  In other words, each routine uses the input image
+header to determine the ROI size, but for most routines no check is made that
+the output header has the appropriate size ROI to accommodate the results of
+the calculation.  It is up to the user to ensure that output ROIs are the
+appropriate size for each routine.  This is generally the same size as the
+input ROI, but may be a different size if the routine modifies image geometry
+(e.g.
+.i h_stretch (3)
+or
+.i h_rot90 (3)).
+.sh 2 "Color and depth support"
+.pp
+HIPS has a number of provisions for color and 3D image processing.
+The HIPS header
+has two entries which describe the number of frames:
+.i num_frame
+and
+.i numcolor .
+In addition, an extended parameter called
+.i depth
+may also be defined and is recognized by many of the programs.
+For a typical greyscale image
+.i num_frame
+will be the total number of frames and
+.i numcolor
+and
+.i depth
+are equal to one.  However, the image may also indicate the existence of
+multiple color planes and/or multiple depth planes.
+For example, a sequence consisting of four full color
+frames, each of which included a red, green and blue plane would have
+.i num_frame
+equal to twelve (the total number of stored frames) and
+.i numcolor
+equal to three.  A sequence of 5 3D images with 4 depth planes each, and 3
+color planes per depth plane would have
+.i num_frame
+equal to 60,
+.i numcolor
+equal to 3, and the extended parameter
+.i depth
+equal to 4.  The order of storage is 5 frames, each of which consists of 4
+depth plane images, each of which consists of 3 color plane images, each of
+which is a rectangular array of pixels.
+For convenience, two subroutines are provided to make it easier
+to get and set the depth parameter (\c
+.i hgetdepth
+and
+.i hsetdepth ).
+A number of HIPS programs respect and/or check the
+.i numcolor
+field.  In particular, there is provision for converting from this true
+color format to and from two other standard storage formats for color images:
+PFRGB (which stores the color pixels one after another: rgbrgbrgbrgb, three
+bytes
+per pixel), PFRGBZ (which stores the color pixels one after another in a
+longword: rgb0rgb0rgb0rgb0), PFZRGB (0rgb0rgb0rgb), PFBGR (bgrbgrbgr), PFBGRZ
+(bgr0bgr0bgr0) and PFZBGR (0bgr0bgr0bgr) using the library routines
+.i btorgb ,
+.i btorgbz ,
+.i rgbtob ,
+.i rgbztob ,
+.i rgbtorgbz
+and
+.i rgbztorgb ,
+or the routines used by the automatic conversion software (see
+h_col1tocol3, h_col3tob, h_col3tocol3 and h_col3toi).
+A single color frame can be extracted using
+.i rgbtob2
+or
+.i rgbztob2 .
+As described above, the automatic format conversion software can convert
+between these packed 3-color formats and between any 3-color and 1-color
+formats.
+.pp
+HIPS also includes support for pseudo-color and color lookup tables.  The
+extended parameters section of the image header allows the user to store all
+sorts of information in the header along with the image.  A number of HIPS
+routines recognize a standard colormap format.  A colormap is stored with an
+image as a PFBYTE formatted extended parameter array called
+.i cmap .
+The array consists of three subarrays stored in order: red, green and blue.
+Thus, the total number of entries in the array is always a multiple of three.
+There need not be a full 768 entries in the colormap (3 vectors times 256
+possible pixel values), but if a shorter array is used, it is assumed to
+represent the lowest pixel values only (i.e. if there are only ten entries,
+then the image should only have pixel values 0 through 9).  This color map
+may be added to the image using the programs
+.i addparam
+or
+.i addcmap .
+In addition, there is a standard form for storing color maps in files
+(basically a count followed by that many `r g b' triplets), and a routine
+for reading such a file:
+.i readcmap .
+A number of the HIPS image viewing tools (e.g.
+.i sunv ,
+.i sunanim ,
+.i xvhips
+and
+.i xvanim )
+will utilize these color maps or
+others specified by the user.
+.sh 2 "Mixed raster support"
+.pp
+The HIPS software supports storage of an image sequence in which each frame
+can be in a different raster pixel format (e.g. a byte frame followed by a
+float frame followed by an integer frame followed by an RGB frame,
+etc., all with the same number of
+rows and columns).  To accomplish this, the entire sequence is stored with
+pixel format PFMIXED.  Then, a table with the actual pixel formats (one for
+each frame) is stored in the header parameters section as extended parameter
+.i formats .
+At the moment, only a few programs handle this format (most importantly
+.i catframes
+and
+.i subseq ,
+but also
+.i seeheader ,
+.i ptoa ,
+.i addcmap ,
+.i adddesc ,
+.i addparam ,
+.i clearroi ,
+.i extract ,
+.i extractroi ,
+.i setroi
+and
+.i stripheader ),
+and so it mainly serves as a way to store different aspects of an image in a
+single file (to be processed separately later using
+.i subseq
+to pull out images in a common format).
+.sh 2 "Plot3d support"
+.pp
+HIPS includes a rudimentary 3D graphics package called Plot-3d for manipulating
+a 3D world of lines and vectors.  There is a separate document describing
+this software.  The low-level utilities for Plot-3d are in the low-level HIPS
+library, including routines to read and write Plot-3d frames, to transform
+them given particular translation and rotation matrices, and so on (see the
+manual pages for
+.i addplot ,
+.i cut_frame ,
+.i getplot ,
+.i pix_code ,
+.i read_frame ,
+.i trans_frame ,
+.i view_frame
+and
+.i write_frame).
+.sh 2 "Image pyramid support"
+.pp
+There are a number of routines in the HIPS library for manipulating image
+pyramids (a multiresolution technique for handling image data originally
+described by Peter Burt).  There are routines for allocating, defining,
+reading, writing, expanding and reducing pyramids.  These are described in the
+manual pages for
+.i pyralloc ,
+.i pyrcopy ,
+.i pyrfiltio ,
+.i pyrio ,
+.i pyrnumpix ,
+.i pyrredexp
+and
+.i pyrreflect .
+.sh 2 "Mathematical routines"
+.pp
+The HIPS library also includes the basic code for a number of standard image
+transforms.  These include the Fourier transform (see the manual pages for
+.i fft
+and
+.i dfft ),
+the Walsh transform (see
+.i ffwt
+and
+.i fwt )
+and the discrete cosine transform (see
+.i dct ).
+.sh 1 "The HIPS and HIPSADDON image processing routine libraries (-lhipsh and -lhipsa)"
+.pp
+For carrying out actual image processing algorithms, HIPS provides a number of
+image processing libraries.  The standard one that is always provided is
+loaded with your program by specifying \%-lhipsh
+in your compilation command.  There are a large number of subroutines here,
+corresponding to most of the main programs provided with HIPS.
+There are also a number of subroutines available for the commands
+provided with HIPSADDON and these can be loaded by selecting the library
+\%-lhipsa in the compilation command. The routines in both libraries
+are available for use at a number of levels of generality, and we review that
+structure here.
+.pp
+The programs in this library are all named using a standard set of naming
+conventions.  This is most easily shown by example.  For example, to take the
+absolute value of image pixels, the most general call is to 
+.i h_abs (3).
+This program checks the pixel format of the input image, takes the absolute
+value of the ROI of that image, and stores the result in the ROI of the output
+image (it is supplied with the header of each image).  If the pixel format
+is known, then there are routines for each pixel format that is handled, such
+as
+.i h_abs_i
+for integer format.  Finally, there are routines which may be used without
+reference to a HIPS header at all, such as
+.i h_abs_I
+for integer format.  These latter routines are supplied with pointers to the
+first pixel in the input and output ROI, the number of rows and columns of the
+ROI, and the number of actual columns (as in the header variable
+.i ocols)
+in each image.  All routine names in this library begin `h_', followed by the
+name of the function they carry out (such as `abs'), followed optionally by
+the pixel format for the routine which handles only that format (as in `_i'),
+or the pixel format in capital letters for the low-level interface (as in
+`_I').  Most routines only process the ROI, but check the manual pages to be
+sure.  Thus, if you want to process the entire image, you should make sure to
+clear the ROI (reset it to be the entire image) if the routine uses ROIs.
+Most routines have one or more argument images and a single result image.  In
+many cases these can be the same image if you wish to compute this function in
+place, replacing the current image with the transformed image.  This is called
+processing `in place', and is done by calling the routine with two arguments,
+both of which are the same header (or same image pointers).  Many routines
+support this type of operation (\c
+.i h_abs ,
+for example).  The manual pages specify what types of in-place processing are
+available.  A final note:  all of these routines which handle ROIs are
+intended to process from the input ROI to the output ROI.  However, none of
+them actually check whether the two ROIs are of the appropriate sizes to be
+compatible.  Rather, the input ROI is used to determine the number of ROI rows
+and columns, the first pixel pointers are used to determine the start of
+each image, and the number ROI columns for each image are queried to get to
+the first pixel in successive rows.  Thus, if a routine is called and the
+output header ROI is the wrong shape, funny things can result.  Let the user
+beware.
+.sh 1 "A typical HIPS program"
+.pp
+The program
+.i abspix (1)
+is a typical example of a HIPS program.  Here is the code for this program:
+.(b
+.ta .5i 1i 1.5i 2i 2.5i 3i 3.5i 4i
+#include <hipl_format.h>
+
+static Flag_Format flagfmt[] = {LASTFLAG};
+int types[] = {PFINT,PFFLOAT,LASTTYPE};
+
+main(argc,argv)
+
+int argc;
+char **argv;
+
+{
+	struct header hd,hdp;
+	int method,fr,f;
+	Filename filename;
+	FILE *fp;
+
+	Progname = strsave(*argv);
+	parseargs(argc,argv,flagfmt,FFONE,&filename);
+	fp = hfopenr(filename);
+	fread_hdr_a(fp,&hd,filename);
+	method = fset_conversion(&hd,&hdp,types,filename);
+	write_headeru(&hdp,argc,argv);
+	fr = hdp.num_frame;	/* don't use hd.num_frame here!!! */
+	for (f=0;f<fr;f++) {
+		fread_imagec(fp,&hd,&hdp,method,f,filename);
+		h_abs(&hdp,&hdp);
+		write_image(&hdp,f);
+	}
+	return(0);
+}
+.)b
+.pp
+The program begins by including the standard include file, and then defines
+the argument format (there are none other than the standard switches) and a
+list of the types which are directly handled by the HIPS absolute-value
+routines (in this case, only integer and floating point subroutines are
+available).  The program begins by setting Progname (a global) to be a copy of
+the name of this program (grabbed from the arguments).  This is used to format
+error messages.  Then
+.i parseargs
+is called to handle the standard switch arguments and optional specification
+of an input file.  The file is opened with
+.i hfopenr ,
+which also checks if the file was defaulted to the standard input. Then
+.i fread_hdr_a
+reads the image header, and allocates memory for one image.
+.i fset_conversion
+checks whether the pixel format is either in the types list, or whether there
+is a way of converting to that type.  If not (e.g. if the input is a histogram
+or some other nonraster type) then an error message will be produced.  If it
+is a raster type, then the process header `hdp' will be given the appropriate
+information (and allocated an image if needed) and an indication of the
+conversion method is returned.  Next,
+.i write_headeru
+updates the sequence history and writes the header to the standard output.
+Finally, for every frame (based on the number of frames in the process header,
+which may differ from that in the input header if the input is, for example,
+in RGB format), the frame is read (and converted to the pixel format
+that will actually be used), the absolute value is computed (and as we said,
+.i h_abs
+will look at the pixel format and call the appropriate routine based on
+whether it is integer or floating point), and the image is written to the
+standard output.
+.pp
+For more complicated programs, some additional steps are needed.  If the
+program changes something about the image (such as its geometry, as with
+.i enlarge (1)),
+then it may need to make a copy of the input header, change header parameters,
+allocate an image for that new header, and so on.
+If the program combines more than one input image (such as
+.i addseq (1)),
+then the sequence file will have to be opened, the header read (with
+.i fread_header (3)),
+the appropriate processing pixel format computed (using
+.i maxformat (3)),
+the conversion handled a little differently (with
+.i pset_conversion (3)),
+the sequence descriptions get combined (with
+.i desc_set2 (3),
+.i desc_append2 (3)
+and
+.i desc_indentadd (3),
+if
+.i hips_fulldesc
+was set),  the extended parameters are combined (with
+.i mergeparam (3),
+if
+.i hips_fullxpar
+was set), and the various sequence histories get combined (with
+.i history_set (3),
+.i history_append (3),
+.i history_indentadd (3)
+and
+.i update_headern (3), if
+.i hips_fullhist
+was set).
+The easiest way to learn how any of this is done is to look at the source code
+for a HIPS program which is similar to one you are interested in writing, with
+the manual pages handy.
+.pp
+Next, let's examine the
+.i h_abs (3)
+routine:
+.(b
+.ta .5i 1i 1.5i 2i
+h_abs(hdi,hdo)
+
+struct header *hdi,*hdo;
+
+{
+	switch(hdi->pixel_format) {
+	case PFINT:	return(h_abs_i(hdi,hdo));
+	case PFFLOAT:	return(h_abs_f(hdi,hdo));
+	default:	return(perr(HE_FMTSUBR,"h_abs",
+				hformatname(hdi->pixel_format)));
+	}
+}
+.)b
+.pp
+This generic routine simply calls the appropriate nongeneric routine depending
+upon the pixel format.  The integer absolute value routine
+.i h_abs_i (3) is:
+.(b
+.ta .5i 1i 1.5i 2i
+h_abs_i(hdi,hdo)
+
+struct header *hdi,*hdo;
+
+{
+	h_abs_I((int *) hdi->firstpix,(int *) hdo->firstpix,hdi->rows,
+		hdi->cols,hdi->ocols,hdo->ocols);
+	return(0);
+}
+.)b
+.sp
+It simply calls the routine
+.i h_abs_I (3)
+which is a low-level routine, none of whose arguments depend on definitions in
+.i hipl_format.h .
+The routine is provided with pointers to the images, number of rows and
+columns, and number of pixels per line for both the input and output images (so
+that regions-of-interest can be handled correctly).  Finally, let's examine
+the routine that does the work,
+.i h_abs_I :
+.(b
+.ta .5i 1i 1.5i 2i
+h_abs_I(imagei,imageo,nr,nc,nlpi,nlpo)
+
+int *imagei,*imageo;
+int nr,nc,nlpi,nlpo;
+
+{
+	register int i,j,nexi,nexo;
+	register int *pi,*po;
+
+	nexi = nlpi-nc;
+	nexo = nlpo-nc;
+	pi = imagei;
+	po = imageo;
+	for (i=0;i<nr;i++) {
+		for (j=0;j<nc;j++) {
+			if (*pi < 0)
+				*po++ = - *pi++;
+			else
+				*po++ = *pi++;
+		}
+		pi += nexi;
+		po += nexo;
+	}
+	return(0);
+}
+.)b
+.sp
+.i h_abs_I
+is quite simple: for every row and column, the absolute value of the input
+image pixel is placed in the output image.  At the end of every subimage row,
+the input and output image pointers are incremented by
+.i nexi
+and
+.i nexo ,
+respectively, in order to skip over image pixels in that row which are not in
+the region of interest.  Note that output image pixels outside of the region
+of interest are left unchanged.  Finally, suppose you wanted to write a HIPS
+program, but had no need for this elaborate subroutine structure.  Here is a
+version of
+.i abspix (1)
+which involves no subroutines and handles only integer input images.  As you
+can see, it merely involves merging the above code into one routine, and minor
+simplifications since the distinction between input and output image is no
+longer necessary.
+.(b
+.ta .5i 1i 1.5i 2i 2.5i 3i
+#include <hipl_format.h>
+
+static Flag_Format flagfmt[] = {LASTFLAG};
+int types[] = {PFINT,LASTTYPE};
+
+main(argc,argv)
+
+int argc;
+char **argv;
+
+{
+	struct header hd,hdp;
+	int method,fr,f,nr,nc,nex,*p,i,j;
+	Filename filename;
+	FILE *fp;
+
+	Progname = strsave(*argv);
+	parseargs(argc,argv,flagfmt,FFONE,&filename);
+	fp = hfopenr(filename);
+	fread_hdr_a(fp,&hd,filename);
+	method = fset_conversion(&hd,&hdp,types,filename);
+	write_headeru(&hdp,argc,argv);
+	fr = hdp.num_frame;
+	for (f=0;f<fr;f++) {
+		fread_imagec(fp,&hd,&hdp,method,f,filename);
+		nr = hdp.rows;
+		nc = hdp.cols;
+		nex = hdp.ocols - nc;
+		p = (int *) hdp.firstpix;
+		for (i=0;i<nr;i++) {
+			for (j=0;j<nc;j++) {
+				if (*p < 0)
+					*p++ = - *p;
+			}
+			p += nex;
+		}
+		write_image(&hdp,f);
+	}
+	return(0);
+}
+.)b
+.sh 1 "Adding new capabilities to HIPS"
+.pp
+It is quite easy to add new programs and routines to HIPS.  In most cases,
+simply following the style of the current programs will do the trick.  New
+subroutines may be added  to the hips/libsrc directory, and programs to the
+hips/sources directory.  The corresponding manual pages are added to the
+hips/libman and hips/lib directories.  In each case, the corresponding
+makefile.src will
+need to be modified to include the name of the new source file or manual
+page.  And, whenever
+you modify a makefile.src, remember to run Configure again.  You may
+choose to isolate your homegrown routines in a new directory.  In this case,
+you can still follow the example of the HIPS makefiles and preserve the
+ability to reinstall your software hierarchically.  Finally, you may want to
+add a listing for your functions or programs in the various documentation
+files in the directory `doc'.
+.pp
+The makefiles only recompile software when the source file itself has been
+modified.  Because of the complexity of the system, the makefiles
+.i "do not"
+include dependencies of sources files on the include file hipl_format.h, or
+dependencies of main program executables on the HIPS libraries.  If they did,
+every time you modified a single library routine or made a minor change to the
+include file, a make would remake the entire system.  This is certainly a safe
+thing to do, but is often unnecessary.  Thus, it is up to the user to remake
+things dependent on a change to hipl_format.h or to a library routine.  When
+in doubt, be safe and type `make clean; make'.
+.pp
+The most common change you will want to make is to add an error code to the
+list of standard errors.  For a new main program, you can usually avoid this
+by using the error code HE_MSG.  However, if you want to add an error code,
+you will have to give it a code number (allocated sequentially) in
+sys/hipl_format.h (and change the definition of MAXERR), and place it's format
+string, format argument types code, and severity in the appropriate
+part of lib/sources/herr.c.  The makefile includes a dependency of perr.c
+on herrs.c, so it will recompile perr for you as well, as it should.
+.pp
+If you want to add a new pixel format, there are a number of changes to make.
+First, add a definition for the new pixel format in sys/hipl_format.h.  Next,
+modify lib/sources/htypes.c so that it knows about the new type.  It is
+unlikely that any more raster-based pixel formats will be added, but if one
+were to add one, this would also involve a number of steps.  For example,
+assume that you have the capability for 64-bit integers.  In sys/hipl_format.h
+and lib/sources/htypes.c we define PFDBLINT.  A new file, lib/sources/h_todi.c
+must be written to convert from various types (including integer, which is
+required for the object-oriented conversion routines to work) to PFDBLINT, and
+add the name of that file to lib/sources/makefile.src in the appropriate
+manner.
+For each type that can be converted to PFDBLINT, modify to conversion routine
+associated with that type to convert
+.i from
+PFDBLINT (the routines in lib/sources/conversion.c require that all conversion
+capabilities be reciprocal).  Finally, modify lib/sources/conversion.c itself
+to imbed your new format into the system (there are a number of modifications
+that need to be made here, but this should be reasonably self-explanatory).
+Lastly, make sure that programs which use
+.i formatheader (3)
+are recompiled, including
+.i seeheader (1),
+.i sunanim (1),
+.i xanim (1)
+and
+.i xvanim (1).
+.sh 1 "Writing publically-available HIPS programs"
+.pp
+It has often come up that a HIPS user wishes to make code available in the
+public domain which was originally written for use as a HIPS filter.  This is
+a problem, of course, because such a routine tends to use low-level HIPS
+routines for reading and writing headers, frames, and so on, and these
+routines are copyright-protected.  There is no general solution to this
+problem, however we have made some efforts to ameliorate the use of
+HIPS-format images by users who don't own HIPS.  We have written a small
+library of routines for reading and writing HIPS headers that we have decided
+to offer into the public domain.  These routines are located in the HIPS
+subdirectory
+.i pub ,
+and are also available via anonymous ftp (to host desdemona.cns.nyu.edu,
+Internet number 128.122.154.48, file pub/hipspub.Z, in compressed tar format).
+These include routines to read and write HIPS headers in both HIPS-1 and
+HIPS-2 format.  The bulk of HIPS header functionality is lost through this
+interface, but the user does have access to the pixel format, rows, columns,
+frames, and number of color planes.  We make this freely available so that
+nonHIPS users may be supplied with (or may write) programs which read and
+write images in HIPS format (including programs which convert between HIPS and
+other image formats).  For further details, see the manual page on this
+library (i.e. type `man hipspub').  For other HIPS library requirements, users
+should simply add compile-time switches to their code which switch between
+the general HIPS routines (for reading/writing/allocating frames, and so on)
+and plain Unix code which accomplishes the same thing (e.g.
+.i fread ).
+Finally, we have not made available the HIPS memory header structure in this
+package, so references to header pointers will also not be possible in public
+domain programs.  Again, this can be avoided through clever use of
+compile-time switches and local storage.
+.sh 1 "A final note"
+.pp
+We hope that you find that this reference manual helps you in extending the
+HIPS image processing software for your own needs.  If you have any
+difficulties, feel free to contact me with any questions you might have.  The
+ways to contact me are, in order of my preference, by email (to
+landy@nyu.edu), by mail (to SharpImage Software, P.O. Box 373, Prince Street
+Station, New York, NY   10012-0007), or by phone ((212) 998-7857).
+.pp
+If you do extend the HIPS software in interesting and useful ways, or find and
+fix bugs to the code, please let us know about it.  As you know, HIPS is
+distributed with a rather large directory of user-contributed code.  This
+directory is filled with donations from a variety of users.  If you wish to
+make your code available to the community of HIPS users (hundreds of
+laboratories world-wide), we will certainly be amenable.  Please make sure to
+document your code (both a manual page and a README or Makefile, at a
+minimum).  You can get the source code to us by email or on most any form of
+UNIX tar-formatted tape.  And, we thank you in advance...

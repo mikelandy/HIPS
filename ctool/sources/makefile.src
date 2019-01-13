@@ -1,0 +1,27 @@
+#
+# makefile for ctool/sources
+#
+
+PGMS = ctool.out
+
+OBJECTS	= ctool.o to_sun.o to_hips.o colorfuncs.o \
+	load.o store.o srle_expand.o grle_expand.o
+OTHERLIBS = -lm -lsuntool -lsunwindow -lpixrect
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+ctool.out:	$(OBJECTS)
+	$(LINKc) $* $(OBJECTS) $(LIBRARIES)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+FRC:

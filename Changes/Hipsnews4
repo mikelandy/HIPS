@@ -1,0 +1,139 @@
+
+		HIPS News - Volume 4 - June 11, 1996
+
+Here is the list of all changes I've made to HIPS since last November 2, 1994.
+Again, if you want an update to your copy of HIPS at any time, just
+contact me.  Similarly, if you have any problems, or find bugs, or have
+written something you'd like to share with other HIPS users, just let
+me know.  Finally, if you want to set up a local distribution list
+for this newsletter (i.e. hipsusers@machine), tell me what it is after
+you set it up.
+
+QUERY:  Lots of users (and potential users) have asked about HIPS under recent
+versions of Solaris (2.4 and 2.5).  If anyone has already built HIPS under one
+of these, I'd appreciate it if you'd share your experience (and working config
+file) with us.  Similarly, there have been problems on SGI machines (e.g.
+getting the manual pages installed sensibly automatically) and under LINUX.
+So, please share your configuration files, bug fixes, etc.  Thanks.
+
+NEWS:  Morten Bro-Nielsen at the Technical University of Denmark has created a
+wonderful tool, mvox,  for visualization of 2-, 3- and 4-dimensional images
+that interfaces quite nicely with HIPS.  It is a commercial package, but
+there is a free demonstration version that you can grab over the Web if you
+are interested in checking it out.  I append below a short description of mvox.
+
+Michael Landy				Voice:	(212) 998-7857
+SharpImage Software			Fax:	(212) 995-4349 (NOTE: address
+P.O. Box 373, Prince Street Station		fax messages c/o Michael Landy,
+New York, NY   10012-0007			New York University)
+					Email:	landy@nyu.edu
+
+------------------------------------------------------------------------
+
+1/9/95	Changed parseargs to use dynamic memory allocation to generate the
+	usage message (so it doesn't crash with large lists of switches).
+	Files affected: lib/sources/{pa_main.c,pa_parser.c,pa_usage.c}
+
+1/17/95	Added config.solaris2.3 (from Claus Sternberg)
+
+1/19/95	New version of user-contributed/imsor installed with lots of new
+	programs.  README_INSTALL was edited to reflect problems compiling
+	the imsor program called xshow (it needs lots of space in /tmp to
+	compile successfully).
+
+3/14/95	Added complex conjugate subroutines (h_conj) and main program
+	(conjpix).
+
+3/15/95	Did a whole slew of minor changes based on a very picky Silicon
+	Graphics compiler's output.  Most are trivial (deleting unused
+	variables).  Some were bug fixes.  Also, changed
+	xvhips/xhips/xhipsc/xvanim to put the base of the filename in the
+	titlebar.
+
+4/13/95	Rewrote getmax/getmin from scratch adding lots of capabilities.  Moved
+	them from user-contributed/cc to hips/sources.
+
+4/18/95	Changed grating.c to default to 1 frame of output.
+
+4/19/95	New programs pub/sources/{hipstoportable.c,portabletohips.c} for
+	conversion to/from Jef Poskanzer's popular portable image formats 
+	(PBM, PGM, PPM).
+
+4/20/95	Bug fix to colorhips/sources/cscan.c so that it works on RGB (etc.)
+	formats and not just on 3 separate color plane pixel formats.
+
+4/25/95	Added Jef Poskanzer's Portable Bitmap code to HIPS
+	(user-contributed/pbm), including the usual automatic installation
+	stuff.
+
+6/5/95	Added colormap support to the public domain HIPS header facilities
+	(pub/libsrc/*.c).
+
+8/29/95	Minor changes to run-length encoding stuff (rletob.c, hformatnames.c)
+
+9/26/95	Minor changes to user-contributed/matlab/sources/readhips.c
+
+11/17/95 Minor bug fix to lib/sources/read_histo.c (zero histodealloc flag)
+
+1/12/96	Added full extended parameter and region-of-interest support to the
+	public domain HIPS header facilities (pub/libsrc/*.c).
+
+2/20/96	Configured/loaded HIPS using config.linux.template on a LINUX
+	machine.  Made various minor code modifications to cut down on the
+	number of warnings.  Unfortunately I have been unable to get
+	user-contributed/{pbm,lbl} to compile under LINUX.  Also, my machine
+	doesn't have X stuff loaded, so I didn't try to make any drivers.
+
+Michael Landy				Voice:	(212) 998-7857
+SharpImage Software			Fax:	(212) 995-4349 (NOTE: address
+P.O. Box 373, Prince Street Station		fax messages c/o Michael Landy,
+New York, NY   10012-0007			New York University)
+					Email:	landy@nyu.edu
+
+--------------------------Description of Mvox-------------------------------
+
+Mvox - Interactive 2-4D Image and Graphics Visualization Software
+
+Mvox homepage: <http://www.imm.dtu.dk/~mvox/>
+
+Mvox is a general purpose tool for visualization and manipulation of a
+wide range of 2-4D grey level/colour images and 3D surface graphics.
+
+Mvox can handle images with different depths, number of colours,
+number of time instances and has been successfully used in the past
+to visualize 3D medical images with stacks of slices (CT, MRI, etc.),
+2D remote sensing images with many channels and 2D colour images
+(Red, Green and Blue). In addition Mvox can also display and manipulate
+3D surface graphics (as used in CAD programs). 3D graphics can be
+exported in VRML format for use on WWW.
+
+The wide range of data types that can be handled by Mvox makes it a
+very flexible tool and it is especially well suited for users with
+changing or widespread needs.
+
+Keywords: *Image browser, *Fast slicing, *Volume rendering using the
+    VolPack library, *Iso-surface rendering (result similar to Marching
+    Cubes), *3D surface graphics, *Interactive thresholding, *Drawing,
+    *Statistical classification using discriminant analysis, *Histogram,
+    *Statistics, *Histogram stretch, *Enlarge, *Colormaps, *Contours,
+    *3D shape from contours using Nuages, *Overview window, *Advanced
+    command line interface, *User-defined functions
+
+Image formats: *ANALYZE, *TIFF, *SGI, *TGA, *BMP, *Inrimage, *HIPS, *BRIMG.
+
+3D formats: Import: *OFF, *Flex3D - Export: *VRML, *DXF, *Inventor, *Flex3D
+
+Mvox is only supported on Silicon Graphics platforms, but can run on
+some HP, IBM RS/6000 and DEC-Alpha as well. A free demo version and test
+images are available from the Mvox homepage:
+
+		<http://www.imm.dtu.dk/~mvox/>
+
+The demo version will only work with the test images. Licenses are available
+for approximately $2,500 (DKK 15,000 excl. VAT).
+
+For further information, contact:
+
+	Morten Bro-Nielsen		Email: mvox@imm.dtu.dk
+	Mware
+	http://www.imm.dtu.dk/~mvox

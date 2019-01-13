@@ -1,0 +1,650 @@
+.\" to print: psroff -me functions_list.me
+.po 1i
+.ls 1
+.ce
+.b "List of Low-Level HIPS Functions (-lhips)"
+.sp 2
+.ce
+.b "Part I - Sorted by Function Name"
+.ta 5i
+.sp 2
+.he 'Functions list''%'
+.nf
+float **_alloc_fimage(nr,nc)	pyralloc.c
+int **_alloc_iimage(nr,nc)	pyralloc.c
+adddec(i)	formatheader.c
+addend(buf,index,limit,x,y,z)	addplot.c
+addpoint(buf,index,limit,b,x,y,z)	addplot.c
+addstr(s)	formatheader.c
+addvec(buf,index,limit,b,x1,y1,z1,x2,y2,z2)	addplot.c
+alloc_fimage(img)	pyralloc.c
+alloc_fpyr(pyr,botlev,toplev)	pyralloc.c
+alloc_histo(histo,min,max,nbins,format)	alloc_histo.c
+alloc_histobins(histo)	alloc_histo.c
+alloc_iimage(img)	pyralloc.c
+alloc_image(hd)	alloc_image.c
+alloc_imagez(hd)	alloc_image.c
+alloc_ipyr(pyr,botlev,toplev)	pyralloc.c
+clearparam(hd,name)	xparam.c
+clearroi(hd)	setroi.c
+codeendp(x,y,pic,cols)	pix_code.c
+codepoint(b,x,y,pic,cols)	pix_code.c
+codevec(b,x1,y1,x2,y2,pic,cols)	pix_code.c
+copy_ftoff(hd,img)	pyrcopy.c
+copy_itoii(hd,img)	pyrcopy.c
+cut_frame(inbuf,nbytes,outbuf,limit,x0,y0,xn,yn)	cut_frame.c
+dct_2d(ivec,ovec,loglen)	dct.c
+dctinv_2d(ivec,ovec,loglen)	dct.c
+def_fpyr(pyr,lev,nr,nc)	pyralloc.c
+def_ipyr(pyr,lev,nr,nc)	pyralloc.c
+default_1dfilter(f)	pyrfiltio.c
+desc_append(hd,s)	desc_set.c
+desc_append2(hd,fmt,fmtstring,sprintfargs)	add_header.c
+desc_indentadd(h,s)	add_header.c
+desc_set(hd,s)	desc_set.c
+desc_set2(hd,fmt,fmtstring,sprintfargs)	add_header.c
+dfft(rvec,ivec,loglen)	dfft.c
+dfft_2d(rvec,ivec,loglen)	dfft.c
+dfft_2dgen(rvec,ivec,logrows,logcols)	dfft.c
+dfftn(rvec,ivec,loglen,nskip)	dfft.c
+int dfprintf(fp,i,fname)	wsubs.c
+dup_header(hd1,hd2)	dup_header.c
+dup_headern(hd1,hd2)	dup_header.c
+fexpand(pyr,botlev,toplev,ef,mode,rtype)	pyrredexp.c
+ffind_closest(hd,typeslist,fname)	conversion.c
+ffind_method(typein,typeout,fname)	conversion.c
+FILE *ffopen(name,mode)	futils.c
+ffread(ptr,size,nelem,stream)	futils.c
+FILE *ffreopen(name,mode,stream1)	futils.c
+fft(rvec,ivec,loglen)	fft.c
+fft_2d(rvec,ivec,loglen)	fft.c
+fft_2dgen(rvec,ivec,logrows,logcols)	fft.c
+fftn(rvec,ivec,loglen,nskip)	fft.c
+ffwrite(ptr,size,nelem,stream)	futils.c
+ffwt(vec,loglen)	ffwt.c
+fhconvert(hd,hdp,method,fr,fname)	conversion.c
+fillvect(ib,fx0,fy0,fx1,fy1,pic,cols)	pix_code.c
+find_closest(hd,typeslist)	conversion.c
+find_method(typein,typeout)	conversion.c
+struct extpar *findparam(hd,name)	xparam.c
+char *formatheader(h)	formatheader.c
+char *formatheadera(h)	formatheader.c
+char *formatheaderc(h,aflag)	formatheader.c
+fread_hdr_a(fp,hd,fname)	read_hutils.c
+fread_hdr_cc(fp,hd,chd,mask,fname)	read_hutils.c
+fread_hdr_cca(fp,hd,chd,mask,fname)	read_hutils.c
+fread_hdr_ccac(fp,hd,chd,mask,fname,flaga)	read_hutils.c
+fread_hdr_cpf(fp,hd,typelist,fname)	read_hutils.c
+fread_hdr_cpfa(fp,hd,typelist,fname)	read_hutils.c
+fread_hdr_cpfac(fp,hd,typelist,fname,flagc,flaga)	read_hutils.c
+fread_header(fp,hd,fname)	read_header.c
+fread_histo(fp,histo,fr,fname)	read_histo.c
+fread_image(fp,hd,fr,fname)	read_image.c
+fread_imagec(fp,hd,hdp,method,fr,fname)	conversion.c
+fread_oldhdr(fd,hd,firsts,fname)	fread_oldhdr.c
+fread_roi(fp,hd,fr,fname)	read_roi.c
+freduce(pyr,botlev,toplev,rf,rtype)	pyrredexp.c
+free_fimage(img)	pyralloc.c
+free_fpyr(pyr,botlev,toplev)	pyralloc.c
+free_hdrcon(hd)	free_header.c
+free_header(hd)	free_header.c
+free_iimage(img)	pyralloc.c
+free_image(hd)	alloc_image.c
+free_ipyr(pyr,botlev,toplev)	pyralloc.c
+fset_conversion(hd,hdp,typeslist,fname)	conversion.c
+fwrite_header(fp,hd,fname)	write_header.c
+fwrite_histo(fp,histo,fr,fname)	write_histo.c
+fwrite_image(fp,hd,fr,fname)	write_image.c
+fwrite_imagec(fp,hd,hdp,method,flag,fr,fname)	conversion.c
+fwrite_roi(fp,hd,fr,fname)	write_roi.c
+fwt(vec,loglen)	fwt.c
+h_boolean getline(fp,s,l)	fread_oldhdr.c
+getparam(hd,name,fmt,count,valuepointer)	xparam.c
+getplot(buf,index,op,b,x1,y1,z1,x2,y2,z2)	getplot.c
+getpyrfilters(filename,rf,ef)	pyrfiltio.c
+getroi(hd,roi)	setroi.c
+struct extpar *grepparam(hd,subname)	xparam.c
+h_bgrtob_1(hdi,hdo,fr)	h_col3tob.c
+h_bgrtobgrz(hdi,hdo)	h_col3tocol3.c
+h_bgrtoi_1(hdi,hdo,fr)	h_col3toi.c
+h_bgrtorgb(hdi,hdo)	h_col3tocol3.c
+h_bgrtorgbz(hdi,hdo)	h_col3tocol3.c
+h_bgrtozbgr(hdi,hdo)	h_col3tocol3.c
+h_bgrtozrgb(hdi,hdo)	h_col3tocol3.c
+h_bgrztob_1(hdi,hdo,fr)	h_col3tob.c
+h_bgrztobgr(hdi,hdo)	h_col3tocol3.c
+h_bgrztoi_1(hdi,hdo,fr)	h_col3toi.c
+h_bgrztorgb(hdi,hdo)	h_col3tocol3.c
+h_bgrztorgbz(hdi,hdo)	h_col3tocol3.c
+h_bgrztozbgr(hdi,hdo)	h_col3tocol3.c
+h_bgrztozrgb(hdi,hdo)	h_col3tocol3.c
+h_btobgr_1(hdi,hdo,fr)	h_col1tocol3.c
+h_btobgrz_1(hdi,hdo,fr)	h_col1tocol3.c
+h_btof(hdi,hdo)	h_tof.c
+h_btoi(hdi,hdo)	h_toi.c
+h_btolp(hdi,hdo)	h_tolp.c
+h_btomp(hdi,hdo)	h_tomp.c
+h_btorgb(hdr,hdg,hdb,hdo)	h_rgb.c
+h_btorgb_1(hdi,hdo,fr)	h_col1tocol3.c
+h_btorgbz(hdr,hdg,hdb,hdo)	h_rgb.c
+h_btorgbz_1(hdi,hdo,fr)	h_col1tocol3.c
+h_btos(hdi,hdo)	h_tos.c
+h_btozbgr_1(hdi,hdo,fr)	h_col1tocol3.c
+h_btozrgb_1(hdi,hdo,fr)	h_col1tocol3.c
+h_col1tobgr(hdi,hdo,fr)	h_col1tocol3.c
+h_col1tobgrz(hdi,hdo,fr)	h_col1tocol3.c
+h_col1torgb(hdi,hdo,fr)	h_col1tocol3.c
+h_col1torgbz(hdi,hdo,fr)	h_col1tocol3.c
+h_col1tozbgr(hdi,hdo,fr)	h_col1tocol3.c
+h_col1tozrgb(hdi,hdo,fr)	h_col1tocol3.c
+h_col3tob(hdi,hdo,fr)	h_col3tob.c
+h_col3toi(hdi,hdo,fr)	h_col3toi.c
+h_ctod(hdi,hdo)	h_tod.c
+h_ctodc(hdi,hdo)	h_todc.c
+h_ctof(hdi,hdo)	h_tof.c
+h_ctoi(hdi,hdo)	h_toi.c
+h_dctoc(hdi,hdo)	h_toc.c
+h_dctod(hdi,hdo)	h_tod.c
+h_dctof(hdi,hdo)	h_tof.c
+h_dctoi(hdi,hdo)	h_toi.c
+h_dtoc(hdi,hdo)	h_toc.c
+h_dtodc(hdi,hdo)	h_todc.c
+h_dtof(hdi,hdo)	h_tof.c
+h_dtoi(hdi,hdo)	h_toi.c
+h_ftob(hdi,hdo)	h_tob.c
+h_ftoc(hdi,hdo)	h_toc.c
+h_ftod(hdi,hdo)	h_tod.c
+h_ftodc(hdi,hdo)	h_todc.c
+h_ftoi(hdi,hdo)	h_toi.c
+h_ftos(hdi,hdo)	h_tos.c
+h_itob(hdi,hdo)	h_tob.c
+h_itobgr_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itobgrz_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itoc(hdi,hdo)	h_toc.c
+h_itod(hdi,hdo)	h_tod.c
+h_itodc(hdi,hdo)	h_todc.c
+h_itof(hdi,hdo)	h_tof.c
+h_itolp(hdi,hdo)	h_tolp.c
+h_itomp(hdi,hdo)	h_tomp.c
+h_itorgb_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itorgbz_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itos(hdi,hdo)	h_tos.c
+h_itosb(hdi,hdo)	h_tosb.c
+h_itoui(hdi,hdo)	h_toui.c
+h_itous(hdi,hdo)	h_tous.c
+h_itozbgr_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itozrgb_1(hdi,hdo,fr)	h_col1tocol3.c
+h_lptob(hdi,hdo)	h_tob.c
+h_lptoi(hdi,hdo)	h_toi.c
+h_mptob(hdi,hdo)	h_tob.c
+h_mptoi(hdi,hdo)	h_toi.c
+h_rgbtob(hdi,hdr,hdg,hdb)	h_rgb.c
+h_rgbtob_1(hdi,hdo,fr)	h_col3tob.c
+h_rgbtob2(hdi,hdo,color)	h_rgb.c
+h_rgbtobgr(hdi,hdo)	h_col3tocol3.c
+h_rgbtobgrz(hdi,hdo)	h_col3tocol3.c
+h_rgbtoi_1(hdi,hdo,fr)	h_col3toi.c
+h_rgbtorgbz(hdi,hdo)	h_col3tocol3.c
+h_rgbtozbgr(hdi,hdo)	h_col3tocol3.c
+h_rgbtozrgb(hdi,hdo)	h_col3tocol3.c
+h_rgbztob(hdi,hdr,hdg,hdb)	h_rgb.c
+h_rgbztob_1(hdi,hdo,fr)	h_col3tob.c
+h_rgbztob2(hdi,hdo,color)	h_rgb.c
+h_rgbztobgr(hdi,hdo)	h_col3tocol3.c
+h_rgbztobgrz(hdi,hdo)	h_col3tocol3.c
+h_rgbztoi_1(hdi,hdo,fr)	h_col3toi.c
+h_rgbztorgb(hdi,hdo)	h_col3tocol3.c
+h_rgbztozbgr(hdi,hdo)	h_col3tocol3.c
+h_rgbztozrgb(hdi,hdo)	h_col3tocol3.c
+h_sbtoi(hdi,hdo)	h_toi.c
+h_sbtos(hdi,hdo)	h_tos.c
+h_stob(hdi,hdo)	h_tob.c
+h_stof(hdi,hdo)	h_tof.c
+h_stoi(hdi,hdo)	h_toi.c
+h_stosb(hdi,hdo)	h_tosb.c
+h_tob(hdi,hdo)	h_tob.c
+h_tobgr(hdi,hdo)	h_col3tocol3.c
+h_tobgrz(hdi,hdo)	h_col3tocol3.c
+h_toc(hdi,hdo)	h_toc.c
+h_tod(hdi,hdo)	h_tod.c
+h_todc(hdi,hdo)	h_todc.c
+h_tof(hdi,hdo)	h_tof.c
+h_toi(hdi,hdo)	h_toi.c
+h_tolp(hdi,hdo)	h_tolp.c
+h_tomp(hdi,hdo)	h_tomp.c
+h_torgb(hdi,hdo)	h_col3tocol3.c
+h_torgbz(hdi,hdo)	h_col3tocol3.c
+h_tos(hdi,hdo)	h_tos.c
+h_tosb(hdi,hdo)	h_tosb.c
+h_toui(hdi,hdo)	h_toui.c
+h_tous(hdi,hdo)	h_tous.c
+h_tozbgr(hdi,hdo)	h_col3tocol3.c
+h_tozrgb(hdi,hdo)	h_col3tocol3.c
+h_uitoi(hdi,hdo)	h_toi.c
+h_ustoi(hdi,hdo)	h_toi.c
+h_zbgrtob_1(hdi,hdo,fr)	h_col3tob.c
+h_zbgrtobgr(hdi,hdo)	h_col3tocol3.c
+h_zbgrtobgrz(hdi,hdo)	h_col3tocol3.c
+h_zbgrtoi_1(hdi,hdo,fr)	h_col3toi.c
+h_zbgrtorgb(hdi,hdo)	h_col3tocol3.c
+h_zbgrtorgbz(hdi,hdo)	h_col3tocol3.c
+h_zbgrtozrgb(hdi,hdo)	h_col3tocol3.c
+h_zrgbtob_1(hdi,hdo,fr)	h_col3tob.c
+h_zrgbtobgr(hdi,hdo)	h_col3tocol3.c
+h_zrgbtobgrz(hdi,hdo)	h_col3tocol3.c
+h_zrgbtoi_1(hdi,hdo,fr)	h_col3toi.c
+h_zrgbtorgb(hdi,hdo)	h_col3tocol3.c
+h_zrgbtorgbz(hdi,hdo)	h_col3tocol3.c
+h_zrgbtozbgr(hdi,hdo)	h_col3tocol3.c
+byte *halloc(i,j)	halloc.c
+hconvert(hd,hdp,method,fr)	conversion.c
+hconvertback(hd,hdp,method,fr);	conversion.c
+hdr_to_histo(hd,histo)	read_histo.c
+h_boolean hfgets(s,n,fp)	fread_oldhdr.c
+FILE *hfopenr(name)	futils.c
+hformatlevel(pfmt)	hformatlevel.c
+char *hformatname(pfmt)	hformatname.c
+char *hformatname_f(pfmtf,pfmtt)	hformatname.c
+char *hformatname_t(pfmtf,pfmtt)	hformatname.c
+int hgetdepth(hd)	hdepth.c
+histo_to_hdr(hd,histo)	write_histo.c
+history_append(hd,fmt,fmtstring,sprintfargs)	add_header.c
+history_indentadd(h,s)	add_header.c
+history_set(hd,fmt,fmtstring,sprintfargs)	add_header.c
+byte *hmalloc(i)	halloc.c
+hor_reflectf(h,border,rtype)	pyrreflect.c
+hor_reflecti(h,border,rtype)	pyrreflect.c
+int hsetdepth(hd,depth)	hdepth.c
+hsize_t hsizepix(pfmt)	hsizepix.c
+iexpand(pyr,botlev,toplev,ef,mode,rtype)	pyrredexp.c
+in_typeslist (type,typeslist)	conversion.c
+init_hdr_alloc(hd,onm,snm,nfr,odt,rw,cl,pfmt,nc,desc)	init_header.c
+init_hdr_alloc_d(hd,onm,onmd,snm,snmd,nfr,odt,odtd,rw,cl,pfmt,nc,desc,descd)	init_header.c
+init_header(hd,onm,snm,nfr,odt,rw,cl,pfmt,nc,desc)	init_header.c
+init_header_d(hd,onm,onmd,snm,snmd,nfr,odt,odtd,rw,cl,pfmt,nc,desc,descd)	init_header.c
+ireduce(pyr,botlev,toplev,rf,rtype)	pyrredexp.c
+maxformat(pfmt1,pfmt2,typeslist,fname1,fname2)	hformatlevel.c
+char *memalloc(nelem,elsize)	halloc.c
+mergeparam(hd1,hd2)	xparam.c
+parseargs(argc,argv,flagformat,paramptrs,fileformat,fileptrs)	pa_main.c
+parseargsu(argc,argv,flagformat,paramptrs,fileformat,fileptrs,fileusage)	pa_main.c
+perr(errcode,sprintfargs)	perr.c
+pfind_closest(pfmt,typeslist,fname)	conversion.c
+pix_code(buf,nbytes,pic,rows,cols)	pix_code.c
+print_usage()	pa_usage.c
+pset_conversion(hd,hdp,ptype,fname)	conversion.c
+h_boolean ptype_is_col3(pfmt)	type_is_col3.c
+pyrnumpix(toplev,nr,nc)	pyrnumpix.c
+read_1dfilter(f,stream,filename)	pyrfiltio.c
+read_fimage(stream,img,fr,fname)	pyrio.c
+read_fpyr(stream,pyr,botlev,toplev,fr,fname)	pyrio.c
+read_frame(fp,buf,buf_limit,flags,shift_vector,rot_matrix,fr,fname)	read_frame.c
+read_hdr_a(hd)	read_hutils.c
+read_hdr_cc(hd,chd,mask)	read_hutils.c
+read_hdr_cca(hd,chd,mask)	read_hutils.c
+read_hdr_cpf(hd,typelist)	read_hutils.c
+read_hdr_cpfa(hd,typelist)	read_hutils.c
+read_header(hd)	read_header.c
+read_histo(histo,fr)	read_histo.c
+read_iimage(stream,img,fr,fname)	pyrio.c
+read_image(hd,fr)	read_image.c
+read_imagec(hd,hdp,method,fr)	conversion.c
+read_ipyr(stream,pyr,botlev,toplev,fr,fname)	pyrio.c
+read_roi(hd,fr)	read_roi.c
+readcmap(filename,maxcount,count,r,g,b)	cmapio.c
+reflectf(image,border,rtype)	pyrreflect.c
+reflecti(image,border,rtype)	pyrreflect.c
+set_conversion(hd,hdp,typeslist)	conversion.c
+setformat(hd,pfmt)	setformat.c
+setparam(hd,name,fmt,count,value)	xparam.c
+setparamd(hd,name,fmt,count,value)	xparam.c
+setpyrformat(hd,pfmt,toplev)	setformat.c
+setroi(hd,fr,fc,nr,nc)	setroi.c
+setroi2(hd,roi)	setroi.c
+setsize(hd,r,c)	setsize.c
+setupconvback(hd,hdo,hdcb)	conversion.c
+char *strsave(s)	strsave.c
+h_boolean swallownl(fp)	fread_oldhdr.c
+trans_frame(buf,nbuf,shift_v,rot_m,flags)	trans_frame.c
+h_boolean type_is_col3(hd)	type_is_col3.c
+update_header(hd,argc,argv)	update_hdr.c
+update_headerc(hd,argc,argv,pflag)	update_hdr.c
+update_headern(hd,argc,argv)	update_hdr.c
+ver_reflectf(v,border,rtype)	pyrreflect.c
+ver_reflecti(v,border,rtype)	pyrreflect.c
+view_frame(inbuf,nbytes,outbuf,limit,dist)	view_frame.c
+int wnocr(fp,s)	wsubs.c
+write_fimage(stream,img,fr)	pyrio.c
+write_fpyr(stream,pyr,botlev,toplev,fr)	pyrio.c
+write_frame(fd,buf,nbytes,shift_v,rot_m,fr)	write_frame.c
+write_header(hd)	write_header.c
+write_headeru(hd,argc,argv)	write_header.c
+write_headeru2(hd,hdp,argc,argv,flag)	write_header.c
+write_headerun(hd,argc,argv)	write_header.c
+write_histo(histo,fr)	write_histo.c
+write_iimage(stream,img,fr)	pyrio.c
+write_image(hd,fr)	write_image.c
+write_imagec(hd,hdp,method,flag,fr)	conversion.c
+write_roi(hd,fr)	write_roi.c
+write_ipyr(stream,pyr,botlev,toplev,fr)	pyrio.c
+.sp 5
+.ce
+.b "Part II - Sorted by Source File Name"
+.sp 2
+history_set(hd,fmt,fmtstring,sprintfargs)	add_header.c
+history_append(hd,fmt,fmtstring,sprintfargs)	add_header.c
+history_indentadd(h,s)	add_header.c
+addpoint(buf,index,limit,b,x,y,z)	addplot.c
+addvec(buf,index,limit,b,x1,y1,z1,x2,y2,z2)	addplot.c
+addend(buf,index,limit,x,y,z)	addplot.c
+alloc_histo(histo,min,max,nbins,format)	alloc_histo.c
+alloc_histobins(histo)	alloc_histo.c
+alloc_image(hd)	alloc_image.c
+alloc_imagez(hd)	alloc_image.c
+free_image(hd)	alloc_image.c
+readcmap(filename,maxcount,count,r,g,b)	cmapio.c
+find_closest(hd,typeslist)	conversion.c
+ffind_closest(hd,typeslist,fname)	conversion.c
+pfind_closest(pfmt,typeslist,fname)	conversion.c
+in_typeslist (type,typeslist)	conversion.c
+find_method(typein,typeout)	conversion.c
+ffind_method(typein,typeout,fname)	conversion.c
+set_conversion(hd,hdp,typeslist)	conversion.c
+fset_conversion(hd,hdp,typeslist,fname)	conversion.c
+pset_conversion(hd,hdp,ptype,fname)	conversion.c
+hconvert(hd,hdp,method,fr)	conversion.c
+fhconvert(hd,hdp,method,fr,fname)	conversion.c
+hconvertback(hd,hdp,method,fr);	conversion.c
+setupconvback(hd,hdo,hdcb)	conversion.c
+read_imagec(hd,hdp,method,fr)	conversion.c
+fread_imagec(fp,hd,hdp,method,fr,fname)	conversion.c
+write_imagec(hd,hdp,method,flag,fr)	conversion.c
+fwrite_imagec(fp,hd,hdp,method,flag,fr,fname)	conversion.c
+cut_frame(inbuf,nbytes,outbuf,limit,x0,y0,xn,yn)	cut_frame.c
+dct_2d(ivec,ovec,loglen)	dct.c
+dctinv_2d(ivec,ovec,loglen)	dct.c
+desc_append(hd,s)	desc_set.c
+desc_append2(hd,fmt,fmtstring,sprintfargs)	add_header.c
+desc_indentadd(h,s)	add_header.c
+desc_set(hd,s)	desc_set.c
+desc_set2(hd,fmt,fmtstring,sprintfargs)	add_header.c
+dfft(rvec,ivec,loglen)	dfft.c
+dfft_2d(rvec,ivec,loglen)	dfft.c
+dfft_2dgen(rvec,ivec,logrows,logcols)	dfft.c
+dfftn(rvec,ivec,loglen,nskip)	dfft.c
+dup_header(hd1,hd2)	dup_header.c
+dup_headern(hd1,hd2)	dup_header.c
+fft(rvec,ivec,loglen)	fft.c
+fft_2d(rvec,ivec,loglen)	fft.c
+fft_2dgen(rvec,ivec,logrows,logcols)	fft.c
+fftn(rvec,ivec,loglen,nskip)	fft.c
+ffwt(vec,loglen)	ffwt.c
+char *formatheader(h)	formatheader.c
+char *formatheadera(h)	formatheader.c
+char *formatheaderc(h,aflag)	formatheader.c
+adddec(i)	formatheader.c
+addstr(s)	formatheader.c
+fread_oldhdr(fd,hd,firsts,fname)	fread_oldhdr.c
+h_boolean getline(fp,s,l)	fread_oldhdr.c
+h_boolean swallownl(fp)	fread_oldhdr.c
+h_boolean hfgets(s,n,fp)	read_header.c
+free_header(hd)	free_header.c
+free_hdrcon(hd)	free_header.c
+FILE *ffopen(name,mode)	futils.c
+FILE *ffreopen(name,mode,stream1)	futils.c
+ffread(ptr,size,nelem,stream)	futils.c
+ffwrite(ptr,size,nelem,stream)	futils.c
+FILE *hfopenr(name)	futils.c
+fwt(vec,loglen)	fwt.c
+getplot(buf,index,op,b,x1,y1,z1,x2,y2,z2)	getplot.c
+h_col1torgb(hdi,hdo,fr)	h_col1tocol3.c
+h_col1torgbz(hdi,hdo,fr)	h_col1tocol3.c
+h_col1tozrgb(hdi,hdo,fr)	h_col1tocol3.c
+h_col1tobgr(hdi,hdo,fr)	h_col1tocol3.c
+h_col1tobgrz(hdi,hdo,fr)	h_col1tocol3.c
+h_col1tozbgr(hdi,hdo,fr)	h_col1tocol3.c
+h_btorgb_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itorgb_1(hdi,hdo,fr)	h_col1tocol3.c
+h_btorgbz_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itorgbz_1(hdi,hdo,fr)	h_col1tocol3.c
+h_btozrgb_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itozrgb_1(hdi,hdo,fr)	h_col1tocol3.c
+h_btobgr_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itobgr_1(hdi,hdo,fr)	h_col1tocol3.c
+h_btobgrz_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itobgrz_1(hdi,hdo,fr)	h_col1tocol3.c
+h_btozbgr_1(hdi,hdo,fr)	h_col1tocol3.c
+h_itozbgr_1(hdi,hdo,fr)	h_col1tocol3.c
+h_col3tob(hdi,hdo,fr)	h_col3tob.c
+h_rgbtob_1(hdi,hdo,fr)	h_col3tob.c
+h_rgbztob_1(hdi,hdo,fr)	h_col3tob.c
+h_zrgbtob_1(hdi,hdo,fr)	h_col3tob.c
+h_bgrtob_1(hdi,hdo,fr)	h_col3tob.c
+h_bgrztob_1(hdi,hdo,fr)	h_col3tob.c
+h_zbgrtob_1(hdi,hdo,fr)	h_col3tob.c
+h_torgb(hdi,hdo)	h_col3tocol3.c
+h_torgbz(hdi,hdo)	h_col3tocol3.c
+h_tozrgb(hdi,hdo)	h_col3tocol3.c
+h_tobgr(hdi,hdo)	h_col3tocol3.c
+h_tobgrz(hdi,hdo)	h_col3tocol3.c
+h_tozbgr(hdi,hdo)	h_col3tocol3.c
+h_rgbztorgb(hdi,hdo)	h_col3tocol3.c
+h_zrgbtorgb(hdi,hdo)	h_col3tocol3.c
+h_bgrtorgb(hdi,hdo)	h_col3tocol3.c
+h_bgrztorgb(hdi,hdo)	h_col3tocol3.c
+h_zbgrtorgb(hdi,hdo)	h_col3tocol3.c
+h_rgbtorgbz(hdi,hdo)	h_col3tocol3.c
+h_zrgbtorgbz(hdi,hdo)	h_col3tocol3.c
+h_bgrtorgbz(hdi,hdo)	h_col3tocol3.c
+h_bgrztorgbz(hdi,hdo)	h_col3tocol3.c
+h_zbgrtorgbz(hdi,hdo)	h_col3tocol3.c
+h_rgbtozrgb(hdi,hdo)	h_col3tocol3.c
+h_rgbztozrgb(hdi,hdo)	h_col3tocol3.c
+h_bgrtozrgb(hdi,hdo)	h_col3tocol3.c
+h_bgrztozrgb(hdi,hdo)	h_col3tocol3.c
+h_zbgrtozrgb(hdi,hdo)	h_col3tocol3.c
+h_rgbtobgr(hdi,hdo)	h_col3tocol3.c
+h_rgbztobgr(hdi,hdo)	h_col3tocol3.c
+h_zrgbtobgr(hdi,hdo)	h_col3tocol3.c
+h_bgrztobgr(hdi,hdo)	h_col3tocol3.c
+h_zbgrtobgr(hdi,hdo)	h_col3tocol3.c
+h_rgbtobgrz(hdi,hdo)	h_col3tocol3.c
+h_rgbztobgrz(hdi,hdo)	h_col3tocol3.c
+h_zrgbtobgrz(hdi,hdo)	h_col3tocol3.c
+h_bgrtobgrz(hdi,hdo)	h_col3tocol3.c
+h_zbgrtobgrz(hdi,hdo)	h_col3tocol3.c
+h_rgbtozbgr(hdi,hdo)	h_col3tocol3.c
+h_rgbztozbgr(hdi,hdo)	h_col3tocol3.c
+h_zrgbtozbgr(hdi,hdo)	h_col3tocol3.c
+h_bgrtozbgr(hdi,hdo)	h_col3tocol3.c
+h_bgrztozbgr(hdi,hdo)	h_col3tocol3.c
+h_col3toi(hdi,hdo,fr)	h_col3toi.c
+h_rgbtoi_1(hdi,hdo,fr)	h_col3toi.c
+h_rgbztoi_1(hdi,hdo,fr)	h_col3toi.c
+h_zrgbtoi_1(hdi,hdo,fr)	h_col3toi.c
+h_bgrtoi_1(hdi,hdo,fr)	h_col3toi.c
+h_bgrztoi_1(hdi,hdo,fr)	h_col3toi.c
+h_zbgrtoi_1(hdi,hdo,fr)	h_col3toi.c
+h_btorgb(hdr,hdg,hdb,hdo)	h_rgb.c
+h_btorgbz(hdr,hdg,hdb,hdo)	h_rgb.c
+h_rgbtob(hdi,hdr,hdg,hdb)	h_rgb.c
+h_rgbztob(hdi,hdr,hdg,hdb)	h_rgb.c
+h_rgbtob2(hdi,hdo,color)	h_rgb.c
+h_rgbztob2(hdi,hdo,color)	h_rgb.c
+h_tob(hdi,hdo)	h_tob.c
+h_mptob(hdi,hdo)	h_tob.c
+h_lptob(hdi,hdo)	h_tob.c
+h_stob(hdi,hdo)	h_tob.c
+h_itob(hdi,hdo)	h_tob.c
+h_ftob(hdi,hdo)	h_tob.c
+h_toc(hdi,hdo)	h_toc.c
+h_itoc(hdi,hdo)	h_toc.c
+h_ftoc(hdi,hdo)	h_toc.c
+h_dtoc(hdi,hdo)	h_toc.c
+h_dctoc(hdi,hdo)	h_toc.c
+h_tod(hdi,hdo)	h_tod.c
+h_itod(hdi,hdo)	h_tod.c
+h_ftod(hdi,hdo)	h_tod.c
+h_ctod(hdi,hdo)	h_tod.c
+h_dctod(hdi,hdo)	h_tod.c
+h_todc(hdi,hdo)	h_todc.c
+h_itodc(hdi,hdo)	h_todc.c
+h_ftodc(hdi,hdo)	h_todc.c
+h_dtodc(hdi,hdo)	h_todc.c
+h_ctodc(hdi,hdo)	h_todc.c
+h_tof(hdi,hdo)	h_tof.c
+h_btof(hdi,hdo)	h_tof.c
+h_stof(hdi,hdo)	h_tof.c
+h_itof(hdi,hdo)	h_tof.c
+h_dtof(hdi,hdo)	h_tof.c
+h_ctof(hdi,hdo)	h_tof.c
+h_dctof(hdi,hdo)	h_tof.c
+h_toi(hdi,hdo)	h_toi.c
+h_mptoi(hdi,hdo)	h_toi.c
+h_lptoi(hdi,hdo)	h_toi.c
+h_btoi(hdi,hdo)	h_toi.c
+h_sbtoi(hdi,hdo)	h_toi.c
+h_ustoi(hdi,hdo)	h_toi.c
+h_stoi(hdi,hdo)	h_toi.c
+h_uitoi(hdi,hdo)	h_toi.c
+h_ftoi(hdi,hdo)	h_toi.c
+h_dtoi(hdi,hdo)	h_toi.c
+h_ctoi(hdi,hdo)	h_toi.c
+h_dctoi(hdi,hdo)	h_toi.c
+h_tolp(hdi,hdo)	h_tolp.c
+h_btolp(hdi,hdo)	h_tolp.c
+h_itolp(hdi,hdo)	h_tolp.c
+h_tomp(hdi,hdo)	h_tomp.c
+h_btomp(hdi,hdo)	h_tomp.c
+h_itomp(hdi,hdo)	h_tomp.c
+h_tos(hdi,hdo)	h_tos.c
+h_btos(hdi,hdo)	h_tos.c
+h_sbtos(hdi,hdo)	h_tos.c
+h_itos(hdi,hdo)	h_tos.c
+h_ftos(hdi,hdo)	h_tos.c
+h_tosb(hdi,hdo)	h_tosb.c
+h_stosb(hdi,hdo)	h_tosb.c
+h_itosb(hdi,hdo)	h_tosb.c
+h_toui(hdi,hdo)	h_toui.c
+h_itoui(hdi,hdo)	h_toui.c
+h_tous(hdi,hdo)	h_tous.c
+h_itous(hdi,hdo)	h_tous.c
+byte *halloc(i,j)	halloc.c
+byte *hmalloc(i)	halloc.c
+char *memalloc(nelem,elsize)	halloc.c
+hformatlevel(pfmt)	hformatlevel.c
+maxformat(pfmt1,pfmt2,typeslist,fname1,fname2)	hformatlevel.c
+char *hformatname(pfmt)	hformatname.c
+char *hformatname_f(pfmtf,pfmtt)	hformatname.c
+char *hformatname_t(pfmtf,pfmtt)	hformatname.c
+hgetdepth(hd)	hdepth.c
+int hsetdepth(hd,depth)	hdepth.c
+hsize_t hsizepix(pfmt)	hsizepix.c
+init_header(hd,onm,snm,nfr,odt,rw,cl,pfmt,nc,desc)	init_header.c
+init_hdr_alloc(hd,onm,snm,nfr,odt,rw,cl,pfmt,nc,desc)	init_header.c
+init_header_d(hd,onm,onmd,snm,snmd,nfr,odt,odtd,rw,cl,pfmt,nc,desc,descd)	init_header.c
+init_hdr_alloc_d(hd,onm,onmd,snm,snmd,nfr,odt,odtd,rw,cl,pfmt,nc,desc,descd)	init_header.c
+parseargs(argc,argv,flagformat,paramptrs,fileformat,fileptrs)	pa_main.c
+parseargsu(argc,argv,flagformat,paramptrs,fileformat,fileptrs,fileusage)	pa_main.c
+print_usage()	pa_usage.c
+perr(errcode,sprintfargs)	perr.c
+pix_code(buf,nbytes,pic,rows,cols)	pix_code.c
+codepoint(b,x,y,pic,cols)	pix_code.c
+codevec(b,x1,y1,x2,y2,pic,cols)	pix_code.c
+codeendp(x,y,pic,cols)	pix_code.c
+fillvect(ib,fx0,fy0,fx1,fy1,pic,cols)	pix_code.c
+def_ipyr(pyr,lev,nr,nc)	pyralloc.c
+alloc_ipyr(pyr,botlev,toplev)	pyralloc.c
+free_ipyr(pyr,botlev,toplev)	pyralloc.c
+def_fpyr(pyr,lev,nr,nc)	pyralloc.c
+alloc_fpyr(pyr,botlev,toplev)	pyralloc.c
+free_fpyr(pyr,botlev,toplev)	pyralloc.c
+alloc_iimage(img)	pyralloc.c
+alloc_fimage(img)	pyralloc.c
+int **_alloc_iimage(nr,nc)	pyralloc.c
+float **_alloc_fimage(nr,nc)	pyralloc.c
+free_iimage(img)	pyralloc.c
+free_fimage(img)	pyralloc.c
+copy_ftoff(hd,img)	pyrcopy.c
+copy_itoii(hd,img)	pyrcopy.c
+getpyrfilters(filename,rf,ef)	pyrfiltio.c
+read_1dfilter(f,stream,filename)	pyrfiltio.c
+default_1dfilter(f)	pyrfiltio.c
+read_iimage(stream,img,fr,fname)	pyrio.c
+read_fimage(stream,img,fr,fname)	pyrio.c
+write_iimage(stream,img,fr)	pyrio.c
+write_fimage(stream,img,fr)	pyrio.c
+read_ipyr(stream,pyr,botlev,toplev,fr,fname)	pyrio.c
+read_fpyr(stream,pyr,botlev,toplev,fr,fname)	pyrio.c
+write_ipyr(stream,pyr,botlev,toplev,fr)	pyrio.c
+write_fpyr(stream,pyr,botlev,toplev,fr)	pyrio.c
+pyrnumpix(toplev,nr,nc)	pyrnumpix.c
+freduce(pyr,botlev,toplev,rf,rtype)	pyrredexp.c
+fexpand(pyr,botlev,toplev,ef,mode,rtype)	pyrredexp.c
+ireduce(pyr,botlev,toplev,rf,rtype)	pyrredexp.c
+iexpand(pyr,botlev,toplev,ef,mode,rtype)	pyrredexp.c
+hor_reflectf(h,border,rtype)	pyrreflect.c
+ver_reflectf(v,border,rtype)	pyrreflect.c
+reflectf(image,border,rtype)	pyrreflect.c
+hor_reflecti(h,border,rtype)	pyrreflect.c
+ver_reflecti(v,border,rtype)	pyrreflect.c
+reflecti(image,border,rtype)	pyrreflect.c
+read_frame(fp,buf,buf_limit,flags,shift_vector,rot_matrix,fr,fname)	read_frame.c
+read_header(hd)	read_header.c
+fread_header(fp,hd,fname)	read_header.c
+read_histo(histo,fr)	read_histo.c
+fread_histo(fp,histo,fr,fname)	read_histo.c
+hdr_to_histo(hd,histo)	read_histo.c
+read_hdr_a(hd)	read_hutils.c
+fread_hdr_a(fp,hd,fname)	read_hutils.c
+read_hdr_cpf(hd,typelist)	read_hutils.c
+fread_hdr_cpf(fp,hd,typelist,fname)	read_hutils.c
+read_hdr_cpfa(hd,typelist)	read_hutils.c
+fread_hdr_cpfa(fp,hd,typelist,fname)	read_hutils.c
+fread_hdr_cpfac(fp,hd,typelist,fname,flagc,flaga)	read_hutils.c
+read_hdr_cc(hd,chd,mask)	read_hutils.c
+fread_hdr_cc(fp,hd,chd,mask,fname)	read_hutils.c
+read_hdr_cca(hd,chd,mask)	read_hutils.c
+fread_hdr_cca(fp,hd,chd,mask,fname)	read_hutils.c
+fread_hdr_ccac(fp,hd,chd,mask,fname,flaga)	read_hutils.c
+read_image(hd,fr)	read_image.c
+fread_image(fp,hd,fr,fname)	read_image.c
+read_roi(hd,fr)	read_roi.c
+fread_roi(fp,hd,fr,fname)	read_roi.c
+setformat(hd,pfmt)	setformat.c
+setpyrformat(hd,pfmt,toplev)	setformat.c
+setroi(hd,fr,fc,nr,nc)	setroi.c
+setroi2(hd,roi)	setroi.c
+getroi(hd,roi)	setroi.c
+clearroi(hd)	setroi.c
+setsize(hd,r,c)	setsize.c
+char *strsave(s)	strsave.c
+trans_frame(buf,nbuf,shift_v,rot_m,flags)	trans_frame.c
+h_boolean type_is_col3(hd)	type_is_col3.c
+h_boolean ptype_is_col3(pfmt)	type_is_col3.c
+update_header(hd,argc,argv)	update_hdr.c
+update_headern(hd,argc,argv)	update_hdr.c
+update_headerc(hd,argc,argv,pflag)	update_hdr.c
+view_frame(inbuf,nbytes,outbuf,limit,dist)	view_frame.c
+write_frame(fd,buf,nbytes,shift_v,rot_m,fr)	write_frame.c
+write_headeru(hd,argc,argv)	write_header.c
+write_headeru2(hd,hdp,argc,argv,flag)	write_header.c
+write_headerun(hd,argc,argv)	write_header.c
+write_header(hd)	write_header.c
+fwrite_header(fp,hd,fname)	write_header.c
+write_histo(histo,fr)	write_histo.c
+fwrite_histo(fp,histo,fr,fname)	write_histo.c
+histo_to_hdr(hd,histo)	write_histo.c
+write_image(hd,fr)	write_image.c
+fwrite_image(fp,hd,fr,fname)	write_image.c
+write_roi(hd,fr)	write_roi.c
+fwrite_roi(fp,hd,fr,fname)	write_roi.c
+int wnocr(fp,s)	wsubs.c
+int dfprintf(fp,i,fname)	wsubs.c
+setparam(hd,name,fmt,count,value)	xparam.c
+setparamd(hd,name,fmt,count,value)	xparam.c
+getparam(hd,name,fmt,count,valuepointer)	xparam.c
+clearparam(hd,name)	xparam.c
+struct extpar *findparam(hd,name)	xparam.c
+mergeparam(hd1,hd2)	xparam.c
+struct extpar *grepparam(hd,subname)	xparam.c

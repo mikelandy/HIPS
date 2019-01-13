@@ -1,0 +1,360 @@
+.\" to print: psroff -me cat_subroutine_list.me
+.po 1i
+.sz 11
+.he 'HIPS Categorized Subroutine Group Reference ''%'
+.ce
+\fB\s+2CATEGORIES\s-2\fR
+.sp 2
+.ta .75i
+PIXEL FORMAT CONVERSION
+.br
+HARDCOPY AND HALFTONING
+.br
+IMAGE GENERATION
+.br
+GEOMETRIC AND OTHER OPERATIONS ON PICTURES
+.br
+OPERATIONS ON PIXELS
+.br
+STATISTICS
+.br
+FRAME ARITHMETIC
+.br
+CONVOLUTION, CORRELATION, EDGE DETECTION AND OTHER
+.br
+	SPATIAL OPERATIONS
+.br
+DIGITAL TRANSFORMS AND FILTERS
+.br
+GAUSSIAN AND LAPLACIAN PYRAMID OPERATIONS
+.br
+IMAGE COMPRESSION
+.br
+REGION-OF-INTEREST
+.sp 2
+\fBNOTE:\fP subroutines marked with an asterisk (*) are only available
+with HIPSADDON
+.sp 2
+.ce
+\fB\s+2PIXEL FORMAT CONVERSION\s-2\fR
+.sp 2
+.br
+h_combine \- subroutines to combine two real images into one complex image
+.sp 2
+.ce
+\fB\s+2HARDCOPY AND HALFTONING\s-2\fR
+.sp 2
+.br
+h_dither \- halftones using an 8x8 dither matrix
+.br
+h_dotdiff \- subroutines to halftone using an 8x8 dot diffusion matrix
+.br
+h_halftone \- halftones using the Floyd-Steinberg algorithm
+.sp 2
+.ce
+\fB\s+2IMAGE GENERATION\s-2\fR
+.sp 2
+.br
+h_addcos \- subroutines to add a sinusoidal grating to an image
+.br
+h_addgabor \- subroutines to add a Gabor function to an image
+.br
+h_checkers \- subroutines to fill an image with a checkerboard
+.br
+h_fastaddcos \- subroutines to add a sinusoidal grating to an image (quickly)
+.br
+*h_ellipse \- subroutines to generate an ellipse line drawing image
+.br
+h_gaussmask \- subroutine to compute a 1D Gaussian mask
+.br
+*h_grey2disp \- subroutines to generate a random-dot stereogramme
+.br
+h_greybar \- subroutines to fill an image with grey bars ramped in value
+.br
+h_zoneplate \- subroutines to fill an image with a zoneplate image
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2GEOMETRIC AND OTHER OPERATIONS ON PICTURES\s-2\fR
+.sp 2
+.br
+h_affine \- Warp an image using an affine transformation
+.br
+h_copy \- subroutines to copy an image
+.br
+*h_cshift \- subroutines for circular image wrapping
+.br
+h_enlarge \- subroutines to enlarge an image by pixel replication
+.br
+*h_extend \-  subroutines to expand images
+.br
+h_extract \- subroutines to extract a subimage
+.br
+h_flipquad \- subroutines to swap opposite quadrants of an image
+.br
+*h_framing \- subroutines to frame an image for documentation
+.br
+h_gridwarp \- image warp using a control grid
+.br
+h_ienlarge \- subroutines to enlarge an image by bilinear interpolation
+.br
+h_ienlarge3 \- subroutines to enlarge image sequences by trilinear interpolation
+.br
+h_invert \- subroutines to invert an image (reflect about a horizontal axis)
+.br
+*h_project \- subroutines for an image geometric transformation
+.br
+h_reduce \- subroutines to reduce an image by pixel summing
+.br
+h_reflect \- subroutines to reflect an image about a vertical axis
+.br
+*h_rotate \-  subroutines for a 2D geometric rotation
+.br
+h_rot180 \- subroutines to rotate an image by 180 degrees
+.br
+h_rot90 \- subroutines to rotate an image by 90 degrees
+.br
+h_sample \- subroutines to subsample images
+.br
+h_stretchimg \- subroutines to stretch an image
+.br
+*h_translatei - subroutines for a 2D image geometric transformation
+.br
+h_translate \- subroutines to shift pixels by an integral amount
+.br
+h_transpose \- subroutines to transpose an image about the main diagonal
+.br
+h_wgauss \- window an image with a 2-dimensional Gaussian
+.sp 2
+.ce
+\fB\s+2OPERATIONS ON PIXELS\s-2\fR
+.sp 2
+.br
+h_abs \- subroutines to take the absolute value of pixels
+.br
+h_applylut \- subroutines to apply a lookup table to an image
+.br
+h_bnoise \- add binomial noise to an image
+.br
+h_colorkey \- color keying
+.br
+h_conj \- subroutines to compute the complex conjugate of pixels
+.br
+h_divscale \- divide by a fixed scale factor
+.br
+h_exp \- exponential function
+.br
+h_extremum - apply an extremum filter to an image
+.br
+h_gnoise \- subroutines to add Gaussian noise to an image
+.br
+h_hardthresh \- subroutines to apply a `hard threshold'
+.br
+h_histoeq \- subroutines to compute a mapping for histogram equalization
+.br
+h_linscale \- linear scaling
+.br
+h_log \- natural logarithm
+.br
+*h_meanfilt \- subroutines for a mean filter
+.br
+h_median \- apply a median filter to an image
+.br
+h_mulscale \- multiply by a fixed scale factor
+.br
+h_neg \- subroutines to take the negative of an image
+.br
+h_noise \- simulate a noisy communication channel
+.br
+h_pixmap \- subroutines to apply a pixel mapping table
+.br
+h_power \- raise to a power, and if PFBYTE then normalize
+.br
+h_quadscale \- quadratic scaling
+.br
+h_setimage \- subroutines to set all image pixels to a single value
+.br
+h_shift \- subroutines to shift image pixels
+.br
+h_softthresh \- subroutines to apply a `soft threshold'
+.br
+h_stretch \- subroutines to stretch image pixel range
+.br
+*h_unoise \- subroutines to generate uniform random noise
+.sp 2
+.ce
+\fB\s+2STATISTICS\s-2\fR
+.sp 2
+.br
+h_clearhisto \- subroutines to clear an image histogram
+.br
+h_disphist \- display histograms as a bar graph
+.br
+h_entropy \- subroutines to compute the entropy of an image
+.br
+h_entropycnt \- subroutines to count pixel values for an entropy computation
+.br
+h_histo \- subroutines to compute the histogram of an image
+.br
+h_max \- subroutines to compute the maximum of an image
+.br
+h_maxhisto \- subroutines to compute the maximum bin of a histogram
+.br
+h_mean \- subroutines to compute the mean of an image
+.br
+h_minmax \- subroutines to compute the minimum and maximum of an image
+.br
+*h_sigmaspat \- subroutines to estimate noise in an image
+.br
+*h_sigmatemp \- subroutines to estimate temporal noise in an image
+.br
+h_slice \- display slices through an image as a graph
+.br
+h_stats \- subroutines to compute basic statistics on an image
+.sp 2
+.ce
+\fB\s+2FRAME ARITHMETIC\s-2\fR
+.sp 2
+.br
+h_absdiff \- compute the absolute value of the difference of two images
+.br
+h_add \- subroutines to add two images
+.br
+h_and \- subroutines to compute the logical AND of two images
+.br
+*h_average \- subroutines for sequence averaging
+.br
+h_avg \- subroutines to compute a weighted average of two images
+.br
+h_diff \- subroutines to subtract two images
+.br
+h_div \- subroutines to divide two images
+.br
+h_maxabsp \- subroutines to compute the maximum absolute value
+.br
+h_maxp \- subroutines to compute the maximum of two images pixel by pixel
+.br
+h_minabsp \- subroutines to compute the minimum absolute value
+.br
+h_minp \- subroutines to compute the minimum of two images pixel by pixel
+.br
+h_mul \- subroutines to multiply two images
+.br
+h_or \- subroutines to compute the logical OR of two images
+.br
+h_scaleadd \- scale an image and add it to a second image
+.br
+h_shuffleadd \- subroutines to shuffle one image and add it to another
+.br
+h_wtsum3 \- subroutines to compute a weighted sum of three images
+.br
+h_xor \- subroutines to compute the logical XOR of two images
+.br
+.ne 9
+.sp 2
+.ce 2
+\fB\s+2CONVOLUTION, CORRELATION, EDGE DETECTION
+.sp
+AND OTHER SPATIAL OPERATIONS\s-2\fR
+.sp 2
+.br
+h_abdou \- Abdou's edge fitting procedure
+.br
+*h_asl \- subroutines for an adaptive-surface labeling smoothing filter
+.br
+h_bclean \- remove small 8-connected components
+.br
+h_convolve \- subroutines to perform a true 3D convolution on two images
+.br
+h_correl \- subroutines to cross-correlate two images
+.br
+h_discedge \- a discrete domain regional edge detector
+.br
+h_discedge2 \- a discrete domain regional edge detector with offsets
+.br
+h_extremum - apply an extremum filter to an image
+.br
+h_hconvolve \- 1D horizontal convolution
+.br
+h_mask \- apply a set of masks to an image
+.br
+h_median \- apply a median filter to an image
+.br
+*h_mls \- subroutines for a maximum-likliehood-smoothing filter
+.br
+h_morphdil \- apply the morphological operator of dilation
+.br
+h_morphero \- apply the morphological operator of erosion
+.br
+*h_nns \- subroutines for a nearest-neighbour-smoothing filter
+.br
+h_nonisot \- nonisotropic convolution
+.br
+*h_rank \-  subroutines to rank-order filter an image
+.br
+*h_sasmooth \- subroutines for a selective-average-smoothing filter
+.br
+*h_snn \- subroutines for a symmetric-nearest-neighbour filter
+.br
+h_sepconv \- 2D separable convolution
+.br
+h_thicken \- thicken a white-on-black image
+.br
+h_thin \- thin a white-on-black image
+.br
+h_vconvolve \- 1D vertical convolution
+.br
+h_zc \- computer zero crossing slopes
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2DIGITAL TRANSFORMS AND FILTERS\s-2\fR
+.sp 2
+.br
+h_dct \- the forward and reverse discrete cosine transform
+.br
+h_fft2 \- low-level subroutines to compute a Fourier transform
+.br
+h_filter \- subroutines to apply standard linear filters to Fourier spectra and transforms
+.br
+h_flipquad \- subroutines to swap opposite quadrants of an image
+.br
+h_fourtr \- subroutines to compute a Fourier transform
+.br
+h_fourtr3d \- subroutines to compute a 3D Fourier transform
+.br
+h_invfourtr \- subroutines to compute an inverse Fourier transform
+.br
+h_invfourtr3d \- subroutines to compute an inverse 3D Fourier transform
+.br
+h_seqord \- subroutines to reorder a Walsh transform in sequency order
+.br
+h_walshtr \- subroutines to compute a Walsh transform
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2GAUSSIAN AND LAPLACIAN PYRAMID OPERATIONS\s-2\fR
+.sp 2
+.br
+h_pyrdisp \- convert an image pyramid to a single image for display
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2IMAGE COMPRESSION\s-2\fR
+.sp 2
+.br
+h_btorle \- subroutines to convert from byte to run-length encoding format
+.br
+h_rletob \- subroutines to convert from run-length encoding to byte format
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2REGION-OF-INTEREST\s-2\fR
+.sp 2
+.br
+h_minroi \- subroutines to compute a minimum useful region

@@ -1,0 +1,92 @@
+
+		HIPS News - Volume 5 - January 13, 2009
+
+Well, I haven't sent out one of these since June, 1996! With a move from old
+Sun boxes to PCs in my lab and no decent image viewers for the setup I had in
+my office, I let HIPS atrophy for quite a number of years. But, now I've got a
+nice OSX Mac on my desk and have managed to find enough time (and get a little
+nudge and help) to get HIPS working again. There have been a number of minor
+under-the-hood changes to get it to compile on current machines. In
+particular, HIPS was written originally (some 27 years ago!) on a Berkeley
+Unix Vax in straight Kernighan & Ritchie "C". At this point, most machines to
+which I have access use gcc compilers (which are more finicky) and the
+distribution of information in /usr/include has changed a bit as well. Also,
+OSX uses stdarg instead of vararg for flexible argument lists. So, I've
+attempted to modify things so that they work on new and older machines. But, I
+don't have an older machine on which to test it, so I may well have broken
+something! It compiles on a Mac (both leopard and tiger OSX) using the osx
+configuration file with no compilation warnings. But, if you try it on other
+machines and have any difficulties, or generate useful configuration files,
+please share them with me (and the rest of the user base, should such a user
+base still exist!).
+
+Other important changes that just happened:
+
+* The support for interaction between HIPS and Matlab was revised (the MEX
+interface between C and Matlab had been changed since the early 90's when that
+code was originally written).
+
+* I modified the raw X11 HIPS image viewer to work on Macs. This new viewer is
+in drivers/X/xhips and is called mhips. It shows still images and animates
+frame sequences (movies).
+
+* We also have a nice HIPS image and movie viewer for the Mac windowing system
+(Cocoa), called hv. It isn't quite stable yet, but we hope to be able to
+provide that relatively soon as well.
+
+Here is the list of other changes I've made to HIPS since June 11, 1996.
+Again, if you want an update to your copy of HIPS at any time, just
+contact me.  Similarly, if you have any problems, or find bugs, or have
+written something you'd like to share with other HIPS users, just let
+me know.  Finally, if you want to set up a local distribution list
+for this newsletter (i.e. hipsusers@machine), tell me what it is after
+you set it up.
+
+QUERY:  Lots of users (and potential users) have asked about HIPS under recent
+versions of Solaris (2.4 and 2.5).  If anyone has already built HIPS under one
+of these, I'd appreciate it if you'd share your experience (and working config
+file) with us.  Similarly, there have been problems on SGI machines (e.g.
+getting the manual pages installed sensibly automatically) and under LINUX.
+So, please share your configuration files, bug fixes, etc.  Thanks.
+
+6/23/98:	Added FLOAT to list of types handled by rotate (affects
+		rotate.c, h_rotate.c, h_project.c)
+
+1/20/00:	Deleted sys_errlist printing from xhips/xhipsc as they are not
+		OS-independent.
+		Modified hips_basic.h to avoid defining str*() if string.h
+		was already included.
+
+11/6/00:	Fixed calls to va_arg in lib/sources/xparam.c to treat byte
+		and short arguments as int, since default promotion of
+		arguments does that (Redhat Linux 7.0 flagged it).
+
+3/29/01:	Fixed a few minor bugs in user-contributed/lbl/sources/hips/
+			autocollage.c
+------------------------------------------------------------------------
+
+7/23/96	New version of user-contributed/lbl (Note:  it now potentially requires
+	a patch to an X11 include file - see README_INSTALL).  Modified
+	versions of config.osf1.template and a new config.solaris2.45.  They
+	tested installation of HIPS on IRIX 5.3, OSF1/3.x, SOLARIS 2.4 and
+	2.5, BSDI BSD/OS 2.x and FreeBSD 2.1 and 2.2.
+
+9/9/96	Minor change (new error message) for
+	user-contributed/cc/source/hupdown.c
+
+1/9/97	Bug fix to h_sample.c (which effects program subsample) so that it
+	works correctly for complex and double-complex images.  Thanks and a
+	tip o' the hat to Mike Preston at Sheffield.
+
+3/5/97	Minor changes to hips/sources/{histo.c,histoeq.c,histostretch.c,
+	thresh.c,zc.c} to fix a bug (histo.histodealloc was never
+	initialized).
+
+4/4/97	Minor bug fixes to user-contributed/imsor/sources/{frarithmetic.c,
+	util.h,raw2hips.c} to include math.h because of calls to atof.
+
+Michael Landy
+Voice:	(212) 998-7857
+Fax:	(212) 995-4349
+(NOTE: address fax messages c/o Michael Landy, New York University)
+Email:	landy@nyu.edu

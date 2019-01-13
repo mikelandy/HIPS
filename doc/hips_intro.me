@@ -1,0 +1,237 @@
+.\" to run this off, type: ptroff -me hips_intro.me
+.\"
+.ce
+\fB\s+2Image Processing With HIPS \- Some Exercises\s-2\fR
+.sp 2
+.b Introduction
+.sp
+.pp
+This note is intended as an outline of things to try in order to gain a working
+familiarity with the HIPS software for image processing.  The intent is that a
+new user
+take this guide and a copy of the HIPS manual pages, and play with the images
+in the
+HIPS image gallery in order to get a feel for the various capabilities of the
+software.
+.sp 2
+.b Prerequisites
+.sp
+.pp
+Before you play with HIPS, make sure you have gained a basic familiarity with
+UNIX and the shell.  You should know how to log in and out, how to deal
+with files, how to use `more',  and although it may not be needed at all, you
+may eventually want to learn how to use a text editor such as vi, ex, ed, or
+emacs.  Learn to use commands, specifying the standard input with `<', the
+standard output with `>', and joining the output of one command to the input
+of the next with a pipe using `|'.  Image files can be huge, so you should learn
+about `ls -l', `du', `df', and especially `rm' (to clean up after yourself).
+Learn to use the `man' command to examine on-line documentation, including the
+documentation for the HIPS commands (but also find out where the hardcopy
+of the manual is kept).  Find out from your system administrator how to print
+PostScript files (usually something like `lpr -Pps'), and where the HIPS image
+gallery is stored (usually /usr/src/local/hips/gallery).
+.sp 2
+.b "Viewing Image Files"
+.sp
+.pp
+Look at the various image files in the gallery.  Find out about the parameters
+of some of the images (using
+.i seeheader ,
+and if the information is voluminous, the pipe the results into
+.i more ).
+Learn how to view single images and image sequences.  On a Sun console under
+SunView, you may use
+.i sunv
+to view single images and
+.i sunanim
+to view image sequences.
+Under Xwindows, there are a number of image viewers such as
+.i xhips ,
+.i xhipsc ,
+.i xanim ,
+.i xvanim
+and
+.i xvhips .
+On a Sun console with a 1-bit framebuffer 8-bit images will be halftoned
+automatically.
+Finally, if you are so inclined, look at the raw image data using
+.i cat
+(awful, since the data after the header are binary) or 
+.i ptoa .
+The gallery directory has a variety of subdirectories.  The most decent natural
+image is a picture of Alan Turing (file `turing/turing').
+.sp 2
+.b Geometry
+.pp
+Take an image apart into pieces, and put it back together again in a variety of ways.
+Relevant commands to play with include
+.i joinframes ,
+.i affine ,
+.i collage ,
+.i enlarge ,
+.i reduce ,
+.i stretch ,
+.i subsample ,
+.i pad ,
+.i extract ,
+.i gridwarp ,
+.i reflect ,
+.i rotate180 ,
+.i rotate90 ,
+.i pictranspose ,
+.i picinvert ,
+and
+.i wgauss .
+Of course, continue to review the results of each program by piping the results into
+.i sunv .
+.sp 2
+.b "Pixel Transforms"
+.sp
+.pp
+Try to enhance different features of the Turing image by modifying only the gray levels.
+Relevant commands include:
+.i scale ,
+.i neg ,
+.i shiftpix ,
+.i powerpix ,
+.i stretchpix ,
+.i histoeq ,
+.i histostretch ,
+.i logimg ,
+.i thresh ,
+and for the truly adventurous,
+.i calcpix .
+Note that to use
+.i logimg
+you will need to learn about pixel formats other than byte.  The simplest thing to do is
+to pipe the result of
+.i logimg
+into
+.i scale ,
+which converts it back to byte format from the floating point results of
+.i logimg ,
+and scales it to use the entire byte range of 0-255.
+.sp 2
+.b "Pixel Formats"
+.sp
+.pp
+A brief aside: HIPS can handle binary packed images, and images for pixels
+which are byte,
+short, int, float, double, complex, and double complex.  There is also an
+ASCII format,
+which is handy for debugging by letting you view the image data directly.
+For example,
+.i htof
+converts to floating point.  There are converters between most pairs of formats.
+In addition, for dealing with complex numbers the
+.i htof
+filter can be used to extract the real part, imaginary part, complex phase or
+complex magnitude, and
+.i combine
+can put these parts back together as a complex image.
+.sp 2
+.b "Enhancement"
+.sp
+.pp
+Next, try to enhance the appearance of the Turing image using operators that combine
+pixels over space.  Try both linear and nonlinear methods.  For linear methods,
+relevant commands include
+.i mask ,
+.i convolve ,
+.i fourtr ,
+.i inv.fourtr ,
+.i lowpass ,
+.i bandpass ,
+.i bandreject ,
+.i highpass ,
+.i dog ,
+and
+.i mulseq .
+For nonlinear methods, also see
+.i thresh ,
+.i median ,
+.i extremum ,
+.i abdou ,
+.i discedge ,
+.i discedge2 ,
+.i thicken ,
+.i thin ,
+and
+.i zc .
+.sp 2
+.b "Image Statistics"
+.sp
+.pp
+Compute and display the statistics of an image using
+.i framevar ,
+.i binentropy ,
+.i pixentropy ,
+.i histo ,
+.i disphist
+and
+.i slice .
+If you use a Sun under SunView, get a feel for image analysis using
+.i hipstool
+and
+.i hipsview .
+.sp 2
+.b "Other Things"
+.sp
+.pp
+There are a number of tools in HIPS we haven't used thus far which you might
+like to try.  These include facilities for image arithmetic (\c
+.i addseq ,
+.i diffseq ,
+.i absdiffseq ,
+.i mulseq ,
+and
+.i divseq ,
+and also see
+.i calccomb ,
+and
+.i fcalccomb ),
+for halftoning (\c
+.i dither ,
+.i dotdiff ,
+.i halftone ,
+.i bpack ,
+and
+.i pshalftone ),
+for pattern recognition (see
+.i asl
+in the Hipsaddon package), for adding noise to images
+(\c
+.i noise ,
+.i gnoise ,
+and
+.i bnoise ),
+for combining multiple images into a single combined image (\c
+.i collage ,
+.i comicstrip
+and
+.i joinframes ),
+and for playing with image sequences (\c
+.i subseq ,
+.i catframes ,
+.i strobe ,
+and
+.i autodiff ).
+Try to compute and manipulate Gaussian and Laplacian pyramids using
+.i imgtopyr ,
+.i pyrdisplay ,
+.i pyrexpand ,
+.i pyrextract ,
+.i pyrmerge ,
+.i pyrreduce ,
+and
+.i pyrtoimg.
+For example, try the following.  Take two images of equal dimensions.
+Compute the
+Laplacian pyramid of each.  Now, extract each level of each pyramid, and make
+a new
+image from the left half of the first image's pyramid data and the right half
+of the
+other.  Reconstruct a pyramid from these collaged images, and reconstruct an
+image from
+that pyramid.  This is a very effective technique for image blending suggested
+by Burt and Adelson.

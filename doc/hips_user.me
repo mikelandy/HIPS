@@ -1,0 +1,3227 @@
+\" to print: tbl hips_user.me | psroff -me
+.po 1i
+.bp 0
+.(l C
+\fB\s+3The HIPS Image Processing Software
+.sp
+HIPS-2 Version: August, 1991\s-1\fI
+.sp 2
+Yoav Cohen
+.sp
+\fRand\fI
+.sp
+Michael S. Landy\s-2\fR
+.)l
+.sp 3i
+.ta 3i
+.nf
+Worldwide, the HIPS Software
+is available from:
+
+Michael Landy
+SharpImage Software
+P.O. Box 373, Prince Street Station
+New York, NY   10012-0007
+USA
+
+Voice only: (212) 998-7857
+landy@nyu.edu
+.fi
+.he 'HIPS Software''%'
+.+c
+.ce 2
+\fB\s+2The HIPS Image Processing Software
+.sp
+HIPS-2 Version: August, 1991\s-2\fR
+.sp 3
+.sh 1 "Introduction"
+.(x t
+.sp
+\*($n Introduction
+.)x
+.pp
+.ta 1i
+In the following pages you will find a description
+of the HIPS software for the manipulation of
+digital images.  This manual provides an overview of the functionality of HIPS
+and the use of HIPS via its command-level interface.  Much of HIPS is also
+available as a series of subroutine libraries.  Those aspects of the software
+are covered in a separate programmer's manual.  There are several additional
+documents which you may find useful, including three brief summaries of the
+command-level interface, an introductory manual which provides a guided tour
+to the software and some initial projects for the new HIPS user, and several
+summary sheets for the subroutine libraries.   Each command mentioned here is
+also described more fully in its own manual page (which can be printed, or
+displayed on the user's terminal using the UNIX
+.i man
+command). Finally, the design goals of the
+original HIPS software and examples of its use are described in two published
+articles (Landy, Cohen and Sperling, 1984a,b).
+.pp
+The HIPS commands are designed to run under any version of the UNIX operating
+system.  In order to use HIPS, some basic familiarity with UNIX is required,
+including an understanding of how to use one of the UNIX command shells such
+as
+.i sh
+or
+.i csh .
+In particular, in this manual it is assumed that you are familiar with the
+notion of a UNIX
+.i filter ,
+including its use of a standard input and a standard output.  Also, you should
+understand the concept of a
+.i pipe ,
+which allows a string of UNIX programs to be run at one time, with the
+standard output of one program providing the standard input for the subsequent
+program.  Although it is not required, you will undoubtedly find it useful to
+be able to use a text editor (such as
+.i vi
+or
+.i emacs ),
+and to be able to write shell scripts (collections of shell commands kept in a
+file which can be run all at once by invoking that file as if it were a
+command).  Images tend to be fairly large files, and so any user should be
+aware of the available disk space on the system and delete temporary
+image files as soon as they are no longer needed.
+.pp
+The basic HIPS image processing commands are device-independent.  In other
+words, they should run on any version of UNIX on any hardware from
+any manufacturer without modification.  However, in order to communicate with
+any peripheral devices (to digitize an image, to view an image or a sequence
+of animated images, or to produce hardcopy), some familiarity is required with
+the peripherals and/or windowing environment available on your computers.  We
+will touch on these issues later on (in the section on `Peripheral Interface
+and Windowing Systems').
+.pp
+The executable HIPS programs are all kept in a single directory which was
+chosen when HIPS was installed on your system.  The default is to keep them in
+.i /usr/hips ,
+but you should check to find out what was done on your system.  In order to
+use the programs, you will want this directory included in your search path.
+This is the list of directories that are searched for commands.  The way this
+is done depends on the particular command shell that you use.  For example,
+if you use
+.i .csh ,
+then in your home directory, in the file
+.i .cshrc
+you should modify the command which sets your path to include this directory.
+The result may look something like:
+.sp
+.ce
+set path = (. /usr/hips /usr/local /etc /usr/ucb /bin /usr/bin )
+.sp
+This will not take effect until the next time you login, although you can
+force it to take effect immediately (again, only under
+.i csh )
+by typing:
+.sp
+.ce
+source .cshrc ; rehash
+.sp
+If you use
+.i sh
+or some other shell, the precise details will vary, and you should contact the
+person who installed HIPS on your system or your system administrator for
+assistance if necessary.
+.pp
+Most HIPS programs are written as UNIX filters. They read images
+from the standard input (or from a file) and write them to the standard output.
+This feature of the package facilitates interactive manipulation
+of images.  For example, suppose you have a file in your current directory
+called `imagefile' which contains a single image.  Typing the following
+command:
+.sp
+.ce
+enlarge -s 4 < imagefile | rotate90 | thresh -p 50 | neg > outputfile
+.sp
+will apply a series of image transformation to the original image.  The image
+will be spatially
+enlarged by a factor of 4, rotated by 90 degrees, thresholded so that
+50% of the pixels will be above the threshold and set to white, and the rest
+set to black, negated so that the previously white pixels are set to black and
+vice versa, and stored in a file named `outputfile.'  This example
+demonstrates a number of the features of the command-level interface to the
+HIPS software.  First, HIPS consists of a large collection of simple image
+transformation tools (enlarge, rotate, threshold, negate, etc.).  Second, most
+tools read in an image from the standard input and write to the standard
+output, and hence tools may be combined using the UNIX pipe facility by using the
+pipe symbol `|'.  Third, each program will have a number of parameters which
+control its actions, which are specified using switches (and switch 
+parameters)
+after the command name.  For example, the `-s 4' above specified that
+.i enlarge
+should enlarge the image spatially by a factor of 4.  Finally, the image data
+storage format is critical in making this interface so simple.  Each image or
+image sequence in HIPS is represented by an
+.i "image header"
+followed by the actual image data.  As we will see in detail in the next
+section, the image header describes the format of the image data.  For
+example, it gives the size of the image (the number of rows and columns).
+Thus, in the above command,
+.i enlarge
+read the image header of `imagefile' and by noting the size of the image,
+knew how much data to read.  In the image it then output, the header was
+modified to indicate the new enlarged size, and the succeeding program was
+able to tell the size of the image it was reading.
+.pp
+The rest of this document introduces you to the HIPS software from a
+command-level user's point of view.  The manual proceeds as follows.  First,
+the data format is described including the image header and the various data
+and pixel formats.  Then, basic issues on the command-level user interface are
+described including the handling of file arguments, specific command argument
+switches, and standard switches.  Then several common aspects of HIPS filters
+are discussed including the treatment of pixel format conversion, the
+facilities for handling a rectangular image region-of-interest, and the
+support for color and pseudocolor.  The next section reviews the available
+facilities for interfacing to various peripheral devices and windowing
+systems.  The final sections are the bulk of the manual.  They
+overview the HIPS image processing software commands.  Within HIPS there is a
+graphics package for the generation and manipulation of three-dimensional
+scenes (consisting of lines and vectors).  This package is only briefly
+mentioned here, and is discussed more fully in a separate PLOT3D manual.
+.pp
+As you read along, you may want to try some of the various commands for
+yourself.  The HIPS software comes with a library of images in HIPS format
+which you might use as sample inputs to commands you wish to try out.  These
+images are in subdirectory `gallery' in the HIPS source directory.  We keep
+that source directory as `/usr/src/local/hips', but this is installation
+dependent and you should determine its location from your system
+administrator.
+.sh 1 "Image data format"
+.(x t
+.sp
+\*($n Image data format
+.)x
+.pp
+Images or image sequences are stored as an image
+.i header
+followed by one or more frames of image data.  Here, the content of the image
+header is described, along with HIPS programs which manipulate image headers.
+Then, the format of the image data is described.
+.sh 2 "Headers"
+.(x t
+.ti .3i
+\*($n Headers
+.)x
+.pp
+The image header is the concept which allows HIPS usage to be as convenient as
+it is.  The image header serves three purposes.  First, it includes a
+description of the associated image data which is used by each HIPS program
+to be able to interpret the image data.  Second, it automatically provides a history
+of the data, because each HIPS program applied to an image is logged in the
+.i "sequence history"
+which is kept in the header.  Finally, it provides room for documentation of
+the sequence including basic textual documentation and also arbitrary numbers
+of variables and their values stored with the image in the header's
+.i "extended parameters"
+section.
+Detailed description of the header-structure can be found in the HIPS
+Programmer's Manual.
+.pp
+Application programs expect each picture to be preceded by a header.
+On output, the programs either update the header, or generate
+a new one.
+.pp
+The program
+.i seeheader 
+reads an image header and outputs a readable version of that header.  If you run
+this program on an image file by typing
+.sp
+.ce
+seeheader < imagefile
+.sp
+you will get an idea of the information kept in the header.  There are a
+number of fields of documentary information (originator name, sequence name,
+origination date, and the open-ended sequence description) which may be set by
+the user (with the program
+.i adddesc )
+and are otherwise uninterpreted by HIPS programs.  The header gives the format
+of the data which follows the image header (byte pixels, floating point
+pixels, a histogram, a stereogram, etc., see below), and if the data are
+images, it also specifies the number of color frames of data, the number of
+color planes per frame, the number of rows and
+columns of each frame, and the size and position of the region-of-interest
+within that image (the region-of-interest facility is described below).
+.pp
+The header also includes the
+.i "sequence history" .
+This is a text field which is automatically updated by each HIPS program.  It
+lists every HIPS program which has been applied to this image including the
+program name, each argument, and a data/time stamp when the program was run.
+When a HIPS program is applied to an image, it appends a new line to this
+history.  A number of HIPS programs actually combine more than one input image
+(e.g.
+.i addseq ,
+which adds corresponding frames of two image files together, pixel by pixel).
+These programs normally preserve the entire sequence history of all of their
+input images in the output, appending a line at the end representing the
+current program.  Thus, no information on history is lost.  However, this
+behavior can be defeated using the standard switch
+.i -NFH
+(`no full history', see the section on standard switches below, which also
+discusses how the sequence description and extended parameters are handled in
+these cases).
+.pp
+Finally, the image header contains a section called the
+.i "extended parameters" .
+This allows the user to extend the functionality of the image header by
+defining new image header variables.  It consists of a series of header
+parameters.  A parameter consists of a name (like a variable name), a format
+(the value of a parameter can be an Ascii string, or one or more bytes, short
+integers, integers, or floating point values), a count (the length of the
+string or array), and a value (or array of values).  This is a general
+database facility which the HIPS user is free to use in any manner.
+.pp
+The HIPS software uses this extended parameter section to store a number of
+variables.  If the user plans on using the extended parameters, these variable
+names should be avoided:
+.i stackrow ,
+.i stackcol ,
+.i stackspa ,
+.i stackdepth ,
+.i height ,
+.i width ,
+.i vdom ,
+.i stacks
+(used by various image compression programs including
+.i ahc3 ,
+.i binquad ,
+.i hc_bin
+and
+.i oct ),
+.i depth
+(used to store the number of depth planes for 3D images),
+.i cmap
+(used to store a colormap) and
+.i toplev
+(used to store the index of the top level in an image pyramid).
+.pp
+There are a number of HIPS commands which examine and manipulate image
+headers.  As mentioned above,
+.i seeheader
+is used to examine the header.  This may even be used in the middle of
+a pipeline by using the
+.i -p
+switch:
+.sp
+.ce
+enlarge < imagefile | seeheader -p | rotate90 > newimagefile
+.sp
+The readable form of the header (that is, the header output by
+.i enlarge )
+is sent to `stderr' (i.e. the user's terminal), and the header and image in
+their original form are sent (`piped') to the standard output where they may be
+further processed.
+.i Grabheader
+and
+.i stripheader
+may be used to output only the header or only the image data, respectively.
+For example, when debugging an image transformation you will often find
+the following command useful:
+.sp
+.ce
+ptoa < imagefile | stripheader
+.sp
+which converts the image data to a readable Ascii format, and then removes the
+header.  In order to import data into HIPS from other image data formats there
+is
+.i genheader ,
+which generates a HIPS image header, and optionally prepends it to a raw image
+file.
+.i adddesc
+is used to add descriptive information to an image header, and
+.i addparam
+is used to add extended parameters while
+.i rmparam
+is used to remove them.  Finally, users of the original HIPS
+software and its XHEADER package can use
+.i convertxhd
+to convert such images to the format used by HIPS-2.
+.sh 2 "Image data formats"
+.(x t
+.ti .3i
+\*($n Image data formats
+.)x
+Images or sequences of images
+are stored as a collection of numbers representing the
+pixels, and are preceded by the image header.  The most commonly used formats
+are the raster formats.  In these formats, the data consists of a sequence of
+frames of equal size (the number of rows and columns).  The data for a single
+frame are stored as one row after another.  A given row consists of one pixel
+after another from left to right.  The first row in a frame may be either the
+top row or the bottom row.  This choice is installation-dependent, and is
+generally chosen to coincide with the coordinate system of the image hardware
+or window system you use (it is chosen at the point that the HIPS software is
+first installed).  Most systems are installed with the first row corresponding
+to the top row (in other words, the origin of the image coordinate system is
+at the upper-left of each image).  When the user indicates a particular row or
+column position, the rows and columns are numbered such that the first row or
+column is number `0'.
+.pp
+In addition to the raster formats, there are the image pyramid formats (based
+on the Gaussian and Laplacian pyramids introduced by Burt (1981) and Burt and
+Adelson (1983)).  Each frame of an image pyramid consists of a sequence of
+images, one with the size specified in the image header, and zero or more
+others (the number specified by header extended parameter
+.i toplev )
+each of which has approximately half the number of columns and half the number
+of rows of the previous.
+.pp
+The individual pixels in a raster image come in a wide variety of formats
+corresponding to most every data format.  The raster and image pyramid formats
+implemented in HIPS are listed in the following table.
+.TS
+center;
+cb cb
+l l.
+Abbreviation	Format
+.sp
+mp	1 bit per pixel, packed, most-significant bit first
+lp	1 bit per pixel, packed, least-significant bit first
+b	unsigned byte
+sb	signed byte
+s	short integer
+us	unsigned short integer
+i	integer
+ui	unsigned integer
+f	single precision floating point
+d	double precision floating point
+c	single precision complex (pairs of floats)
+d	double precision complex (pairs of doubles)
+ip	integer image pyramid
+fp	single precision floating point image pyramid
+rgb	3 unsigned byte color pixels:
+	red byte, green byte, blue byte
+rgbz	4 unsigned byte color pixels:
+	red byte, green byte, blue byte, zero byte
+zrgb	4 unsigned byte color pixels:
+	zero byte, red byte, green byte, blue byte
+bgr	3 unsigned byte color pixels:
+	blue byte, green byte, red byte
+bgrz	3 unsigned byte color pixels:
+	blue byte, green byte, red byte, zero byte
+zbgr	3 unsigned byte color pixels:
+	zero byte, blue byte, green byte, red byte
+a	Ascii format
+.TE
+The packed formats allow images with only a single bit per pixel (binary
+images with pixels that are either black or white) to be stored efficiently,
+with 8 pixels stored in each byte.  For these formats, each row starts on a
+byte boundary, and thus the last byte for each row may have some unused bits.
+For all other formats, there is no padding at the end of each row.  After the
+last pixel of one row comes the first pixel of the subsequent row.  The Ascii
+format is used for debugging. Each pixel is printed with
+.i printf .
+Because the original format of the pixels is no longer available, it is not
+possible to tell whether the original data were in a complex format.  Thus, if
+a complex image is converted to Ascii (with the program
+.i ptoa ),
+the number of columns in the header is doubled, and is later halved if the
+data is converted to a complex format (with
+.i atop ).
+For
+.i ptoa
+conversions of 3-color formats (such as RGB), the pixels are output as
+triplets of red/green/blue, and the number of columns in the header is
+tripled.
+The abbreviations listed in the table are useful to remember as they are used
+as parts of the names of programs that convert to those formats.  For example,
+to convert to floating point format, the program
+.i htof
+(HIPS-to-float) is used.
+.pp
+Finally, there are a number of nonraster image data formats.  These include a
+variety of formats associated with compressed images (quadtrees, octtrees,
+spanning trees, run-length encoding, and so on; see the section on image
+compression below), image histograms, and a variety of other data formats
+which are used by HIPS programs or by programs written by HIPS users.
+.sh 1 "User interface standards"
+.(x t
+.sp
+\*($n User interface standards
+.)x
+.pp
+The command level interface to HIPS has been standardized substantially
+because all HIPS routines utilize the same subroutine (\c
+.i parseargs )
+to parse the command line arguments.  Because of this, there are certain
+standards to which all programs adhere for command line argument and filename
+specification, and a set of standard switches which are accepted by all HIPS
+programs.
+.pp
+Every HIPS command consists of the command name (the name of the program to
+invoke) followed by an optional list of switches, followed by an optional list
+of input filenames.  We discuss the switch and filename standards in turn.
+.pp
+HIPS switches are used to specify the precise operation of a given program.
+The switches list is optional, and if omitted the program will exhibit a
+default behavior as indicated in the manual page for that program.  All
+switches consists of the switch itself (which is always the character `-'
+followed by one or more letters) and possibly a series of parameters for that
+switch.  The parameters of a switch are separated from the switch itself and
+from each other by white space (blanks or tabs).  The order in which different
+switches are specified is arbitrary, but each switch may be specified at most
+once.  The order of switch parameters, on the other hand, is fixed.  Any given
+switch may have zero or more mandatory parameters followed by zero or more
+optional ones.
+.pp
+The lexical analysis used by the parser is
+.i greedy.
+In other words, if the parser finds a switch and is looking for its optional
+parameters, and if the next item in the command line is of the appropriate type
+to be the next optional parameter (e.g. is a sequence of digits when an integer
+parameter is expected), then it
+.i will
+be taken as that parameter.  For example, the command
+.sp
+.ce
+extract -s 100 file
+.sp
+will extract a 100x100 subimage from the image stored in `file', whereas the
+command
+.sp
+.ce
+extract -s 100 200
+.sp
+will extract a 100x200 subimage from the standard input (and will sit there
+doing nothing if no standard input was specified).  Thus, if you actually had
+a file with the name `200', you would be forced to type
+.sp
+.ce
+extract -s 100 < 200
+.sp
+or
+.sp
+.ce
+extract -s 100 100 200
+.sp
+in order to extract a 100x100 subimage from that file.
+.pp
+The argument parser also provides a number of standard switches which are
+accepted by every HIPS program.  Not every program actually uses every switch,
+and the ones honored by a given program are listed in its manual page.  Here
+is a list of the standard switches:
+.sp
+.(b L
+.TS
+expand;
+cb s
+c c
+lt lw(4.5i).
+Predefined HIPS Flag Options
+.sp 1.5
+Flag Option	Meaning
+.sp
+-D 	T{
+The date at which this transformation was applied.  This is how the
+date/time stamp is represented in the sequence history.
+T}
+-U	T{
+Print a usage message for the filter and quit.
+T}
+-P \fImode\fP	T{
+Set the prevailing \fImode\fP for packing images.
+The \fImode\fP can be either ``M'', or ``L'' indicating respectively
+that the image should be packed most significant bit first or least
+significant bit first.
+The default \fImode\fP is set when the software is installed.
+T}
+-CR \fImode\fP	T{
+To set the prevailing \fImode\fP for converting from complex-valued images
+to real-valued images.
+The \fImode\fP can be either ``M'', ``P'', ``I'' or ``R'' indicating
+respectively
+that the real-valued image should be formed from the complex magnitude,
+the complex phase, the imaginary part or the real part of the
+complex-valued image.
+The default \fImode\fP is to take the complex magnitude value.
+T}
+-RC \fImode\fP	T{
+To set the prevailing \fImode\fP for converting from real-valued images
+to complex-valued images.
+The \fImode\fP can be either ``R'', ``I'' or ``B'' indicating respectively
+that the complex-valued image should be formed by setting the real part
+from input and clearing the imaginary part, by setting the imaginary part
+from input and clearing the real part or by setting both the real and
+imaginary parts from input.
+The default \fImode\fP is to set the real part from input and to clear
+the imaginary part.
+T}
+-UL \fIvalue\fP	T{
+To set the \fIvalue\fP substituted for a bit 0 during unpacking.
+This should lie in the range 0 - 255 and defaults to 0.  This value is also
+used for low or background values by a variety of HIPS programs.
+T}
+-UH \fIvalue\fP	T{
+To set the \fIvalue\fP substituted for a bit 1 during unpacking.
+This should lie in the range 0 - 255 and defaults to 255.  This value is also
+used for high or foreground values by a variety of HIPS programs.
+T}
+-CB 	T{
+Convert back to the input pixel format.
+T}
+-NFH 	T{
+Do not preserve the input sequence histories of all input sequences.
+T}
+-NFD 	T{
+Do not preserve the input sequence descriptions of all input sequences.
+T}
+-FXP 	T{
+Merge the extended parameter lists from all input sequences.
+T}
+.TE
+.)b
+.pp
+The switches which relate to format conversion will be described further in
+the next section.
+.i -NFH ,
+.i -NFD
+and
+.i -FXP
+are relevant for HIPS programs which combine two or more input images.  The
+default behavior is for the output image header from such a program to include
+all of the input headers' sequence histories and sequence descriptions
+(formatted so that they may be identified and distinguished), but to include
+the extended parameters only from the `primary' input file (which is
+identified in the manual page for each program).  The full history and full
+sequence description may be defeated using
+.i -NFH
+or
+.i -NFD ,
+in which case only the history or description from the `primary' input is
+used.  Similarly, the header parameters from all input files may be combined
+using
+.i -FXP .
+In this case, the header parameters from files other than the primary file are
+merged in.  If more than one input file defines the same parameter, only one
+will be preserved in the output (generally from the last file specified other
+than the `primary' input).
+.pp
+After the switches are specified, the user specifies the input files.  There
+are four types of HIPS programs as far as file specification is concerned:
+those that require no input files, one input file, two input files, or an
+arbitrary length list of input files.  If one input file is expected, the user
+may specify it as the last item in the command line or provide it as the
+standard input.  Thus,
+.sp
+.ce
+enlarge imagefile > bigfile
+.sp
+and
+.sp
+.ce
+enlarge < imagefile > bigfile
+.sp
+produce identical results.  Similarly, if a command requires two input files,
+the first must be specified on the command line, the second may be, but if the
+second is omitted, then it is expected to be provided as standard input.  The
+following two commands are thus equivalent:
+.sp
+.ce 2
+addseq first second > sum
+addseq first < second > sum
+.sp
+If a program requires a file list, then all files must be specified as
+command-line arguments.  However, for these commands (and for the other types
+as well), a file specified as `-' is interpreted as indicating that the
+standard input should be used.  Thus, the following two commands are
+equivalent:
+.sp
+.ce 2
+joinframes firstfile secondfile thirdfile fourthfile
+joinframes firstfile - thirdfile fourthfile < secondfile
+.sp
+The standard input may only be indicated once for a given command.
+.sh 1 "Raster image format conversion"
+.sp
+.(x t
+\*($n Raster image format conversion
+.)x
+.pp
+There are a large number of pixel formats for raster images as listed above
+(byte, short, integer, float, etc.).  Although a given image may have any of
+these formats, it is not true that every HIPS program knows how to manipulate
+images in every format.  The user can force a particular format conversion,
+and there are programs for converting to each pixel format.  In addition, the
+HIPS software is designed to be `object-oriented' in the sense that each HIPS
+program will automatically convert input images to a type which can be handled
+by that program.  We discuss each of the conversion methods in turn.  It
+should be noted, however, that certain HIPS programs perform format conversion
+as part of what they do.  For example, the program
+.i halftone
+not only halftones the input, but also converts the resulting two-valued image
+to a bit-packed format.  Each program's manual page describes the output pixel
+format of a routine if such a conversion is performed.
+.pp
+There are programs which convert from any raster format to a specified format,
+and the naming of these routines uses the abbreviations mentioned above.
+.i Htomp ,
+.i htolp ,
+.i htob ,
+.i htosb ,
+.i htos ,
+.i htous ,
+.i htoi ,
+.i htoui ,
+.i htof ,
+.i htod ,
+.i htoc
+and
+.i htodc
+convert to most-significant-bit first packed, least-significant-bit first
+packed, byte, signed byte, short, unsigned short, integer, unsigned integer,
+float, double, complex and double complex format, respectively.
+.i htof
+and
+.i htoi
+also convert between integer and float pyramid format.
+.i bpack
+converts to the default packed format (which is set when the software is
+installed, generally to the packed format required for your display
+hardware).  Images are converted to and from the readable Ascii format using
+.i ptoa
+and
+.i atop
+(pixel-to-Ascii and Ascii-to-pixel).
+.i ptoa
+formats the output nicely with one output line per image row, and a blank line
+between image frames.
+.i atop
+also allows the user to input an image by hand, typing the pixels in Ascii.
+This is very useful for creating simple image for debugging purposes.
+For conversions to the various packed 3-color formats (where a single pixel
+includes bytes of red, green and blue, as well as a possible pad byte) use
+.i htorgb ,
+.i htorgbz ,
+.i htozrgb ,
+.i htobgr ,
+.i htobgrz
+and
+.i htozbgr .
+Two images may be combined into one complex-valued image using
+.i combine .
+Conversion between raster formats and image pyramid formats must be carried
+out explicitly using
+.i imgtopyr
+and
+.i pyrtoimg ,
+although
+.i pyrdisplay ,
+.i pyrextract
+and
+.i pyrmerge
+can convert between these formats as a side effect as well.
+Finally, the program
+.i scale
+may be used to first linearly or quadratically scale image pixels, and then
+convert to another pixel format.  In particular, the default behavior of
+.i scale
+is to linearly scale the input image to the range 0-255 and then convert to
+byte format and thus this program is often used rather than implicit
+conversion prior to displaying images which were not in byte format.
+By default, the parameters for the linear transformation are determined by the
+pixel values of the first frame in the input sequence. If pixels in
+subsequent frames are outside the range of the pixels in the first frame
+they are clipped to the minimum and the maximum of the range.
+.pp
+When pixel format conversion takes place, the effect is generally what you
+might expect.  Conversion from floating point formats to integer formats
+involves rounding.  Conversion from bit-packed to unpacked formats involves a
+substitution of one value for 0 bits (specified by the standard switch
+.i -UL
+which defaults to 0) and a different value for 1-bits (specified by the
+standard switch
+.i -UH
+which defaults to 255 in most cases).  When an image is bit-packed, non-zero
+pixels are replaced with a 1-bit, and zero pixels are replaced with a 0-bit.
+If the type of bit-packing is not explicitly stated (for example, the program
+.i bpack ),
+then the type of packing may be specified by the standard switch
+.i -P ,
+and defaults to the format specified when the software was installed.  When
+converting from a real format to a complex format, the conversion is
+controlled by the standard switch
+.i -RC
+which specifies whether to set the real part (and set the imaginary part to
+zero), to set the imaginary part (and set the real part to zero), or to set
+both the real and imaginary part equal to the input real pixel value.  When
+converting from a complex format to a real format, the conversion is
+controlled by the standard switch
+.i -CR
+which specifies whether to return the real part, the imaginary part, the
+complex magnitude, or the phase (in radians).  The complex magnitude is
+generally the default.  When converting from one format to an integer format
+with less range, pixel values may be clipped, and some routines will output
+the number of underflows and overflows that occur.
+.pp
+In addition to explicit format conversion, HIPS programs will implicitly
+convert input images if necessary to another pixel format.  Each program
+handles only a limited number of pixel formats
+.i directly ,
+and these are listed in the manual page.  Pixel format conversion will occur
+automatically if another raster format is supplied as input.  Generally, the
+format is converted to the nearest available format that is handled directly
+by the program, with a preference given to conversions which don't involve
+possible loss of information or clipping.  Pixel format conversion also occurs
+if a program combines two or more input images and only handles certain
+combinations of input formats.  For example, most of the frame arithmetic
+programs (such as
+.i addseq )
+handle a number of input formats, but require both images to be in the same
+format.  If they are not in the same format, or if they are in a format the
+program doesn't handle directly, then the best possible format is chosen to
+which to convert the input images so that the format is handled by the
+program, is as close as possible to the input formats, and involves the least
+loss of data necessary if any.  When these automatic conversions take place,
+a warning message is printed.  Also, not every format conversion is carried
+out directly.  The most popular conversions have been implemented, but if a
+conversion is required which is not implemented then the input image will
+first be converted to integer format, and then from integer format to the
+required format.  In this case, the warning message will indicate that the
+conversion has taken place `via integer format.'  Automatic conversion may
+occur between single color formats (byte, float, complex, etc.), between
+3-color formats (RGB, BGRZ, etc.), from 1-color to 3-color, or from 3-color to
+1-color.  A number of HIPS programs which perform implicit format conversions
+also allow the result to be converted back to the original input format by
+specifying the standard flag
+.i -CB .
+.pp
+Finally, HIPS users may occasionally need to convert to and from various other
+image data standards.  There are a number of facilities for this in HIPS.  The
+programs
+.i suntohips
+and
+.i hipstosun
+convert to and from Sun raster format.  The programs
+.i portabletohips
+and
+.i hipstoportable
+convert to and from Jef Poskanzer's popular portable formats (PBM, PGM and
+PPM). In the user-contributed section there
+are routines for conversion to and from the popular TIFF format and a number
+of other formats.  Most image
+processing packages have the option of storing and accepting raw image data
+with no image header.  This allows the HIPS user to import such data using
+.i genheader ,
+and to generate such files using
+.i stripheader .
+For those of you with Internet access, you may wish to investigate the package
+called PBM which is available via anonymous
+.i ftp
+from a number of sites, because it contains conversion programs to and from
+its own internal from and a large number of image format standards.
+.sh 1 "Region-of-interest"
+.(x t
+.sp
+\*($n Region-of-interest
+.)x
+.pp
+The HIPS software is designed to support a rectangular
+.i "region of interest" 
+(or ROI).
+This allows the user to specify a subimage within an image which is the area
+of interest to the user.  Most HIPS programs treat this region specially, for
+example by modifying only the pixels in this region, leaving those outside the
+region untouched.  The manual page for each program has a section which
+describes how the region-of-interest is handled by that program.  Format
+conversion programs generally convert the entire image, but leave the
+specification of the ROI untouched so that it still affects subsequent
+operations.  For most other programs, only the ROI is processed.  For most
+programs which combine two or more input images, the input images may be of
+different sizes, but their ROIs must have the same size.  Only three programs
+are needed to explicitly specify and manipulate ROIs:
+.i setroi
+(to specify the subimage size and position),
+.i clearroi
+(to clear the ROI, making the ROI equal to the entire image), and
+.i extractroi
+to extract the region-of-interest from the image, discarding the nonROI border
+regions.  Note that for a bit-packed image, the left edge of the ROI must lie
+on a byte boundary.  In other words, for such images the first column in the
+ROI must be an even multiple of eight.  For nonpacked images no such
+restrictions apply.
+.sh 1 "Support for color and pseudocolor"
+.(x t
+.sp
+\*($n Support for color and pseudocolor
+.)x
+.pp
+HIPS has a number of facilities for handling color and pseudocolor images.
+For true color image processing,
+the image header has a field which indicates the total number of frames, and a
+field which indicates the number of color planes.  For example, if a file
+consists of 20 full color frames, each of which consists of a red frame
+followed by a green frame followed by a blue frame, then the header will
+indicate 60 frames total, and 3 color planes per color frame.  Most image
+processing programs will process these color planes separately and
+independently.  However, the fields are checked, and programs which combine
+more than one input image will often require the input images to have the same
+number of color planes.  Separate images may be combined into one color
+sequence using
+.i intercolor ,
+and sequences with three color planes may be converted to a form with one
+color plane using
+.i luminance
+(which tries to compute an accurate black-and-white rendition of a full color
+image).  A subset of color planes may be extracted using
+.i subseq
+or
+.i subsample .
+.i Coltransf
+may be used to apply a general affine transformation to the color space.
+.pp
+For pseudocolor image processing (and other purposes as well, such as gamma
+correction) the HIPS software has facilities for computing and storing
+colormaps along with an image sequence.  These colormaps are stored in the
+image header as the extended parameter
+.i cmap .
+.i Addcmap
+may be used to compute a colormap or read one from a file, storing it in an
+image header.
+.i Applycmap
+is used to pass an image through a given color map.  A number of the image
+display programs recognize these colormaps and can use them when displaying
+the associated image, for example
+.i sunv .
+The program
+.i cscan
+(part of the COLORHIPS package which is sold separately) can be used to
+convert a true 24-bit color image to an 8-bit pseudocolor approximation.
+.sh 1 "Support for 3D images"
+.(x t
+.sp
+\*($n Support for 3D images
+.)x
+.pp
+HIPS has the capability of storing and manipulating 5-dimensional image data.
+We have already discussed four of these dimensions:  frames, colors, rows and
+columns.  In addition, the user may manipulate sequences of 3D color images.
+The value of this last dimension, the number of depth planes, is stored in a
+header extended parameter called
+.i depth .
+The data format for such a sequence is a series of frames, each of which
+consists of a series of depth planes, each of which consists of a series of
+color planes, each of which is a rectangular image (rows and columns).  To
+most programs this is entirely transparent.  However, one may construct such a
+3D image sequence our of 2D image sequences using
+.i interdepth ,
+and pull out particular depth planes (or frames or color planes) using
+.i subseq
+or
+.i subsample .
+.sh 1 "Peripheral interface and windowing systems"
+.(x t
+.sp
+\*($n Peripheral interface and windowing systems
+.)x
+.pp
+The bulk of HIPS is entirely device independent, and the programs described in
+the rest of this manual will run unmodified on any UNIX system and hardware
+using images derived from any source.  However in order to get an image into
+HIPS from the outside world (to digitize, in other words), to view an image or
+image sequence on a monitor or in a window, or to produce hardcopy of a HIPS
+image sequence, interface routines are required.  We discuss three sorts of
+routines:  interface to framestores, interface tools for windowing systems,
+and conversions to hardcopy.
+.sh 2 "Framestore interface"
+.(x t
+.ti .3i
+\*($n Framestore interface
+.)x
+.pp
+The HIPS software has been interfaced to a number of image processors and
+frame buffers.  The most extensive interfaces have been programmed for the
+Adage image processor, but since these programs have little
+interest outside of the New York University laboratories in which they are
+used, they will not be described further.  However, the source code and
+documentation for these device drivers are included with the package, and if
+you find yourself developing HIPS device support for your own hardware, you
+may find these programs useful as an indication of the kind of facilities that
+have been found to be useful.  Three basic programs constitute a full
+interface to a framestore device:  read a frame (to scan or digitize a single
+image frame), write a frame (to display a single still frame on the device),
+and write a sequence (to download and display an image sequence as a movie
+animation on the device).  All three of these facilities exist for the
+Adage.  Subsets of these capabilities have been programmed by
+various HIPS users in the past, and in the hipsaddon and user-contributed
+source code directories you will find programs which interface to devices from
+a number of manufacturers including CRS, Datacube, Imaging Technology, Lexidata
+and Matrox.
+.sh 2 "Windowing tools"
+.(x t
+.ti .3i
+\*($n Windowing tools
+.)x
+.pp
+A windowing system on a UNIX workstation provides an excellent way of working
+with images using HIPS.  In one window the user can type the actual HIPS
+command lines.  In another the documentation may be examined.  And when an
+image is generated, it may be viewed in another window.  Thus, as a basic
+minimum it is useful to be able to display single frames or multiple frame
+animations in a window.  In addition, windowing systems provide the
+possibility for interacting with an image while it is presented in order to
+make measurements on the image (\c
+.i "image analysis" ),
+perform image processing on the image, and so on.  There are several programs
+available for HIPS for use with windowing systems written by the originators
+of HIPS-2 (SharpImage Software in New York and the Turing Institute in
+Glasgow) and contributed by the users of HIPS, and this is an area where
+subsequent HIPS development is expected.  Programs exist for a variety of
+window systems including SunView (\c
+.i sunv ,
+.i sunanim ,
+.i hipstool
+and
+.i hipsview ),
+raw Xwindows (\c
+.i xhips ,
+.i xhipsc
+and
+.i tuner ),
+XView (X with the Sun-supplied but publicly available XView toolkit,
+including
+.i xhist ,
+.i genial ,
+.i xvhips ,
+.i xvanim
+and
+.i segal ),
+the Apple Macintosh windowing system (see the user-contributed directories
+macII), the NeXT computer windowing system (\c
+.i nhips ),
+and the Silicon Graphics Iris windowing system (\c
+.i wframe ).
+For example, any example below can be displayed on a Sun under SunView rather
+than stored in a file by replacing the `> filename' part of the command with
+`| sunv' or `| sunanim'.
+.sh 2 "Halftoning and hardcopy"
+.(x t
+.ti .3i
+\*($n Halftoning and hardcopy
+.)x
+.pp
+HIPS has facilities for reading images for hardcopy and for converting them
+to a form required by a number of hardcopy devices.  Other than film
+recorders, most hardcopy devices require nonbinary images to be converted to
+binary form before being printed.  This process is known as halftoning (much
+the way pictures are printed in the newspaper).  There are several HIPS
+programs which implement popular methods of halftoning including the
+Floyd-Steinberg algorithm (\c
+.i halftone ),
+dot diffusion (\c
+.i dotdiff ),
+and dithering (\c
+.i dither).
+There are programs which convert 8-bit images to a form suitable for
+particular dot matrix printers including the Anadex (\c
+.i prtdth
+and
+.i prthlf )
+and the Epson (\c
+.i prteps ).
+Most useful is
+.i pshalftone ,
+which converts binary and byte image sequences to PostScript.  This allows one
+to print the images locally on one of dozens of PostScript printers (such as
+the Laserwriters).  In addition, there are now typesetting machines (such as
+the Linotronic) which can print PostScript files at very high resolution (up
+to 2500 dots per inch) allowing the HIPS user to produce publication-quality
+halftones directly from image data, and there are a number of typesetting
+services which will accept Postscript data on diskette or over a modem
+(although the latter will be a problem for most huge image files).
+With
+.i pshalftone ,
+the user may specify the output image height and width (with
+.i -h
+and 
+.i -w ),
+the type of halftone screen
+(circular, the default, or line, by specifying
+.i -l ),
+and the screen frequency and angle
+(with
+.i -F
+and
+.i -A ).
+.sh 1 "Image generation
+.(x t
+.sp
+\*($n Image generation
+.)x
+.pp
+.i Genframe
+is used to produce a uniform image sequence.  The user may specify the
+greylevel, the size, then number of frames, the number of color planes, and
+the pixel format.
+For example, the command
+.sp
+.ce
+genframe -g 128 > myframe
+.sp
+will write a 512X512 frame of gray-level 128 in file
+.i myframe .
+A frame with a checkerboard pattern can be generated by the program
+.i checkers .
+The program produces a picture in which the upper-left pixel is bright, and
+bright and dark pixels alternate across rows, columns and frames. For example
+.sp
+.ce
+checkers -s 8 8 | enlarge -s 40 > chess
+.sp
+produces a reasonable looking chessboard.
+.pp
+A program called
+.i zoneplate
+may be used to create a sinusoidal zoneplate image.  This is an image which
+contains concentric circular sinusoidal modulations which increase linearly in
+spatial frequency with increase in radius.  It is useful, for example, to
+analyze the filtering properties of convolution masks.  You need only filter
+this image in order to find the frequencies and orientations to which a
+particular filter is sensitive.  Other test images include a ramp of grey
+bars (produced by
+.i greybar ),
+sums of sinusoidal grating patterns (produced by
+.i cosum ,
+.i fastcosum ,
+and
+.i grating ),
+and Gabor function images (sinusoidal gratings windowed by a Gaussian,
+produced by
+.i gabor ).
+.pp
+The program
+.i sirds
+generates an interesting type of image known as a ``single image random dot
+stereogram.''  It is a stereogram in that it allows the two eyes to see
+different images and, through manipulation of disparity between those images,
+to portray 3D depth.  However, instead of using two separate images, a single
+image with a vertical strip which (approximately) repeats is used, allowing
+stereo to be seen in a single image (by diverging or converging ones eyes by a
+single strip width).  The input to the program is a depth map \- an image in
+which a larger pixel value means a depth that is closer to the observer.  The
+output is a single image RD stereogram.
+.pp
+Finally, it should be noted that
+.i atop ,
+.i calcpix ,
+and
+.i fcalcpix
+may be used for image generation.
+.i Atop
+may be used to convert raw Ascii image data into HIPS format.
+.i Calcpix
+and
+.i fcalcpix
+may be used to generate an image where each pixel value is computed using
+C program code supplied by the user.  These latter programs are described in
+more detail in the next section.
+.sh 1 "Operations on single pixels
+.(x t
+.sp
+\*($n Operations on single pixels
+.)x
+There are a number of programs which simply remap the values of individual
+pixels with no global processing or change in image geometry.  There are three
+types of routines:  pixel value remapping routines,
+\fIcalcpix\fR/\fIfcalcpix\fR, and routines which add noise to an image.
+.sh 2 "Pixel value remapping"
+.(x t
+.ti .3i
+\*($n Pixel value remapping
+.)x
+.pp
+The simplest of these routines are those that apply a fixed function to each
+pixel value such as the negative value (using
+.i neg ,
+which produces the arithmetic negative for most pixel formats, but uses bit
+inversion for byte format), the absolute value (\c
+.i abspix ),
+the complex conjugate (\c
+.i conjpix ),
+the exponential (\c
+.i exppix ),
+the logarithm (\c
+.i logimg ),
+or a power function (\c
+.i powerpix ).
+For example,
+.sp
+.ce
+powerpix -p 3 < file > cubedfile
+.sp
+raises each pixel to the third power.
+.pp
+To reduce the number of bits which represent the gray-levels
+of the picture use the program
+.i shiftpix .
+The user supplies the number of bit positions to shift each pixel,
+where a negative argument will cause each pixel to be divided by 2 to the
+power of
+.i factor
+(by shifting the integer to the right
+.i factor
+bit positions).  For example:
+.sp
+.ce
+shiftpix -s -5 < old > new
+.sp
+will cause the pixels in
+.i old
+to be divided by 32.
+This operation of course reduces the brightness of the picture.
+If the input picture has 256 distinct gray-levels in the range
+0 to 255, the output
+picture has only 8 distinct gray-levels in the range 0 to 7
+which is practically black. To restore the brightness, the
+pixels can be multiplied again by 32, giving a range of 0 to 224
+to the distinct 8 levels. Thus,
+.sp
+.ce
+shiftpix -s -5 < old | shiftpix -s 5 > new
+.sp
+produces a coarsely quantized version of the input image.
+.pp
+.i Scale
+is used to apply either a linear or a quadratic function to each pixel value.
+The user can supply the parameters for the linear or quadratic function.
+Instead, the user can supply a minimum and maximum value, in which case the
+image will be scaled linearly so as to encompass that range.  This program
+also allows the user to specify the output pixel format.  In particular, its
+default action is to scale the image to the range from 0 to 255, and then
+convert to byte format, thus creating the highest contrast byte version of the
+input image possible (e.g. for display purposes).
+.pp
+.i Powerpix
+raises each pixel value to a power, but with byte-formatted images it also
+renormalizes the result to again range from 0 to 255.
+This operation is often used to improve the quality of a displayed image in
+order to defeat nonlinearities in display characteristics (the so-called
+`gamma function', meaning the function x\u\s-3\(*g\s+3\d).
+The default value for the exponent is .5,
+which results in a brighter output picture.
+.pp
+Better control over the change in brightness level
+can be achieved by the program
+.i stretchpix .
+This program permits different manipulations
+on two separate regions of the gray-level range.
+The user specifies a boundary (a number between 0 and 1),
+and two exponents. Pixels with gray-levels
+(normalized to the range 0-1) which are below the boundary,
+are raised to the power of the first exponent, the rest are
+raised to the power of the second exponent.
+Thus, one can stretch the gray-levels of the picture
+by specifying a first exponent which is greater than 1, and a second
+exponent which is less than 1. Compression of the gray-levels
+can be achieved by specifying the exponents in the reverse order.
+For example:
+.sp
+.ce
+stretchpix -p .33 .5 3. in > out
+.sp
+will create a `compressed' version of the input image.
+.pp
+To threshold a picture, use the program 
+.i thresh .
+This program can compute either a hard or a soft threshold.
+For a hard threshold, the program sets to zero (dark) every pixel which is
+below the threshold, and all other pixels are set to 255.
+For a soft threshold, pixel values above the threshold are left untouched.
+There are two ways to specify the threshold.
+The first is to specify the percentage of pixels which should exceed the
+threshold. For example:
+.sp
+.ce
+thresh -p 6 < iseq > oseq
+.sp
+will threshold `iseq' so that 6% of the pixels are white, and all
+the rest are dark.
+The second method for determining a threshold is to specify the actual
+threshold using the
+.i -t
+switch:
+.sp
+.ce
+thresh -t 128 < iseq > oseq
+.pp
+Two other useful programs are
+.i mean0
+and
+.i scalemeansd .
+.i Mean0
+subtracts the mean value of each frame from each pixel in that frame.
+This results in a sequence in which all frames have a mean value of zero
+(so that the Fourier transform will have no DC component, in other words).
+.i Scalemeansd
+will scale an image linearly so as to have a specified mean and standard
+deviation.
+.pp
+A histogram equalization program has been written, called
+.i histoeq .
+It applies a variant of the Peleg algorithm, which shuffles pixel values 
+around, attempting to get a histogram whose cumulative distribution most
+closely approximates a ramp.  A simpler constrast enhancement program is
+.i histostretch ,
+which linearly stretches a central portion of the pixel values to utilize the
+entire range (clipping a small percentage of the low and high pixel values).
+.sh 2 "Calcpix"
+.(x t
+.ti .3i
+\*($n Calcpix
+.)x
+.pp
+There are two general-purpose programs for the manipulation of pixel values:
+.i calcpix
+and
+.i fcalcpix ,
+for manipulating byte and float-formatted images, respectively.
+These are actually program generators for user-defined operations.
+They take C-statements from the argument list or from an input file,
+and insert them into a skeleton
+of a program that manipulates byte-formatted (\c
+.i calcpix )
+or float-formatted (\c
+.i fcalcpix )
+sequences.  The resulting program is compiled and the object code is then
+placed in the user's directory.
+The name of the object file can be specified by the user
+(option
+.i -o ).
+The skeleton
+program goes over all the pixels of the input sequence (columns within rows
+within frames), and executes for each pixel the user-supplied C statements.
+The user's code can refer to a number of predefined variables, including the
+number of rows, columns, color planes and color frames in the image sequence,
+the current row, column, color plane and color frame, and the input and output
+pixel values for the current and for all other pixel positions.
+All the legal C-statements are permitted, and all of the
+.i math
+functions can be called.
+The user can specify as many statements as needed, but bear in mind that
+these statements are inserted into the busiest loop...  Additional switches
+allow one to specify code to be executed once per frame rather than once per
+pixel.
+.pp
+Here are some examples of the use of these very powerful tools.
+The following call will set to zero all the input pixels which
+are not in the range [100,200]:
+.sp
+.ce
+calcpix -s "if (ipix<100 || ipix>200) opix=0" < iseq > oseq
+.sp
+In the next example a vertical edge (a ramp between columns 60 and 80)
+is generated:
+.sp
+.ce 2
+calcpix -s "opix = (c>60 && c<80) ? ((c-60)*12) : ((c>=80) ? 240 : 0)" \\
+-c 140 140 > rampedge
+.sp
+(the backslash implies continuation of the command on the next input line).
+The program reports on the diagnostic device when compilation is done;
+it then consumes the input sequence.
+The compiled program remains intact in the user's directory for
+future use (under the name
+.i "calcpix.local"
+if the option 
+.i -o
+was not specified).
+.i Calcpix
+is not intended to serve as a tool for generating system programs, because the
+object code
+is usually a bit slower than a program which is specially-tailored
+for a particular computation.  Note also that there are similar programs
+for combining more than one input sequence using user-supplied code (see the
+descriptions of
+.i calccomb
+and
+.i fcalccomb
+below in the section on Image arithmetic).
+.sh 2 "Noise generation"
+.(x t
+.ti .3i
+\*($n Noise generation
+.)x
+.pp
+Effects of a noisy channel on transmission of digitized
+images can be studied by the programs
+.i noise ,
+.i gnoise
+and
+.i bnoise .
+Given an image sequence, the program 
+.i noise
+randomly selects a certain proportion
+of the transmitted bits and reverses them.
+The default value for the proportion of reversed bits is .001,
+but the user can specify any other proportion between
+zero and one. A second optional argument to the program
+determines a
+.i seed
+for the pseudo-random numbers generator.
+The noise is uncorrelated, that is the probability of a transmitted
+bit to be reversed is constant, and does not depend
+on the past history of the noise; hence, noise bursts of longer duration
+than that of a single bit, cannot be simulated by this program.
+Examples of usage:
+.sp
+.ce 2
+noise -p .01 < frame > noisyframe
+noise -p .01 2 < frame > 2ndnoisyframe
+.sp
+Both commands will add noise to
+.i frame
+(about 1/100 of the bits will be reversed), but the patterns of noise
+are not the same since different
+.i seeds
+were used to generate the noise in each case.
+.pp
+Additive Gaussian noise can be simulated by the program
+.i gnoise .
+A random normal deviates generator is used to generate the noise for the
+first frame of the sequence. For subsequent frames the default action is to
+shuffle the rows and columns of the initial noise array rather than generating
+a new array.
+The user, however, can override this mode by specifying
+.i -l
+(\c
+.i l ong
+mode).
+The standard deviation of the noise is an optional argument, as well as the
+seed for the random number generator.
+This is useful for generating different noise arrays for
+different sequences (by selecting different seeds), or for
+reproduction of the same noise array (by selecting the same seed
+in different runs).
+Example:
+.sp
+.ce
+gnoise -p 100 -l < iseq > oseq
+.sp
+creates a sequence
+degraded by Gaussian noise source with a standard deviation of 100.
+.i Gnoise
+may also be used to generate a noise sequence (added to uniform images) by
+specifying the
+.i -c
+switch.
+.pp
+Finally, 
+.i bnoise
+can be used to add binomially distributed noise to an image sequence.  The
+user can specify the number of Bernoulli trials which are added together to
+form the binomial, the probability of a 1 in each trial, and can linearly
+scale the resulting number.
+.sh 1 "Image arithmetic
+.(x t
+.sp
+\*($n Image arithmetic
+.)x
+.pp
+Most image arithmetic routines simply combine each pixel of one sequence with
+the pixel in the same location in a second sequence using some arithmetic or
+logical operator.  Thus, two images can be added (\c
+.i addseq ),
+subtracted (\c
+.i diffseq ),
+multiplied (\c
+.i mulseq ),
+divided (\c
+.i divseq ),
+logically ANDed (\c
+.i andseq ),
+logically ORed (\c
+.i orseq )
+and logically exclusive-ORed (\c
+.i xorseq ).
+The combined effects of
+.i diffseq
+and
+.i abspix
+may be had using
+.i absdiffseq .
+The output pixel can be gotten from the two input pixels by choosing the pixel
+which has the maximum value (\c
+.i maxseq ),
+the minimum value (\c
+.i minseq ),
+the maximum absolute value of the two pixels (\c
+.i maxabsseq ),
+or the minimum absolute value (\c
+.i minabsseq ).
+All of these programs combine each frame from one sequence with the
+corresponding frame of the other sequence.  However, if one sequence is
+shorter than the other, the last frame of the shorter sequence will be used
+for the corresponding frame in the longer sequence and all subsequent frames.
+.pp
+.i Diffseq
+and
+.i absdiffseq
+effectively compare two images, and thus might be used to observe the regions
+in which two images differ.  Similarly
+.i autodiff
+computes the absolute value of the difference between each frame of a sequence
+and the subsequent frame, and hence may be used to indicate portions of the
+frame in which motion has occurred.  Note that the output sequence from
+.i autodiff
+is one frame shorter than the input sequence.
+.pp
+Program
+.i mulseq
+multiplies a sequence of frames by a single frame.
+It can combine frames in floating point format with frames in complex format.
+As such, it can be useful for filtering a large sequence.
+For example, if
+.i filter
+is the Fourier spectrum of a digital filter and
+.i fft_file
+is a sequence of image spectra (produced by
+.i fourtr ), then
+.sp
+.ce
+mulseq filter < fft_file > outseq
+.sp
+will give a filtered version of the input file in the Fourier domain.
+.pp
+The most general combination programs are
+.i calccomb
+and
+.i fcalccomb .
+These programs are similar in spirit and in detail to the programs
+.i calcpix
+and
+.i fcalcpix
+(described above).  The user may supply a code fragment which is then applied
+to each pixel in the input sequences.
+.i Calccomb
+is used for byte-formatted input/output sequences, and
+.i fcalccomb
+is used for float-formatted sequences.  For example, the following command
+combines three input sequences using a polynomial formula:
+.sp
+.ce 2
+fcalccomb -s "opix = ipix(0)*ipix(0) + 3*ipix(1) + 5*ipix(0)*ipix(2) + 12" \\
+iseq0 iseq1 iseq2 > oseq
+.sp
+.pp
+Finally, there is
+.i colorkey .
+This program can combine several image sequences.  Each pixel in a control
+sequence is used to choose from which of the other sequences the output pixel
+at that position will come.
+.sh 1 "Geometric and other operations on single images
+.(x t
+.sp
+\*($n Geometric and other operations on single images
+.)x
+.pp
+Several programs change the geometry of images in a variety of ways.  The
+simplest merely shuffle the pixels around with no actual computation.  These
+accomplish image rotation by 90 or 180 degrees (\c
+.i rotate90
+and
+.i rotate180 ),
+image rotation about a vertical, diagonal or horizontal axis (\c
+.i reflect ,
+.i pictranspose
+and
+.i picinvert ),
+swapping opposite image quadrants (\c
+.i flipquad ),
+inserting an image into a uniform background (\c
+.i pad ),
+extracting a rectangular subregion from an image (\c
+.i extract ),
+or subsampling an image (\c
+.i subsample ).
+.pp
+.i Enlarge
+produces an enlarged copy of the input sequence.  If desired, the user can
+specify separate enlargement factors for the horizontal, vertical and temporal
+axes (although with this program, each factor must be an integer).  The
+enlargement can be either by pixel replication, or with the
+.i -i
+switch,
+(tri-linear) interpolation of the new pixels is used.
+The program
+.i reduce ,
+performs the inverse operation.
+Like,
+.i enlarge ,
+the user may specify the degree of reduction for each
+dimension independently.  The block of input pixels which correspond to a
+given output pixel are averaged.
+The program
+.i stretch
+can be used to change the dimensions of a sequence by arbitrary (i.e.
+nonintegral) amounts by block averaging and pixel repetition.
+.pp
+Four programs have been defined for image warping.  The first program is
+.i affine ,
+which can effect any affine warping transformation of an image.  An affine
+warping transformation is of the form
+.(l
+newxvalue = a*oldxvalue + b*oldyvalue + c
+newyvalue = d*oldxvalue + e*oldyvalue + f
+.)l
+where a, b, c, d, e, and f are constants.  Such a transformation can carry out
+any combination of translation, rotation, enlargement/reduction, and shear.
+The user specifies the transformation by choosing the destination of up to
+three corners of the input image.
+.i Cylindrate
+warps an image as if the image were wrapped around half of a vertical cylinder
+and then projected back to the image plane using parallel projection.
+For more complicated warping, there is
+.i calcwarp ,
+which warps an image based on a user-specified warp function.  The warp
+function is given as a few lines of C code which are compiled to create a new
+special-purpose warping program, much in the manner of
+.i calcpix .
+Finally,
+.i gridwarp
+may be used for an image warp described by a grid of control points.  For a
+rectangular grid of control points in the output image the use describes which
+locations in the input image correspond to these control points.  This mapping
+induces a warp on the entire image by using bilinear interpolation within each
+control grid rectangle.
+.pp
+Several programs change geometry by combining multiple images into each output
+image.
+.i Joinframes
+takes several image sequences and combines corresponding frames of each into a
+single output image frame, with the images arranged in a matrix (side by side,
+one row of images above another).  The images may be arranged in a more
+arbitrary fashion using
+.i collage .
+An image sequence can be collapsed into a smaller number of output frames with
+.i comicstrip ,
+which takes batches of successive frames and arranges them in a matrix in much
+the same way as
+.i joinframes .
+.pp
+The odd man out in this section is
+.i wgauss .
+This program might be considered to be like the image arithmetic program
+.i mulseq ,
+except one of the multiplier images is generated by the program itself (it is
+an image of a 2D Gaussian function).  Otherwise stated, this program windows
+the input image with a Gaussian.
+.sh 1 "Convolution, correlation, edge detection and other spatial operations
+.(x t
+.sp
+\*($n Convolution, correlation, edge detection and other spatial operations
+.)x
+.sh 2 "Convolving with a mask"
+.(x t
+.ti .3i
+\*($n Convolving with a mask
+.)x
+.pp
+In many applications, filtering of spatial frequencies is done by
+convolving the picture with a mask which is small relative to the
+size of the picture (for large masks it is more efficient to
+perform the convolution by multiplication in the Fourier domain as described
+in the next major section).
+The most general program for this is
+.i mask .
+This program can be used
+for convolution, the user needs only to define the mask in
+a file (the
+.i mask-file )
+and then to specify the file name to the program.
+Thus for example, if a mask for edge detection is defined in the
+file
+.i /usr/edgemask ,
+the following command will perform the convolution of the mask
+with the pictures in
+.i iseq :
+.sp
+.ce
+mask -m /usr/edgemask < iseq > oseq
+.sp
+.pp
+This same program can achieve
+nonlinear filtering by specifying several masks
+in the mask file, and a method for combining the outputs of convolving
+with the different masks. Several methods for combination
+are defined in the program
+.i mask .
+Some of these methods are:
+.sp
+.ta .6i
+\(bu	take the maximum absolute value of all mask outputs,
+.sp
+\(bu	take the square-root of the sum-of-squares of all masks outputs, and
+.sp
+\(bu	take the maximum of all masks outputs.
+.sp
+\(bu	etc.
+.sp
+The structure of a mask-file is described in the manual page, but basically
+consists of fields for the number of masks and the function which combines
+them, and for each mask the size of the mask, the position of the center pixel
+of the mask, and the array of mask values.
+A 
+.i "filter name"
+is included which is a string which is printed during run-time and identifies
+the mask.
+About 45 masks have been predefined which implement a a large number of
+standard lowpass and bandpass filters and edge enhancement methods (they are
+listed in the manual page).
+These masks can be applied by specifying the option 
+.i -f
+followed by a number corresponding to the particular mask file.  For example:
+.sp
+.ce
+mask -f 26 < inseq > outseq
+.sp
+will apply a 4x4 Laplacian operator to
+.i inseq .
+.pp
+Since the masks are defined in a special format, they cannot
+be processed as HIPS images unless converted to the standard
+HIPS image format.  The program
+.i maskseq
+can be used to perform such a conversion.
+The available options are identical to those of
+.i mask ;
+that is the mask can be specified either by the number, if it is
+predefined, using the switch
+.i -f ,
+or by a file name, using the switch
+.i -m .
+For example the command
+.sp
+.ce
+maskseq -f 26 | scale | enlarge -s 32 > oimage
+.sp
+can be used in order to display the Laplacian operator as a 128x128 picture.
+.pp
+.i Mask
+and
+.i maskseq
+are concerned with spatial convolution.  For a spatiotemporal convolution,
+the program
+.i convolve
+can be used.  For a spatial correlation between two images,
+.i correl
+may be used. For nonisotropic convolution (where the convolution mask varies
+with spatial position), the program to use is
+.i nonisot .
+.i Btcsmooth
+also performs nonisotropic convolution, in this case as an antidote to the
+artifacts of the image compression method carried out by
+.i btc .
+.sh 2 "DOG masks: A special case"
+.(x t
+.ti .3i
+\*($n DOG masks: A special case
+.)x
+.pp
+Convolving a sequence with a Gaussian is useful both for blurring
+a picture uniformly and for edge-detection (Marr and Hildreth, 1980).
+The program
+.i dog
+generates masks for Gaussians and applies them to a sequence.
+To apply a difference-of-Gaussians (DOG) mask to a sequence,
+one has to specify the standard deviation of a positive Gaussian
+(which defaults to 1.0), the size of the mask (which defaults to 7), and the
+ratio between the standard deviations of the negative and positive
+Gaussians (which defaults to 1.6).
+Thus,
+.sp
+.ce
+dog -w 0.8 31 1.7 < inseq > oseq
+.sp
+will convolve
+.i inseq
+with a difference of two Gaussians.
+The first Gaussian will have a standard deviation of 0.8 pixels, and the
+second of 1.7X0.8=1.36 pixels.
+The actual mask is of size 31X31, and the output sequence will be in
+float format.
+The same program can be used for blurring by a single Gaussian, simply by
+setting the ratio to 0.0, thus:
+.sp
+.ce
+dog -w 1.0 31 0 < inseq > oseq
+.sp
+blurs
+.i inseq
+by a Gaussian with standard deviation of 1.0 on a mask of 31X31 pixels.
+The program may also be used to generate a single frame with an impulse
+response at its center;
+the output sequence than contains an image of the mask.
+The program is reasonably efficient for large masks because it performs each
+Gaussian convolution as a sequence of 1-dimensional convoltions (first for
+rows, then for columns).
+.sh 2 "Other nonlinear filters"
+.(x t
+.ti .3i
+\*($n Other nonlinear filters
+.)x
+.pp
+Median filtering is performed by replacing each pixel of the input
+picture by the median of the pixels in its neighborhood.
+The program
+.i median
+applies a median filter using a square neighborhood.
+The size of the neighborhood (the side of the square) is an argument
+to the program which defaults to 3.
+Example:
+.sp
+.ce
+median -s 4 < inseq > oseq
+.pp
+Extremum filtering is performed by replacing each pixel of the
+input picture by the maximum or the minimum of the pixels in its
+neighborhood.
+The pixel is replaced by the minimum if its gray-level is closer
+to the minimum than to the maximum;
+otherwise it is replaced by the maximum.
+The program
+.i extremum
+applies this filter using a square neighborhood.
+The size of the neighborhood is given as 
+an argument to the program; it defaults to 3.
+.pp
+Isolated regions in a white on black (binary) sequence can be deleted
+by the program
+.i bclean .
+The program detects 8-connected regions composed of
+.i size
+pixels or less, and deletes them (sets them to 0).
+The default value for 
+.i size
+is 1, thus:
+.sp
+.ce
+bclean < dirty > clean
+.sp
+will delete from
+.i dirty
+all the white pixels which are surrounded by 8 black pixels.
+More complicated processing of binary images can be had by performing the
+so-called morphological operations of erosion and dilation, using the programs
+.i morpherode
+and
+.i morphdilate .
+.sh 2 "Other edge detection methods"
+.(x t
+.ti .3i
+\*($n Other edge detection methods
+.)x
+.sh 3 "Shaw's edge detector"
+.(x t
+.ti .6i
+\*($n Shaw's edge detector
+.)x
+.pp
+A fast algorithm for edge detection in small regions of a picture
+has been described by Shaw (1979).
+The program
+.i discedge
+is an implementation of this algorithm.
+It detects a single edge (which is monotonic but not necessarily
+a straight line) in each
+.i sizeXsize
+region of the picture.
+Regions in which the variance is below a criterion are
+not processed at all (no edge is detected).
+There are two optional arguments to the program.  One is the
+.i size
+of the regions (7 by default); the other
+is the variance criterion (0 by default).
+Example:
+.sp
+.ce
+discedge -s 5 -c 100 < inseq | thresh -t 1 | neg > oseq
+.sp
+will detect edges on 5X5 regions in which the variance is greater
+than 100, and display them as black lines on a white background.
+.pp
+The program
+.i discedge2
+is a modification of
+.i discedge
+which applies the edge detection algorithm at different offsets.
+Thus, if the region is
+.i size
+pixels wide, the program actually processes the image
+.i size
+times, in each pass the boundaries between the regions are shifted.
+The offsets are:
+.i "(0,0),(1,1), ... ,(size-1,size-1)" .
+On each pass, one bit in the output word for a particular pixel is
+set if that pixel is an edge-pixel. Bit 0 is set for the offset (0,0),
+bit 1 for offset (1,1), etc.
+If the output is then thresholded at 1 (meaning that all nonzero
+output words are set to 1), the output will be the
+.i or
+of the 
+.i size
+passes.
+If, on the other hand, the output is thresholded at
+.i "2**size-1" ,
+then the output is the
+.i and
+of the
+.i size
+output passes.
+The user can specify the thresholding level in addition to the other
+two arguments (the size of the regions and the standard deviation criterion).
+For example:
+.sp
+.ce
+discedge2 -s 5 -c 100 -t 1 < iseq > oseq
+.sp
+will detect edges on 5X5 regions in which the variance is greater than
+100; this will be done in 5 passes, and the output will be the
+logical 
+.i or
+of all the passes.
+.sh 3 "Abdou's edge fitting procedure"
+.(x t
+.ti .6i
+\*($n Abdou's edge fitting procedure
+.)x
+.pp
+Implementation of an edge-fitting algorithm that was suggested by Abdou
+in his thesis (Abdou, 1978) can be invoked by using the program
+.i abdou .
+There is a size
+parameter which determines the length of a side of nonoverlapping neighborhoods
+in the picture.
+A value of zero for an output pixel means that the pixel is not on an edge.
+Nonzero value gives the signal-to-noise ratio for the pixel, where the
+``signal'' is ``being an edge pixel.''
+.sh 3 "Zero-crossing detection"
+.(x t
+.ti .6i
+\*($n Zero-crossing detection
+.)x
+.pp
+Marr and Hildreth (1980) suggested that the zero crossings of a convolved
+image be used to determine edge locations.
+The idea is that given a suitable mask (see the section above about DOG
+masks),
+the locations in the filtered image where the values
+change sign are edge points.
+For each such location the program 
+.i zc
+computes the slope of the convolved image at
+that point, which, roughly speaking, gives an idea about the salience of the
+edge.
+The program allows the user to specify an error threshold to suppress background
+noise and a percent of pixels to be considered to be zero crossings (based upon
+an approximation of the zero crossing slope).  The pixels are placed either
+on the positive size of a zero crossing, or with
+the
+.i -n
+switch, on the negative side.
+.sh 3 "Edge thinning and thickening"
+.(x t
+.ti .6i
+\*($n Edge thinning and thickening
+.)x
+.pp
+Thick edges can be thinned down by the program
+.i thin .
+The program considers every pixel which is not black (zero) 
+to be an edge-pixel.
+It produces an image in which all the nonedge pixels
+are black, and the edge-pixels are (optionally) categorized as detailed below.
+The algorithms are derived from those of Sakai, Nagao and Matsushima (1972).
+The simplest call:
+.sp
+.ce
+thin < inseq > oseq
+.sp
+applies two passes to the input sequence.
+In the first pass, points with 3 to 5 neighbors which are not
+branching points are deleted. 
+This pass is repeated until no deletions occur.
+In the second pass, diagonal lines are thinned.
+Two additional passes can be applied,
+the
+.i -c
+option invokes the third pass, in which pixels are categorized as endpoints,
+multiple-branch points, isolated points or uninteresting points.
+Option
+.i -m
+invokes the fourth pass in which multiple-branch points can be
+further categorized.
+The first two passes can be invoked explicitly by
+.i "-t -d" ;
+option
+.i -a
+implies all four passes, and option
+.i -s
+suppresses repetitions of the first pass.
+Option
+.i -v
+gives some statistics of the algorithm on the user's terminal.
+.pp
+The program
+.i thicken
+can be used to thicken edges by adding edge-points in the neighborhoods
+of existing ones.
+Multiple applications of the program result in thicker and thicker edges.
+Note that:
+.sp
+.ce
+thin < inseq | thicken > oseq
+.sp
+is not the identity transformation.
+.sh 1 "Digital image transforms and filters
+.(x t
+.sp
+\*($n Digital image transforms and filters
+.)x
+.pp
+HIPS includes subroutines for three common image transforms:  the Fourier
+transform (using an FFT algorithm), the Walsh transform (using the analogous
+FWT transform) and the discrete cosine transform, although command level
+interface is available only for the first two.  Once an image is in a
+transform domain it may be spatially filtered efficiently
+by multiplication with the modulation
+transfer function of the filter as will be demonstrated below.
+.sh 2 "The fast Fourier transform"
+.(x t
+.ti .3i
+\*($n The fast Fourier transform
+.)x
+.pp
+The program
+.i fourtr
+takes the 2D Fourier transform of each images in a sequence, using
+the fast algorithm known as the FFT.
+The output transforms are
+in complex or double complex format.
+The Fourier spectra of the input pictures can be generated by
+specifying the option 
+.i -s .
+In that case the output format is float or double
+pixels, and the spectrum is shifted
+such that the DC or (0,0) coefficient is near the center of the picture.
+The input pictures must have sides which are powers of 2.
+For example, to display the Fourier spectrum of the picture
+.i sign
+type:
+.sp
+.ce
+fourtr -s < sign | scale > osign
+.sp
+(\c
+.i scale
+is the program that converts float pixels to byte format, in this case
+linearly scaling the range to go from 0 to 255).  It turns out that the DC
+component in the spectrum is usually far greater than any other component and
+thus makes the spectrum visually useless (it tends to look like a bright dot
+in the center surrounded, mostly, by nothing).  Two approaches to this are
+possible.  One is to set the DC component to zero (either by applying
+.i mean0
+before using
+.i fourtr ,
+or by using the
+.i fourtr
+switch
+.i -z ).
+Alternatively, one can logarithmically transform the spectrum coefficients
+(with
+.i logimg ).
+To transform back from the Fourier transform domain, use the program
+.i inv.fourtr .
+This program directly handles complex and double complex images, but may be
+directed to convert the output image to one of several pixel formats.
+.pp
+To capture the spatiotemporal frequencies in a sequence of pictures,
+use the program
+.i fourtr3d .
+The program performs a 3D fast Fourier transform on image sequences.  However,
+note that the entire sequence is held in memory in complex format, and this
+will be difficult or impossible for large images or long sequences.
+Otherwise, this program is similar to
+.i fourtr .
+Its inverse is carried out by
+.i inv.fourtr3d .
+Note that
+.i htof
+and
+.i htod
+may be used to separate a transform into real and imaginary part, or into phase
+and magnitude, and after manipulating these components, a complex spectrum may
+be recreated using
+.i combine .
+These programs can provide some surprising results if one is not thoroughly
+familiar with the symmetry properties of the discrete Fourier transform.
+Also, when one creates a new spatial domain image with
+.i inv.fourtr ,
+one must be careful about the type of output provided, since clipping of the
+imaginary part of the image after one has played with the phase and magnitude
+spectra can have some strange results.
+.sh 2 "Filtering in the transform domain"
+.(x t
+.ti .3i
+\*($n Filtering in the transform domain
+.)x
+.pp
+A transformed image can be filtered by multiplying the transform
+coefficients by the Fourier spectrum of a spatial filter.
+Four programs have been created to apply this method using standardized
+filter characteristics:
+.i lowpass ,
+.i highpass ,
+.i bandpass
+and
+.i bandreject .
+Three filters are implemented: ideal filter, Butterworth filter
+and exponential filter (cf. Gonzalez and Wintz, 1977, pp. 140-163).
+Ideal filters are characterized by a single parameter: the cutoff
+frequencies; the other two filters are additionally characterized by
+the steepness of the transfer function around the cutoff frequency. 
+The user can specify the filtering method and the parameters.
+Nine filters are predefined and can be selected by specifying
+their number. 
+For example, to explicitly specify a filter the user types:
+.sp
+.ce 2
+lowpass -I -p .3 < in > out
+highpass -B -p .4 2 < in > out2
+.sp
+The first command applies an ideal filter which cuts off at a frequency of .3
+(where frequencies are stated relative to the highest frequency possible in
+the image; this is described further in the manual pages).  The second applies
+a 2nd-order Butterworth highpass filter with a cutoff of .4.
+.pp
+Predefined filters can be selected by typing:
+.sp
+.ce
+lowpass -f n < in > out
+.sp
+where
+.i n
+stands for the filter number (an integer).  There are 9 predefined filters
+including three for each method at three different cutoff frequencies (the
+precise details are in the manual pages).
+.pp
+By default, the filters are isotropic; that is, the distance metric
+on the picture array is Euclidean.
+Other distance metrics can be specified by adding the switch
+.i -d
+followed by the power of the Minkowski metric.
+.pp
+The spectrum of a filter can be produced by specifying the option 
+.i -s .
+In that case the program does not expect any input, and the
+output spectrum is drawn on a 128x128 array.
+For example:
+.sp
+.ce
+highpass -E -p .9 1 -s | scale > ospectrum
+.sp
+will create a highpass, exponential filter (with a cutoff frequency
+at about 58 cycles per frame) on the screen.
+In accordance with the conventions of the
+.i fourtr
+program,
+spectra are drawn with the (0,0) coefficient near the center of the image.
+If the user needs to take such a spectrum image and shift the origin back to
+the first pixel in order to use the spectrum with
+.i mulseq
+to filter an image in the Fourier domain, the program
+.i flipquad
+may be used to swap the opposite image quadrants to accomplish this.  This
+program may also be used to move a transform origin to the middle of the image
+in order to view it like an image spectrum.
+.pp
+As a final example, the following command demonstrates all of the
+stages in highpass filtering of a sequence:
+.sp
+.ce
+fourtr < insequence | highpass -f 9 | inv.fourtr -f > outseq
+.sp
+.sh 2 "The Walsh-Hadamard transform"
+.(x t
+.ti .3i
+\*($n The Walsh-Hadamard transform
+.)x
+.pp
+The program
+.i walshtr
+applies the fast Walsh transform to an input image (see
+Gonzales and Wintz (1977),
+for explanation of this transform).
+It outputs a picture which contains
+the transform coefficients. If the argument
+.i -o
+is specified, the output is ordered by
+sequency (see book for explanation of the term).
+The dimensions of the input picture must be powers of 2,
+otherwise the fast algorithm cannot be applied.
+The program 
+.i inv.walshtr
+applies the inverse transformation to the output of
+.i walshtr .
+Thus, the command:
+.sp
+.ce
+walshtr < myframe | inv.walshtr > oframe
+.sp
+should have no effect on the input image.
+If you want to look at the basis set in 2D of the 
+Walsh-Hadamard transform for 16X16 arrays, use the program
+.i dispwbasis .
+.pp
+Interesting manipulation of pictures can be achieved by combining
+the transform programs with other programs.
+For example, by using programs
+.i extract ,
+.i pad
+and/or
+.i collage
+one can zero part of the coefficients in the
+transform matrix, and then reconstruct the picture by
+.i inv.walshtr .
+Suppose that a 128x128 picture is stored in the file
+.i original .
+Then
+.sp
+.ce 2
+walshtr -o < original | extract 96 96 0 0 | pad 128 128 0 0 | \\
+inv.walshtr -o | scale > newimage
+.sp
+will create a picture which is a reconstruction of
+.i original
+using only the first 96x96 coefficients.
+.sh 2 "The discrete cosine transform"
+.(x t
+.ti .3i
+\*($n The discrete cosine transform
+.)x
+.pp
+The discrete cosine transform is also available in HIPS.  The forward
+transform is created using the program
+.i dct ,
+and the inverse transform by using
+.i inv.dct .
+.sh 1 "Operations on image sequences
+.(x t
+.sp
+\*($n Operations on image sequences
+.)x
+.pp
+Separate image sequences can be combined into a single sequence
+by using the program
+.i catframes .
+The command
+.sp
+.ce
+catframes pic1 pic2 pic3 > sequence_of_3
+.sp
+will combine the three pictures into the file
+.i sequence_of_3 .
+As with any HIPS filter, one of the images may be specified as coming from the
+standard input by designating the filename as `-'.
+.pp
+A single image or subset of images (a subsequence)
+can be extracted from an image sequence using the command
+.i subseq .
+The arguments to
+.i subseq
+function as the three components of a primitive
+.i "for loop".
+The user specifies the numbers of the first and last frames to be
+extracted from the input sequence, and the 
+.i "increment"
+(in order to skip intermediate frames). Thus the command
+.sp
+.ce
+subseq -f 1 20 2 < sequence > subsequence
+.sp
+will place in
+.i subsequence
+the ten odd-numbered frames of 
+.i sequence .
+Default values are as follows: the third parameter defaults to 1,
+the second defaults to the value of the first parameter which in turn
+defaults to 0 (the first picture in the sequence).
+Thus
+.sp
+.ce
+subseq < sequence > frame
+.sp
+will extract the first image of
+.i sequence .
+.i Subseq
+may also be used to extract a subset of the color planes in an image or image
+sequence by using the switch
+.i -c
+in precisely the same fashion as
+.i -f ,
+or a subset of depth planes using
+.i -d .
+Similar operations (along with spatial subsampling) may also be performed
+by
+.i subsample .
+Frames from several sequences can be combined in an arbitrary manner
+using the command
+.i interlace .
+This program either interlaces the frames from the files, one frame from each
+at a time (rotating among the files), or the user can provide a script file
+designating which frame from which sequence is used for each output frame.
+A single frame can be drifted in an arbitrary direction at constant speed
+using
+.i drift ,
+creating an image sequence as a result.  An image sequence may be shifted with
+wraparound in space and time using
+.i wrapimg .
+An image sequence can be displayed in fewer frames using
+.i comicstrip ,
+which arranges batches of successive frames in a matrix in a single frame.
+.pp
+A sequence of images can also be collapsed into a single image
+using the command
+.i strobe .
+This program takes batches of images from a sequence and computes an average,
+pixel by pixel.
+Applying the program to a motion sequence produces a picture which 
+resembles a stroboscopic photograph or series of photographs.
+Thus for example, if 
+.i insequence 
+contains 30 images of motion, the command
+.sp
+.ce
+strobe -b 5 < insequence > outpic
+.sp
+will produce in
+.i outpic
+a (quasi) stroboscopic sequence of images, averaging each successive group
+of 5 pictures, resulting in 6 output frames.
+The batch length defaults to the length of the input sequence, resulting in a
+single output frame consisting of the average of all of the input frames.
+Also,
+.i autodiff
+is used on sequences to produce a sequence in which each frame is the pairwise
+difference between successive input frames.
+.pp
+A simple (and crude) method to reduce the transmission load
+is to transmit only every n'th frame and then repeat or
+interpolate the missing frames at the receiving end.
+The program
+.i repframe
+repeats frames or interpolates them using three different methods.
+The user specifies the rate of transmission with the switch
+.i -b .
+The program then transmits the first frame and every
+.i n 'th
+frame thereafter, and generates the missing frames.
+The second argument to the program selects the method as follows.
+.i -r
+(the default method) selects simple repetition for the missing frames.
+With the
+.i -u 
+(union) option, each pixel in the missing frames is the union
+(bitwise or) of the corresponding pixels in the previous and next
+transmitted frame.
+The
+.i -i
+(intersection) option is similar, but instead of bitwise
+.i or
+a bit-wise
+.i and
+is used to generate the missing pixels.
+The last option,
+.i -a 
+(average) every pixel in the missing frames is a weighted average
+of the corresponding pixels in the previous and next transmitted frame.
+The weighting of the two pixels that enter the computation depends
+on the relative distance (in the temporal dimension) of the
+interpolated frame from the previous and next transmitted frames
+in the sequence.
+For example:
+.sp
+.ce
+repframe -b 3 -a < inseq > outseq
+.sp
+will display on the screen a version of
+.i inseq
+where the first frame, fourth frame, seventh frame, and so on are transmitted
+as they are, and the missing frames are interpolated by averaging.  Finally,
+the
+.i -n
+flag may be used to preserve all of the input frames
+.i and
+to generate new frames by frame repetition.
+.pp
+HIPS also includes a pixel format (PFMIXED, for mixed raster format)
+that allows an image sequence to be a
+sequence of raster format frames each of which is in a different pixel format
+(e.g. a byte frame followed by a float frame followed by an integer frame
+followed by an RGB frame,
+etc., all with the same number of rows and columns).  This is accomplished by
+storing a table with the actual pixel formats (one for each frame) in the
+header parameters section as extended parameter
+.i formats .
+At the moment, only a few programs handle this format (most importantly
+.i catframes
+and
+.i subseq ,
+but also
+.i seeheader ,
+.i ptoa ,
+.i addcmap ,
+.i adddesc ,
+.i addparam ,
+.i clearroi ,
+.i extract ,
+.i extractroi ,
+.i rmparam ,
+.i setroi
+and
+.i stripheader ),
+and so it mainly serves as a way to store different aspects of an image in a
+single file by using
+.i catframes
+with the
+.i -m
+flag (to be processed separately later using
+.i subseq
+to pull out images in a common format).
+.sh 1 "Image statistics
+.(x t
+.sp
+\*($n Image statistics
+.)x
+.pp
+The mean and variance of the graylevels in a picture
+can be computed by the program
+.i framevar .
+The program can stand at the end of a 
+.i pipe
+since normally it absorbs the input.
+The option
+.i -p
+can be specified (just as for
+.i seeheader ),
+if the user wishes to pipe the input through.
+Thus for example, the command
+.sp
+.ce
+framevar -p < oldframe | powerpix | framevar
+.sp
+will display on the user's terminal
+(the standard error device)
+the ``before'' and ``after'' statistics of the frame.
+Simpler programs
+.i getmax
+and
+.i getmin
+can find the maximum and minimum values in a frame or sequence along with
+their coordinates.
+.pp
+To determine the  potential maximum compression
+of a binary sequence (1 bit per pixel), the entropy of subblocks
+of the image can be computed by the program
+.i binentropy .
+The user can specify the size of the subblock which will be the basic
+unit for counting.
+Entropy computation on subblocks of size 1x1x1 gives the 0'th order
+entropy of the sequence; it counts
+the number of white and black pixels, computes their proportions (p),
+and then computes the negative of the sum of log(p).
+Note that the subblocks can be 3-dimensional, thus:
+.sp
+.ce
+binentropy -b 2 4 1 < inseq
+.sp
+computes the entropy of the sequence where the basic units are blocks
+which are 1 pixel wide, 4 pixels high and 2 pixels deep (2x2x2 is the default).
+The statistics (entropy and entropy normalized by the number of pixels
+per subblock) are reported on the user's terminal.
+Two options are available:
+.i -h 
+tells the program
+to compute also the Huffman code length of the sequence; this is
+a more conservative measure of the potential compression.
+The algorithm for computing the Huffman code might require a long time
+if large subblocks are specified.
+The
+.i -v
+(\c
+.i v erbose)
+option causes the program to report its progress,
+so that the user can get an idea of how long it might take to complete
+the computation.
+.pp
+The program
+.i pixentropy
+gives the entropy of 8-bit pixels (default) or of pairs of 8-bits pixels
+(option
+.i -p ).
+.pp
+The program
+.i histo
+generates graylevel histograms, one for each input frame.
+The output file is in a special format: PFHIST.
+The user can specify the number of bins
+in the histogram and the minimum and maximum limits.
+Specifying 
+.i -c
+causes the program to
+.i c ollapse
+all the histograms into a single one for the entire sequence.
+The contents of the histogram may be viewed using
+.i seehist .
+.pp
+The program 
+.i disphist
+converts the histogram file into a byte-formatted file that contains
+a graphic rendition
+of the histogram, ready for display.
+The user can specify a scaling factor for the height of the histogram, either
+by specifying the maximum count that fits in a histogram bar (switch
+.i -m ),
+or the percent of the main body of the histogram which will be covered by
+histogram bin data (switch
+.i -p ).
+If not specified, the scaling is equivalent to the switch
+.i "-p 30" .
+For example:
+.sp
+.ce
+histo -N 128 -c < inseq | disphist > ohistoframe
+.sp
+will create a 128-bin histogram of all the frames of 
+.i inseq .
+.pp
+The program
+.i slice
+takes a single pixel wide slice through an image and creates an image which
+plots the grey levels found in that slice.  The user can specify either a
+horizontal or vertical slice (using
+.i -h
+or
+.i -v ),
+and the row or column number to display.
+.sh 1 "Gaussian and Laplacian pyramid operations
+.(x t
+.sp
+\*($n Gaussian and Laplacian pyramid operations
+.)x
+.pp
+The HIPS software includes a set of utilities for the construction and
+manipulation of image pyramid structures.  These constructs are an efficient
+means of working with an image at multiple resolutions.  The basic idea is to
+take an initial image and construct a series of images, each of which is
+derived from the previous by a combination of blurring and subsampling.  This
+results in what is called the Gaussian Pyramid (Burt, 1981; Burt and Adelson,
+1983), which is a pyramid of images beginning with the original image, and
+continuing with a sequence of images which are lower in resolution, and less
+finely sampled.  This structure consists of a series of images each of which
+is a lowpass filtered (and subsampled) version of the original with
+successively lower frequency cutoffs.  The operation which blurs and
+subsamples an image is called the pyramid
+.i reduce
+operation.  One can also go in the opposite direction, increasing the number
+of samples and interpolating the new samples from the old.  This is the
+pyramid
+.i expand
+operation.
+If one takes the Gaussian pyramid and constructs a new pyramid by expanding
+each level of the pyramid, and subtracting the expanded image from the Gaussian
+pyramid image from the next lower level, the result is called a Laplacian
+pyramid.  The Laplacian pyramid consists of a series of images, each smaller
+than the one below, each a bandpass version of the original image at a
+different scale of resolution.  Also, one can reconstruct the original image
+by expanding and summing the various levels.
+The pyramid utilities in HIPS are derived from code originally written by
+Raj Hingorani at SRI/David Sarnoff Research Institute.  The original
+Gaussian and Laplacian pyramid algorithms were designed by Peter Burt (also
+currently at SRI/DSRC).
+.pp
+There are a number of issues which are important in defining a set of pyramid
+routines relating to how many samples are in each level, where they are
+spatially located with respect to the samples below, and how the image edges
+are treated.  In basing our system on the code from Raj Hingorani, we settled
+for the simplest route.  Given an input image with
+.i nr
+rows and
+.i nc
+columns, the next lower level in the pyramid will have (\fInr\fP+1)/2 rows and
+(\fInc\fP+1)/2 columns, truncated to an integral number of rows and columns.
+Further, the samples with indices (0,0) are all treated as spatially aligned.
+This scheme is the same as the one described by Burt and Adelson (1983), but
+we allow images of any size.  As an example, in one
+dimension, an image with 17 columns would lead to a pyramid sampled as
+follows:
+.sp
+.ne 8
+.nf
+.ta 1i 1.3i 1.6i 1.9i 2.2i 2.5i 2.8i 3.1i 3.4i 3.7i 4i 4.3i 4.6i 4.9i 5.2i 5.5i 5.8i
+	Image sample positions:
+.sp
+Level 4	*																*
+Level 3	*								*								*
+Level 2	*				*				*				*				*
+Level 1	*		*		*		*		*		*		*		*		*
+Level 0	*	*	*	*	*	*	*	*	*	*	*	*	*	*	*	*	*
+.sp
+.fi
+.pp
+A second issue concerns the treatment of image boundaries.  Typically, both
+the reduce and expand operations require the ability to inquire as to the
+value of pixels beyond the edge pixels of the image being expanded or reduced.
+We handle this by allocating pyramid level images larger than their nominal
+size, reading the images into the `center' of each allocated image, and
+calling a subroutine to `reflect' the images into the image pixels beyond the
+borders when required to do so by an expand or reduce operation.  The details
+of the allocation should be of no concern to most users but are documented
+somewhat in the code for the pyramid allocation routines.  Finally, there are
+many ways in which to do this reflection, and all relevant programs (\c
+.i imgtopyr ,
+.i pyrtoimg ,
+.i pyrexpand ,
+and
+.i pyrreduce )
+take an optional argument specifying the type of reflection to perform.  Seven
+reflection types have been implemented, and are documented in the manual page
+for the subroutine
+.i pyrreflect .
+The default reflection
+type is even reflection. For example, for the right hand border of an image
+the pixels would reflect as follows:
+.sp
+.ce
+\&... e d c b a | b c d e ...
+.sp
+Other reflection types include wrap around with averaged opposite edge pixels
+(type 2), copy edge values (3),
+odd reflection (4), zero out border (5), wrap around (6), and even reflection
+with repeat (7).
+.pp
+Finally, the reduce and expand operations are based on a filter (or
+convolution mask) which is used repeatedly at all levels.  We have implemented
+the simplest case in which the filters are separable (between x and y), 
+symmetric around the center pixel, and with an odd number of values (or
+.i taps ).
+Thus, to define a filter operation, only the tap values from 0 rightward need
+be specified, since the others leftward are the same by symmetry, and the same
+filter is used horizontally and vertically in succession (using separability).
+All programs which perform reduce and expand operations (\c
+.i imgtopyr ,
+.i pyrtoimg ,
+.i pyrexpand ,
+and
+.i pyrreduce )
+allow the user to specify a filter file which describes the filter
+coefficients.  The format of that file is:
+.sp
+.in +2i
+.ta .5i
+.nf
+nred scalered
+reduce-filter-tap-0
+reduce-filter-tap-1
+	.
+	.
+	.
+reduce-filter-tap-nred
+nexp scaleexp
+expand-filter-tap-0
+expand-filter-tap-1
+	.
+	.
+	.
+expand-filter-tap-nexp
+.fi
+.sp
+.in -2i
+The values for the reduce filter are specified, followed by the values for the
+expand filter.  For each filter, the first value specifies the number of taps
+to the right of the center tap
+.i n
+(the full number of taps is thus 2*\fIn\fP+1).
+The second value specifies a scale factor; each tap value in the file is
+divided by this scale factor.  Finally, the taps from 0 through
+.i n
+are specified.  For each program, if no filter is specified, the default
+filter is the one which converges to a nearly Gaussian profile as described by
+Burt (1981), which is a 5-tap filter with values .05, .25, .4, .25, and .05.
+Another interesting 5-tap filter has values .0625, .25, .375, .25, and .0625.
+This filter produces interpolations which are formally equivalent to
+B-splines.
+.pp
+The implementation of the pyramid algorithms consists of a number of library
+routines included in the standard HIPS library (loaded with
+.i -lhips ),
+and a number of programs to construct and manipulate pyramids.  Two image
+types are included: integer and floating point pyramids.  Gaussian and
+Laplacian pyramids are constructed using
+.i imgtopyr ,
+and Laplacian pyramids are converted back to images (by expansion and summing
+of levels) using
+.i pyrtoimg .
+The expand and reduce operations may be applied to images and pyramids using
+.i pyrexpand
+and
+.i pyrreduce .
+Pyramids and images with consistent dimensions may be combined into a single
+pyramid using
+.i pyrmerge ,
+and subsets of pyramid levels may be extracted from a pyramid using
+.i pyrextract .
+Finally, to view the entire set of levels as a single image you can use
+.i pyrdisplay ,
+which creates a single image from each pyramid image by placing the separate
+levels of the pyramid side by side in the image.  In addition, a number of the
+standard HIPS routines treat pyramids in the same manner as standard images
+including the frame arithmetic routines (\c
+.i addseq ,
+.i diffseq ,
+.i divseq ,
+and
+.i mulseq ),
+and the format conversion routines (\c
+.i ftoi
+and
+.i itof ).
+.pp
+For programming new pyramid algorithms, there are a number of pyramid routines
+included in the standard HIPS library.  A pyramid format image file consists
+of a HIPS header, an integer extended parameter
+.i toplev
+which indicates the top level number for the stored pyramids
+(the pyramid has levels 0 through
+.i toplev ),
+followed by one pyramid per sequence frame.  Each pyramid is stored level by
+level, beginning with the bottom level (level 0, the one with the highest
+resolution and largest number of pixels).  The header entries for number of
+rows and number of columns specify the dimensions of the bottom level pyramid
+image, the higher levels each have dimensions a factor of two smaller than
+those of the image below.  The number of levels in a stored image is printed
+by the program
+.i seeheader .
+.pp
+The use of the pyramid library routines is fairly self-explanatory (look at
+the manual pages and their use by the HIPS pyramid main programs).
+There are two copies of each routine, one for integer pyramids (\fIi\fP) and
+one for floating point pyramids (\fIf\fP).  There are routines for pyramid
+definition, which involves computing the number of rows and columns in all the
+levels given a specified size for one level (\c
+.i def_ipyr
+and
+.i def_fpyr ).
+There are routines for allocating and deallocating level images and entire
+pyramids (\c
+.i alloc_ipyr ,
+.i alloc_fpyr ,
+.i alloc_iimage ,
+.i alloc_fimage ,
+.i free_ipyr ,
+.i free_fpyr ,
+.i free_iimage ,
+and
+.i free_fimage ).
+There are routines for reading and writing pyramid level images, pyramids, and
+filter definitions (\c
+.i read_iimage ,
+.i read_fimage ,
+.i write_iimage ,
+.i write_fimage ,
+.i read_ipyr ,
+.i read_fpyr ,
+.i write_ipyr ,
+.i write_fpyr ,
+and
+.i getpyrfilters ).
+There are routines for the pyramid reduce and expand operations (\c
+.i ireduce ,
+.i freduce ,
+.i iexpand ,
+and
+.i fexpand )
+which in turn call the reflection routines to fill in the pixels beyond the
+borders (\c
+.i hor_reflecti ,
+.i hor_reflectf ,
+.i ver_reflecti ,
+.i ver_reflectf ,
+.i reflecti ,
+and
+.i reflectf ).
+Finally, for simple programs which deal with pixels independently (like
+.i addseq ,
+for example), there is a program which computes the number of pixels in a
+pyramid summed across pyramid levels (\c
+.i pyrnumpix ).
+One final important point: the pyramid allocation routine needs to know the
+number of pixels required beyond the borders of the actual images.  Any
+program which allocates and manipulates a pyramid must set a global
+integer called
+.i Image_border
+whose value is the number of pixels required.  For routines such as
+.i pyr_extract
+which do no reduce or expand operations (hence no reflection), no border
+pixels are required (and
+.i Image_border
+is set to zero).  If a reduce/expand operation is used then the number of
+pixels required is equal to the number of taps in the filter to the right of
+the center tap plus one, which is how
+.i Image_border
+is set in programs such as
+.i pyrtoimg .
+.sh 1 "Image compression techniques
+.(x t
+.sp
+\*($n Image compression techniques
+.)x
+.pp
+This section contains descriptions of  several schemes
+for simulation of digital image transmission and compression.
+A simple compression algorithm can be invoked in Unix
+(on some systems) by calling the program
+.i compact .
+This program performs optimal Huffman coding for byte data.
+It is therefore, suitable for image compression.
+Another common Unix file compression program which can just as well be used
+with HIPS images is
+.i compress
+whose effects are reversed using
+.i uncompress .
+Programs that are included in HIPS are described below.  Almost all of these
+routines are for the compression of binary (black-or-white) image sequences
+(reflecting the activity on the research project for which HIPS was originally
+written, see Landy, Cohen and Sperling (1984a)).
+.sh 2 "Hierarchical coding"
+.(x t
+.ti .3i
+\*($n Hierarchical coding
+.)x
+.pp
+HIPS includes several hierarchical coding programs which are errorless schemes
+for compressing binary images,
+that is, no information is lost by encoding and decoding a sequence using
+these methods.
+The encoding schemes are recursive, they try to find homogeneous areas
+in an image or sequence for which a single graylevel has to be transmitted,
+even if the region is very large.
+If a given region is not homogeneous, it is divided into subregions,
+and the codes for these are output preceded by a
+.i "meta symbol"
+designating that the subimage will be subdivided (and in some schemes,
+designating the way in which it is to be cut into subregions).
+Heterogeneous regions are thus divided again and again until a division
+into homogeneous regions is found (a single pixel region is of course
+homogeneous).
+.pp
+One such hierarchical coding scheme is binary tree coding, which is performed
+by the encoding program
+.i hc_bin
+and decoding program
+.i hc_bin_r .
+The division of a region into subregions is done by dividing the
+largest dimension of that region in half. If the dimensions are equal,
+a fixed order is applied (horizontal first, or vertical first, specified by
+the user).
+Statistics about the compression are output by
+.i hc_bin
+on the user's terminal.
+.pp
+We have developed two adaptive hierarchical coding schemes for binary images:
+AHC and BINQUAD (Cohen, Landy and Pavel, 1985).
+AHC is carried out by coding program
+.i ahc3
+and decoding program
+.i ahc3_r ,
+and BINQUAD by
+.i binquad
+and
+.i binquad_r .
+The AHC method decomposes an image sequence by cutting each region into
+two subregions if necessary using either a horizontal, vertical or temporal
+cut.  The choice of which cuts to use is done adaptively so as to produce the
+minimum possible code length.  The BINQUAD method is similar, except that only
+two cuts are allowed: a binary temporal cut, or a spatial cut which involves
+both a horizontal and a vertical cut, resulting in four subregions (this type
+of cut if used alone results in the standard method known as quadtree
+coding).  These programs may be used just to collect image coding statistics,
+to show the coding tree and code, or to actually encode the images.  The
+decoding programs can simply decode the compressed images or additionally they
+can reconstruct a image which shows where the cuts were made.  Finally, the
+user may specify the size of the initial subregions which are coded (in both
+space and time).  The size of the coded subregions must be powers of 2.
+.pp
+A nonadaptive coding technique has been implemented: octtrees.  This technique
+works with image subregions which are cubic (in space-time) with sides that
+are powers of 2.  If a subregion is nonuniform, it is split into 8 subregions
+(octants) and these subregions are each coded in turn.  This is performed by
+the encoder program
+.i oct
+and decoder program
+.i oct_r .
+.sh 2 "Other binary coding techniques"
+.(x t
+.ti .3i
+\*($n Other binary coding techniques
+.)x
+.pp
+Two other coding techniques have been implemented for binary images.  The
+first is the standard run-length encoding technique.  With this method, runs
+of pixels of the same greylevel are encoded as a greylevel and a count of the
+length of the run.  The encoder program is
+.i rle
+and the decoder is
+.i rle_r .
+.pp
+For line drawings, we have developed a spanning tree coding method (Landy and
+Cohen, 1985).  This method is generally applied to images which have been
+edge enhanced (e.g. using
+.i dog ),
+thresholded (using
+.i thresh ),
+and the lines in the binary image thinned (using
+.i thin ).
+The routines track the single-pixel-wide lines in each image, and then
+approximate these lines as a series of straight line segments (a polygonal
+spline).  The code then designates the series of line segments, and the
+decoder fills in these lines.  The encoder program is
+.i vectgen ,
+and the receiver is
+.i vectcode .
+.sh 2 "DPCM coding"
+.(x t
+.ti .3i
+\*($n DPCM coding
+.)x
+.pp
+In transmission by DPCM coding the receiver tries to predict each pixel
+by some linear combination of preceding pixels. Therefore, the
+transmitter must send only the corrections for these predictions.
+A major saving in transmission then results if the corrections are coded
+by a small number of bits.
+When no prior information is available, a mean value, which is known
+to both the transmitter and the receiver, is used.
+The pair of programs:
+.i dpcm_t
+and
+.i dpcm_r
+can be used for the simulation of transmission by DPCM coding.
+The parameters for the coding scheme are stored in a special file
+which is given to the programs as their single (optional) argument.
+For example:
+.sp
+.ce
+dpcm_t -f parameters < iseq | dpcm_r -f parameters | movie
+.sp
+will display on the screen the DPCM-coded version of
+.i iseq .
+The parameters for coding are taken from the file
+.i parameters .
+.pp
+The separation between the transmitter and the receiver 
+makes it possible to inspect the intermediate code and also to manipulate
+it.  For example, the effect of a noisy channel on the transmission of DPCM
+can be studied by:
+.sp
+.ce
+dpcm_t < iseq | noise .01 | dpcm_r > reconstructed-seq
+.sp
+Note that in this example no parameters file was specified; 
+default-values apply in this case.
+.pp
+The parameters file consists of three parts.
+The first part, which is only one line long, gives the value for the
+.i mean
+around which the prediction is done. Its form is
+.sp
+.ce
+M c n
+.sp
+where 
+.i M
+and
+.i c
+are literals, and
+.i n
+is an integer (the mean).
+.pp
+The second part of the parameters file starts with the line
+.sp
+.ce
+P l n
+.sp
+where 
+.i P
+and
+.i l
+are literals and 
+.i n
+is an integer that gives the number of predictors for each pixel.
+This line is followed by
+.i n
+predictor lines, each describing one predictor.
+A predictor line gives the weight of the predictor (a real number)
+in the linear prediction, and three other numbers that describe the
+spatial relationship between the predicting pixels and the predicted one.
+The three numbers are the signed differences between the location of the
+predicted pixel and the location of the predictor along the frame, row
+and column axes.
+For example, the predictor line:
+.sp
+.ce
+ .33 -1 0 1
+.sp
+means that the pixel which is on the same line,
+one location further to the right, but in the preceding frame, is given
+a weight of .33 in the prediction of the current pixel.
+.pp
+The third section of the parameters file describe the quantizer.
+The quantizer is the module in the
+transmitter which converts the prediction correction
+into a small number of levels. 
+The receiver performs the inverse conversion: from quantization levels
+into actual values for correcting the predictions.
+The section starts with the line:
+.sp
+.ce
+Q f n
+.sp
+where
+.i Q
+and
+.i f
+are literals and 
+.i n
+is an integer that counts the number of cut-off points between the
+quantization levels.
+This line is followed by
+.i n +1
+lines that describe the quantizer
+and inverse quantizer intervals.
+The quantizer and its inverse are described by two values (signed
+integers) per level.
+The first value specifies the upper-bound of the interval, the second is
+the value which is assigned to that level by the inverse quantizer.
+For example if all corrections that are less than -13 are quantized to
+level 0, and if that level is to be interpreted by the receiver
+as an actual correction of -20 then the line would read:
+.sp
+.ce
+-13 20
+.sp
+The intervals are ordered from low (usually negative) to high.
+Since the upper bound on the last interval is immaterial, this value
+is not specified, and the last line contains only one value, that
+of the output value of the inverse quantizer for the highest level.
+.pp
+The following is an example for a parameters file, the values are
+the default values that are used by the programs when
+a parameters-file argument is not specified:
+.sp
+.in +2i
+.nf
+M c 128
+P l 3
+ .3 0 0 -1
+ .3 0 -1 0
+ .25 -1 0 0
+Q f 3
+-13 -20
+0 -5
+13 5
+20
+.fi
+.in -2i
+.sp
+This file describes a DPCM coding scheme with 3 predictors and
+4 quantizer levels.
+The predictors for each pixel are its immediate neighbors:
+the pixel on the same frame and same row but one column earlier,
+the pixel on the same frame and the same column but one row earlier,
+and the pixel at the same row and column but in the preceding frame.
+The transmitted values are quantized into 4 levels.
+All values that are below -13 are transmitted as a 0, those that are
+-13 or more but less than 0 are transmitted as a 1 etc.
+On receiving, 0 is interpreted as a correction of -20, 1 as a
+correction of -5, etc.
+.sh 2 "Block truncation"
+.(x t
+.ti .3i
+\*($n Block truncation
+.)x
+.pp
+A 2-dimensional block-truncation algorithm was described and implemented by
+Mitchell and Delp (1980).
+The program
+.i btc
+simulates encoding and decoding of pictures using this algorithm.
+Given an input sequence,
+.i btc
+will produce a block-truncated version of it on the standard output.
+The output images have edge artifacts at the edges of the blocks which are
+encoded.  These artifacts may be improved (slightly) using the program
+.i btcsmooth .
+.sh 2 "Grey scale run-length encoding"
+.(x t
+.ti .3i
+\*($n Grey scale run-length encoding
+.)x
+.pp
+A simple run-length encoding scheme for grey-scale images is available.  The
+program
+.i btorle
+is used to encode images and
+.i rletob
+is used to decode them.  This is a nonlossy encoding scheme which is only
+useful for images with reasonably large uniform regions.  The switch
+.i -v
+to
+.i btorle
+gives statistics on the amount of compression achieved.
+.sh 1 "The Plot3d graphics package
+.(x t
+.sp
+\*($n The Plot3d graphics package
+.)x
+.pp
+HIPS includes a subpackage for the generation and manipulation of 3D graphic
+scenes.  This package, called
+.i Plot3d ,
+is quite rudimentary.  It allows the user to create a world of lines and
+points.  Objects can move relative to one another by translation, rotation, or
+scaling.  The viewer may move through the environment as well, and the
+resulting scene may then be rendered as a raster image using polar projection.
+For a full description of this package, see the Plot3d user's manual.
+The Plot3d programs may be used to translate, rotate or scale the world either
+globally (programs
+.i gshift ,
+.i grot
+and
+.i gmag ),
+temporally (\c
+.i tshift ,
+.i trot
+and
+.i tmag ),
+or from the viewer's perspective (\c
+.i vshift ,
+.i vrot
+and
+.i vmag ).
+There are programs to generate a polygon (\c
+.i gpoly )
+or a cube (\c
+.i gcube ),
+or to convert a raster image to Plot3d format (\c
+.i pixto3d ).
+Multiple worlds may be combined into one (\c
+.i gsync ),
+clipped spatially (\c
+.i cutf ),
+transformed by its rotation and scaling matrices (\c
+.i transf )
+and viewed using a perspective transformation (\c
+.i view ).
+A subseq of a graphic sequence can be extracted using
+.i psubseq ,
+and multiple frames collapsed to a single frame using
+.i pstrobe .
+The resulting graphic sequence can be viewed as readable text (\c
+.i dump_plot3d
+or
+.i seeplot ),
+converted to raster form for further processing and display using HIPS (\c
+.i plot3topix ),
+or converted to the standard UNIX
+.i plot
+format (\c
+.i plot3tov ).
+.sp 3
+.sh 1 "References"
+.(x t
+.sp
+\*($n References
+.)x
+.in +.2i
+.sp
+.ti -.2i
+Abdou (1978).
+.i "Methods of Edge Detection" ,
+Univ. of Southern California,
+Image Processing Institute report 830.
+.sp
+.ti -.2i
+Burt, P. J. (1981). Fast filter transforms for image processing.
+.i "Computer Graphics and Image Processing" ,
+.i 16 ,
+20-51.
+.sp
+.ti -.2i
+Burt, P. J. & Adelson, E. H. (1983). The Laplacian Pyramid as a compact image
+code.
+.i "IEEE Transactions on Communications" ,
+.i COM-31 ,
+532-540.
+.sp
+.ti -.2i
+Cohen, Y., Landy, M. S. & Pavel, M. (1985). Hierarchical coding of binary
+images.
+.i "IEEE Transactions on Pattern Analysis and Machine Intelligence" ,
+.i PAMI-7 ,
+284-298.
+.sp
+.ti -.2i
+Gonzalez, R. C., & Wintz, P. (1977).
+.i "Digital Image Processing" .
+Reading, Mass.: Addison-Wesley Publishing Company, Inc.
+.sp
+.ti -.2i
+Landy, M. S. & Cohen, Y. (1985).  Vectorgraph coding: Efficient
+Coding of line drawings.
+.i "Computer Vision, Graphics, and Image Processing" ,
+.i 30 ,
+331-344.
+.sp
+.ti -.2i
+Landy, M. S., Cohen, Y. & Sperling, G. (1984a). HIPS: Image processing under
+UNIX. Software and applications.
+.i "Behavior Research Methods, Instruments, and Computers" ,
+.i 16 ,
+199-216
+.sp
+.ti -.2i
+Landy, M. S., Cohen, Y. & Sperling, G. (1984b).  HIPS: A Unix-based image
+processing system.
+.i "Computer Vision, Graphics, and Image Processing" ,
+.i 25 ,
+331-347.
+.sp
+.ti -.2i
+Marr, D. & Hildreth E. (1980).  Theory of Edge Detection.
+.i "Proceedings of the Royal Society, London" ,
+.i B207 ,
+187-217.
+.sp
+.ti -.2i
+Mitchell, R. O. & Delp, E. J. (1980). Multilevel graphics representation using
+block truncation coding.
+.i "Proceedings of the IEEE" ,
+.i 68 ,
+868-873.
+.sp
+.ti -.2i
+Sakai, T., Nagao, M. & Matsushima, H. (1972).
+Extraction of invariant picture substructures by computer.
+.i "Computer Graphics and Image Processing" ,
+.i 1 ,
+81-96.
+.sp
+.ti -.2i
+Shaw, G. B. (1979).
+Local and regional edge detectors: Some comparisons.
+.i "Computer Graphics and Image Processing" ,
+.i 9 ,
+135-149.
+.++P
+.+c "Table of contents"
+.xp t

@@ -1,0 +1,1168 @@
+.\" to print: psroff -me cat_commands_ref.me
+.po 1i
+.ta .2i .5i
+.sz 8
+.he 'HIPS Categorized Reference ''%'
+.2c
+.na
+.ce
+\fB\s+2CATEGORIES\s-2\fR
+.sp 2
+HEADER MANIPULATION
+.br
+PIXEL FORMAT CONVERSION
+.br
+HARDCOPY AND HALFTONING
+.br
+OPERATIONS ON SEQUENCES
+.br
+IMAGE GENERATION
+.br
+GEOMETRIC AND OTHER OPERATIONS ON PICTURES
+.br
+OPERATIONS ON PIXELS
+.br
+STATISTICS
+.br
+FRAME ARITHMETIC
+.br
+CONVOLUTION, CORRELATION, EDGE DETECTION
+.br
+	AND OTHER SPATIAL OPERATIONS
+.br
+DIGITAL TRANSFORMS AND FILTERS
+.br
+GAUSSIAN AND LAPLACIAN PYRAMID OPERATIONS
+.br
+FEATURE EXTRACTION AND RULE GENERATION
+.br
+IMAGE COMPRESSION
+.br
+PLOT3D GRAPHICS PACKAGE
+.br
+SUNVIEW TOOLS
+.br
+XWINDOWS TOOLS
+.br
+DATACUBE TOOLS
+.br
+COLOR AND COLORMAP SUPPORT
+.br
+REGION-OF-INTEREST
+.sp 2
+\fBNOTE:\fP Commands marked with an asterisk * are
+.br
+only available with HIPSADDON
+.sp 2
+.ce
+\fB\s+2STANDARD SWITCHES\s-2\fR
+.sp 2
+-P [M | L] (packing mode)
+.br
+-UL zerolevel (unpacking zero level)
+.br
+-UH onelevel (unpacking one level)
+.br
+-CR [M | P | R | I] (complex-to-real)
+.br
+-RC [R | I | B] (real-to-complex)
+.br
+-CB (convertback)
+.br
+-NFH (no full history)
+.br
+-NFD (no full sequence description)
+.br
+-FXP (full extended parameters)
+.br
+-U (print usage message)
+.sp 2
+.ce
+\fB\s+2HEADER MANIPULATION\s-2\fR
+.sp 2
+.b adddesc
+[-d ``original sequence date'']
+.br
+	[-s ``sequence name''] [-o ``originator's name'']
+.br
+	[-a ``additional description'']
+.br
+	[-r ``description replacement'']
+.sp
+.b addparam
+[-F paramfile]
+.br
+	[-b name bytevalue]
+.br
+	[-s name shortvalue]
+.br
+	[-i name intvalue]
+.br
+	[-f name floatvalue]
+.br
+	[-S name stringvalue]
+.br
+	[-SF name stringfile]
+.sp
+.b convertxhd
+[-f descriptionfile]
+.sp
+.b hipstoportable
+[-p] [-c]
+.sp
+.b hipstosun
+[-e]
+.sp
+.b hips2tohips1
+[-n] [-h]
+.sp
+.b *hips2vit
+.sp
+.b genheader
+[-MP -LP -B -SB -S -US -I -UI -F -D -C -DC
+.br
+	-RGB -RGBZ -ZRGB -BGR -BGRZ -ZBGR]
+.br
+	[-s rows [cols]] [-f frames]
+.br
+	[-nd numdepth] [-nc numcolor] [-p]
+.sp
+.b grabheader
+<iseq >oheader
+.sp
+.b portabletohips
+[-f frames]
+.sp
+.b rmparam
+-n name1 [name2 ... name6]
+.sp
+.b seeheader
+[-a] [-p]
+.sp
+.b stripheader
+.sp
+.b suntohips
+.sp 2
+.ce
+\fB\s+2PIXEL FORMAT CONVERSION\s-2\fR
+.sp 2
+.b atop
+[-B -S -I -F -C -RGB -RGBZ -ZRGB -BGR -BGRZ -ZBGR]
+.br
+	[-c rows [cols]] [-f frames]
+.br
+	[-d numdepth] [-nc numcolor]
+.sp
+.b bpack
+.sp
+.b combine
+[-pm | -ri] image1 image2
+.sp
+.b htob
+.sp
+.b htobgr
+.sp
+.b htobgrz
+.sp
+.b htoc
+.sp
+.b htod
+.sp
+.b htodc
+.sp
+.b htof
+.sp
+.b htoi
+.sp
+.b htolp
+.sp
+.b htomp
+.sp
+.b htorgb
+.sp
+.b htorgbz
+.sp
+.b htos
+.sp
+.b htosb
+.sp
+.b htoui
+.sp
+.b htous
+.sp
+.b htozbgr
+.sp
+.b htozrgb
+.sp
+.b imgtopyr
+[-f filter] [-g] [-l toplev] [-r rtype]
+.sp
+.b ptoa
+.sp
+.b pyrtoimg
+[-f filter] [-r rtype]
+.sp
+.b scale
+[-l b [c]] [-f | -i | -b | -s | -S] 
+.br
+.b scale
+[-q a [b [c]]] [-f | -i | -b | -s | -S]
+.br
+.b scale
+[-m minout maxout] [-f | -i | -b | -s | -S] [-e]
+.sp
+.b *seecontents
+.sp 2
+.ce
+\fB\s+2HARDCOPY AND HALFTONING\s-2\fR
+.sp 2
+.b dither
+.sp
+.b dotdiff
+.sp
+.b halftone
+[-l lower] [-u upper] [-r] [-p a b c d]
+.sp
+.b prtdth
+[-s shift] [-i 2 | -i 4] 
+.br
+	[-l label | -lf label [startframe] | -f labelfile |
+.br
+	-ff label [startframe]]
+.br
+.ne 3
+.sp
+.b prteps
+[-d] [-l label] [-lf label [startframe]] [-f labelfile]
+.br
+		[-ff labelfile [startframe]] [-e factor]
+.br
+.ne 3
+.sp
+.b prthlf
+[-s shift] [-o]
+.br
+	[-l label | -lf label [startframe] | -f labelfile |
+.br
+	-ff labelfile [startframe]
+.br
+.ne 4
+.sp
+.b pshalftone
+[-h imageheight] [-w imagewidth] [-l]
+.br
+	[-F screenfrequency]
+.br
+	[-A screenangle] [-I] [-n] [-B] < imagefile | lpr -Ppostscript
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2OPERATIONS ON SEQUENCES\s-2\fR
+.sp 2
+.b autodiff
+[-f factor]
+.sp
+.b catframes
+file1 file2 ...
+.sp
+.b comicstrip
+[-s mr [mc]] [-m margin] [-e]
+.sp
+.b drift
+[-f frames] [-s x-shift [y-shift]] [-w] < frame > sequence
+.sp
+.b interdepth
+file1 file2 ...
+.sp
+.b interlace
+[-s scriptfile] file1 [file2 ... ]
+.sp
+.b repframe
+[-b rate] [-n | -a | -r | -i | -u]
+.sp
+.b strobe
+[-b batch-length]
+.sp
+.b subsample
+[-h hrate [hoffset]] [-v vrate [voffset]]
+.br
+	[-t trate [toffset]] [-d drate [doffset]]
+.br
+	[-c crate [coffset]]
+.sp
+.b subseq
+[-f fromframe [toframe [frameinc]]]
+.br
+	[-d fromdepth [todepth [depthinc]]]
+.br
+	[-c fromcolor [tocolor [colorinc]]]
+.sp
+.b wrapimg
+[-s x-shift [y-shift [t-shift]]]
+.sp 2
+.ce
+\fB\s+2IMAGE GENERATION\s-2\fR
+.sp 2
+.b atop
+[-B -S -I -F -C -RGB -RGBZ -ZRGB -BGR -BGRZ -ZBGR]
+.br
+	[-c rows [cols]] [-f frames] [-nc numcolor]
+.sp
+.b calcpix
+[-d] [-o objectname] [-c [rows [cols]] [-f frames]
+.br
+	[-nd numdepth] [-nc numcolor] [-A n arg1 ... argn]
+.br
+	[-s "statements" | -F filename]
+.br
+	[-i "init-statements" | -I initfilename]
+.sp
+.b checkers
+[-s rows [cols]] [-f frames]
+.sp
+.b cosum
+< file > outseq
+.sp
+.b *ellipse
+[-c cenr cenc] [-d rows cols] [-r radr radc]
+.sp
+.b fastcosum
+< file > outseq
+.sp
+.b fcalcpix
+[-d] [-o objectname] [-c [rows [cols]] [-f frames]
+.br
+	[-nd numdepth] [-nc numcolor] [-A n arg1 ... argn]
+.br
+	[-s "statements" | -F filename]
+.br
+	[-i "init-statements" | -I initfilename]
+.sp
+.b gabor
+[-s nr [nc]] [-f nf] [-xf xfrq] [-yf yfrq] [-tf tfrq]
+.br
+	[-xm xmean] [-ym ymean] [-tm tmean]
+.br
+	[-xs xsigma] [-ys ysigma] [-ts tsigma]
+.br
+	[-p phase] [-a amplitude]
+.sp
+.b genframe
+[-B -S -I -F -C] [-s rows [cols]] [-f frames]
+.br
+	[-nd numdepth] [-nc numcolor]
+.br
+	[-g greylevel [imaginarypart] | -G r g b]
+.sp
+.b grating
+[-s nr [nc]] [-f nf] [-xf xfrq] [-yf yfrq] [-tf tfrq]
+.br
+	[-p phase] [-a amplitude]
+.br
+.ne 3
+.sp
+.b *grey2disp
+[-c] [-d ldispi hdisp] [-t]
+.sp
+.b greybar
+[-s barheight [barwidth]] [-n numbar] [-f frames]
+.br
+	[-nc numcolor] [-g mingrey maxgrey | -i mingrey step]
+.sp
+.b *greylevel
+.sp
+.b *mandelbrot
+[-a lb rb] [-b ub bb] [-d rows cols] [-e eps] [-n ite]
+.sp
+.b *saw
+[-d rows cols]
+.sp
+.b sirds
+[-s stripwidth] [-d] [-f [size]]
+.sp
+.b zoneplate
+[-s rows [cols]] [-f frequency] [-S]
+.br
+.ne 8
+.sp 2
+.ce 2
+\fB\s+2GEOMETRIC AND OTHER
+.sp .5
+OPERATIONS ON PICTURES\s-2\fR
+.sp 2
+.b affine
+[-ll x y] [-lr x y] [-ul x y] [-ur x y] [-s nr nc] [-C]
+.sp
+.b calcwarp
+[-o objectname] [-w warpcodefile | -W warpcode]
+.br
+	[-i "init-statements" | -I initfilename]
+.br
+	[-d] [-A n arg1 ... argn] [-s nr [nc]]
+.br
+.ne 8
+.sp
+.b collage
+[-s rows [cols]] [-f] [-e]
+.br
+	file1 ir1 ic1
+.br
+	file2 ir2 ic2
+.br
+		.
+.br
+		.
+.br
+		.
+.br
+	filen irn icn
+.sp
+.b comicstrip
+[-s mr [mc]] [-m margin] [-e]
+.sp
+.b *cshift
+[-x srow] [-y scol]
+.sp
+.b cylindrate
+.sp
+.b enlarge
+[-h hfactor] [-v vfactor] [-t tfactor] [-i]
+.br
+.b enlarge
+[-s [spacefactor]] [-t tfactor] [-i]
+.sp
+.b *extend
+[-b | -w]
+.sp
+.b extract
+[-s rows [cols]] [-p from-row [from-col]]
+.sp
+.b extractroi
+.sp
+.b flipquad
+.sp
+.b *framing
+[-f frameval]
+.sp
+.b gridwarp
+[-c controlfile] [-s nr [nc]] [-w]
+.sp
+.b joinframes
+[-s rows [cols]] [-m margin] [-e] file1 file2 ... filen
+.sp
+.b *mark
+[-l line] [-v]
+.sp
+.b pad
+[-g gray-levelr [gray-levelg [gray-levelb]]]
+.br
+	[-s rows [ cols [from-row [from-col]]]]
+.br
+	[-f frames [from-frame]] [-r]
+.sp
+.b *padimage
+ [-s startrow startcol] sequence1 sequence2
+.sp
+.b picinvert
+.sp
+.b pictranspose
+.sp
+.b *project
+[-a angle] [-d rows cols] [-l distance] [-s scale]
+.sp
+.b reduce
+[-h hfactor] [-v vfactor] [-t tfactor]
+.br
+.b reduce
+[-s [spacefactor]] [-t tfactor]
+.sp
+.b reflect
+.sp
+.b *rotate
+[-a angle] [-d rows cols]
+.sp
+.b rotate180
+.sp
+.b rotate90
+[-l]
+.sp
+.b *smear
+[-n rows]
+.sp
+.b stretch
+[-f xfactor yfactor | -s rows columns]
+.sp
+.b subsample
+[-h hrate [hoffset]] [-v vrate [voffset]]
+.br
+	[-t trate [toffset]] [-d drate [doffset]]
+.br
+	[-c crate [coffset]]
+.sp
+.b *translate
+[-d rows cols] [-o srow scol]
+.sp
+.b wgauss
+[-x xsigma] [-y ysigma] [-t tsigma]
+.br
+	[-m tmu ymu xmu]
+.sp 2
+.ce
+\fB\s+2OPERATIONS ON PIXELS\s-2\fR
+.sp 2
+.b abspix
+.sp
+.b bnoise
+[-s seed] [-n N] [-p p] [-a addconst] [-m mulconst]
+.br
+.ne 3
+.sp
+.b calcpix
+[-d] [-o objectname] [-c [rows [cols]] [-f frames]
+.br
+	[-nc numcolor] [-A n arg1 ... argn]
+.br
+	[-s "statements" | -F filename]
+.br
+	[-i "init-statements" | -I initfilename]
+.br
+.ne 3
+.sp
+.b conjpix
+.sp
+.b exppix
+.br
+.ne 3
+.sp
+.b fcalcpix
+[-d] [-o objectname] [-c [rows [cols]] [-f frames]
+.br
+	[-nc numcolor] [-A n arg1 ... argn]
+.br
+	[-s "statements" | -F filename]
+.br
+	[-i "init-statements" | -I initfilename]
+.sp
+.b gnoise
+[-p sd [random-seed]] [-l] [-f]
+.br
+	[-c [rows [cols [frames [colors]]]]
+.sp
+.b histoeq
+[-n]
+.sp
+.b histostretch
+[-p lowpercent [highpercent]]
+.br
+	[-m newmin [newmax]] [-n]
+.sp
+.b logimg
+[-o offset]
+.sp
+.b mean0
+.sp
+.b neg
+.sp
+.b noise
+[-p p-error [random-seed [bits-per-pixel]]]
+.sp
+.b powerpix
+[-p power]
+.br
+.ne 4
+.sp
+.b scale
+[-l b [c]] [-f | -i | -b | -s | -S] 
+.br
+.b scale
+[-q a [b [c]]] [-f | -i | -b | -s | -S]
+.br
+.b scale
+[-m minout maxout] [-f | -i | -b | -s | -S] [-e]
+.sp
+.b scalemeansd
+[-m mean] [-s stddev]
+.sp
+.b shiftpix
+[-s factor]
+.sp
+.b stretchpix
+[-p expt1 [ boundary [ expt2 ]]] [-m max | -f]
+.sp
+.b thresh
+[-p percent | -t threshold] [-f] [-s | -S] [-n]
+.sp
+.b *unoise
+[-s sdev]
+.sp 2
+.ce
+\fB\s+2STATISTICS\s-2\fR
+.sp 2
+.b binentropy
+[-b depth [height [width]]] [-h] [-v]
+.sp
+.b disphist
+[-m maxcnt | -p percent] [-w barwidth] [-h barheight]
+.br
+	[-b borderwidth] [-g bordergreylevel]
+.sp
+.b framevar
+[-p] [-n]
+.sp
+.b getmax
+[-c] [-s] [-i] [-n] [-p]
+.sp
+.b getmin
+[-c] [-s] [-i] [-n] [-p]
+.sp
+.b histo
+[-N numbins] [-m min max] [-c] [-n]
+.sp
+.b pixentropy
+[-p]
+.sp
+.b seehist
+[-p] [-z]
+.sp
+.b *sigmaspat
+[-p]
+.sp
+.b *sigmatemp
+[-p] [-s]
+.sp
+.b slice
+[-h] [-v] [-p row-or-column]
+.sp 2
+.ce
+\fB\s+2FRAME ARITHMETIC\s-2\fR
+.sp 2
+.b absdiffseq
+seq1 seq2
+.sp
+.b addseq
+seq1 seq2
+.sp
+.b andseq
+seq1 seq2
+.sp
+.b autodiff
+[-f factor]
+.sp
+.b *average
+[-f from] [-t to]
+.sp
+.b calccomb
+[-d] [-o objectname]
+.br
+	[-A n arg1 ... argn] [-s "statements" | -F filename]
+.br
+	[-i "init-statements" | -I initfilename]
+.sp
+.b colorkey
+[-b] ctrlseq file1 ... filen
+.sp
+.b diffseq
+seq1 seq2
+.sp
+.b divseq
+seq1 seq2
+.sp
+.b fcalccomb
+[-d] [-o objectname]
+.br
+	[-A n arg1 ... argn] [-s "statements" | -F filename]
+.br
+	[-i "init-statements" | -I initfilename]
+.sp
+.b maxabsseq
+seq1 seq2
+.sp
+.b maxseq
+seq1 seq2
+.sp
+.b minabsseq
+seq1 seq2
+.sp
+.b minseq
+seq1 seq2
+.sp
+.b mulseq
+seq1 seq2
+.sp
+.b orseq
+seq1 seq2
+.sp
+.b xorseq
+seq1 seq2
+.br
+.ne 8
+.sp 2
+.ce 3
+\fB\s+2CONVOLUTION, CORRELATION,
+.sp .5
+EDGE DETECTION AND
+.sp .5
+OTHER SPATIAL OPERATIONS\s-2\fR
+.sp 2
+.b abdou
+[-s size]
+.sp
+.b *asl
+[-a] [-d]  [-o order | -w size] [-s sigma] [-v]
+.sp
+.b bclean
+[-s size]
+.sp
+.b btcsmooth
+.sp
+.b convolve
+kernel
+.sp
+.b correl
+[-s rows [cols]] file
+.sp
+.b discedge
+[-s size] [-c varcrit]
+.sp
+.b discedge2
+[-s size] [-c varcrit] [-t edgethresh]
+.sp
+.b dog
+[-w esigma [masksize [ratio]]] [-p precision] [-i] [-m] [-g]
+.sp
+.b extremum
+[-s size]
+.sp
+.b mask
+[-f filter-number | -m filter-file]
+.sp
+.b maskseq
+[-f filter-number | -m filter-file]
+.sp
+.b *mean
+[-s size]
+.sp
+.b median
+[-s size]
+.sp
+.b *mls
+[-p perc] [-s size [ssize]]
+.sp
+.b morphdilate
+element
+.sp
+.b morpherode
+element
+.sp
+.b *mpmatch
+[-l] [-n its] [-t threshold] [-v]
+.sp
+.b *nns
+[-s size [k]]
+.sp
+.b nonisot
+chooser mask0 ... maskn imagefile
+.sp
+.b *rank
+[-s horsize [versize]] [-r horrank [verrank]]
+.br
+	[-max | -min | -med]
+.sp
+.b *sasmooth
+[-s size] [-t threshold]
+.sp
+.b *snn
+[-d] [-s size]
+.sp
+.b thicken
+.sp
+.b thin
+[-t] [-d] [-c] [-m] [-a] [-s] [-v]
+.sp
+.b zc
+[-e error] [-p percent | -s] [-n] [-z]
+.sp 2
+.ce
+\fB\s+2DIGITAL TRANSFORMS AND FILTERS\s-2\fR
+.sp 2
+.b bandpass
+[-b | -r] [-d metric]
+.br
+	[-f filterno | -p lowcut highcut [loworder [highorder]]]
+.br
+	[-I | -B | -E] [-s | <inseq]
+.sp
+.b bandreject
+[-b | -r] [-d metric]
+.br
+	[-f filterno | -p lowcut highcut [loworder [highorder]]]
+.br
+	[-I | -B | -E] [-s | <inseq]
+.sp
+.b dct
+[-w]
+.sp
+.b dispwbasis
+.sp
+.b flipquad
+.sp
+.b fourtr
+[-d] [-s] [-z] [-w]
+.sp
+.b fourtr3d
+[-s]
+.br
+.ne 4
+.sp
+.b highpass
+[-b | -r] [-d metric]
+.br
+	[-f filterno | -p highcut [highorder]]
+.br
+	[-I | -B | -E] [-s | <inseq]
+.sp
+.b inv.dct
+[-w]
+.sp
+.b inv.fourtr
+[-d] [-C | -F | -I | -S | -B] [-w]
+.sp
+.b inv.fourtr3d
+[-C | -F | -I | -S | -B]
+.sp
+.b inv.walshtr
+[-o]
+.br
+.ne 3
+.sp
+.b lowpass
+[-b | -r] [-d metric] [-f filterno | -p lowcut [loworder]]
+.br
+	[-I | -B | -E] [-s | <inseq]
+.sp
+.b walshtr
+[-o]
+.br
+.ne 8
+.sp 2
+.ce 2
+\fB\s+2GAUSSIAN AND LAPLACIAN
+.sp .5
+PYRAMID OPERATIONS\s-2\fR
+.sp 2
+.b imgtopyr
+[-f filter] [-g] [-l toplev] [-r rtype]
+.sp
+.b pyrdisplay
+[-c] [-m margin]
+.sp
+.b pyrexpand
+[-f filterfile] [-n nlevels] [-r rtype]
+.sp
+.b pyrextract
+[-l botlev [toplev]]
+.sp
+.b pyrmerge
+[-i | -f] file1 ... filen
+.sp
+.b pyrreduce
+[-f filterfile] [-n nlevels] [-r rtype] [-l]
+.sp
+.b pyrtoimg
+[-f filter] [-r rtype]
+.sp 2
+.ce 2
+\fB\s+2FEATURE EXTRACTION
+.sp .5
+AND RULE GENERATION\s-2\fR
+.sp 2
+.b *binatts
+[-d] [-v] [-a atts-list] [-f atts-file]
+.sp
+.b *cmat
+[-e] [-n] [-r] [-s] atts-file < vacls-data-file
+.sp
+.b *vacls
+[-c] [-a atts-file] [-r rule-file] < training-set-file
+.sp 2
+.ce
+\fB\s+2IMAGE COMPRESSION\s-2\fR
+.sp 2
+.b ahc3
+[-t stackrow stackcol] [-f stackdepth]
+.br
+	[-d] [-s] [-v] [-g | -a > outseq]
+.sp
+.b ahc3_r
+[-d [delta [greylevel]]] 
+.sp
+.b binquad
+[-t stackspatial] [-f stackdepth]
+.br
+	[-d] [-s] [-v] [-g | -a > outseq]
+.sp
+.b binquad
+[-d [delta [greylevel]]] 
+.sp
+.b btc
+-m -v [-p jap [nbloc [filtered-file]]] [-s]
+.sp
+.b btcsmooth
+.sp
+.b btorle
+[-v | -V]
+.sp
+.b dpcm_r
+[-f file-name]
+.sp
+.b dpcm_t
+[-f file-name]
+.sp
+.b hc_bin
+[-t height [width]] [-s] [-v] [-g > outseq]
+.sp
+.b hc_bin_r
+[-d [delta [greylevel]]]
+.sp
+.b oct
+[-s stacksize] [-g > outseq]
+.sp
+.b oct_r
+[-d]
+.sp
+.b rle
+[-b | -w] [-s] [-g | -a > out_sequence]
+.sp
+.b rle_r
+.sp
+.b rletob
+.sp
+.b vectcode
+[-n] [-h] [-q]
+.sp
+.b vectgen
+[-p] [-d] [-x] [-c short [long [break]]]
+.sp 2
+.ce
+\fB\s+2PLOT3D GRAPHICS PACKAGE\s-2\fR
+.sp 2
+.b cutf
+[-p x0 [y0 [xn [yn]]]]
+.sp
+.b dump_plot3d
+.sp
+.b gcube
+.sp
+.b gmag
+[-p x [y [z]]]
+.sp
+.b gpoly
+[-n nedges]
+.sp
+.b grot
+[-p x [y [z]]]
+.sp
+.b gshift
+[-p x [y [z]]]
+.sp
+.b gsync
+[file1 ... filen]
+.sp
+.b pixto3d
+[-v] [-f] [-z] [-s space] [-a amplitudescale] [-g]
+.sp
+.b plot3topix
+.sp
+.b plot3tov
+.sp
+.b pstrobe
+[-b batch]
+.sp
+.b psubseq
+[-f fromframe [toframe [increment]]]
+.sp
+.b seeplot
+.sp
+.b tmag
+[-p t x [y [z]]]
+.sp
+.b transf
+.sp
+.b trot
+[-p t x [y [z]]]
+.sp
+.b tshift
+[-p t x [y [z]]]
+.sp
+.b view
+[-p dist]
+.sp
+.b vmag
+[-p from to [x [y [z]]]
+.sp
+.b vrot
+[-p from to [x [y [z]]]
+.sp
+.b vshift
+[-p from to [x [y [z]]]
+.br
+.ne 6
+.sp 2
+.ce
+\fB\s+2SUNVIEW TOOLS\s-2\fR
+.sp 2
+.b hipstool
+[-i imagefile]
+.sp
+.b hipsview
+.br
+.ne 4
+.sp
+.b sunanim
+[-s pixelsize] [-f | -r | -c mapfile |
+.br
+	-g gammar gammag gammab |
+.br
+	-sg gammar gammag gammab]
+.br
+.ne 4
+.sp
+.b sunv
+[-s pixelsize] [-f | -r | -c mapfile |
+.br
+	-g gammar gammag gammab |
+.br
+	-sg gammar gammag gammab]
+.sp
+.b viewcolor
+.br
+.ne 6
+.sp 2
+.ce
+\fB\s+2XWINDOWS TOOLS\s-2\fR
+.sp 2
+.b genial
+.sp
+.b segal
+[-i image][-m mask] [-v] [-c NN]
+.br 
+.ne 3 
+.sp 
+.b tuner 
+.br 
+	[-cc] [-cq[#]] [-nm] [-debug]
+.br      
+	[-verb] [input_file_name]
+.br
+.ne 4
+.sp
+.b *xanim
+[-64 | -256] [-r | -i | -s]
+.br 
+        [-a] [-c | -w] [-p]
+.br
+        [-f from-frame [to-frame]]
+.br 
+        [-d width height]
+.sp
+.b xhips
+[-d display] [-c] [-b] [-g]
+.sp
+.b xhipsc
+[-d display] [-c] [-b] [-g] [-l lut-file] [-24 | -8]
+.sp
+.b xhist
+.br
+.ne 4
+.sp
+.b xvanim
+[-s pixelsize] [-f | -r | -c mapfile |
+.br
+	-g gammar gammag gammab |
+.br
+	-sg gammar gammag gammab]
+.br
+	[-C] [-S viewrows [viewcols]]
+.br
+.ne 4
+.sp
+.b xvhips
+[-s pixelsize] [-f | -r | -c mapfile |
+.br
+	-g gammar gammag gammab |
+.br
+	-sg gammar gammag gammab]
+.br
+	[-C] [-S viewrows [viewcols]] [-l framelabel]
+.br
+.ne 6
+.sp 2
+.ce
+\fB\s+2DATACUBE TOOLS\s-2\fR
+.sp 2
+.b *dispic
+[-b background] [-o row col] [-d delay] < image
+.sp
+.b *grabpic
+[-c channel] [-d rows cols] [-o from_row from_col]
+.br
+	[-r row_resolution col_resolution]
+.br
+	[-s num_frames [delay]]
+.sp
+.b *livepic
+[-c channel]
+.br
+.ne 6
+.sp 2
+.ce
+\fB\s+2COLOR AND COLORMAP SUPPORT\s-2\fR
+.sp 2
+.b addcmap
+[-f colormapfile | -g gammar [gammag [gammab]]]
+.sp
+.b applycmap
+[-f colormapfile |
+.br
+	-g [gammar [gammag [gammab]]]]
+.sp
+.b coltransf
+[-f mappingfile]
+.sp
+.b cscan
+[-s scanflag] [-m mappingflag] [-b outbins] [-d]
+.sp
+.b intercolor
+file1 file2 ...
+.br
+.ne 4
+.sp
+.b luminance
+[-f colormapfile |
+.br
+	-g [gammar [gammag [gammab]]]]
+.br
+	[-p redweight greenweight blueweight]
+.sp
+.b subsample
+[-h hrate [hoffset]] [-v vrate [voffset]]
+.br
+	[-t trate [toffset]] [-d drate [doffset]]
+.br
+	[-c crate [coffset]]
+.br
+.ne 6
+.sp 2
+.ce
+\fB\s+2REGION-OF-INTEREST\s-2\fR
+.sp 2
+.b clearroi
+.sp
+.b extractroi
+.sp
+.b setroi
+-s frow fcol nrow ncol
+.br
+.b setroi
+-l frow fcol lrow lcol

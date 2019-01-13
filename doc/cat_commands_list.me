@@ -1,0 +1,662 @@
+.\" to print: psroff -me cat_commands_list.me
+.po 1i
+.sz 11
+.he 'HIPS Categorized Reference ''%'
+.ce
+\fB\s+2CATEGORIES\s-2\fR
+.sp 2
+.ta .75i
+HEADER MANIPULATION
+.br
+PIXEL FORMAT CONVERSION
+.br
+HARDCOPY AND HALFTONING
+.br
+OPERATIONS ON SEQUENCES
+.br
+IMAGE GENERATION
+.br
+GEOMETRIC AND OTHER OPERATIONS ON PICTURES
+.br
+OPERATIONS ON PIXELS
+.br
+STATISTICS
+.br
+FRAME ARITHMETIC
+.br
+CONVOLUTION, CORRELATION, EDGE DETECTION
+.br
+	AND OTHER SPATIAL OPERATIONS
+.br
+DIGITAL TRANSFORMS AND FILTERS
+.br
+GAUSSIAN AND LAPLACIAN PYRAMID OPERATIONS
+.br
+FEATURE EXTRACTION AND RULE GENERATION
+.br
+IMAGE COMPRESSION
+.br
+PLOT3D GRAPHICS PACKAGE
+.br
+SUNVIEW TOOLS
+.br
+XWINDOWS TOOLS
+.br
+DATACUBE TOOLS
+.br
+COLOR AND COLORMAP SUPPORT
+.br
+REGION-OF-INTEREST
+.sp 2
+\fBNOTE:\fP commands marked with an asterisk (*) are only available
+with HIPSADDON
+.sp 2
+.ce
+\fB\s+2HEADER MANIPULATION\s-2\fR
+.sp 2
+adddesc \- add information to a sequence header
+.br
+addparam \- add parameters to a HIPS image header
+.br
+convertxhd \- convert a HIPS-1 image with extended header to HIPS-2 format
+.br
+genheader \- generate a image header
+.br
+grabheader \- throw out an image sequence, preserving the header alone
+.br
+hipstoportable \- convert from HIPS format to various portable formats
+.br
+hipstosun \- convert HIPS images to Sun raster format
+.br
+hips2tohips1 \- convert HIPS-2 images to HIPS-1 format
+.br
+*hips2vit \- convert HIPS images to VITOK format
+.br
+portabletohips \- convert from various portable formats to HIPS format
+.br
+rmparam \- remove parameters from a HIPS image header
+.br
+seeheader \- print the header of a frame sequence
+.br
+stripheader \- strip an image sequence of its header
+.br
+suntohips \- convert Sun raster images to HIPS format
+.sp 2
+.ce
+\fB\s+2PIXEL FORMAT CONVERSION\s-2\fR
+.sp 2
+atop \- converts images to various pixel formats from ASCII
+.br
+bpack \- convert to packed pixel format
+.br
+combine \- combine two real images into one complex image
+.br
+htob \- convert to byte pixel format
+.br
+htobgr \- convert to BGR format
+.br
+htobgrz \- convert to BGRZ format
+.br
+htoc \- convert to complex pixel format
+.br
+htod \- convert to double pixel format
+.br
+htodc \- convert to double complex pixel format
+.br
+htof \- convert to floating point pixel format
+.br
+htoi \- convert to integer pixel format
+.br
+htolp \- convert to least-significant-bit-first packed pixel format
+.br
+htomp \- convert to most-significant-bit-first packed pixel format
+.br
+htorgb \- convert to RGB format
+.br
+htorgbz \- convert to RGBZ format
+.br
+htos \- convert to short integer pixel format
+.br
+htosb \- convert to signed byte pixel format
+.br
+htoui \- convert to integer pixel format
+.br
+htous \- convert to unsigned short integer pixel format
+.br
+htozbgr \- convert to ZBGR format
+.br
+htozrgb \- convert to ZRGB format
+.br
+imgtopyr \- compute a Laplacian or Gaussian pyramid
+.br
+ptoa \- convert images from pixel-format to ASCII
+.br
+pyrtoimg \- reconstruct an image from a Laplacian pyramid
+.br
+scale \- scale a sequence of images
+.br
+*seecontents \- print the contents of an image
+.sp 2
+.ce
+\fB\s+2HARDCOPY AND HALFTONING\s-2\fR
+.sp 2
+dither \- halftones using an 8x8 dither matrix
+.br
+dotdiff \- halftones using an 8x8 dot diffusion matrix
+.br
+halftone \- halftones using the Floyd-Steinberg algorithm
+.br
+prtdth \- print halftones with 64 grey level dither on an Anadex printer
+.br
+prteps \- print halftones on an Epson printer
+.br
+prthlf \- print halftones on an Anadex printer
+.br
+pshalftone \- display images as halftones on a PostScript device
+.sp 2
+.ce
+\fB\s+2OPERATIONS ON SEQUENCES\s-2\fR
+.sp 2
+autodiff \- absolute value of the difference between successive frames
+.br
+catframes \- concatenate several image sequences
+.br
+comicstrip \- display batches of frames in a single matrix of pictures
+.br
+drift \- translate a single frame with linear, integral velocity
+.br
+interdepth \- interleave depth planes
+.br
+interlace \- interlace the frames of several files
+.br
+repframe \- repeat or interpolate frames by different methods.
+.br
+strobe \- average groups of successive frames
+.br
+subsample \- subsample a sequence spatially and/or temporally
+.br
+subseq \- extract a subsequence of frames
+.br
+wrapimg \- shift and wrap around an image sequence
+.sp 2
+.ce
+\fB\s+2IMAGE GENERATION\s-2\fR
+.sp 2
+atop \- converts images to various pixel formats from ASCII
+.br
+calcpix \- generate and execute a program which manipulates byte-formatted sequences
+.br
+checkers \- generate a checkerboard image
+.br
+cosum \- Compute a sum of arbitrary spatiotemporal sinewave gratings
+.br
+*ellipse \- generate an ellipse line drawing image
+.br
+fastcosum \- Compute a sum of spatiotemporal sinewave gratings (quickly)
+.br
+fcalcpix \- generate and execute a program which manipulates float-formatted sequences
+.br
+gabor \- create a 3-dimensional Gabor packet
+.br
+genframe \- generate a uniform frame
+.br
+grating \- create a 3-dimensional sinusoidal grating
+.br
+*grey2disp \- generate a random-dot stereogramme
+.br
+greybar \- generate a ramp of grey bars
+.br
+*greylevel \- generate a greylevel ramp image
+.br
+*mandelbrot \- mandelbrot subset generator
+.br
+*saw \- generate a sawtooth intensity image
+.br
+sirds \- create a single image random dot stereogram from a depth image
+.br
+zoneplate \- make a sinusoidal zoneplate image
+.sp 2
+.ce
+\fB\s+2GEOMETRIC AND OTHER OPERATIONS ON PICTURES\s-2\fR
+.sp 2
+affine \- warp an image using an affine transformation
+.br
+calcwarp \- generate and execute a program which warps an image
+.br
+collage \- combine 2 or more sequences into a single collage sequence
+.br
+comicstrip \- display batches of frames in a single matrix of pictures
+.br
+*cshift \- circular image wrapping
+.br
+cylindrate \- project sequence onto a half cylinder
+.br
+enlarge \- enlarge a sequence in space and/or time
+.br
+*extend \- image expander
+.br
+extract \- extract a subpicture
+.br
+extractroi \- extract the region-of-interest from a sequence
+.br
+flipquad \- swap opposite image quadrants
+.br
+*framing \- decorate an image with a frame
+.br
+gridwarp \- warp an image using a control grid
+.br
+joinframes \- synchronize and abut the frames from 2 or more sequences
+.br
+*mark \- place an image marke
+.br
+pad \- pad a sequence, inserting it into a uniform background
+.br
+*padimage \- merge images
+.br
+picinvert \- invert a frame
+.br
+pictranspose \- reflect an image about its main diagonal
+.br
+*project \- image geometric transformation
+.br
+reduce \- reduce a sequence by pixel averaging
+.br
+reflect \- reflect a frame about a vertical axis
+.br
+*rotate \-  image 2D geometric rotation
+.br
+rotate180 \- rotate a frame by 180 degrees
+.br
+rotate90 \- rotate a frame by 90 degrees
+.br
+*smear \- expand image
+.br
+stretch \- stretch an image
+.br
+subsample \- subsample a sequence spatially and/or temporally
+.br
+*translate \- 2D image geometric transformation
+.br
+wgauss \- window a sequence with a 3-dimensional Gaussian envelope
+.sp 2
+.ce
+\fB\s+2OPERATIONS ON PIXELS\s-2\fR
+.sp 2
+abspix \- take the absolute value of pixels
+.br
+bnoise \- add binomial noise to an image
+.br
+calcpix \- generate and execute a program which manipulates byte-formatted sequences
+.br
+conjpix \- take the complex conjugate of pixels
+.br
+exppix \- take the exponential of an image
+.br
+fcalcpix \- generate and execute a program which manipulates float-formatted sequences
+.br
+gnoise \- pipe sequence through a channel with Gaussian noise
+.br
+histoeq \- histogram equalization
+.br
+histostretch \- stretch contrast by ignoring outlier pixel values
+.br
+logimg \- take the natural logarithm of an image
+.br
+mean0 \- subtract the mean from an image so that it has a mean of zero
+.br
+neg \- take the photographic negative of an image
+.br
+noise \- simulate a noisy digital communication channel
+.br
+powerpix \- raise to a power and normalize each pixel of a frame
+.br
+scale \- scale a sequence of images
+.br
+scalemeansd \- scale images to have a specified mean and standard deviation
+.br
+shiftpix \- shift pixel values
+.br
+stretchpix \- stretch or compress the range of gray-levels
+.br
+thresh \- apply a threshold
+.br
+*unoise \- generate uniform random noise
+.sp 2
+.ce
+\fB\s+2STATISTICS\s-2\fR
+.sp 2
+binentropy \- compute the entropy of pixel blocks over a binary image
+.br
+disphist \- display histogram files as a bar graph
+.br
+framevar \- compute basic statistics of an image
+.br
+getmax \- calculate the maximum value in an image or sequence
+.br
+getmin \- calculate the minimum value in an image or sequence
+.br
+histo \- compute grey-level histograms
+.br
+pixentropy \- compute image entropy
+.br
+seehist \- display histogram files as readable Ascii text
+.br
+*sigmaspat \- estimate the random noise in an image
+.br
+*sigmatemp \- estimate the random temporal noise in an sequence
+.br
+slice \- display slices through an image as a graph
+.sp 2
+.ce
+\fB\s+2FRAME ARITHMETIC\s-2\fR
+.sp 2
+absdiffseq \- compute the absolute value of the difference of image pixels
+.br
+addseq \- add two sequences, pixel by pixel
+.br
+andseq \- compute the logical AND of two sequences
+.br
+autodiff \- absolute value of the difference between successive frames
+.br
+*average \- pixel-by-pixel averaging of an image sequence
+.br
+calccomb \- generate and execute a program which combines byte-formatted sequences
+.br
+colorkey - perform a `color keying' operation for merging several images
+.br
+diffseq \- subtract two sequences, pixel by pixel
+.br
+divseq \- divide two sequences, pixel by pixel
+.br
+fcalccomb \- generate and execute a program which combines float-formatted sequences
+.br
+maxabsseq \- compute the maximum absolute value of two sequences, pixel by pixel
+.br
+maxseq \- compute the maximum of two sequences, pixel by pixel
+.br
+minabsseq \- compute the minimum absolute value of two sequences, pixel by pixel
+.br
+minseq \- compute the minimum of two sequences, pixel by pixel
+.br
+mulseq \- multiply two sequences, pixel by pixel
+.br
+orseq \- compute the logical OR of two sequences
+.br
+xorseq \- compute the logical XOR of two sequences
+.sp 2
+.ce 2
+\fB\s+2CONVOLUTION, CORRELATION, EDGE DETECTION
+.sp
+AND OTHER SPATIAL OPERATIONS\s-2\fR
+.sp 2
+abdou \- Abdou's edge fitting procedure
+.br
+*asl \- adaptive-surface labeling smoothing filter
+.br
+bclean \- remove small 8-connected components
+.br
+btcsmooth \- smooth a btc image
+.br
+convolve \- 3D convolution
+.br
+correl \- cross-correlate two images
+.br
+discedge \- a discrete domain regional edge detector
+.br
+discedge2 \- a discrete domain regional edge detector with offsets
+.br
+dog \- filter an image by applying difference of Gaussians mask
+.br
+extremum \- apply an extremum filter to an image
+.br
+mask \- Generalized filtering program
+.br
+maskseq \- convert a mask set into a HIPS sequence
+.br
+*mean \- mean filter
+.br
+median \- apply a median filter to an image
+.br
+*mls \- maximum-likliehood-smoothing filter
+.br
+morphdilate \- apply the morphological operator of dilation
+.br
+morpherode \- apply the morphological operator of erosion
+.br
+*mpmatch \- Marr-Poggio stereogramme matcher
+.br
+nonisot \- nonisotropic convolution
+.br
+*nns \- nearest-neighbour-smoothing filter
+.br
+*rank \-  rank-order filter an image
+.br
+*sasmooth \- selective-average-smoothing filter
+.br
+*snn \- symmetric-nearest-neighbour filter
+.br
+thicken \- thicken a white-on-black image
+.br
+thin \- thin and categorize a white-on-black image
+.br
+zc \- find zero-crossings in a convolved sequence
+.sp 2
+.ce
+\fB\s+2DIGITAL TRANSFORMS AND FILTERS\s-2\fR
+.sp 2
+bandpass \- apply a bandpass filter to a sequence
+.br
+bandreject \- apply a band rejection filter to a sequence
+.br
+dct \- discrete cosine transform
+.br
+dispwbasis \- output the basis set for the Walsh transform of a 16X16 array
+.br
+flipquad \- swap opposite image quadrants
+.br
+fourtr \- Fourier transform and spectrum
+.br
+fourtr3d \- 3D Fourier transform and spectrum
+.br
+highpass \- apply a highpass filter to a sequence
+.br
+inv.dct \- inverse discrete cosine transform
+.br
+inv.fourtr \- inverse Fourier transform
+.br
+inv.fourtr3d \- inverse 3D Fourier transform
+.br
+inv.walshtr \- inverse Walsh transform
+.br
+lowpass \- apply a lowpass filter to a sequence
+.br
+walshtr \- Walsh transform
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2GAUSSIAN AND LAPLACIAN PYRAMID OPERATIONS\s-2\fR
+.sp 2
+imgtopyr \- compute a Laplacian or Gaussian pyramid
+.br
+pyrdisplay \- convert an image pyramid to a single image for display
+.br
+pyrexpand \- apply the pyramid expand operation to an image or pyramid
+.br
+pyrextract \- extract a subset of pyramid levels
+.br
+pyrmerge \- merge several images or pyramids into a single pyramid
+.br
+pyrreduce \- apply the pyramid reduce operation to an image or pyramid
+.br
+pyrtoimg \- reconstruct an image from a Laplacian pyramid
+.sp 2
+.ce
+\fB\s+2FEATURE EXTRACTION AND RULE GENERATION\s-2\fR
+.sp 2
+*binatts \- compute a series of shape descriptors for a boolean image
+.br
+*cmat \- display a confusion matrix using data output from VACLS
+.br
+*vacls \- generate/test classification rules using feature/attribute vectors
+.sp 2
+.ce
+\fB\s+2IMAGE COMPRESSION\s-2\fR
+.sp 2
+ahc3 \- 3D adaptive hierarchical coding into binary trees of binary images
+.br
+ahc3_r \- decode an ahc3-coded sequence into a byte formatted sequence
+.br
+binquad \- 3D binary (temporal) and quadtree (spatial) adaptive hierarchical coding of binary images
+.br
+binquad_r \- decode an binquad-coded sequence into a byte formatted sequence
+.br
+btc \- 2-d block truncation coding/encoding
+.br
+btcsmooth \- smooth a btc image
+.br
+btorle \- run-length encoding of grey-scale images
+.br
+dpcm_r \- DPCM decoding program receiver
+.br
+dpcm_t \- DPCM transmission program.
+.br
+hc_bin \- binary-tree coding of binary images
+.br
+hc_bin_r \- decode an hc_bin-coded sequence into a byte formatted sequence
+.br
+oct \- Hierarchical oct-tree coding of binary image sequences
+.br
+oct_r \- decode an oct-tree into a byte formatted sequence.
+.br
+rle \- run length encoding of binary sequences
+.br
+rle_r \- decode an rle-coded sequence into a byte formatted sequence.
+.br
+rletob \- decoding of run-length encoded images
+.br
+vectcode \- spanning tree coding receiver
+.br
+vectgen \- spanning tree coding
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2PLOT3D GRAPHICS PACKAGE\s-2\fR
+.sp 2
+cutf \- cut a PLOT3D frame
+.br
+dump_plot3d \- examine the ASCII code of a PLOT3D vector plot
+.br
+gcube \- generate a 3-D cube.
+.br
+gmag \- scale a 3-D graph
+.br
+gpoly \- generate a 2-D polygon
+.br
+grot \- rotate a 3-D graph
+.br
+gshift \- shift a 3-D graph
+.br
+gsync \- synchronize plot files
+.br
+pixto3d \- convert sequences in pixel-format to PLOT3D format
+.br
+plot3topix \- convert from PLOT3D format to pixel format
+.br
+plot3tov \- convert PLOT3D images to UNIX PLOT format
+.br
+pstrobe \- collapse a batch of PLOT3D frames into one frame of output
+.br
+psubseq \- extract a subsequence of frames in PLOT3D format
+.br
+seeplot \- examine the ASCII code of a PLOT3D vector plot
+.br
+tmag \- scale a 3-D graph
+.br
+transf \- transform a PLOT3D sequence
+.br
+trot \- rotate a 3-D graph in time
+.br
+tshift \- translate a 3-D graph over time
+.br
+view \- generate a conic perspective of a 3D graph
+.br
+vmag \- scale a world around an observer in a 3-D graph over time
+.br
+vrot \- rotate the 3-D coordinates system over time
+.br
+vshift \- translate an observer in a 3-D graph over time
+.sp 2
+.ce
+\fB\s+2SUNVIEW TOOLS\s-2\fR
+.sp 2
+hipstool \- SunView image analysis tool
+.br
+hipsview \- SunView image analysis tool
+.br
+sunanim \- SunView image animator and browsing tool
+.br
+sunv \- SunView image display tool
+.br
+viewcolor \- pseudocolor tool for use under SunView
+.sp 2
+.ce
+\fB\s+2XWINDOWS TOOLS\s-2\fR
+.sp 2
+genial \- general image analysis tool
+.br
+segal \- XView binary mask editor/builder/analyzer
+.br
+tuner \- enhancement and analysis tool using an elastic-tuning function
+.br
+*xanim \- XView image animator
+.br
+xhips \- X image display tool
+.br
+xhist \- histogram display and manipulation tool
+.br
+xvanim \- XView image animator and browser
+.br
+xvhips \- XView image display tool
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2DATACUBE TOOLS\s-2\fR
+.sp 2
+*dispic \- display an image via a DIGIMAX/FRAMESTORE
+.br
+*grabpic \- capture an image from a DIGIMAX/FRAMESTORE
+.br
+*livepic \- enable live video on a DIGIMAX/FRAMESTORE system
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2COLOR AND COLORMAP SUPPORT\s-2\fR
+.sp 2
+addcmap \- add a colormap to a HIPS image header
+.br
+applycmap \- apply a colormap to an image
+.br
+coltransf \- apply an affine color transformation
+.br
+cscan \- convert 24-bit color to 8-bit pseudocolor
+.br
+intercolor \- interleave color planes
+.br
+luminance \- convert a color or pseudocolor image to black-and-white
+.br
+subsample \- subsample a sequence spatially and/or temporally
+.br
+.ne 7
+.sp 2
+.ce
+\fB\s+2REGION-OF-INTEREST\s-2\fR
+.sp 2
+clearroi \- reset the region-of-interest to be the entire image
+.br
+extractroi \- extract the region-of-interest from a sequence
+.br
+setroi \- set the region-of-interest

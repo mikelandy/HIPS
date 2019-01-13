@@ -1,0 +1,530 @@
+.\" to print: ptroff -me hips2changes.me
+.po 1i
+.ls 1
+.ce 3
+\fB\s+2Changes from HIPS to HIPS-2\s-2\fR
+.sp
+.i "Michael S. Landy"
+.sp
+January 20, 1991
+.sp 2
+.he ''%''
+.pp
+This document gives an overview of the changes between the original version of
+HIPS (which was first written in 1982) and HIPS-2.  HIPS-2 involved a complete
+redesign of HIPS (after a number of consultations between Michael Landy and
+the folks at the Turing Institute in Glasgow).  The bulk of the rewriting was
+accomplished in January, 1991.  The initial motivation for the rewrite was to
+provide a subroutine interface to the HIPS capabilities.  But, given the
+amount of rewriting that would entail, we invested the effort to make a
+substantial number of improvements to the software.
+.sh 1 "Changes from the command-level user's standpoint"
+.sh 2 "Image header format"
+.pp
+The image header format has been changed a bit.  The only header fields
+which have been eliminated are `bits_per_pixel', which was basically
+informational, useless and often incorrect in the old HIPS, and `bit_packing',
+which is now indicated in the pixel_format (by using PFMSBF or PFLSBF for
+bit-packed images, as opposed to PFBYTE for unpacked byte images).  New
+header fields include support for a rectangular region-of-interest
+(see below) and a standardized extended parameters section (this
+replaces the old XHEADER package, which is no longer supported).  All
+HIPS-2 programs can read images created by old HIPS programs, but not
+vice-versa.  However, images created by HIPS which used the XHEADER
+package to store additional parameters in the image header will need
+to be converted by hand using the
+.i convertxhd (1)
+program.  As a result of all of this, the output from
+.i seeheader (1)
+changes slightly.
+.pp
+The extended parameters section of the header allows HIPS to be more useful as
+an image database and image documenting tool.  This is mostly of interest to
+programmers, but command-level users may add parameters using the
+.i addparam (1)
+command, and can see the value of these parameters with
+.i seeheader (1)
+along with values that are now subsumed into the parameters section (such as
+the top level of an image pyramid, or the number of bins in a histogram).
+.pp
+More recently (11/92) a new pixel format was added which makes use of the
+extended parameters.  This format, PFMIXED, allows an image sequence to be a
+sequence of raster format frames each of which is in a different pixel format
+(e.g. a byte frame followed by a float frame followed by an integer frame
+followed by an RGB frame,
+etc., all with the same number of rows and columns).  This is accomplished by
+storing a table with the actual pixel formats (one for each frame) in the
+header parameters section as extended parameter
+.i formats .
+At the moment, only a few programs handle this format (most importantly
+.i catframes
+and
+.i subseq ,
+but also
+.i seeheader ,
+.i ptoa ,
+.i addcmap ,
+.i adddesc ,
+.i addparam ,
+.i clearroi ,
+.i extract ,
+.i extractroi ,
+.i setroi
+and
+.i stripheader ),
+and so it mainly serves as a way to store different aspects of an image in a
+single file (to be processed separately later using
+.i subseq
+to pull out images in a common format).
+.sh 2 "Format conversion"
+.pp
+One major nuisance of the original HIPS was that the user was required
+to keep track of the pixel format of each image and convert from one
+pixel format to another when a subsequent program required a different
+format.  HIPS-2 is `object-oriented' in the sense that each HIPS-2
+program handles a given subset of the pixel formats and automatically
+converts images in other formats to the nearest available format.  The user
+will always be told when this happens (a warning is printed on stderr).
+.pp
+There
+are built-in conversion subroutines from each type to most other types.  When
+a direct conversion isn't available, the conversion is still performed by
+first converting from the input format to integer, and then from integer to
+the required format.  In the documentation of each routine is a list of the
+pixel formats that are directly handled by that routine \- images in other
+formats will be converted to the nearest available format, with preference
+given to the simplest possible format that doesn't involve a loss of
+information.  Thus, a byte image will be converted to short if possible, to
+float or complex, if necessary, and to bit-packed format only as a last
+resort.  Routines which combine more than one image (e.g. addseq) can now
+handle images in different formats.  Again, a common output format will be
+chosen which is as simple as possible, with a preference for types which will
+involve no loss of information from any of the input images.  For example, a
+combination of a double-precision image and a complex image will attempt to do
+processing in double-precision complex if at all possible.
+.pp
+The pixel format conversion is generally done in the way one would expect.
+Real formats are converted to integer formats by rounding, and also by
+clipping at zero if the integer format is unsigned (unsigned byte, short or
+integer), and at 255 if the format is unsigned bytes.  Signed bytes are
+clipped at -128 and +127.  Conversions from complex to real formats can use
+complex magnitude, phase, real part or imaginary part (generally selectable
+with a switch).  Conversions from real to complex formats can set the real
+part only (and leave the imaginary part zero), set the imaginary part only, or
+set both parts equal to the real input value.  For conversions from bit-packed
+formats, the user may generally specify the value corresponding to the 0- and
+1-bits as an integer between 0 and 255 with a command-line switch.
+.sh 2 Programs
+.pp
+All of the original HIPS programs have been converted to HIPS-2.
+As a consequence, there have been some changes in program names.
+Because of the object-orientation, for example, rather than
+having a huge collection of pixel format conversion programs from each
+type to each other type (such as
+.i btof
+\- byte-to-float conversion),
+now there are conversion programs which take any HIPS binary format
+and convert to a particular other format (such as
+.i htob (1)
+\- conversion
+from any hips format to byte), plus the two Ascii conversion programs (\c
+.i ptoa
+and
+.i atop ).
+These converters also take over for programs such as
+.i bunpack
+and
+.i phase_mag .
+Also, since most other programs do format conversion as necessary, the format
+conversion routines like
+.i htob (1)
+should be required far less often.
+.pp
+The argument handling has been standardized and
+taken over by a single argument parsing routine with the result that
+there are some changes in the command line interface to certain
+filters.
+A set of flag options have been reserved and are used by all programs for
+which they are relevant, such as the flags to control conversion
+from real to complex formats, conversion from complex to real formats,
+conversion to and from bit-packed format and the printing of an
+automatically generated usage message for the filter. 
+.pp
+Various changes have been made to the grammar of the command lines for
+HIPS filters.
+All command line parameters must now be attached to a flag which removes
+the need for positionally dependent parameters and should associate each
+parameter with a flag which is easier to remember.
+For example, rather than invoking \fIgenframe\fP as
+.sp
+.(b
+.ta 1i
+	genframe [graylevel [rows [cols]]]
+	genframe graylevel frames rows cols,
+.)b
+the command line now looks like
+.sp
+.(b
+.ta 1i
+	genframe [-f frames] [-g graylevel] [-s rows [cols]]
+.)b
+.pp
+White space is now required between all flags, parameters and filenames
+on the command line so that formats such as ``-f27'' are illegal and have
+been changed to ``-f 27''.
+This ensures a more consistent interface across all HIPS filters.  If you are
+not sure what the flags are for a command, simply run the program with the
+.i -U
+option, and a summary usage line will be printed (or, of course, consult the
+manual page).
+.pp
+The HIPS-2 interface also allows input image filenames to be specified on
+the command line and these will treated equivalently to images redirected
+via \fIstdin\fP.
+Thus, the commands
+.sp
+.(b
+.ta 1i
+	filter imagefile > outimagefile
+.)b
+and
+.sp
+.(b
+.ta 1i
+	filter < imagefile > outimagefile
+.)b
+will produce the same result.
+This is more in keeping with standard UNIX conventions and should prove a
+useful extension to the user interface.
+If a sequence of image filenames is expected, an input from
+.i stdin
+can be positioned in the sequence by using a `-' as a place marker, so the
+commands
+.sp
+.(b
+.ta 1i
+	filter image1 image2 image3 image4  > outimagefile
+.)b
+and
+.sp
+.(b
+.ta 1i
+	filter image1 image2 - image4 < image3 > outimagefile
+.)b
+will also be equivalent.
+Again, this is in keeping with the UNIX precedent.
+.pp
+A number of new routines have been written such as
+.i clearroi (1),
+.i extractroi (1),
+and
+.i setroi (1)
+for the new region-of-interest capability,
+.i addparam (1)
+for setting image header parameters, and
+.i convertxhd (1)
+for converting old hips images to new format which used the old XHEADER
+facilities.
+.sh 2 Region-of-Interest
+.pp
+We have added the capability of handling a rectangular
+`region-of-interest' (ROI).  This allows the user to specify a
+sub-rectangle to be processed by each program, with the surrounding
+image left untouched, but still passed on to subsequent programs.
+New programs which manage ROIs include
+.i setroi (1),
+.i getroi (1),
+and
+.i extractroi (1).
+The manual page for each HIPS program specifies
+whether it handles ROIs.  The format conversion programs, of course, convert
+the entire image, but leave the ROI parameters intact for subsequent ROI
+processing in the new format.  For bit-packed images, ROIs are only
+partially implemented: The left-hand edge of the ROI must be at a column
+which is a multiple of eight (i.e. the first pixel in a byte).  If an image
+with an ROI is converted to bit-packed form and the ROI does not satisfy this
+condition, the ROI is reset to be the entire image.  Programs which change
+image geometry (e.g.
+.i rotate90 (1),
+.i enlarge (1),
+and
+.i extract (1))
+generally do not use the ROI, but change the ROI in the output image in the
+way one would expect (i.e. the ROI is carried along with the image as it is
+transformed).
+.sh 2 "Color"
+.pp
+We have added more explicit capabilities for handling color images.
+If an image consists of several color planes per frame, this is
+now indicated in the image header.  There are routines which respect
+this distinction between frame and color plane.  There are conversion
+routines between byte images with 3 color planes and formats in which
+the color bytes are packed together into one pixel (PFRGB where the succession
+of bytes is `rgbrgbrgb', PFRGBZ where it is
+`rgb0rgb0rgb0', PFZRGB where it is `0rgb0rgb0rgb', PFBGR where it is
+`bgrbgrbgr', PFBGRZ where it is `bgr0bgr0bgr0' and PFZBGR where it is
+`0bgr0bgr0bgr').  The automatic format conversion described above can also
+convert between the various packed 3-color formats and standard 1-color
+formats (such as byte, float, etc.).
+There is now the possibility of storing a lookup
+table with an image (in the image header parameters section) for use
+as a pseudocolor lookup table or for gamma correction.
+.sp 2 "Depth"
+.pp
+We have recently (March, 1994) added another dimension to those allowed for
+image sequences:
+.i depth .
+Thus, a sequence may consist of a series of 3-dimensional color image frames
+(e.g. corresponding to successive time steps).
+Each frame consists of a series of depth planes (e.g. corresponding to
+different slices through a solid).  Each depth plane consists of a series of
+color planes (e.g. red, green and blue).  Each color plane is a rectangular
+image (of dimensions
+.i nrows
+by
+.i ncols ).
+Because the depth dimension was added on later, it is not a regular part of
+the header, but rather is stored in an extended parameter (called
+.i depth ),
+which defaults to 1 if it is not included in the header parameters section.
+A number of programs were modified to know about the depth parameter
+(including
+.i subseq ,
+.i catframes ,
+.i genframe ,
+.i genheader ,
+.i wrapimg ,
+.i atop ,
+.i seeheader ,
+.i calccomb ,
+.i fcalccomb ,
+.i calcpix ,
+.i fcalcpix
+and
+.i calcwarp ,
+as well as a new program:
+.i interdepth ).
+If a user makes no use of this facility, all programs continue to work as they
+did before (when image sequences were indexed by frame, color, row and column
+only).
+.sh 2 "Full sequence histories, etc."
+.pp
+When a HIPS routine combines more than one input image, it now preserves the
+sequence history of all of the input images.  These routines accept a switch
+to defeat this capability and revert to the original HIPS method of retaining
+only one of the input sequence histories.  Similarly, by default the sequence
+descriptions from the input images are combined.  It is also possible to
+combine the extended parameters from all input sequences (see below for a
+brief mention of extended parameters) although in this case, the default is to
+include only the parameters from the primary input sequence.
+.sh 1 "Changes from the HIPS programmer's standpoint"
+.sh 2 "Image processing subroutine library"
+.pp
+The HIPS-2 package is usable both as a library of main programs (UNIX
+`filters') as in the past, but most functions are also available as
+user-callable subroutines.  The old low-level routines (mostly dealing
+with image headers) and the pixel format conversion routines are still
+loaded with -lhips.  The new image processing routines are loaded with
+-lhipsh, and hipsaddon subroutines are loaded with -lhipsa.  The new routines
+exist in a generic form, in forms for each of several pixel formats, and in
+forms which may be called with raw data for users who don't want to use the
+HIPS memory headers.
+.sh 2 "Low-level library changes"
+.pp
+The low-level library has been changed substantially.  Many routines
+now require different arguments than in old HIPS \- so be careful in
+converting your HIPS programs.  The most frequent changes in arguments result
+from the conversion to using stdio for I/O (so fread/fwrite routines require
+file pointers rather than file descriptors), the changes to the error handler
+(so many routines take a frame number and file name argument in order to give
+more informative error messages), and the change to the error handler
+.i perr (3)
+itself.
+.pp
+The low-level library now includes
+programs for converting between all pixel-based formats, and for
+implementing the object-oriented character of HIPS-2 programs.  There
+is a new argument parser which imposes a consistent user interface for
+HIPS programs.  There are many new low-level functions which make
+HIPS-2 more convenient for the programmer (`read-header-and-allocate-image',
+`update-header-and-write-header', `read-image', `write-image',
+etc.).  This has been made possible by having the image header (as stored in
+memory) point to the image itself and to the parameters section (so that
+pyramid routines can access the value of the top pyramid level in order to
+compute the number of pixels in an image).
+.pp
+The error handler has been changed to accommodate both the main
+program and subroutine interface.  Thus, every single HIPS library routine
+returns a value other than HIPS_ERROR on a successful return, and either
+returns HIPS_ERROR if there was a problem, or prints an error message and
+exits (depending on the severity of the error and the user settings of two
+external variables:
+.i hipserrprt
+and
+.i hipserrlev ).
+Also, there is now a table of standard error codes, and so the first argument
+to
+.i perr (3)
+is now an error code, rather than an error string. If a routine doesn't
+encounter an error, something other than HIPS_ERROR is returned (for example,
+HIPS_OK).
+.pp
+The low-level header and image I/O is now done entirely using stdio
+(putc/getc/fread/fwrite).  As a result, the old routine
+.i pread
+is gone, and users must convert to using
+.i fopen (3s),
+.i fread (3s)
+and
+.i fwrite (3s)
+rather than
+.i open (2) ,
+.i read (2)
+( or
+.i pread )
+and
+.i write (2).
+.sh 2 "Changes required of locally written HIPS programs"
+.pp
+Locally written HIPS programs will need to be changed slightly to work
+with HIPS-2.  The minimal changes include:
+.np
+Don't define `Progname'. It's defined in hipl_format.h.  However, you should
+still set it to the name of your program, as it continues to be used by
+.i perr (3)
+for formatting error messages.
+.np
+Modify calls to perr given the new argument structure.  The simplest thing is
+to use the error code HE_MSG.  Thus
+.sp
+.ti .5i
+perr("error message");
+.sp
+becomes
+.sp
+.ti .5i
+perr(HE_MSG,"error message");
+.sp
+However, consult the error codes in hipl_format.h, because most standard error
+conditions are included in the list.
+.np
+Convert to using stdio (fopen/fread/fwrite), because the header is now read
+using
+.i fscanf (3s),
+so that any attempt to read the subsequent image using
+.i read (2)
+or
+.i write (2)
+will fail.  As a result, the routine
+.i pread
+no longer exists.
+A simpler solution is to use the new routines
+.i read_image (3)
+and
+.i write_image (3),
+after having allocated your image memory when the header is read using
+.i read_hdr_a (3).
+Better still, use
+.i read_hdr_cpfa (3),
+which reads the image header, checks that the pixel format is one
+you can handle, and then allocates the image.  Finally, if you
+want your programs to become object-oriented, then convert to
+using
+.i read_header (3),
+.i set_conversion (3)
+and
+.i read_imagec (3).
+.np
+Remove all references to bits_per_pixel.  Change all references to bit_packing
+to instead check for pixel_format values of PFBYTE, PFMSBF and PFLSBF (the
+latter two are the two forms of bit-packed images).
+.np
+Change all references to hd.rows and hd.cols to be hd.orows and hd.ocols.
+Because of the new region-of-interest code, these values may differ, and
+hd.orows/hd.ocols specify the size of the entire input image.  Of course, you
+might consider getting your routines to handle ROI's appropriately.
+(See
+.i neg (1)
+and
+.i h_neg (3)
+for a simple example of how to do this.)
+.np
+The external variable
+.i Image_border
+which is used by the pyramid subroutines is now defined in hips_extrns.c and
+hipl_format.h, and so its definition should be removed from any programs which
+call these subroutines.
+.pp
+Other low-level routines have changed in their arguments, and new
+memory allocation programs have been added in addition to
+.i halloc (3)
+(there is
+.i memalloc (3),
+which doesn't zero the memory area, and
+.i hmalloc (3),
+which is like
+.i malloc
+in its arguments).
+.pp
+If you wish to be fully compatible with 
+HIPS-2, you should also present the standard user interface. To do
+this, convert to using
+.i parseargs (3),
+the argument parser library
+routine, which will ensure that the interface presented by your program is
+consistent with the HIPS standard interface.
+The standard we have settled on forces all command line parameters to be
+attached to a flag, requires white space to separate all flags,
+parameters and filenames on the command line and allows input image
+filenames to be specified as command line arguments.
+So, you may have to modify the interface presented by your filter if you
+wish to adopt this standard. Prior to calling
+.i parseargs (3),
+you will also have to define format descriptors for both the flag options and
+input image filenames which are accepted by your filter as discussed in
+the manual page.
+In addition, you will need to use the routine
+.i hfopenr (3)
+to open any files you use, even if your program only accepts one input file,
+because the new interface standard allows users to specify filenames as part
+of the command line or as the standard input.
+.sh 2 "Changes in image format - What to do with old HIPS images"
+.pp
+The image format has changed a bit, both as stored on disk and as held
+in a memory header structure.  Most of this should not affect users,
+but note that XHEADER is gone, and replaced with the more efficient
+extended header parameters (which are provided standard with HIPS-2).
+If you used XHEADER in your local programs, you will have to convert
+to using extended parameters (see
+.i setparam (3),
+.i getparam (3)
+and
+.i clearparam (3)),
+and convert your old images which had extended headers
+to the new format by hand using
+.i convertxhd .
+Sorry about that, chief.  In order to accommodate users who read entire HIPS
+images into memory including the header, all binary items in the header
+parameters section and the first image are fullword aligned (by adding padding
+to the last Ascii item and to binary items whose length is not a multiple of 4
+bytes).  Also, we have dropped the old bits_per_pixel header entry as it was
+never used.
+.pp
+We have added a header entry for the number of color planes.  The intent is
+that a sequence of 5 RGB images will have num_frame equal to 15 and numcolor
+equal to 3.  Then routines will be added to convert between industry standard
+RGB color formats to and from HIPS.  So far, this field is purely
+informational.
+.sh 1 "Changes to the installation procedure"
+.pp
+The installation procedure has been changed completely, and the new Makefile's
+are a substantial improvement.  The details are given, as usual, in
+README_INSTALL.  After editing a configuration file with local options, the
+installer now runs a Configuration command which hierarchically creates a
+tailored Makefile in every HIPS directory.  Having done this, the user can
+still hierarchically install all of HIPS by typing `make' in the top level
+directory, but can also install portions of the system thereafter by typing
+`make' at any lower level as well.  Other changes include the option to `make
+pristine', which uninstalls the software entirely, to `make doc', which prints
+the documentation other than the manual pages, and now the manual pages do
+not get reinstalled on every make, but only when manual pages have changed.

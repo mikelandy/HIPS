@@ -1,0 +1,31 @@
+
+i) This is a gallery of images in HIPS format, including single frames,
+processed images, and binary and 8-bit animation sequences.  For
+information on the format of any image file, type "seeheader <
+filename".
+
+ii) The sequence movies/corridor is stored in Left-Right pairs.  The
+sequence movies/range is an imaginary walk through a 3D model that has
+been generated from the first stereo pair using MSSM (included in
+hipsaddon) and expressed in terms of range (brighter pixels are closer
+to the imaginary walker).  The sequence movies/intensities is generated
+in the same manner as above except that the results are expressed using
+the grey-values of the original stereo-pair (those found in
+movies/corridor).
+
+iii) The directory 'thermal' contains some pictures (unsurprisingly)
+captured with a thermal imager. The image thermal/building.huffed
+contains the results of a hough transform (supplied with the HIPSaddon
+package) applied to building.s4 The teapot image had some rather hot
+tea in it!
+
+iv) The directory turing contains pictures of the late Alan Turing (from
+whence the name The Turing Institute comes (and incidentally the people
+that supply HIPSaddon)). turing.sobel is the result of turing convolved
+with a sobel mask.
+ 
+v) Subdirectory 'kde' contains a number of binary movies which show depth
+from motion.  
+ 
+vi) Subdirectory 'textures' includes a couple of artificially generated
+textures.

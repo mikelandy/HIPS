@@ -1,0 +1,21 @@
+#! /bin/sh
+
+CONFIG=${1-config.sun4}
+TOPDIR=${2-`pwd`}
+HERE=${3-}
+MFLAGS=${4-}
+
+# CONFIG = name of machine specific configuration file
+# TOPDIR = location of top level directory (see makefile.awk for desciption )
+# HERE =  used to keep track of current directory
+# MFLAGS = any standard 'make' arguements you may want to use 
+
+( 	echo TOPDIR = ${TOPDIR} ;
+	echo CONFIG = ${CONFIG} ;
+	echo HERE = ${HERE} ;
+	echo CCS_ROOT = ${TOPDIR}/user-contributed/lbl ;
+	cat ${TOPDIR}/${CONFIG} ${TOPDIR}/makefile.hdr makefile.src ${TOPDIR}/makefile.tlr
+) > Makefile
+
+make config-subdirs TOPDIR=${TOPDIR} CONFIG=${CONFIG} HERE=${HERE} \
+                MFLAGS=${MFLAGS}

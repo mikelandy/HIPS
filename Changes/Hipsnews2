@@ -1,0 +1,134 @@
+
+		HIPS News - Volume 2
+
+Here is the list of all changes I've made to HIPS since last December.
+Again, if you want an update to your copy of HIPS at any time, just
+contact me.  Similarly, if you have any problems, or find bugs, or have
+written something you'd like to share with other HIPS users, just let
+me know.  Finally, if you want to set up a local distribution list
+for this newsletter (i.e. hipsusers@machine), tell me what it is after
+you set it up.
+
+Michael Landy
+landy@nyu.edu
+
+------------------------------------------------------------------------
+
+12/93	H_BOOLEAN:  A minor change has happened recently to accomodate
+	the new program `xdisp'.  It turns out that there is a conflict
+	in the definition of Boolean between that used in HIPS and that
+	included in some of the X-windows include files.  So, the
+	current copy of HIPS has changed the HIPS type for Boolean
+	variables to be called h_boolean.  This change affected huge
+	numbers of files, and will affect your HIPS programs as well if
+	you use the Boolean type (simply change all instances of
+	Boolean to h_boolean to fix it).
+
+	Affected files:  The definition is in sys/hips_basic.h and the
+	word Boolean was changed to h_boolean everywhere else (affecting
+	the majority of HIPS source files).
+
+1/24/94	Minor bug fix to program shiftmin (in user-contributed/cc)
+
+	Affected files:  user-contributed/cc/sources/shiftmin.c
+
+2/11/94	Removed ifdef's around definition of h_boolean in hips_basic.h
+
+	Affected files:  sys/hips_basic.h
+
+2/24/94	Added routine `grepparam' to allow searches for header extended
+	parameters using substring matching (from University of Sheffield's
+	program xdisp)
+
+	Affected files:  lib/sources/xparam.c,
+	user-contributed/sheffield/xdisp/sources/hinter.c
+
+2/24/94	Fixed a memory leak.  Added deallocation rights parameters to the
+	memory header for orig_date, orig_name, seq_name.  This added two
+	new routines (init_header_d and init_hdr_alloc_d) and slightly changed
+	a few others.  Should not affect most users unless you are developing
+	programs which keep multiple headers in memory and copy them around,
+	allocate and deallocate them, etc. (e.g. user interface programs).
+
+	Affected files:  sys/hips_header.h, lib/sources/{dup_header.c,
+	fread_oldhdr.c,free_header.c,init_header.c,read_header.c}
+
+2/24/94	Added a Solaris configuration file.  This involved adding a new
+	configuration parameter (LDLIBFLAGS) for the call to ld used when
+	libraries are made.
+
+	Affected files:	config.* (including config.solaris.template),
+	hips/libsrc/makefile.src, hipsaddon/main/libsrc/makefile.src,
+	lib/sources/makefile.src, user-contributed/lbl/libscs/makefile.src,
+	user-contributed/lbl/hips/libsrc/makefile.src,
+	user-contributed/lbl/xview/guidexv/makefile.src,
+	user-contributed/lbl/xview/libxcolor/makefile.src,
+	user-contributed/lbl/rlelib/makefile.src,
+	pub/libsrc/makefile.src
+
+3/8/94	Added a new extended parameter `depth' which allows the user to define
+	time sequences of 3D color images (column within row within color
+	plane within depth plane within time step).  This should work
+	transparently for current users (since depth defaults to one if
+	undefined).  A new program (interdepth) was defined to merge images as
+	different depth planes.  Other programs were modified to be able to
+	handle or generate depth images (atop, genframe, genheader, subseq,
+	intercolor, catframes, autodiff, strobe, repframe, calcpix, fcalcpix,
+	calccomb, fcalccomb, calcwarp, comicstrip, interlace, and wrapimg).
+	Many other programs will deal with depth images correctly with no
+	modification (such as the image arithmetic programs:  addseq, mulseq,
+	etc.).
+
+	Affected files:  sys/{hips_basic.h,hips_error.h},
+	lib/sources/{formatheader.c,herrs.c,read_hutils.c,maxformat.c,hdepth.c)
+	hips/sources/{atop.c,genframe.c,genheader.c,subseq.c,intercolor.c,
+		catframes.c,autodiff.c,strobe.c,repframe.c,calcpix.c,
+		calcpixp.c,fcalcpix.c,fcalcpixp.c,interlace.c,calcwarp.c,
+		calcwarpp.c,comicstrip.c,wrapimg.c,calccomb.c,calccombp.c,
+		fcalccomb.c,fcalccombp.c,interdepth.c}
+
+3/9/94	Added a subsampling program (subsample) and subroutines (h_sample).
+
+	Affected files:  hips/libsrc/h_sample.c, hips/sources/subsample.c,
+	and related makefile.src, man, libman and doc files.
+
+3/14/94	Minor bug fixes to binatts and its manual page.
+
+	Affected files:  hipsaddon/main/sources/binatts/binatts.c and
+	associated manual page.
+
+3/17/94	Fix to avoid yet another Solaris problem:  /usr/include/strings.h
+	has disappeared.  I hard-coded the most popular function
+	definitions in sys/hips_basic.h, and removed most references to
+	string.h and strings.h (occasionally inserting references to
+	hipl_format.h where they had been omitted).  I did not pull references
+	to string.h/strings.h from user-contributed/lbl.
+
+	Affected files:  sys/hips_basic.h, lib/sources/pa_*.c, various
+	and sundry files in user-contributed.
+
+4/7/94	Changed config.solaris to not use ranlib.  Changed
+	hips/sources/makefile.src to make interdepth.
+
+4/18/94	A new version of user-contributed/lbl was installed.  Also, the
+	file sys/hips_basic.h was changed slightly: the definition of
+	strlen() was removed as it conflicted with that assumed by gcc
+	compilers.  The default of a returned integer is correct in most
+	installations.
+
+7/6/94	Minor fix to hips/sources/collage.c to fix a bug which only occured
+	under Solaris.
+
+7/14/94	Modified pshalftone to handle color, color maps, binary PostScript
+	image formats, and other subtleties possible with PostScript Level 2.
+
+7/21/94	New program added, scalemeansd, which scales a sequence so that each
+	frame has a specified mean and standard deviation.
+
+8/3/94	Minor changes to drivers/X/xhips/sources/{xhips.c,xhipsc.c}.
+
+Michael Landy				Voice:	(212) 998-7857
+SharpImage Software			Fax:	(212) 995-4349 (NOTE: address
+P.O. Box 373, Prince Street Station		fax messages c/o Michael Landy,
+New York, NY   10012-0007			New York University)
+					Email:	landy@nyu.edu

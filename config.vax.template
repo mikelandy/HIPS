@@ -1,0 +1,80 @@
+
+# Vax configuration file.
+# The file "makefile.hdr" contains code common to all makefiles.  It
+# should not be necessary to edit that file.
+
+# DRIVERDIRS = Iris NeXT SunView X XView ctool sunanim xvanim xanim datacube adage
+DRIVERDIRS = adage
+# CONTRIBDIRS = canny cc compress fsun imsor label lbl matlab pbm surrey tamu usl uva verdth
+CONTRIBDIRS = canny cc compress fsun imsor label pbm surrey tamu usl uva
+# MATINCLUDE = /usr/local/matlab/extern/include 
+MATINCLUDE = /usr/local/matlab/extern/include 
+# MATLABDEST = /usr/local/bin/matlab
+MATLABDEST = /usr/local/bin/matlab
+# SUNVDIRS = hipstool hipsview lblsun sunv
+SUNVDIRS = hipstool hipsview lblsun sunv
+# HTDIRS = sunos3.4 ****or**** sunos4.0
+HTDIRS = sunos4.0
+# XDIRS = lblx11 imsorx11 xhips
+XDIRS = lblx11 imsorx11 xhips
+# XVDIRS = lblxview xvhips sheffield
+XVDIRS = lblxview xvhips
+# DESTDIR = /usr/hips
+DESTDIR = /usr/hips
+# LIBDIR = /usr/local/lib
+LIBDIR = /usr/local/lib
+# INCLUDE_DIR = /usr/include
+INCLUDE_DIR = /usr/include
+# MANDIR = /usr/man/mann
+MANDIR = /usr/man/mann
+MANEXT = n
+# LIBMANDIR = /usr/man/mann
+LIBMANDIR = /usr/man/mann
+LIBMANEXT = n
+TMPDIR = /tmp
+MASKDIR = $(DESTDIR)/masks
+MASK3DIR = $(DESTDIR)/3dmasks
+LIB = hips
+HLIB = hipsh
+HALIB = hipsa
+
+FLOAT = 
+TARGET_ARCH = 
+FASTCOPY = 
+USESTDARG =
+HNOVALUESH =
+
+CPPFLAGS = -I$(INCLUDE_DIR)
+LIBRARYH = -l$(HLIB) -l$(LIB)
+LIBRARY = -l$(HALIB) -l$(HLIB) -l$(LIB)
+LIBRARY1 = -l$(HLIB)
+LIBRARY2 = -l$(LIB)
+HALIBRARY = -l$(HALIB)
+LIBNAME = lib$(LIB).a
+HLIBNAME = lib$(HLIB).a
+HALIBNAME = lib$(HALIB).a
+OTHERLIBS = -lm
+OTHERLIB2 =
+LDFLAGS = -L$(LIBDIR)
+CFLAGS = -O
+LDLIBFLAGS = -r -x
+
+ORIG = ULORIG
+BITORDER = LSBFVERSION
+
+MANPRINT = ptroff -Pps -man
+MEPRINT = ptroff -Pps -me
+TBL = tbl
+EQN = eqn
+RANLIB = ranlib
+XVIEWHOME = /usr/openwin
+LIBXVIEW = -lxview -lolgx -lX11
+XINCLUDE = /usr/include
+XLIB = /usr/lib
+D3HOME =
+LORDER = lorder
+TSORT = tsort
+MEXEXT = mex4
+
+# Stuff you like to have removed from directories to "make clean"
+OTHERJUNK = core *~ #* *BAK

@@ -1,0 +1,84 @@
+
+# Mac OSX 10.4 configuration file.
+# The file "makefile.hdr" contains code common to all makefiles.  It
+# should not be necessary to edit that file.
+
+# The installation root for HIPS
+INSTALLROOT = /Users/msl/HIPS
+
+
+# DRIVERDIRS = Iris NeXT SunView X XView ctool sunanim xvanim xanim datacube adage
+DRIVERDIRS = X
+# CONTRIBDIRS = canny cc compress fsun imsor label lbl matlab pbm surrey tamu usl uva verdth
+CONTRIBDIRS = canny cc compress fsun imsor matlab surrey tamu usl uva
+MATINCLUDE = /Applications/MATLAB.app/Contents/Matlab/extern/include
+MEXPATH = /Applications/MATLAB.app/Contents/Matlab/bin/mex
+MATLABDEST = $(INSTALLROOT)/matlab
+# SUNVDIRS = hipstool hipsview lblsun sunv
+SUNVDIRS = hipstool hipsview
+# HTDIRS = sunos3.4 ****or**** sunos4.0
+HTDIRS = sunos4.0
+# XDIRS = lblx11 imsorx11 xhips
+XDIRS = xhips imsorx11
+# XVDIRS = lblxview xvhips sheffield
+XVDIRS = 
+# DESTDIR = /usr/local/hips/bin
+DESTDIR = $(INSTALLROOT)/bin
+# LIBDIR = /usr/local/hips/lib
+LIBDIR = $(INSTALLROOT)/lib
+# INCLUDE_DIR = /usr/local/hips/include
+INCLUDE_DIR = $(INSTALLROOT)/include
+# MANDIR = /usr/man/mann
+MANDIR = $(INSTALLROOT)/man
+MANEXT = l
+# LIBMANDIR = /usr/man/mann
+LIBMANDIR = $(INSTALLROOT)/manl
+LIBMANEXT = l
+TMPDIR = /tmp
+MASKDIR = $(DESTDIR)/masks
+MASK3DIR = $(DESTDIR)/3dmasks
+LIB = hips
+HLIB = hipsh
+HALIB = hipsa
+
+FLOAT = 
+TARGET_ARCH = 
+FASTCOPY = 
+USESTDARG = -DHUSESTDARG
+HNOVALUESH = -DHNOVALUESH
+
+CC=gcc
+CPPFLAGS = -I$(INCLUDE_DIR)
+LIBRARYH = -l$(HLIB) -l$(LIB)
+LIBRARY = -l$(HALIB) -l$(HLIB) -l$(LIB)
+LIBRARY1 = -l$(HLIB)
+LIBRARY2 = -l$(LIB)
+HALIBRARY = -l$(HALIB)
+LIBNAME = lib$(LIB).a
+HLIBNAME = lib$(HLIB).a
+HALIBNAME = lib$(HALIB).a
+OTHERLIBS = -lm
+OTHERLIB2 =
+LDFLAGS = -L$(LIBDIR) '-Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' -arch ppc
+CFLAGS = -O -g -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc
+LDLIBFLAGS = -r -arch ppc
+
+ORIG = ULORIG
+BITORDER = MSBFVERSION
+
+MANPRINT = psroff -Pps -man
+MEPRINT = psroff -Pps -me
+TBL = tbl
+EQN = eqn
+RANLIB = ranlib
+XVIEWHOME = 
+LIBXVIEW = -lolgx -lX11
+XINCLUDE = /usr/include
+XLIB = /usr/X11R6/lib
+D3HOME =
+LORDER = lorder
+TSORT = tsort
+MEXEXT = mexmac
+
+# Stuff you like to have removed from directories to "make clean"
+OTHERJUNK = core *~ #* *BAK

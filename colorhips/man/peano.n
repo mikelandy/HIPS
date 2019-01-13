@@ -1,0 +1,13 @@
+.TH PEANO 1 "7/14/89" "Version 2" "HIPS Manual"
+.\"	@(#)peano.h	1.1
+.SH NAME
+peano \- create files needed by cscan
+.SH SYNOPSIS
+.B peano
+.SH DESCRIPTION
+.I Peano
+creates the files ``/usr/local/lib/scanfile'' and ``/usr/local/lib/xyzfile''
+which are required by
+.IR cscan (1).
+.SH SEE ALSO
+cscan(1)

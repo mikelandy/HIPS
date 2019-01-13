@@ -1,0 +1,100 @@
+
+		HIPS News - Volume 3
+
+Here is the list of all changes I've made to HIPS since last August 10, 1994.
+Again, if you want an update to your copy of HIPS at any time, just
+contact me.  Similarly, if you have any problems, or find bugs, or have
+written something you'd like to share with other HIPS users, just let
+me know.  Finally, if you want to set up a local distribution list
+for this newsletter (i.e. hipsusers@machine), tell me what it is after
+you set it up.
+
+Michael Landy
+landy@nyu.edu
+
+------------------------------------------------------------------------
+
+8/15/94	Slight fix of hips/libsrc/makefile.src
+	Slight fix of user-contributed/canny/sources/canny.c
+	New programs added for nonlossy run-length image compression: btorle
+	and rletob, as well as subroutines to do the work: h_btorle and
+	h_rletob.  Affected files:  hips/sources/{makefile.src,btorle.c,
+	rletob.c}, hips.libsrc/{makefile.src,h_btorle.c,h_rletob.c}, man
+	pages and documentation, sys/hips_error.h, lib/sources/herrs.c.
+
+9/15/94	Trivial changes to hipsaddon/main/sources/binatts/binatts.c and
+	hipsaddon/main/sources/vacls/vacls.driver.c (added return(0)).
+
+10/13/94 Slight change of README_INSTALL to note a requirement to redefine
+	H__RANDTYPE for OSF UNIX.
+
+11/2/94	The archives of the HIPS News mailings are now kept in the HIPS
+	source directory (in subdirectory Changes).
+
+News:  The Turing Institute Ltd. is Dead --- The Turing Institute is Reborn!
+
+		Many HIPS users are familiar with the Turing Institute, as
+	they were a distributor in Europe of HIPS2 as well as the authors of
+	the HIPS product known as HIPSADDON.  Originally, the Institute was a
+	nonprofit institute loosely associated with the University of
+	Strathclyde in Glasgow, Scotland, UK, specializing in robotics,
+	computer vision, image processing and a few other areas of research
+	(as well as possessing a fine library in these areas).  A few years
+	ago, this nonprofit institute (let's call it `T1') was convinced that
+	it would be a good idea to become a for-profit corporation, and with
+	funds from Scottish Enterprise and other places, Turing Institute Ltd.
+	(let's call it `T2') was born.  The idea was to take the various
+	technologies that had been developed at Turing and turn them into
+	commercial products.  Well, earlier this year, T2 went bust in a
+	fairly big way.  At this point, most of what was T2 has been
+	liquidated, and a lot of creditors (including yours truly) have been
+	stiffed.  So it goes...  The principal scientists of T2 have since
+	formed a new nonprofit research institute, again called the Turing
+	Institute (or T3), this time associated with the University of
+	Glasgow.
+		This has several implications for HIPS users, both old and new.
+	First, those of you who have already bought HIPSADDON (or HIPSPLUS
+	from SharpImage, or HIPS2 from Turing) will continue to have the right
+	to use HIPSADDON, but the software will no longer be supported,
+	because the banks that inherited T2 and its debt will not allow
+	SharpImage to sell HIPSADDON any longer (at least not under reasonable
+	terms).  Second, HIPSADDON will no longer be sold by SharpImage (or
+	anyone else, as far as I can tell).  Third, SharpImage is exploring a
+	continued alliance with T3, and HIPS2 will thus likely soon be available
+	again from the Turing Institute in its newest guise.  Fourth, T3 is
+	busy developing HIPS-related software including new interactive user
+	interfaces for X11 and new pattern recognition software.  These will
+	soon be available to HIPS users.   I will send out an announcement
+	about that when things are finalized.
+
+News:	New HIPS products from Thomson
+
+		Two new HIPS products have just become available:  ALLEGORY
+	and the ALLEGORY NEURAL NETS EXTENSION.  These are available from
+	Thomson (their Electronics Laboratories in Rennes, France) as well as
+	from SharpImage Software.  ALLEGORY is a computer vision software
+	package that provides HIPS with a visual programming language user
+	interface.  It provides access to all of HIPS' capabilities through
+	use of a mouse, windows and menus.  It allows the user to combine HIPS
+	routines (as well as several add-on routines provided with ALLEGORY)
+	in a visual representation of the vision/image processing system under
+	development.  It adds programming constructs (conditionals, loops,
+	etc.) to the image processing library.  It includes facilities for
+	displaying intermediate results and manipulating datasets.  The NEURAL
+	NETS EXTENSION provides a suite of algorithms for classification based
+	on artificial neural networks, statistical techniques, and so on.
+	Supplied programs include:  back-propagation, polynomial network,
+	restricted Coulomb energy, Kohonen network, Bayesian classification
+	and nearest neighbor classification.  Additional utility routines
+	allow for conversion between different data formats, preprocessing
+	(e.g. principal components analysis), postprocessing (e.g.
+	binarization) and set operations (subset, union, etc.).  These two
+	products are available only in binary form (unlike the rest of HIPS).
+	For further information and pricing, contact SharpImage Software (that
+	is, me).
+
+Michael Landy				Voice:	(212) 998-7857
+SharpImage Software			Fax:	(212) 995-4349 (NOTE: address
+P.O. Box 373, Prince Street Station		fax messages c/o Michael Landy,
+New York, NY   10012-0007			New York University)
+					Email:	landy@nyu.edu

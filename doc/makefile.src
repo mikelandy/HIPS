@@ -1,0 +1,24 @@
+#
+# makefile for directory doc
+#
+
+install:
+
+clean:
+
+man:
+
+doc:
+	$(MEPRINT) functions_list.me
+	$(TBL) hips_programmer.me | $(MEPRINT)
+	$(TBL) hips_user.me | $(MEPRINT)
+	$(MEPRINT) hips2changes.me
+	$(MEPRINT) plot3d.me
+	$(MEPRINT) commands_ref.me
+	$(MEPRINT) cat_commands_ref.me
+	$(MEPRINT) cat_commands_list.me
+	$(MEPRINT) subroutine_ref.me
+	$(MEPRINT) cat_subroutine_list.me
+	$(MEPRINT) hips_intro.me
+
+pristine:

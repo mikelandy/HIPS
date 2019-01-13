@@ -1,0 +1,665 @@
+.\" to print:  psroff -me plot3d.me
+.+c
+.po 1i
+.nr si 3n
+.ls 1
+.(l C
+.b "PLOT3D: A software package for generating"
+.b "and manipulating 3D graphs"
+.sp 2
+.i "Yoav Cohen"
+.sp
+.he 'PLOT3D''%'
+April, 1982
+.)l
+.sp 4
+.sh 1 "Introduction"
+.pp
+PLOT3D is a package within HIPS for generating dynamic vector displays of 3D
+scenes.
+The package is a subset of the HIPS image processing software,
+and shares its features: the header structure and the self-documenting
+capability.
+Three-dimensional graphs are treated as image sequences in a special
+format:
+.i PLOT3D .
+In addition, most of the programs are written as Unix filters and thus can
+be combined into 
+.i pipes
+through which  graphic sequences flow, in much the same way as other HIPS
+programs handle raster images in this fashion.
+.pp
+This graphic package differs from others such as 
+.i Leroy ,
+or the standard 
+.i plot
+format of Berkeley Unix, in several respects.
+First, the objects that PLOT3D can  handle are only points and vectors.
+No provision was made for conic-sections, two dimensional objects, or
+character strings.
+Second, the package has the capability of generating dynamic sequences of
+graphs.  Graphs can be rotated and moved about in successive frames, 
+to create the illusion of moving objects or movements of the observer.
+Third, the space in which the objects are situated is continuous and
+practically unbounded;
+coordinates are specified as real numbers and thus provide both continuity
+(up to the resolution which is dictated by floating-point representation
+of numbers in the computer), and large dynamic range for the spatial position
+and extension of the objects.
+.pp
+The next two sections are intended to serve as a tutorial  for PLOT3D.
+The first demonstrates how to generate a 
+.i "graphic world"
+in a single frame.
+The second teaches how to add the time dimension to the display by
+generating multiple-frame sequences.
+The next section provides information about conversion between the PLOT3D
+format and other formats.
+The final section gives more details about the actual representation of
+graphs, and lists the available library functions for manipulating
+the format; it is  useful only for someone who is interested in debugging
+the package or in extending it, and need not be read as a part of the tutorial.
+.sh 1 "Generating and Viewing a Single Frame"
+.pp
+Regular polygons are the building blocks in the generation of the graphic
+world.
+A single program generates any desired regular polygon by specifying
+the number of edges. Thus:
+.(l
+gpoly -n 6 > hexagon
+.)l
+.i g enerates
+a
+.i poly gon
+with six edges and places it in the file
+.i hexagon .
+The polygon has a radius of 1.0 and is centered on the origin of the coordinate system.
+A second polygon can be added by piping the input into a second call to
+.i gpoly :
+.(l
+gpoly -n 5 | gpoly -n 4 | gpoly -n 3 > three
+.)l
+creates in file
+.i three
+an equilateral triangle, a square, and a pentagon, all sharing the same center
+and can be  circumscribed by a  circle of radius 1.0.
+Note that 
+.i "gpoly -n 2"
+generates a horizontal line,
+.i "gpoly -n 1"
+creates a point at (0,0,0) and 
+.i "gpoly -n 0"
+creates an empty frame.
+.pp
+To view the graphs they must be converted to another form.  In a later section
+the various means of doing this will be surveyed.  Until then, it is assumed
+that the graphs are viewed on a Sun workstation, and so the graphs are first
+converted to raster format, then bit-packed (to save space), and then viewed
+with
+.i sunv
+(for single images) or
+.i sunanim
+(for image sequences).
+The rasterizing program generates an image of size as specified in the input
+header (which programs such as
+.i gpoly
+set to 512x512), with the origin at the center of the frame.
+If you try now to display file
+.i three
+by
+.(l
+plot3topix < three | bpack | sunv
+.)l
+you will notice that the picture is very small and that the three polygons
+are not discernible. This is because
+the units of the coordinates system are mapped without scaling to the
+screen units (pixels).
+A scaling program is available as well as programs to shift the objects
+and to rotate them.
+The programs are
+.i gmag
+for
+.i g lobal
+.i mag nification
+(and reduction),
+.i gshift
+for
+.i g lobal
+.i shift ing,
+and
+.i grot
+for
+.i g lobal
+.i rot ation.
+The arguments for each program are numbers that apply to the axes.
+For example:
+.(l
+gpoly -n 4 | gmag -p 100 100 | gshift -p 120 100 | plot3topix | bpack | sunv
+.)l
+will display a big square (with a ``radius'' of 100.0 pixels) in the
+upper right corner of the screen (its center is shifted 120 units
+to the right and 100 units above the center of the screen).
+A better view of file
+.i three
+can now be obtained by:
+.(l
+gmag -p 100 100 < three | plot3topix | bpack | sunv.
+.)l
+Until now we have been discussing only two dimensional polygons although it
+was stated that they inhabit a 3D space.
+Indeed,
+.i gpoly
+generates the polygons so that they are on a plane parallel to the face of the
+screen, and thus have no depth.
+But a z-coordinate is associated with each vertex of a polygon, and the
+polygons can be shifted in depth and rotated through the z-dimension.
+Thus:
+.(l
+gpoly -n 5 | gmag -p 100 100 | grot -p 15 | plot3topix | bpack | sunv
+.)l
+generates a pentagon that is rotated 15 degrees around the x-axis and thus
+extends in depth.
+Similarly:
+.(l
+gpoly -n 4 | gmag -p 100 100 | grot -p 0 0 30 | plot3topix | bpack | sunv
+.)l
+rotates a square by 30 degrees around the z-axis, i.e., in the x-y plane.
+Multiple rotations are possible, for example:
+.(l
+gpoly -n 4 | grot -p 0 0 30 | gpoly -n 4 | grot -p 0 0 30 | gpoly -n 4 | \\
+grot -p 0 0 30 | gpoly -n 4 | gmag -p 100 100 | grot -p 0 15 0 | \\
+plot3topix | bpack | sunv
+.)l
+(on a single input line) 
+generates three squares, each rotated by 30 degrees in the xy plane relative
+to the preceding square,  all three are magnified, and then rotated by 15
+degrees in depth (about the y-axis).
+.pp
+Line drawings of 3D objects can be built from lines and polygons.
+A cube however can be generated by
+.i gcube
+which outputs a cube with sides 2 units long, centered at the origin.
+Any rectangular solid can be generated by using different magnifications
+for the three axes:
+.(l
+gcube | gmag -p 50 100 70 > box
+.)l
+generates a box which is 100 units wide, 200 units high and 140 units deep.
+Try to display it with
+.(l
+plot3topix < box | bpack | sunv
+.)l
+and you will discover that only one face of the box is visible; this is
+because
+.i plot3topix
+displays the graph in parallel perspective.
+To get a more realistic view of the box it should be rotated in 3D space
+or viewed under polar perspective.
+.(l
+grot -p 0 15 < box | grot -p 7 | plot3topix | bpack | sunv
+.)l
+will display the box rotated 15 degrees about the y-axis and 7 degrees about
+the x-axis.
+Note that for the first rotation only two arguments were specified, the
+third was set to 0.0 by default; similarly in the second rotation  the
+two last arguments were set to 0.0 by default.
+The program
+.i view
+transforms a graph into polar perspective, with a focal point in the origin,
+and so that points and segments that lie in the negative side of the z-axis
+are deleted.
+Since only what is in front of the observer is projected, in order to get
+a full view of the box it should be shifted forward, as follows:
+.(l
+gshift -p 0 0 300 < box | view | plot3topix | bpack | sunv
+.)l
+In generating polar perspective, program 
+.i view
+projects the 3D space on a plane which is parallel to the x-y axes and lies
+at a depth of 256 units; thus, in order
+to get a realistic impression, the display should be viewed from a distance
+of about half the width of the screen.
+The depth of the picture plane is set to 256 by default but can be redefined
+by the user:
+.(l
+gshift -p 0 0 1500 < box | view -p 1500 | plot3topix | bpack | sunv
+.)l
+generates a perspective of the box on a plane
+that passes through the center of the box.
+Realistic view is  achieved if the screen is positioned about three
+screen widths in front of the viewer.
+.sh 1 "Generating Dynamic Sequences"
+.sh 2 "Object movement"
+.pp
+Having generated a static world we are now in the position to start moving
+objects in 3D space over time.  The programs
+.i tshift ,
+.i tmag
+and
+.i trot
+(the
+.i t -programs)
+enable 
+.i t emporal
+.i shift ing
+(to be understood as spatial shifting over time),
+.i mag nification
+and
+.i rot ation.
+Suppose for example that we want to generate a sequence of frames
+in which the box is rotating about its vertical axis in steps of 3 degrees
+per frame; the following line:
+.(l
+trot -p 30 0 3 <box | plot3topix | bpack | sunanim
+.)l
+generates a sequence in which the first frame shows the box in its initial
+position, and the subsequent 30 frames contain rotated versions 
+of the box.
+Since parallel projection is used in this example, the display does not
+convey realistic impression of the box; tilting the box in each frame
+produces a more convincing display:
+.(l
+trot -p 30 0 3 < box | grot -p 30 | plot3topix | bpack | sunanim
+.)l
+The magnification transformation in time produces the effect of zooming
+in and out; for example:
+.(l
+tmag -p 30 .9 .9 .9 < box | grot -p 0 15 | grot -p 30 | plot3topix | bpack | sunanim
+.)l
+generates a sequence of frames, each frame containing a box which is a
+90% reduced version of the preceding one.
+This example demonstrates the use of fractional arguments;
+in general, every transformation can be specified by using real numbers;
+frame counts and frame-numbers however, have to be specified as integers.
+Note also that the order of the programs in the last example is not optimal.
+The program
+.i tmag
+is the first in the pipe; it outputs 31 frames (the original
+.i box
+and 30 reduced versions), and each frame is transformed by two calls
+of
+.i grot .
+Since the box can be rotated before it is reduced, a more efficient pipe is:
+.(l
+grot -p 0 15 < box | grot -p 30 | tmag -p 0 .9 .9 .9 | plot3topix | bpack | sunanim.
+.)l
+.pp
+The zoom-out effect is not a realistic depiction of an object that moves
+away from the viewer at a constant velocity.
+In order to get a more realistic effect we have to
+.i tshift
+the box along the z-axis and view it in polar perspective.
+For example:
+.(l
+grot -p 30 <box | grot -p 0 15 | tshift -p 120 0 0 100 | view | plot3topix | bpack | sunanim
+.)l
+.pp
+Spatial transformations in time can be concatenated, thus:
+.(l
+trot -p 30 0 3 < box | trot -p 30 0 0 5 | grot -p 30 | plot3topix | bpack | sunv
+.)l
+generates a sequence in which the box is first rotated about the vertical for
+30 frames and then about the z-axis for an additional 30 frames.
+.pp
+The 
+.i t-programs
+manipulate whole scenes, there is no way to manipulate selectively a single
+object in a world that is inhabited by many objects.
+To get around this problem the program
+.i gsync
+can be used;
+it is capable of merging (\c
+.i g raphically
+.i sync hronizing)
+several files, each containing a collection of objects, into one
+world which contains their totality.
+Thus, if file 
+.i cw-cube
+contains a box which is rotating clockwise, and the file
+.i acw-cube
+contains a mirror image of this 
+world enlarged by a factor of 2, they can be merged and displayed by:
+.(l
+gsync cw-cube acw-cube | grot -p 15 | plot3topix | bpack | sunv
+.)l
+The two files can be created by:
+.(l
+gcube | gmag -p 50 50 50 | trot -p 30 0 3 > cw-cube
+gcube | gmag -p 100 100 100 | trot -p 30 0 -3 > acw-cube.
+.)l
+The result is a sequence in which one cube 
+is rotating inside a larger cube which is rotating in the opposite direction.
+Note that the merging is done so that the axes and their senses are
+superimposed.
+The synchronization program can handle input sequences of different lengths.
+It reads all of the input files (also the standard input if it is not a
+terminal), and if one input-file is exhausted before the others, then its last
+frame is repeated until all the files have been exhausted.
+.pp
+The 
+.i t-programs
+repeat the same object in successive frames after applying a spatial
+transformation.  These sequences can be collapsed into a single frame by the
+program
+.i pstrobe ,
+resulting in a single frame that contains replications of the same object.
+Thus:
+.(l
+gpoly -n 30 | gmag -p 100 100 100 | tshift -p 30 0 0 15 | pstrobe > cylinder
+.)l
+creates a file in which a cylinder-like object lies along the z-axis.
+This may be rotated and viewed:
+.(l
+grot -p 15 20 < cylinder | plot3topix | bpack | sunv
+.)l
+.sh 2 "Viewer movement"
+.pp
+Once a sequence that describes a world in 3D and time is created, the
+viewer can move around this world.  The viewer can move in straight lines,
+rotate his line of gaze in all directions, or combine both.  Programs
+.i vshift
+and
+.i vrot
+accomplish these transformations. 
+Before demonstrating the use of these programs, a graphic world has to be
+created.  The following commands create a simple world in which there are
+several stationary objects and a single object that moves around.
+The objects are the familiar boxes, one of which moves away from the
+viewer at constant velocity:
+.(l
+gcube | gmag -p 100 100 100 > cube
+.)l
+creates a large cube.
+.(l
+tshift -p 10 0 0 200 < cube | pstrobe | gshift -p 300 > houses
+.)l
+creates a row of cubes.
+.(l
+tshift -p 1 -600 <houses | pstrobe | tshift -p 60 > street
+.)l
+creates 60 frames of two rows of
+.i houses
+on the two sides of the z-axis.
+.(l
+gmag -p .4 .4 .4 < cube | gshift -p 30 -50 | tshift -p 60 0 0 10 > car
+.)l
+creates a box that moves away, and
+.(l
+gsync street car > scene
+.)l
+puts the 
+.i car
+in the
+.i street .
+A static point of view can now be displayed by:
+.(l
+view < scene | plot3topix | bpack | sunanim
+.)l
+and to move the viewer, as if he is crossing the street from left to right,
+the following is executed:
+.(l
+gshift -p 180 < scene | vshift -p 20 40 8 | view | plot3topix | bpack | sunanim.
+.)l
+The first program moves the world 180 units to the right so that the viewer
+(the origin of the coordinates system) is now on the left ``sidewalk''.
+The second program controls the movement of the viewer; starting
+at frame 20 (frame numbering starts at 0), and until frame 40, the viewer
+moves to the right at a speed of 8 units per frame.
+A similar program,
+.i vrot ,
+applies rotation of the viewing direction,
+.(l
+vrot -p 0 60 0 1 < scene | view | plot3topix | bpack | sunanim
+.)l
+is a depiction of the scene viewed by an observer that turns his head
+at the rate of 1 degree per frame while his position is kept fixed.
+Combining the two kinds of viewer-movements can be done by:
+.(l
+gshift -p 180 <scene | vshift -p 20 40 8 | vrot -p 0 60 0 1 | view | plot3topix | bpack | sunanim
+.)l
+.pp
+Note that the 
+.i v-programs
+can be used also to manipulate the graphic-world.
+For example, a curved street can be generated by:
+.(l
+gshift -p 300 < cube | tshift -p 1 -600 | pstrobe > pair
+.)l
+.(l
+tshift -p 10 0 0 300 < pair | vrot -p 0 10 0 2 | pstrobe > cstreet.
+.)l
+Since
+.i v-programs
+are useful for scene manipulation and not only for shifting the 
+point of view, an additional program:
+.i vmag
+was added.
+It bears the same relation to 
+.i tmag
+as
+.i vrot
+does to
+.i trot .
+.pp
+Before describing other programming aids,
+it would be appropriate to give a short synopsis of what has been
+demonstrated so far.
+Generating  3D graphs is done by 
+.i gpoly
+and
+.i gcube .
+Spatial and temporal transformations are applied by three families
+of programs: the
+.i g
+.i t
+and
+.i v -programs,
+each consisting of 
+.i shift ing
+.i rot ation
+and
+.i mag nification
+(reduction) programs.
+In addition,
+.i view
+creates polar perspective,
+.i pstrobe
+helps in creating frames with repeating objects, and
+.i gsync
+merges several sequences into one scene.
+.pp
+The next section describes additional programs that are useful in
+inspecting graphic files and in conversion between the PLOT3D format
+and other formats.
+.sh 1 "Programming Aids"
+.pp
+Since files in PLOT3D share the header structure of the image-processing
+system, the standard header-manipulation programs can be applied to
+graphic sequences.
+Thus,
+.i seeheader ,
+.i stripheader ,
+and
+.i grabheader
+are applicable.
+To inspect the numeric representation of a graphic file, the programs
+.i seeplot
+and
+.i dump_plot3d
+can be used.
+They display on the terminal the type, brightness level, and the relative
+coordinates, of each graphic element.
+They also display the matrix and vector that establish the mapping
+between the relative  and the absolute coordinates systems.
+The program
+.i transf
+can be applied to a graphic sequence before inspecting it with
+.i seeplot
+in order to transform the relative coordinates into an absolute frame
+of reference.
+.pp
+Parts of a sequence can be extracted by using the program
+.i psubseq ;
+it is similar to the standard
+.i subseq
+program (see the writeup for the image-processing software), except
+that it is tailored to the PLOT3D format.
+.pp
+A sequence can be windowed in x and y by the program
+.i cutf ;
+the user specifies the coordinates of the lower-left and upper-right
+corners of the window.
+.pp
+The PLOT3D format is intended to be an integral part of the image-processing
+system, therefore format conversion programs are available.
+The conversion between PLOT3D format and pixel-by-pixel representation
+can be done using
+.i plot3topix .
+Conversion from byte or float pixel-representation into PLOT3D format
+is performed by
+.i pixto3d .
+By default, this program converts pixels in the input picture into points in
+the output graph and black pixels (gray-level of 0) are not coded at all.
+Since the representation of points in PLOT3D format is very costly in terms
+of space, the user is advised to use this conversion only when the input
+picture has relatively few non-zero pixels.
+Switches are available to plot pixels as vectors from the z=0 plane (\c
+.i -v ),
+to plot zero values as well (\c
+.i -z ),
+to flatten the plot (\c
+.i -f ),
+to space out the pixels (\c
+.i -s space),
+to scale to z values (\c
+.i -a amplitude),
+and to use the pixel brightnesses in the output graph (\c
+.i -g ).
+.pp
+To output graphs on a Versatec or other device which may be interfaced to UNIX
+.i plot
+format, a graph can be converted from the
+PLOT3D format to the standard plot format by using
+.i plot3tov .
+Thus the commands:
+.(l
+plot3tov < scene > p
+vplot p
+.)l
+print the graph in file
+.i scene
+on a Versatec.
+For some (as yet) obscure reasons
+.i vplot
+does not feed forms between frames, and the result is
+that a multiframe sequence is collapsed (
+.i pstrobe d)
+on a single sheet of paper.
+To
+.i vplot
+only one frame of a sequence one must
+.i psubseq
+the appropriate frame and then convert and plot it.
+.sh 1 "System's Internals"
+.sh 2 "The PLOT3D format"
+Three types of objects can be represented in this format: an isolated point,
+a vector, and a non-initial point of a polyline (an end-point).
+A point is stored 
+as a byte plus four floating point numbers (type
+.i float ) in their binary representation and not as Ascii strings.
+The byte is `p' and signifies that the next four
+.i float s
+represent a point. The first
+.i float 
+number represents the brightness of the point, and the remaining three
+represent the x, y, and z coordinates.
+A vector is stored as a byte and seven
+.i float s.
+The byte is always `v' and the first 
+.i float
+is the brightness level for the vector.
+The coordinates of the start and end-point of the vector are stored
+in the next six
+.i float s.
+An end-point is stored as one byte and three
+.i float s.
+The byte is always `n', and the 
+.i float s
+contain the coordinates of the end-point.
+The system interprets the entry as a vector from the
+point that was read last
+(e.g. an end-point of a vector) to the current point.
+The brightness is equal to the last encountered brightness level.
+.pp
+A frame is represented by a collection of entries of the three types,
+followed by a single byte: `e', and preceded by a variable-length
+prologue.
+The prologue contains at most four elements.
+The first is a 
+.i flags 
+byte that determines whether the coordinates in the
+frame have to be shifted and/or rotated to give the absolute locations
+of points or vectors.
+If set, the second least significant bit means that a shifting operation has
+to be performed on the coordinates.
+If so, the next three
+.i double
+numbers contain the shift factors for the three coordinates.
+The least significant bit of the 
+.i flags 
+byte determines whether a rotation transformation
+has to be applied. If set, then the next nine
+.i double s
+contain the coefficients for the rotation matrix.
+The fourth element of the prologue is an
+.i int
+that gives the number of bytes that follow, up to and including 
+the `e' byte that stands for end-of-frame.
+The end-of-frame symbol is therefore redundant and is intended to ensure
+the integrity of the data.
+.sh 2 "Library Functions"
+.pp
+Library functions that are frequently used by the programs are listed below.
+.pp
+.i Read_frame
+reads a frame in PLOT3D format and places the vector, matrix, and the graphic
+entries, in areas which are allocated by the calling program. 
+It returns the number of bytes (excluding the frame-end) in which the
+graphic entries are stored.
+If the vector and/or matrix are missing in the input, they are set to the 
+zero-vector and identity matrix.
+.pp
+.i Write_frame
+outputs the frame to a specified file. If the vector and/or matrix
+are the zero and identity elements, they are not written out.
+.pp
+.i Trans_frame
+applies the shifting and rotation as determined by the vector and matrix,
+and set those to the zero and identity elements. All programs
+that shift, scale, or rotate the graphs, do it via manipulation of
+the vector and matrix. Conversion into absolute coordinates is done
+only before actual display (including windowing and polar projection) 
+or when several frames are synchronized.
+.pp
+There are several functions that can be used
+to access or store particular graphic elements; they
+can be found in the files
+.i getplot.c
+and
+.i addplot.c .
+These functions are included in the library.
+.sh 2 "Debugging and Improving..."
+.pp
+Memory allocation for the frames is not dynamic; it is done in the
+source-code by assuming a fixed buffer size which is set by the
+FBUFLIMIT parameter in the appropriate 
+.i include 
+file.
+Thus, to change the buffer size, the software has to be recompiled after
+FBUFLIMIT has been redefined.
+.pp
+As yet there are no tools for manipulating brightness levels.
+If this will ever be done the representation of the graphs might as
+well be converted from cartesian coordinates to homogeneous coordinates
+that also contain the brightness variable and even the temporal
+dimension.

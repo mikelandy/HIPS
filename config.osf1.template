@@ -1,0 +1,80 @@
+# DEC OSF/1 configuration file.
+# The file "makefile.hdr" contains code common to all makefiles.  It
+# should not be necessary to edit that file.
+
+# DRIVERDIRS = Iris NeXT SunView X XView ctool sunanim xvanim xanim datacube adage
+DRIVERDIRS = X # XView xvanim xanim
+# CONTRIBDIRS = canny cc compress fsun imsor label lbl pbm surrey tamu usl uva verdth
+CONTRIBDIRS = canny cc compress fsun imsor label pbm surrey tamu usl uva matlab
+# MATINCLUDE = /usr/local/matlab/extern/include 
+MATINCLUDE = /usr/local/matlab/extern/include 
+# MATLABDEST = /usr/local/bin/matlab
+MATLABDEST = /usr/local/hips2/bin/matlab
+# SUNVDIRS = hipstool hipsview lblsun sunv
+SUNVDIRS = hipstool hipsview lblsun sunv
+# HTDIRS = sunos3.4 ****or**** sunos4.0
+HTDIRS = sunos4.0
+# XDIRS = lblx11 imsorx11 xhips
+XDIRS = lblx11 imsorx11 xhips
+# XVDIRS = lblxview xvhips sheffield
+XVDIRS = lblxview xvhips
+# DESTDIR = /usr/hips
+DESTDIR = /usr/local/hips2/bin
+# LIBDIR = /usr/local/lib
+LIBDIR = /usr/local/hips2/lib
+# INCLUDE_DIR = /usr/include
+INCLUDE_DIR = /usr/local/hips2/include
+# MANDIR = /usr/man/mann
+MANDIR = /usr/local/hips2/man/man1
+MANEXT = 1
+# LIBMANDIR = /usr/man/mann
+LIBMANDIR = /usr/local/hips2/man/man3
+LIBMANEXT = 3
+TMPDIR = /tmp
+MASKDIR = $(DESTDIR)/masks
+MASK3DIR = $(DESTDIR)/3dmasks
+LIB = hips
+HLIB = hipsh
+HALIB = hipsa
+
+FLOAT = 
+TARGET_ARCH = 
+FASTCOPY = 
+USESTDARG =
+HNOVALUESH =
+
+CPPFLAGS = -I$(INCLUDE_DIR) -DMUST_START_VA
+LIBRARYH = -l$(HLIB) -l$(LIB)
+LIBRARY = -l$(HALIB) -l$(HLIB) -l$(LIB)
+LIBRARY1 = -l$(HLIB)
+LIBRARY2 = -l$(LIB)
+HALIBRARY = -l$(HALIB)
+LIBNAME = lib$(LIB).a
+HLIBNAME = lib$(HLIB).a
+HALIBNAME = lib$(HALIB).a
+OTHERLIBS = -lm
+OTHERLIB2 =
+LDFLAGS = -L$(LIBDIR)
+# CFLAGS = -O
+CFLAGS = -g
+LDLIBFLAGS = -r -x
+
+ORIG = ULORIG
+BITORDER = MSBFVERSION
+
+MANPRINT = groff -Pps -man
+MEPRINT = groff -Pps -me
+TBL = tbl
+EQN = eqn
+RANLIB = echo
+XVIEWHOME = /usr/local/xview
+LIBXVIEW = -lxview -lolgx -lX11
+XINCLUDE = /usr/local/xview/include
+XLIB = /usr/local/lib
+D3HOME =
+LORDER = lorder
+TSORT = tsort
+MEXEXT = mexaxp
+
+# Stuff you like to have removed from directories to "make clean"
+OTHERJUNK = core *~

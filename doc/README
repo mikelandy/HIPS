@@ -1,0 +1,30 @@
+
+This directory contains the basic user's and programmer's documentation on
+HIPS (other than the Unix-style manual pages which are  found in the
+various subdirectories man/ and libman together with source code).
+The files are:
+
+hips2changes.me		A list of changes from HIPS-1 to HIPS-2
+hips_programmer.me	The programmer's manual
+hips_user.me		The command-level user's manual
+hips_intro.me		An introductory guide for the novice user
+plot3d.me		A manual for the Plot3D package
+cat_commands_ref.me	A categorised reference of all of the HIPS commands
+			and their arguments
+commands_ref.me		A quick reference of all HIPS commands with their
+			arguments
+cat_commands_list.me	A categorized list of HIPS commands and what they do
+subroutine_ref.me	A list of HIPS high-level library functions
+			and their call arguments
+cat_subroutine_list.me	A categorised list of HIPS high-level library
+			functions and what they do
+functions_list.me	The low-level library functions and their arguments
+
+All of the files in this directory use the -me macro package.  For example, to
+print hips_intro.me on a LaserWriter, type:
+
+	psroff -me hips_intro.me
+
+The files hips_programmer and hips_user.me also require tbl, for example:
+
+	tbl hips_user.me | psroff -me

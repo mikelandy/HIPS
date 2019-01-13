@@ -1,0 +1,41 @@
+#
+# makefile for colorhips/sources
+#
+
+PGMS = cscan.out peano.out
+
+OBJECTS = cscan.o distsq.o medianscan.o peano.o peanocurve.o peanoscan.o
+
+XYZFILE		= $(LIBDIR)/xyzfile
+SCANFILE	= $(LIBDIR)/scanfile
+CPPFLAGS2 = -DFILES -DSCANFILE=\"$(SCANFILE)\" -DXYZFILE=\"$(XYZFILE)\" \
+	-DLOCALSEARCH
+
+.c.o:
+	$(COMPILEc) $(CPPFLAGS2) $<
+
+install:	$(PGMS)
+
+clean:	clean-pgm
+
+man:
+
+doc:
+
+pristine:	pristine-pgm
+
+peano.out:	peano.o peanocurve.o
+	$(LINKc) $* peano.o peanocurve.o $(LIBRARIES)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+	$(DESTDIR)/peano
+
+cscan.out:	cscan.o distsq.o medianscan.o peanoscan.o peanocurve.o
+	$(LINKc) $* cscan.o distsq.o medianscan.o peanoscan.o \
+		peanocurve.o $(LIBRARIES)
+	strip $*
+	mv $* $(DESTDIR)
+	@touch $@
+
+FRC:

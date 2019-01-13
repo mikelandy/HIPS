@@ -1,0 +1,84 @@
+
+# Sun 4 configuration file.
+# The file "makefile.hdr" contains code common to all makefiles.  It
+# should not be necessary to edit that file.
+
+INSTALLROOT = /users/msl/HIPS
+
+# DRIVERDIRS = Iris NeXT SunView X XView ctool sunanim xvanim xanim datacube adage
+DRIVERDIRS = X
+# CONTRIBDIRS = canny cc compress fsun imsor label lbl matlab pbm surrey tamu usl uva verdth
+CONTRIBDIRS = canny cc compress fsun imsor surrey tamu usl uva
+# MATINCLUDE = /usr/local/matlab/extern/include
+MATINCLUDE = /share/erda/matlab/extern/include
+MEXPATH = /share/erda/bin/mex
+# MATLABDEST = /usr/local/bin/matlab
+MATLABDEST = $(INSTALLROOT)/matlab
+# SUNVDIRS = hipstool hipsview lblsun sunv
+SUNVDIRS = hipstool hipsview lblsun sunv
+# HTDIRS = sunos3.4 ****or**** sunos4.0
+HTDIRS = sunos4.0
+# XDIRS = lblx11 imsorx11 xhips
+XDIRS = imsorx11 xhips
+# XVDIRS = lblxview xvhips sheffield
+XVDIRS =
+# DESTDIR = /usr/hips
+DESTDIR = $(INSTALLROOT)/bin
+# LIBDIR = /usr/local/lib
+LIBDIR = $(INSTALLROOT)/lib
+# INCLUDE_DIR = /usr/include
+INCLUDE_DIR = $(INSTALLROOT)/lib
+# MANDIR = /usr/man/mann
+MANDIR = $(INSTALLROOT)/man
+MANEXT = l
+# LIBMANDIR = /usr/man/mann
+LIBMANDIR = $(INSTALLROOT)/manl
+LIBMANEXT = l
+TMPDIR = /tmp
+MASKDIR = $(DESTDIR)/masks
+MASK3DIR = $(DESTDIR)/3dmasks
+LIB = hips
+HLIB = hipsh
+HALIB = hipsa
+
+FLOAT =
+TARGET_ARCH =
+FASTCOPY =
+USESTDARG =
+HNOVALUESH =
+
+CC = /usr/bin/cc
+CPPFLAGS = -I$(INCLUDE_DIR)
+LIBRARYH = -l$(HLIB) -l$(LIB)
+LIBRARY = -l$(HALIB) -l$(HLIB) -l$(LIB)
+LIBRARY1 = -l$(HLIB)
+LIBRARY2 = -l$(LIB)
+HALIBRARY = -l$(HALIB)
+LIBNAME = lib$(LIB).a
+HLIBNAME = lib$(HLIB).a
+HALIBNAME = lib$(HALIB).a
+OTHERLIBS = -lm
+OTHERLIB2 =
+LDFLAGS = -L$(LIBDIR)
+CFLAGS = -O
+LDLIBFLAGS = -r
+
+ORIG = ULORIG
+BITORDER = MSBFVERSION
+
+MANPRINT = psroff -Pps -man
+MEPRINT = psroff -Pps -me
+TBL = tbl
+EQN = eqn
+RANLIB = echo
+XVIEWHOME =
+LIBXVIEW = 
+XINCLUDE = /usr/openwin/include
+XLIB = /usr/X11R6/lib
+D3HOME =
+LORDER = lorder
+TSORT = tsort
+MEXEXT = mex4
+
+# Stuff you like to have removed from directories to "make clean"
+OTHERJUNK = core *~ #* *BAK

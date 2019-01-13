@@ -1,0 +1,205 @@
+.\"	@(#)ctool.h	1.11 4/27/89
+.TH CTOOL 1 "4/27/89" "Version 2" "HIPS Manual"
+.SH NAME
+ctool \- display (and play with) a HIPS image on the Sun screen
+.SH SYNOPSIS
+.B ctool
+[-b backred backgreen backblue] [-l label] [-c rows columns]
+[-m magfactor]
+[-Wp xposition yposition] [file]
+.SH DESCRIPTION
+.I Ctool
+creates a window in which the input image is displayed.
+If the input is a byte image it will be displayed in its true gray scale
+(or colors, if it has a colormap).
+If it is a float image, its values will be scaled to the range 0-255;
+pixel values displayed in menu items, however, will be the actual float values.
+.PP
+At startup, the box is just out of sight surrounding the entire image.
+Holding down the left mouse button while moving the mouse
+will move the box.
+Holding down the middle mouse button while moving the mouse
+will adjust the size of the box.
+Moving and stretching the box operate in constrained
+(i.e. only one dimension changes)
+or unconstrained
+(both dimensions change)
+modes,
+depending upon whether the mouse is closer to
+the middle third of a side of the box
+than it is to a corner.
+.PP
+Holding down the right mouse button will display the menu.
+The first menu item shows the current cursor location and pixel value.
+Selecting this item will pick up that pixel value and
+make it the current brush color.
+Beneath it are displayed the coordinates of the lower left pixel
+of the box interior,
+and the dimensions of the box interior
+(note that the box boundary as it appears in the window
+surrounds this interior and is one pixel thick).
+Note that there is an independent brush color associated with each of the
+image and fat bit subwindows.
+The brushes are initialized with color 0.
+.SH "COMMAND-LINE OPTIONS"
+.TP 1i
+.B \-b
+entry zero in the colormap will be loaded with color
+(\fIbackred, backgreen, backblue\fR); default is red (255, 0, 0).
+.TP 1i
+.B \-c
+No input file is expected; the window is created with a blank image of
+size
+.I rows
+by
+.I columns.
+.TP 1i
+.B \-m
+The image will be magnified \fImagfactor\fR times on the Sun screen.
+(This does \fInot\fR allow sub-pixel operations on the image.)
+.SH COMMANDS
+.TP 1i
+.B m
+toggle long/short menu.
+Note that not all of the available commands appear in the menu!
+.TP 1i
+.B f
+center fat bit window at current point
+.TP 1i
+.B l
+turn locator on or off: the locator shows the outline of the fat bit window
+in the main window
+.TP 1i
+.B k
+kill fat bit window
+.TP 1i
+.B b
+toggle brush on/off
+.TP 1i
+.B c
+change brush shape: square, diamond, point
+(NOTE: in magnify mode the brush acts only as a point brush,
+regardless of its shape.)
+.TP 1i
+.B s
+LUT sweep: each time this command is given, one more entry (coming
+up from 0) in the lookup table is mapped to the background color
+.TP 1i
+.B d
+LUT sweep down: each time this command is given, one more entry (coming
+down from 255) in the lookup table is mapped to the background color
+.TP 1i
+.B U
+LUT frame, a 256-by-256-pixel window, will appear.
+(This is a toggle; giving the command again will remove the LUT frame.)
+The left and right mouse buttons,
+when used in this window,
+have the effect of setting the lower and upper LUT thresholds respectively.
+.TP 1i
+.B S
+LUT stretch: The mapping function is changed so that
+the current domain of LUT entries,
+from the lower to the upper threshold,
+are mapped linearly to the entire range of values from 1 to 255.
+.TP 1i
+.B !
+powerpoint: when the mouse cursor is at any point in the LUT window,
+change the exponent so that the resulting transfer curve
+passes through this point.
+.TP 1i
+.B r
+restore the image to that originally read in
+.TP 1i
+.B L
+ranluts: load a random lookup table
+(NOTE: This command does not modify the lookup table accompanying the image.
+It loads a random lookup table in its place.
+The image's lookup table cannot be modified by any command until it
+is reloaded with the O command.)
+.TP 1i
+.B O
+ranluts off: reload the lookup table accompanying the image
+.TP 1i
+.B R
+restore lookup table to that originally read in
+.TP 1i
+.B &
+set the background color
+.TP 1i
+.B "F or |"
+filter box interior through a UNIX command
+.TP 1i
+.B u
+undo last paintbox, readin, or filter command (this is a toggle)
+.TP 1i
+.B i
+read in a HIPS image at the current cursor location
+.TP 1i
+.B o
+change the operation used to read in a HIPS image
+(at startup, the operation is "src";
+the other choice is "src ^ dst", the XOR operation)
+.TP 1i
+.B w
+write out the entire image to standard output if it is not a terminal.
+If stdout is a terminal, a prompt appears for the name of a file to write to.
+.TP 1i
+.B W
+write out the box interior to standard output if it is not a terminal.
+If stdout is a terminal, a prompt appears for the name of a file to write to.
+.TP 1i
+.B g
+toggle output format: at startup, it defaults to byte;
+the other choice is grle
+.TP 1i
+.B p
+paint the box interior with the current brush color
+.TP 1i
+.B z
+zoom in: make bitwin cover a smaller portion of the image
+.TP 1i
+.B Z
+zoom out
+.TP 1i
+.B B
+toggle blinking of box
+.TP 1i
+.B x
+initialize the box by returning it to its initial position
+surrounding the entire frame
+.TP 1i
+.B X
+set the box size explicitly
+.TP 1i
+.B q
+quit the tool
+.TP 1i
+.B P
+plus: increment the current brush color (from 255 it goes to 0)
+.TP 1i
+.B M
+minus: decrement the current brush color (from 0 it goes to 255)
+.TP 1i
+.B + or =
+increment the exponent
+.TP 1i
+.B -
+decrement the exponent
+.TP 1i
+.B *
+change the way the main cursor is displayed.
+At startup the crosshair cursor is displayed
+with the PIX_SRC ^ PIX_DST operation.
+This command cycles among PIX_SRC ^ PIX_DST, white, and black.
+.PP
+When a command requires a filename the prompt frame appears just below the
+lower left corner of the main window.
+When a command requires a UNIX command name the prompt frame appears
+just below the lower right corner of the main window.
+The X command's prompt frame for the new box size
+and the & command's prompt frame for the new background color
+appear in the upper right corner of the main window.
+The response must be typed into the prompt frame terminated by a return.
+The prompt frame disappears when the command has completed.
+Any of these commands may be aborted by entering just a return into
+the prompt frame.

@@ -1,0 +1,16 @@
+#
+# makefile for colorhips/man
+#
+
+MANPAGES = cscan.n peano.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

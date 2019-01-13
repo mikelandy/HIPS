@@ -1,0 +1,88 @@
+# Sun 4 configuration file for Solaris 2.3.
+# The file "makefile.hdr" contains code common to all makefiles.  It
+# should not be necessary to edit that file.
+
+# This file was used to install HIPS on a system running Solaris 2.3 with
+# default partitioning scheme and file layout. HIPS binaries go in
+# /export/home/hips as this is on the largest partition in the default
+# partition layout. Note that sunview is not in Sol 2.3.
+
+
+# DRIVERDIRS = Iris NeXT SunView X XView ctool sunanim xvanim xanim datacube adage
+# Solaris 2.x does not contain SunView
+DRIVERDIRS = X XView sunanim xvanim xanim
+# CONTRIBDIRS = canny cc compress fsun imsor label lbl matlab pbm surrey tamu usl uva verdth
+CONTRIBDIRS = canny cc compress fsun imsor label lbl pbm surrey tamu usl uva
+# MATINCLUDE = /usr/local/matlab/extern/include
+MATINCLUDE = /usr/local/matlab/extern/include
+# MATLABDEST = /usr/local/bin/matlab
+MATLABDEST = /usr/local/bin/matlab
+# SUNVDIRS = hipstool hipsview lblsun sunv
+SUNVDIRS = hipstool hipsview lblsun
+# HTDIRS = sunos3.4 ****or**** sunos4.0
+HTDIRS = sunos4.0
+# XDIRS = lblx11 imsorx11 xhips
+XDIRS = lblx11 imsorx11 xhips
+# XVDIRS = lblxview xvhips sheffield
+XVDIRS = lblxview xvhips sheffield
+# DESTDIR = /export/home/hips
+DESTDIR = /export/home/hips
+# LIBDIR = /usr/local/lib
+LIBDIR = /usr/local/lib
+# INCLUDE_DIR = /usr/include
+INCLUDE_DIR = /usr/include
+# MANDIR = /usr/man/mann
+MANDIR = /usr/man/mann
+MANEXT = n
+# LIBMANDIR = /usr/man/mann
+LIBMANDIR = /usr/man/mann
+LIBMANEXT = n
+TMPDIR = /tmp
+MASKDIR = $(DESTDIR)/masks
+MASK3DIR = $(DESTDIR)/3dmasks
+LIB = hips
+HLIB = hipsh
+HALIB = hipsa
+
+FLOAT =
+TARGET_ARCH =
+FASTCOPY =
+USESTDARG =
+HNOVALUESH =
+
+CPPFLAGS = -I$(INCLUDE_DIR)
+LIBRARYH = -l$(HLIB) -l$(LIB)
+LIBRARY = -l$(HALIB) -l$(HLIB) -l$(LIB)
+LIBRARY1 = -l$(HLIB)
+LIBRARY2 = -l$(LIB)
+HALIBRARY = -l$(HALIB)
+LIBNAME = lib$(LIB).a
+HLIBNAME = lib$(HLIB).a
+HALIBNAME = lib$(HALIB).a
+OTHERLIBS = -lm
+OTHERLIB2 =
+LDFLAGS = -L$(LIBDIR)
+# -Xs flag is nessecary for SunC to behave like good ol' cc
+CFLAGS = -O -Xs
+LDLIBFLAGS = -r
+
+ORIG = ULORIG
+BITORDER = MSBFVERSION
+
+MANPRINT = psroff -Pps -man
+MEPRINT = psroff -Pps -me
+TBL = tbl
+EQN = eqn
+# don't use ranlib on sol 2.x
+RANLIB = echo
+XVIEWHOME = /usr/openwin
+LIBXVIEW = -lxview -lolgx -lX11
+XINCLUDE = /usr/openwin/include
+XLIB = /usr/openwin/lib
+D3HOME =
+LORDER = lorder
+TSORT = tsort
+MEXEXT = mex4
+
+# Stuff you like to have removed from directories to "make clean"
+OTHERJUNK = core *~ #* *BAK
