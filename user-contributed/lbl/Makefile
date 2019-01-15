@@ -1,7 +1,7 @@
-TOPDIR = /Users/msl/Documents/hips2/hips2
+TOPDIR = /Users/msl/Documents/hips2/HIPS/HIPS
 CONFIG = config.sonny
 HERE = user-contributed/lbl/
-CCS_ROOT = /Users/msl/Documents/hips2/hips2/user-contributed/lbl
+CCS_ROOT = /Users/msl/Documents/hips2/HIPS/HIPS/user-contributed/lbl
 
 # Mac OSX 10.4 configuration file.
 # The file "makefile.hdr" contains code common to all makefiles.  It
@@ -14,7 +14,7 @@ INSTALLROOT = /Users/msl/HIPS
 # DRIVERDIRS = Iris NeXT SunView X XView ctool sunanim xvanim xanim datacube adage
 DRIVERDIRS = X
 # CONTRIBDIRS = canny cc compress fsun imsor label lbl matlab pbm surrey tamu usl uva verdth
-CONTRIBDIRS = canny cc compress fsun imsor lbl matlab surrey tamu usl uva
+CONTRIBDIRS = canny cc compress fsun imsor lbl matlab pbm surrey tamu usl uva
 MATINCLUDE = /Applications/MATLAB.app/extern/include
 MEXPATH = /Applications/MATLAB.app/bin/mex
 MATLABDEST = $(INSTALLROOT)/matlab
@@ -117,38 +117,18 @@ LIBRARIES = $(LDFLAGS) $(LIBRARY) $(OTHERLIBS) $(OTHERLIB2)
 # makefile for directory user-contributed/lbl
 #
 
-# Subdirectories that get made from user-contributed/lbl
-#
-# (subdirectories x11, xview and sun are made indirectly through drivers/X,
-# drivers/XView and drivers/SunView)
+# Subdirectories that get made
 
-# use after comment when running separate from standard HIPS2 distribution
-DIRS = lib jpeg hips doc # xview sun x11
-
-TARDIRS = include lib hips jpeg* sun doc x11 xview makefile.src README
-
-# for insertion into standard HIPS2 distribution
-TARDIRS2 = lib hips doc x11 xview include sun makefile.src 
+DIRS = man libsrc sources
 
 # default action just makes src dirs
 
 all: install
-  
-clean clean-all install pristine man doc: doit
+
+clean install pristine man doc: doit
 	@for d in $(DIRS) ; do \
-		( cd $$d ; echo make $@ on $(HERE)$$d ;	\
-			make CCS_ROOT=$(TOPDIR)/$(HERE) $(MFLAGS) $@ ) ; \
+		( cd $$d ; echo make $@ on $(HERE)$$d ; make $(MFLAGS) $@ ) ; \
 	done
-	@if [ "$@" = "clean-all" ];	then	\
-		rm -f Makefile;	else	true;	fi
-
-tar:	doit
-	-if [ -f Makefile ];	then	make -k clean-all;	fi
-	(tar cvf lbl_hips2.tar $(TARDIRS);	compress -v lbl_hips2.tar)
-
-tar2:	doit
-	make clean
-	tar cvf lbl_hips2.tar $(TARDIRS2)
 
 doit:
 ################ Beginning of makefile.tlr ################

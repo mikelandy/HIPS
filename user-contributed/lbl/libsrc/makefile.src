@@ -1,0 +1,32 @@
+#
+# makefile for directory user-contributed/lbl/hips/libsrc
+#
+
+LIBNAME = libhipslbl.a
+
+OBJECTS = c_array.o h_addmask.o h_bclean2.o h_bthin.o h_fill_holes.o
+
+.c.o:
+	$(COMPILEc) $*.c
+	@-ld $(LDLIBFLAGS) $*.o
+	@mv a.out $*.o
+
+$(LIBNAME):	$(OBJECTS)
+	@rm -f $(LIBNAME)
+	ar cr $(LIBNAME) `$(LORDER) *.o | $(TSORT)`;
+	mv $(LIBNAME) $(LIBDIR)/$(LIBNAME)
+	$(RANLIB) $(LIBDIR)/$(LIBNAME)
+	@touch $(LIBNAME)
+
+install:	$(LIBNAME)
+
+clean:
+	rm -f $(OBJECTS) $(LIBNAME)
+clean-all:	clean_all
+
+pristine:
+	rm -f $(OBJECTS) $(LIBNAME) $(LIBDIR)/$(LIBNAME)
+
+man:
+
+doc:

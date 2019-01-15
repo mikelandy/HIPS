@@ -1,0 +1,84 @@
+.TH SCALE_GRAY 1 9/20/89 LBL-HIPS
+.SH NAME
+scale_gray \- do window based mapping and quadratic scaling of the pixel values of a sequence of images
+.SH SYNOPSIS
+.B scale_gray
+[-imin -imax -omin -omax] [-e] [-c] [-b, -s, -i or -f] [-A -B -C]
+.br
+.SH DESCRIPTION 
+.I Scale_gray
+scales a given input gray level window to a given output gray level
+window, or applies a quadratic transformation to an input window.
+The input sequence may be in byte, short, integer, or float pixel format. All fixed
+point formats, both input and output, are dealt with as unsigned data types.
+The input sequence format is determined from the HIPS header,
+the output sequence is given by:
+.TP
+.B -b
+byte (8 bit) format (the default)
+.TP
+.B -s
+short (16 bit) pixel output
+.TP
+.B -i
+integer (32 bit) pixel output
+.TP
+.B -f
+for float (single precision) pixel output
+.PP
+If no input range (window), output range, or quadratic transformation coefficients
+are given,
+the scaling  is  such  as  to
+stretch the populated part of the histogram of the
+first frame to use the entire range of the output pixel
+format (8, 16, or 32 bits, that is 0-255, 0-65535, or  0-4294967295
+for  fixed point pixel formats, 0.0 to 1.0 for floating point pixels).
+All frames of the sequence are scaled based on the first frame range
+unless -e is given.
+.PP
+If an output range is given, then the input range is  mapped linearly
+to the output range. If an input range is given then that range
+is mapped to the output range (with all pixels outside the given range
+being mapped to min or max pixel value).
+.TP
+.B -imin %f
+lower end of the input range (default = min pixel value for the image)
+.TP
+.B -imax %f
+upper end of the input range (default = max pixel value for the image)
+.TP
+.B -omin %f
+lower end of the output range (default = 0)
+.TP
+.B -omax %f
+upper end of the output range (default = max for the output data type)
+.TP
+.B -e
+Forces re-normalization for every frame. That is, if (imin, imax) are not
+given, then they are redetermined from the pixel values for every
+frame of the sequence.
+.TP
+.B -c
+Forces values outside the input range to be set to zero. Default is to set them to imin or imax.
+.PP
+Provided that an output range is NOT given, the mapping of the input
+range can be given by a quadratic expression:
+Pixels "x" are mapped to Ax*x+Bx+C.
+.TP
+.B -A %f
+The quadratic coefficient (default is A = 0)
+.TP
+.B -B %f
+the linear coefficient (default is B = 1.0)
+.TP
+.B -C %f
+the constant term (default is C = 0)
+.LP
+Except for float pixel output,
+the quadratic values are clipped to fit into the byte, short, or integer
+pixel format (and the output values are rounded by adding .5 before
+truncation).
+.SH SEE\ ALSO
+scale, btof(1), powerpix(1), stretchpix(1), shiftpix(1)
+.SH AUTHOR
+William Johnston - Lawrence Berkeley Laboratory -  9/20/89

@@ -1,0 +1,20 @@
+.TH ADDMASK 1 "1 May 1990" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+addmask \- combines a HIPS image with a binary mask to create a new image.
+.SH SYNOPSIS
+.B addmask
+[-n] mask_file < infile > outfile
+.SH DESCRIPTION
+.I addmask
+creates an image which is 0 where the mask is 0, and the original
+image where the mask is non-zero. This program works on images which
+are byte, short, int, float, or complex format.
+.SH OPTIONS
+[-n]  use the negative of the mask
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH "SEE ALSO"
+segal(1)
+.SH BUGS
+Report to Brian Tierney.

@@ -1,0 +1,22 @@
+#
+# makefile for user-contributed/lbl/man
+#
+
+MANPAGES =  \
+	addmask.n applylut.n autocollage.n autoextract.n bclean2.n \
+	bdwindow.n bin_mask.n bthin.n checkers2.n clip.n disphist_short.n \
+	fill_holes.n getobj.n grate.n gray_wedge.n hfant.n histoeq2.n \
+	hstat.n linesegs.n make_mask.n makefile.src mls_short.n \
+	printxyz.n scale_gray.n
+
+install:	man-pgm
+
+clean:	clean-pgm
+clean-all:	clean_all
+
+man:
+	$(MANPRINT) $(MANPAGES)
+
+doc:
+
+pristine:	pristineman-pgm

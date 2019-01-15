@@ -1,0 +1,62 @@
+.TH CHECKERS2 1 "October, 1989" "LBL-HIPS"
+.SH NAME
+checkers2 \- generate a checker board pattern of gray values
+.SH SYNOPSIS
+.B checkers2
+-hi_gray -lo_gray -np_col -np_row -r rows -c cols [-b, -s, -i, -f] -n num_frames
+.br
+.B Defaults:
+hi_gray: 128; lo_gray: 0; np_col:10; np_row:10; rows: 512; cols: 512; byte output; frames: 1
+.SH DESCRIPTION 
+.I Checker
+produces a frame (or sequence) which contains a checker board of gray value patches.
+.SH OPTIONS
+.TP
+.B \-hi_gray bright_patch_value
+(%d or %f)
+(default = 50% of maximum for the pixel type chosen (0.5 for PFFLOAT))
+.TP
+.B \-lo_gray dim_patch_value
+(%d or %f)
+(default = 0)
+.TP
+.B \-np_col num_patches
+(%d)
+(default = 10): number of patches in the column direction (across)
+.TP
+.B \-np_row num_patches
+(%d)
+(default = 10): number of patches in the row direction (down)
+.TP
+.B \-r rows
+(%d)
+(default = 512): the number of rows in the image.
+.TP
+.B \-c colums
+(%d)
+(default = 512): the number of colums in the image.
+.TP
+.B \-b
+.br
+ byte (unsigned) pixel format output (the default) (HIPS type PFBYTE)
+.TP
+.B \-s
+.br
+ short (unsigned) pixel format output (HIPS type PFSHORT)
+.TP
+.B \-i
+.br
+ integer (unsigned) pixel format output (HIPS type PFINT)
+.TP
+.B \-f
+.br
+ float pixel format output (HIPS type PFFLOAT)
+.TP
+.B \-n
+number_of_frames
+.br
+(%d) - number of frames to output in a sequence (default = 1)
+.SH AUTHOR
+Bill Johnston, LBL
+.br
+Lawrence Berkeley Laboratory

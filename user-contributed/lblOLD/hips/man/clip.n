@@ -1,0 +1,23 @@
+.TH CLIP 1 "January 2, 1984" LBL-HIPS
+.SH NAME
+clip \- limit the upper and lower grey values of an images to a specified value
+.SH SYNOPSIS
+.B clip
+[low high [new_low_value new_high_value]]
+.SH DESCRIPTION 
+.I Clip
+examines each pixel of an image and if the value is greater than ``high''
+or less than ``low'' replaces it with the clip value (default), or with
+a specified value. This technique is useful when, for instance, trying
+to histogram equalize some background information - the foreground can be
+suppressed.
+.I low
+defaults to 0,
+.I high
+to 255,
+.I new_low_value
+to low, and
+.I new_high_value
+to high.
+.SH AUTHOR
+Bill Johnston 5/29/89

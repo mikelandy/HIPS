@@ -1,0 +1,37 @@
+.TH HSTAT 1 "1 May 1990" "LBL-HIPS"
+.SH NAME
+hstat \- compute statistics on objects in a HIPS image defined by a binary mask
+.SH SYNOPSIS
+.B hstat
+-m mask_file [-l][-s][-p] <  image > output
+.SH DESCRIPTION
+.I hstat
+computes statistics on objects in a image. The geometry of the objects
+is defined by a binary image mask, which must be the same size as
+the image image. Based on the location of non-zero pixels in the mask,
+this programs computes the area, total intensity, average intensity,
+and the perimeter, of each object in the mask.
+Image and binary mask must be of type byte.
+.SH OPTIONS
+.TP
+-m mask_file
+filename of binary image mask (required)
+.TP
+-l
+create script for labeling points. This option creates
+a c-shell script for adding labels to the original image
+using the `label' program. This is useful for masks with
+many objects.
+.TP
+-s
+output file is stripped of all text labels. This is useful
+for creating files to be input to statistical programs.
+.TP
+-p
+output file contains x,y locations of the object perimeters
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH "SEE ALSO"
+getobj(1)
+.SH BUGS
+Report to Brian Tierney.

@@ -2,37 +2,17 @@
 # makefile for directory user-contributed/lbl
 #
 
-# Subdirectories that get made from user-contributed/lbl
-#
-# (subdirectories x11, xview and sun are made indirectly through drivers/X,
-# drivers/XView and drivers/SunView)
+# Subdirectories that get made
 
-# use after comment when running separate from standard HIPS2 distribution
-DIRS = lib jpeg hips doc # xview sun x11
-
-TARDIRS = include lib hips jpeg* sun doc x11 xview makefile.src README
-
-# for insertion into standard HIPS2 distribution
-TARDIRS2 = lib hips doc x11 xview include sun makefile.src 
+DIRS = man libsrc sources
 
 # default action just makes src dirs
 
 all: install
-  
-clean clean-all install pristine man doc: doit
+
+clean install pristine man doc: doit
 	@for d in $(DIRS) ; do \
-		( cd $$d ; echo make $@ on $(HERE)$$d ;	\
-			make CCS_ROOT=$(TOPDIR)/$(HERE) $(MFLAGS) $@ ) ; \
+		( cd $$d ; echo make $@ on $(HERE)$$d ; make $(MFLAGS) $@ ) ; \
 	done
-	@if [ "$@" = "clean-all" ];	then	\
-		rm -f Makefile;	else	true;	fi
-
-tar:	doit
-	-if [ -f Makefile ];	then	make -k clean-all;	fi
-	(tar cvf lbl_hips2.tar $(TARDIRS);	compress -v lbl_hips2.tar)
-
-tar2:	doit
-	make clean
-	tar cvf lbl_hips2.tar $(TARDIRS2)
 
 doit:

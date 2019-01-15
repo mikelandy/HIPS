@@ -1,0 +1,28 @@
+.TH HIPS 1 "1 October 1990" "LBL"
+.PD 1.4
+.SH NAME
+.B autocollage
+- collages a sequence of hips images into a single frame with 50 pixels
+between each image.
+.SH SYNOPSIS
+.B autocollage
+[-b NN] [-o NN NN] < inseq > outfile
+.SH DESCRIPTION
+.I autocollage
+creates an image which is a collage of a sequence of images. This is
+useful for combining a sequence of images for printing on a single sheet.
+This program works on byte images only. 
+.SH OPTIONS
+[-b NN]: gray value for background between the images (default = 255)
+.sp
+[-o NN NN]: maximum width and height of output image (default = 2048 x 1536)
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH DIAGNOSTICS
+If all frames in the sequence do not fit in the output image, an error
+message is printed and the program exits. To solve this, you can use
+reduce, scale_geom, or subseq.
+.SH SEE ALSO
+catframes(1), pshalftone(1), reduce(1), scale_geom(1), subseq(1)
+.SH BUGS
+Report to Brian Tierney.

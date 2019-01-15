@@ -1,0 +1,131 @@
+.TH GRATE HIPS "5 March 1991" "LBL-HIPS"
+.SH NAME
+.B grate
+- Generates HIPS image from periodic functions (i.e. diffraction gratings).
+.SH SYNOPSIS
+.B grate 
+[-r %d] [-c %d] [-b] [-s] [-i] [-f] [-frm %d] [-fx %d] [-fy %d] [-cx %f] [-cy %f] [-ox %f] [-oy %f] [-sx %f] [-sy %f] [-D[2]] [-h] > output_image
+.SH DESCRIPTION
+.I Grate 
+generates a HIPS image by applying 2 periodic functions (one in the x direction,one in the y direction) to an image filled with the maximum gray value for a
+pixel.  Many options are available.  By use of these, which particular
+functions, cycles, offsets, and scaling factors in the x and y directions can
+be specified.  Byte, short, integer, or float may be specified for the output
+image type.  The size of the output image may be specified.
+.SH OPTIONS
+.TP
+.B -h
+gives a help page similar to this man page
+.TP
+.B -r %d
+number rows in the image (default = 512)
+.TP
+.B -c %d
+number cols in the image (default = 512)
+.TP
+.B -n %d
+number of frames to generate (default = 1)
+.TP
+.B -fx %d
+number of function to apply in x direction (default = 0 = Square Wave)
+.TP
+.B -fy %d
+number of function to apply in y direction (default = 0 = Square wave)
+.TP
+.B -cx %f
+number of cycles to span funct_x over in x direction (default = 0.5)
+.TP
+.B -cy %f
+number of cycles to span funct_y over in y direction (default = 0.5)
+.TP
+.B -ox %f
+offset to be applied to funct_x (i.e. funct_x(..) + ox) (default = 1.0)
+.TP
+.B -oy %f
+offset to be applied to funct_y (i.e. funct_y(..) + oy) (default = 1.0)
+.TP
+.B -sx %f
+scale factor to be applied to funct_x (i.e. sx * (funct_x() + ox) (default = 0.5)
+.TP
+.B -sy %f
+scale factor to be applied to funct_y (i.e. sy * (funct_y() + oy) (default = 0.5)
+.TP
+.B -pox %f
+phase offset applied to argument of funct_x (mult. by PI) (default = 0.0)
+.TP
+.B -poy %f
+phase offset applied to argument of funct_y (mult. by PI) (default = 0.0)
+.TP
+.B -b
+byte (8 bit) format (the default)
+.TP
+.B -s
+for short (16 bit) pixel output
+.TP
+.B -i
+for integer (32 bit) pixel output
+.TP
+.B -f
+for float (single precision) pixel output
+.TP
+.B -D
+gives one level of debugging messages
+.TP
+.B -D2
+causes all debugging messages to be printed
+.SH NOTES
+.B ***********FUNCTIONS***********
+.PP
+The existing functions are:
+.TP 
+.B 0
+Square Wave
+.TP
+.B 1
+Sine Wave
+.TP
+.B 2
+Cosine Wave
+.TP
+.B 3
+Trianglar (Sawtooth) Wave
+.PP
+Adding an additional function is trivial:
+.TP
+.B 1
+Add the function name to the "#define" section of the program.
+.TP
+.B 2
+Add a case statement in fn() for the function according to the ones already there.
+.TP
+.B 3
+Add the function itself.
+.SP
+.PP
+.B ***********EXAMPLES************
+.PP
+To generate a 1D sin grating in the x direction,
+.PP
+grate -r 256 -c 512 -cx 10 -cy 0 -fx 1 -fy 0 -b -sx .5 -ox 1 -pox 0 | Xhips
+.PP
+Note: due to defaults, the above line is equivalent to
+.PP
+grate -r 256 -cx 10 -fx 1 | Xhips
+.PP
+Other examples:
+.PP
+grate -r 256 -fx 1 -fy 1 -cx 20 -cy 20 -f | scale_gray | Xhips
+.PP
+grate -r 100 -c 100 -fx 3 -fy 2 -cy 10 -sy .25 -oy 2 -pox .5 > weird_grating
+.PP
+grate -r 100 -c 100 -fx 2 -pox .5 -cx 10 | Xhips
+.SH SEE ALSO
+checker, checkers, checkers2
+.SH AUTHOR
+Bryan Skene, Lawrence Berkeley Laboratory.
+.TP
+.B email:
+skene@george.lbl.gov
+.SH DIAGNOSTICS
+.SH BUGS
+Report to Bryan Skene.

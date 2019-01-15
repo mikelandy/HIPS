@@ -1,0 +1,57 @@
+.TH GRAY_WEDGE 1 "September, 1989" "LBL-HIPS"
+.SH NAME
+gray_wedge \- generate a gray value ramp image
+.SH SYNOPSIS
+.B gray_wedge
+-r rows -w cols -m upper_value [-b, -s, -i, -f] -n num_frames
+.SH DESCRIPTION 
+.I gray_wedge
+produces a frame (or sequence) in which the pixel values go from 0 to upper_value
+from right to left (increasing col number). The pixels are constant
+from top to bottom (along cols). The pixel format may be byte, short,
+int, or float.
+.SH OPTIONS
+.TP
+.B \-r
+rows
+.br
+(%d)
+(default = 512): give the number of row in the image.
+.TP
+.B \-w
+columns
+.br
+(%d) (default = 512): give the number of columns in the image.
+.TP
+.B \-m
+max_value
+.br
+(%d or %f) - maximum pixel value (default is maximum for the unsigned data type,
+e.g. 255 for byte, 65535 for short, 4294967295 for int. 1.0 is used for
+float format pixels). An integer is required for -b, -s, and -i output,
+a float for -f output.
+.TP
+.B \-b
+.br
+ byte (unsigned) pixel format output (the default) (HIPS type PFBYTE)
+.TP
+.B \-s
+.br
+ short (unsigned) pixel format output (HIPS type PFSHORT)
+.TP
+.B \-i
+.br
+ integer (unsigned) pixel format output (HIPS type PFINT)
+.TP
+.B \-f
+.br
+ float pixel format output (HIPS type PFFLOAT)
+.TP
+.B \-n
+number_of_frames
+.br
+(%d) - number of frames to output in a sequence (default = 1)
+.SH AUTHOR
+Bill Johnston
+.br
+Lawrence Berkeley Laboratory

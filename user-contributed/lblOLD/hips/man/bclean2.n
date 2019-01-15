@@ -1,0 +1,23 @@
+.TH BCLEAN2 1 "1 May 1990" "LBL-HIPS"
+.PD 1.4
+.SH NAME
+bclean2 \- removes small isolated objects from binary HIPS images
+.SH SYNOPSIS
+.B bclean2
+[-s NN] < inseq > outseq
+.SH DESCRIPTION
+.I bclean2
+removes 8-connected objects smaller than size NN from a hips image. Input
+image must be of type byte.
+.SH OPTIONS
+-s NN   remove objects smaller than NN (default = 4).
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov
+.SH "SEE ALSO"
+getobj(1), bthin(1)
+.SH DIAGNOSTICS
+.PP
+This program may run out of memory if the object size is too large
+or if it is given a non-binary image.
+.SH BUGS
+Report to Brian Tierney.

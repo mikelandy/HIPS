@@ -1,7 +1,7 @@
-TOPDIR = /Users/msl/Documents/hips2/hips2
+TOPDIR = /Users/msl/Documents/hips2/HIPS/HIPS
 CONFIG = config.sonny
 HERE = user-contributed/canny/
-CCS_ROOT = /Users/msl/Documents/hips2/hips2/user-contributed/lbl
+CCS_ROOT = /Users/msl/Documents/hips2/HIPS/HIPS/user-contributed/lbl
 
 # Mac OSX 10.4 configuration file.
 # The file "makefile.hdr" contains code common to all makefiles.  It
@@ -14,7 +14,7 @@ INSTALLROOT = /Users/msl/HIPS
 # DRIVERDIRS = Iris NeXT SunView X XView ctool sunanim xvanim xanim datacube adage
 DRIVERDIRS = X
 # CONTRIBDIRS = canny cc compress fsun imsor label lbl matlab pbm surrey tamu usl uva verdth
-CONTRIBDIRS = canny cc compress fsun imsor matlab pbm surrey tamu usl uva
+CONTRIBDIRS = canny cc compress fsun imsor lbl matlab pbm surrey tamu usl uva
 MATINCLUDE = /Applications/MATLAB.app/extern/include
 MEXPATH = /Applications/MATLAB.app/bin/mex
 MATLABDEST = $(INSTALLROOT)/matlab

@@ -1,0 +1,37 @@
+.TH MAKE_MASK 1 "June 1990" "LBL-HIPS"
+.SH NAME
+make_mask \- create an edge detector mask
+.SH SYNOPSIS
+.B make_mask
+[-s] [-1 .. -8] [-a] > outfile
+.SH DESCRIPTION
+.I make_mask
+creates an edge detector mask of a  specified  size
+for  detecting  edges  at a variety of angles. This file can
+then be used as input to the HIPS  program 
+.IR mask .
+The mask program performs a convolution of the image and this mask.
+For symmetric masks, odd numbers should be used.
+The default is -1 -3 -5 -7.
+.SH OPTIONS
+[-s] size of output mask (default = 7)
+.sp
+[-1] mask at angle of 0    degrees
+.sp
+[-2] mask at angle of 22.5 degrees
+.sp
+[-3] mask at angle of 45   degrees
+.sp
+[-4] mask at angle of 67.5 degrees
+.sp
+[-5] mask at angle of 90   degrees
+.sp
+[-6] mask at angle of 112.5 degrees
+.sp
+[-7] mask at angle of 135  degrees
+.sp
+[-8] mask at angle of 157.5 degrees
+.sp
+[-a] mask with all of the above angles
+.SH AUTHOR
+Brian Tierney, LBL        email: bltierney@lbl.gov

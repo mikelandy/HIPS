@@ -1,0 +1,25 @@
+.TH DISPHIST_SHORT 1 "January 2, 1984" LBL-HIPS
+.SH NAME
+disphist_short \- create a HIPS image containing a display of a
+histogram file represented as a bar graph.
+.SH SYNOPSIS
+.B disphist_short [-m maxcnt] [-b] [-l] < hist > hist_image
+.SH DESCRIPTION 
+.I Disphist_short
+converts histogram files (created with
+.IR histo )
+to a displayable (HIPS) format image.
+The 
+.I -m
+flag specifies an initial maximum bincount for use in scaling the
+displays.  Otherwise, the maximum in the first histogram is used, and 
+increased if a later histogram exceeds it.
+The
+.I -b
+flag specifies an output image size of 512x512. The default is 256x256. The
+.I -l
+flag takes the log of the counts before plotting.
+.SH SEE\ ALSO
+histo(1)
+.SH AUTHOR
+Michael Landy - 12/15/82

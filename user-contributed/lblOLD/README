@@ -1,3 +1,16 @@
+
+*********************************************************
+New information: Michael Landy - 1/14/19
+
+Having recently revived my copy of HIPS and made it public domain, I thought
+it was time to pull from the LBL user contributed code those programs that
+actually compile on my Mac. Most of this code would require a lot of work to
+build without error, and the viewers for X and XView also require a bunch of
+work. So, I've moved most of the LBL code to this directory, and pulled out
+the small amount of vanilla HIPS contributions that I could easily make
+useable. Those are now in user-contributed/lbl
+*********************************************************
+
 /***********************************************************************/
 /*  COPYRIGHT NOTICE         *******************************************/
 /***********************************************************************/
